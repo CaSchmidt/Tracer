@@ -5,4 +5,4 @@ A minimalistic but functional ray tracer.
 
 * Phong shading & shadows
 
-  ![Phong shading & Shadows](docs/images/output_1.png)
+  ![Phong shading & Shadows](Tracer/docs/images/output_1.png)
