@@ -5,7 +5,7 @@ A minimalistic but functional ray tracer.
 
 * Phong shading & shadows
 
-  ![Phong shading & Shadows](Tracer/docs/images/output_1.png)
+  ![Phong shading & shadows](Tracer/docs/images/output_1.png)
 
 * Point/Spherical lights (prototype!)
 
@@ -21,4 +21,4 @@ A minimalistic but functional ray tracer.
 
 * Text rendering
 
-  ![Text rendering](Tracer/docs/images/output_text.png)
+  ![Text](Tracer/docs/images/output_text.png)
