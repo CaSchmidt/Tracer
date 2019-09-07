@@ -3,6 +3,8 @@ QT -= core gui
 CONFIG += c++11 console
 CONFIG -= app_bundle
 
+TARGET = Tracer
+
 
 INCLUDEPATH += ./include
 DEPENDPATH  += ./include

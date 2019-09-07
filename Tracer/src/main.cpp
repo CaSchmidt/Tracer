@@ -37,9 +37,9 @@
 #include "scenes.h"
 #include "tests.h"
 
-void print_progress(const int y, const int height, const bool force = false)
+void print_progress(const int y, const int height, const bool force = false, const int blockSize = 20)
 {
-  if( y % 20 != 0  &&  !force ) {
+  if( y % std::max<int>(blockSize, 1) != 0  &&  !force ) {
     return;
   }
   const int p = (y*100)/height;
