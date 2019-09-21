@@ -31,9 +31,9 @@
 
 #include <algorithm>
 
-#include "scenes.h"
+#include <font8x8_basic.h>
 
-#include "font8x8_basic.h"
+#include "scenes.h"
 
 rt::RenderOptions options_scene_text(const rt::dim_T width, const rt::dim_T height)
 {

@@ -43,7 +43,7 @@ void print_progress(const int y, const int height, const bool force = false, con
     return;
   }
   const int p = (y*100)/height;
-  printf("Progress: %3d%% (%4d/%4d)\n", p, y, height);
+  printf("Progress: %3d%% (%4d/%4d)\n", p, y, height); fflush(stdout);
 }
 
 int main(int /*argc*/, char ** /*argv*/)

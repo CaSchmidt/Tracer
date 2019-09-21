@@ -30,7 +30,7 @@
 *****************************************************************************/
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <3rdparty/stb/include/stb_image_write.h>
+#include <stb_image_write.h>
 
 #include "Image.h"
 
