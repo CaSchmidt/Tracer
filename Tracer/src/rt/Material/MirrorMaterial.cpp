@@ -42,6 +42,11 @@ namespace rt {
   {
   }
 
+  bool MirrorMaterial::isShadowCaster() const
+  {
+    return true;
+  }
+
   void MirrorMaterial::setReflectance(const real_T r)
   {
     _reflectance = geom::clamp<real_T>(r, 0, 1);

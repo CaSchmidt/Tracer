@@ -45,7 +45,7 @@ namespace rt {
     IMaterial();
     virtual ~IMaterial();
 
-    bool isShadowCaster() const;
+    virtual bool isShadowCaster() const = 0;
 
     bool isMirror() const;
     MirrorMaterial *mirror();

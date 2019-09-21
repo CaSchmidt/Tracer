@@ -42,6 +42,8 @@ namespace rt {
     TransparentMaterial();
     ~TransparentMaterial();
 
+    bool isShadowCaster() const;
+
     void setRefraction(const real_T eta);
     real_T refraction() const;
 

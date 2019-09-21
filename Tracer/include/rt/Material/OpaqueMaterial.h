@@ -42,6 +42,8 @@ namespace rt {
     OpaqueMaterial();
     ~OpaqueMaterial();
 
+    bool isShadowCaster() const;
+
     bool isSpecular() const;
 
     void setDiffuse(TexturePtr& tex);

@@ -45,11 +45,6 @@ namespace rt {
   {
   }
 
-  bool IMaterial::isShadowCaster() const
-  {
-    return !isTransparent();
-  }
-
   bool IMaterial::isMirror() const
   {
     return dynamic_cast<const MirrorMaterial*>(this) != nullptr;

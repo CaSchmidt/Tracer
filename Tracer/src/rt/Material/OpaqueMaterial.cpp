@@ -42,6 +42,11 @@ namespace rt {
   {
   }
 
+  bool OpaqueMaterial::isShadowCaster() const
+  {
+    return true;
+  }
+
   bool OpaqueMaterial::isSpecular() const
   {
     return _shininess >= 1  &&  _specTex;

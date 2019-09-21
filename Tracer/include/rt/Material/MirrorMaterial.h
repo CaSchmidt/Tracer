@@ -42,6 +42,8 @@ namespace rt {
     MirrorMaterial();
     ~MirrorMaterial();
 
+    bool isShadowCaster() const;
+
     void setReflectance(const real_T r);
     real_T reflectance() const;
 

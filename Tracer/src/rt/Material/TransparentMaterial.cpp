@@ -42,6 +42,11 @@ namespace rt {
   {
   }
 
+  bool TransparentMaterial::isShadowCaster() const
+  {
+    return false;
+  }
+
   void TransparentMaterial::setRefraction(const real_T eta)
   {
     _refraction = std::max<real_T>(eta, 1);
