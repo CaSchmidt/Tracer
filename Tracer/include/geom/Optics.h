@@ -39,8 +39,7 @@
 namespace geom {
 
   template<typename T>
-  inline T fresnelReflectance(const Vec3<T>& I, const Vec3<T>& N,
-                              const T& etai, const T& etat)
+  inline T fresnel(const Vec3<T>& I, const Vec3<T>& N, const T& eta)
   {
     constexpr T ONE = static_cast<T>(1);
     constexpr T TWO = static_cast<T>(2);
@@ -48,15 +47,15 @@ namespace geom {
     const T cosTi = -dot(I, N);
     const T sinTi = math::pythagoras(cosTi);
 
-    const T sinTt = etai/etat*sinTi; // Snell's law
+    const T sinTt = eta*sinTi; // Snell's law
     if( sinTt >= ONE ) { // total internal reflection
       return ONE;
     }
 
     const T cosTt = math::pythagoras(sinTt);
 
-    const T para = (etat*cosTi - etai*cosTt)/(etat*cosTi + etai*cosTt);
-    const T perp = (etai*cosTi - etat*cosTt)/(etai*cosTi + etat*cosTt);
+    const T para = (cosTi - eta*cosTt)/(cosTi + eta*cosTt);
+    const T perp = (eta*cosTi - cosTt)/(eta*cosTi + cosTt);
 
     return (para*para + perp*perp)/TWO;
   }

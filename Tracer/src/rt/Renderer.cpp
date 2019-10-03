@@ -121,17 +121,18 @@ namespace rt {
       const bool entering = geom::dot(I, sinfo.N) < ZERO;
       const Vec3f N = entering
           ?  sinfo.N
-           : -sinfo.N;
+          : -sinfo.N;
       const real_T etai = entering
           ? _options.globalRefraction
           : sinfo->material()->transparent()->refraction();
       const real_T etat = entering
           ? sinfo->material()->transparent()->refraction()
           : _options.globalRefraction;
+      const real_T eta = etai/etat;
 
       // (2) Fresnel Reflectance & Transmittance /////////////////////////////
 
-      const real_T kR = geom::fresnelReflectance(I, N, etai, etat);
+      const real_T kR = geom::fresnel(I, N, eta);
       const real_T kT = ONE - kR;
 
       // (3) Reflectance /////////////////////////////////////////////////////
@@ -142,7 +143,7 @@ namespace rt {
       // (4) Transmittance ///////////////////////////////////////////////////
 
       if( kT > ZERO ) {
-        const Vec3f T = geom::refract(I, N, etai/etat);
+        const Vec3f T = geom::refract(I, N, eta);
         color += kT*castRay({sinfo.P - TRACE_BIAS*N, T}, MAX_REAL_T, depth + 1);
       }
 
