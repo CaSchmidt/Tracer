@@ -36,6 +36,22 @@
 #include "geom/Vec3.h"
 #include "math/Pythagoras.h"
 
+/*
+ * Optics API:
+ *
+ * The API models the transmission of light from an incident media 'i'
+ * into a media 't'. Throughout this API the following conventions hold:
+ *
+ * I   := The incident vector following the direction of light.
+ * N   := The normal vector of the bounding surface pointing from the media 't' to the media 'i'.
+ * eta := The ratio of the indices of refraction; eta = etai/etat.
+ *
+ * NOTE 1: All input vectors are considered normal AKA having a length of 1!
+ *
+ * NOTE 2: Properly setting up the geometry and refractive index is beyond the scope of this API
+ *         and needs to be done by the caller!
+ */
+
 namespace geom {
 
   template<typename T>
@@ -60,13 +76,13 @@ namespace geom {
     return (para*para + perp*perp)/TWO;
   }
 
-  template<typename T> // cf. GLSL
+  template<typename T> // cf. GLSL v4.60, 8.5. Geometric Functions
   constexpr Vec3<T> reflect(const Vec3<T>& I, const Vec3<T>& N)
   {
     return I - static_cast<T>(2)*dot(I, N)*N;
   }
 
-  template<typename T> // cf. GLSL
+  template<typename T> // cf. GLSL v4.60, 8.5. Geometric Functions
   inline Vec3<T> refract(const Vec3<T>& I, const Vec3<T>& N, const T& eta)
   {
     constexpr T  ONE = static_cast<T>(1);
