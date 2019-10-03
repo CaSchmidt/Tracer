@@ -46,7 +46,7 @@ namespace rt {
   template<typename T>
   using if_real_T = std::enable_if_t<std::is_floating_point_v<T>,T>;
 
-  using real_T = if_real_T<float>;
+  using real_T = if_real_T<float>; // Implementation
 
   ////// Special Values //////////////////////////////////////////////////////
 
@@ -62,12 +62,12 @@ namespace rt {
   template<typename T>
   using if_dim_T = std::enable_if_t<std::is_unsigned_v<T>,T>;
 
-  using dim_T = if_dim_T<uint16_t>;
+  using dim_T = if_dim_T<uint16_t>; // Implementation
 
   template<typename T>
   using if_enum_T = std::enable_if_t<std::is_unsigned_v<T>,T>;
 
-  using enum_T = if_enum_T<unsigned int>;
+  using enum_T = if_enum_T<unsigned int>; // Implementation
 
   ////// Constants ///////////////////////////////////////////////////////////
 
