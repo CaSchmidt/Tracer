@@ -33,11 +33,6 @@
 
 namespace rt {
 
-  ILightSource::ILightSource(const Vec3f& EL) noexcept
-    : _EL{EL}
-  {
-  }
-
   ILightSource::~ILightSource() noexcept
   {
   }

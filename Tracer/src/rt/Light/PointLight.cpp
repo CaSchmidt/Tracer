@@ -33,8 +33,10 @@
 
 namespace rt {
 
+  ////// public //////////////////////////////////////////////////////////////
+
   PointLight::PointLight(const Vec3f& IL, const Vec3f& PL) noexcept
-    : ILightSource(IL)
+    : _IL{IL}
     , _PL{PL}
   {
   }
@@ -48,14 +50,21 @@ namespace rt {
     LightInfo i;
     i.l  = geom::direction(P, _PL);
     i.r  = geom::distance(P, _PL);
-    const real_T rL = std::max<real_T>(i.r, 1);
-    i.EL = _EL/rL/rL;
+    i.EL = _IL*attenuation(i.r);
     return i;
   }
 
   LightSourcePtr PointLight::create(const Vec3f& IL, const Vec3f& PL)
   {
     return std::make_unique<PointLight>(IL, PL);
+  }
+
+  ////// private /////////////////////////////////////////////////////////////
+
+  real_T PointLight::attenuation(const real_T r) const
+  {
+    const real_T rL = std::max<real_T>(r, 1);
+    return ONE/rL/rL;
   }
 
 } // namespace rt

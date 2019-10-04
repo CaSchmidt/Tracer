@@ -50,17 +50,10 @@ namespace rt {
 
   class ILightSource {
   public:
-    ILightSource(const Vec3f& EL) noexcept;
     virtual ~ILightSource() noexcept;
 
     // NOTE: P is in world coordinates!
     virtual LightInfo info(const Vec3f& P) const = 0;
-
-  protected:
-    Vec3f _EL{};
-
-  private:
-    ILightSource() noexcept = delete;
   };
 
   using LightSourcePtr = std::unique_ptr<ILightSource>;

@@ -46,6 +46,7 @@ namespace rt {
     static LightSourcePtr create(const Vec3f& EL, const Vec3f& l);
 
   private:
+    Vec3f _EL;
     Vec3f _l;
   };
 

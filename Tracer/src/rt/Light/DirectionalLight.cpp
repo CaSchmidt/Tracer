@@ -34,7 +34,7 @@
 namespace rt {
 
   DirectionalLight::DirectionalLight(const Vec3f& EL, const Vec3f& l) noexcept
-    : ILightSource(EL)
+    : _EL{EL}
     , _l{l.normalized()}
   {
   }

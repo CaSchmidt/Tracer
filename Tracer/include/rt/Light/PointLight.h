@@ -46,6 +46,9 @@ namespace rt {
     static LightSourcePtr create(const Vec3f& IL, const Vec3f& PL);
 
   private:
+    real_T attenuation(const real_T r) const;
+
+    Vec3f _IL{};
     Vec3f _PL{};
   };
 
