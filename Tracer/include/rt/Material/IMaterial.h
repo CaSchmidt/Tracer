@@ -42,7 +42,6 @@ namespace rt {
 
   class IMaterial {
   public:
-    IMaterial();
     virtual ~IMaterial();
 
     virtual bool isShadowCaster() const = 0;

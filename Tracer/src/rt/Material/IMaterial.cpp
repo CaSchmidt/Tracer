@@ -37,10 +37,6 @@
 
 namespace rt {
 
-  IMaterial::IMaterial()
-  {
-  }
-
   IMaterial::~IMaterial()
   {
   }
