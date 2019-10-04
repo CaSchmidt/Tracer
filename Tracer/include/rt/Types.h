@@ -48,15 +48,6 @@ namespace rt {
 
   using real_T = if_real_T<float>; // Implementation
 
-  ////// Special Values //////////////////////////////////////////////////////
-
-  constexpr real_T INF_REAL_T = std::numeric_limits<real_T>::infinity();
-
-  constexpr real_T MAX_REAL_T = std::numeric_limits<real_T>::max();
-  constexpr real_T MIN_REAL_T = std::numeric_limits<real_T>::lowest();
-
-  constexpr real_T NAN_REAL_T = std::numeric_limits<real_T>::quiet_NaN();
-
   ////// Other Types /////////////////////////////////////////////////////////
 
   template<typename T>
@@ -68,6 +59,15 @@ namespace rt {
   using if_enum_T = std::enable_if_t<std::is_unsigned_v<T>,T>;
 
   using enum_T = if_enum_T<unsigned int>; // Implementation
+
+  ////// Special Values //////////////////////////////////////////////////////
+
+  constexpr real_T INF_REAL_T = std::numeric_limits<real_T>::infinity();
+
+  constexpr real_T MAX_REAL_T = std::numeric_limits<real_T>::max();
+  constexpr real_T MIN_REAL_T = std::numeric_limits<real_T>::lowest();
+
+  constexpr real_T NAN_REAL_T = std::numeric_limits<real_T>::quiet_NaN();
 
   ////// Constants ///////////////////////////////////////////////////////////
 
