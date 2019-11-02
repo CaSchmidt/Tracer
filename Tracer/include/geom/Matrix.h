@@ -29,35 +29,35 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef MAT3_H
-#define MAT3_H
+#ifndef MATRIX_H
+#define MATRIX_H
 
-#include "geom/Vec3.h"
+#include "geom/VectorBase.h"
 
 namespace geom {
 
   template<typename T>
-  struct Mat3 {
+  struct Matrix {
     using value_type = std::enable_if_t<std::is_floating_point_v<T>,T>;
 
     // Construction & Assignment /////////////////////////////////////////////
 
-    Mat3() noexcept = default;
+    Matrix() noexcept = default;
 
-    Mat3(const Mat3<T>&) noexcept = default;
-    Mat3<T>& operator=(const Mat3<T>&) noexcept = default;
+    Matrix(const Matrix<T>&) noexcept = default;
+    Matrix<T>& operator=(const Matrix<T>&) noexcept = default;
 
-    Mat3(Mat3<T>&&) noexcept = default;
-    Mat3<T>& operator=(Mat3<T>&&) noexcept = default;
+    Matrix(Matrix<T>&&) noexcept = default;
+    Matrix<T>& operator=(Matrix<T>&&) noexcept = default;
 
-    Mat3(const T& _m00, const T& _m11, const T& _m22)
+    Matrix(const T& _m00, const T& _m11, const T& _m22)
       : m00{_m00}
       , m11{_m11}
       , m22{_m22}
     {
     }
 
-    Mat3(const T& _m00, const T& _m01, const T& _m02,
+    Matrix(const T& _m00, const T& _m01, const T& _m02,
          const T& _m10, const T& _m11, const T& _m12,
          const T& _m20, const T& _m21, const T& _m22)
       : m00{_m00}
@@ -74,59 +74,59 @@ namespace geom {
 
     // Special Matrices //////////////////////////////////////////////////////
 
-    static constexpr Mat3<T> identity()
+    static constexpr Matrix<T> identity()
     {
-      return Mat3<T>{1, 1, 1};
+      return Matrix<T>{1, 1, 1};
     }
 
-    static inline Mat3<T> rotateX(const T& angle)
+    static inline Matrix<T> rotateX(const T& angle)
     {
       const T COS = std::cos(angle);
       const T SIN = std::sin(angle);
-      return Mat3<T>{
+      return Matrix<T>{
         1, 0, 0,
         0, COS, -SIN,
             0, SIN, COS
       };
     }
 
-    static inline Mat3<T> rotateY(const T& angle)
+    static inline Matrix<T> rotateY(const T& angle)
     {
       const T COS = std::cos(angle);
       const T SIN = std::sin(angle);
-      return Mat3<T>{
+      return Matrix<T>{
         COS, 0, SIN,
             0, 1, 0,
             -SIN, 0, COS
       };
     }
 
-    static inline Mat3<T> rotateZ(const T& angle)
+    static inline Matrix<T> rotateZ(const T& angle)
     {
       const T COS = std::cos(angle);
       const T SIN = std::sin(angle);
-      return Mat3<T>{
+      return Matrix<T>{
         COS, -SIN, 0,
             SIN, COS, 0,
             0, 0, 1
       };
     }
 
-    static constexpr Mat3<T> scale(const T& sx, const T& sy, const T& sz)
+    static constexpr Matrix<T> scale(const T& sx, const T& sy, const T& sz)
     {
-      return Mat3<T>{sx, sy, sz};
+      return Matrix<T>{sx, sy, sz};
     }
 
     // Operators /////////////////////////////////////////////////////////////
 
-    constexpr Mat3<T> operator+() const
+    constexpr Matrix<T> operator+() const
     {
-      return Mat3<T>{m00, m01, m02, m10, m11, m12, m20, m21, m22};
+      return Matrix<T>{m00, m01, m02, m10, m11, m12, m20, m21, m22};
     }
 
-    constexpr Mat3<T> operator-() const
+    constexpr Matrix<T> operator-() const
     {
-      return Mat3<T>{-m00, -m01, -m02, -m10, -m11, -m12, -m20, -m21, -m22};
+      return Matrix<T>{-m00, -m01, -m02, -m10, -m11, -m12, -m20, -m21, -m22};
     }
 
     // Determinant ///////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ namespace geom {
 
     // Inverse ///////////////////////////////////////////////////////////////
 
-    inline Mat3<T> inverse(bool *ok = nullptr) const
+    inline Matrix<T> inverse(bool *ok = nullptr) const
     {
       if( ok != nullptr ) {
         *ok = false;
@@ -195,7 +195,7 @@ namespace geom {
 
       const T det{m00*c00 - m01*c01 + m02*c02};
       if( det == T{0} ) {
-        return Mat3<T>{};
+        return Matrix<T>{};
       }
 
       const T c10 = cofactor10();
@@ -210,7 +210,7 @@ namespace geom {
         *ok = true;
       }
 
-      return Mat3<T>{
+      return Matrix<T>{
         c00/det, -c10/det, c20/det,
             -c01/det, c11/det, -c21/det,
             c02/det, -c12/det, c22/det
@@ -219,7 +219,7 @@ namespace geom {
 
     // Transpose /////////////////////////////////////////////////////////////
 
-    inline Mat3<T>& transpose()
+    inline Matrix<T>& transpose()
     {
       std::swap(m01, m10);
       std::swap(m02, m20);
@@ -227,9 +227,9 @@ namespace geom {
       return *this;
     }
 
-    constexpr Mat3<T> transposed() const
+    constexpr Matrix<T> transposed() const
     {
-      return Mat3<T>{m00, m10, m20, m01, m11, m21, m02, m12, m22};
+      return Matrix<T>{m00, m10, m20, m01, m11, m21, m02, m12, m22};
     }
 
     // Elements //////////////////////////////////////////////////////////////
@@ -240,10 +240,10 @@ namespace geom {
   // Operators ///////////////////////////////////////////////////////////////
 
   template<typename T>
-  constexpr Mat3<T> operator+(const Mat3<T>& A, const Mat3<T>& B)
+  constexpr Matrix<T> operator+(const Matrix<T>& A, const Matrix<T>& B)
   {
 #define ADD(i,j)  A.m##i##j + B.m##i##j
-    return Mat3<T>{
+    return Matrix<T>{
       ADD(0,0), ADD(0,1), ADD(0,2),
           ADD(1,0), ADD(1,1), ADD(1,2),
           ADD(2,0), ADD(2,1), ADD(2,2)
@@ -252,10 +252,10 @@ namespace geom {
   }
 
   template<typename T>
-  constexpr Mat3<T> operator-(const Mat3<T>& A, const Mat3<T>& B)
+  constexpr Matrix<T> operator-(const Matrix<T>& A, const Matrix<T>& B)
   {
 #define SUB(i,j)  A.m##i##j - B.m##i##j
-    return Mat3<T>{
+    return Matrix<T>{
       SUB(0,0), SUB(0,1), SUB(0,2),
           SUB(1,0), SUB(1,1), SUB(1,2),
           SUB(2,0), SUB(2,1), SUB(2,2)
@@ -264,10 +264,10 @@ namespace geom {
   }
 
   template<typename T>
-  constexpr Mat3<T> operator*(const T& s, const Mat3<T>& M)
+  constexpr Matrix<T> operator*(const T& s, const Matrix<T>& M)
   {
 #define SMUL(i,j)  s*M.m##i##j
-    return Mat3<T>{
+    return Matrix<T>{
       SMUL(0,0), SMUL(0,1), SMUL(0,2),
           SMUL(1,0), SMUL(1,1), SMUL(1,2),
           SMUL(2,0), SMUL(2,1), SMUL(2,2)
@@ -276,10 +276,10 @@ namespace geom {
   }
 
   template<typename T>
-  constexpr Mat3<T> operator*(const Mat3<T>& M, const T& s)
+  constexpr Matrix<T> operator*(const Matrix<T>& M, const T& s)
   {
 #define SMUL(i,j)  s*M.m##i##j
-    return Mat3<T>{
+    return Matrix<T>{
       SMUL(0,0), SMUL(0,1), SMUL(0,2),
           SMUL(1,0), SMUL(1,1), SMUL(1,2),
           SMUL(2,0), SMUL(2,1), SMUL(2,2)
@@ -287,11 +287,11 @@ namespace geom {
 #undef SMUL
   }
 
-  template<typename T>
-  constexpr Vec3<T> operator*(const Mat3<T>& M, const Vec3<T>& v)
+  template<typename T, typename DerivedT>
+  constexpr VectorBase<T,DerivedT> operator*(const Matrix<T>& M, const VectorBase<T,DerivedT>& v)
   {
 #define VPROD(i)  M.m##i##0*v.x + M.m##i##1*v.y + M.m##i##2*v.z
-    return Vec3<T>{
+    return VectorBase<T,DerivedT>{
       VPROD(0),
           VPROD(1),
           VPROD(2)
@@ -300,10 +300,10 @@ namespace geom {
   }
 
   template<typename T>
-  constexpr Mat3<T> operator*(const Mat3<T>& A, const Mat3<T>& B)
+  constexpr Matrix<T> operator*(const Matrix<T>& A, const Matrix<T>& B)
   {
 #define MPROD(i,j)  A.m##i##0*B.m0##j + A.m##i##1*B.m1##j + A.m##i##2*B.m2##j
-    return Mat3<T>{
+    return Matrix<T>{
       MPROD(0,0), MPROD(0,1), MPROD(0,2),
           MPROD(1,0), MPROD(1,1), MPROD(1,2),
           MPROD(2,0), MPROD(2,1), MPROD(2,2)
@@ -312,10 +312,10 @@ namespace geom {
   }
 
   template<typename T>
-  constexpr Mat3<T> operator/(const Mat3<T>& M, const T& s)
+  constexpr Matrix<T> operator/(const Matrix<T>& M, const T& s)
   {
 #define SDIV(i,j)  M.m##i##j/s
-    return Mat3<T>{
+    return Matrix<T>{
       SDIV(0,0), SDIV(0,1), SDIV(0,2),
           SDIV(1,0), SDIV(1,1), SDIV(1,2),
           SDIV(2,0), SDIV(2,1), SDIV(2,2)
@@ -325,4 +325,4 @@ namespace geom {
 
 } // namespace geom
 
-#endif // MAT3_H
+#endif // MATRIX_H

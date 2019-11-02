@@ -32,7 +32,7 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "geom/Vec3.h"
+#include "geom/Vector.h"
 
 namespace geom {
 
@@ -47,7 +47,7 @@ namespace geom {
     Ray(Ray&&) noexcept = default;
     Ray& operator=(Ray&&) noexcept = default;
 
-    Ray(const Vec3<T>& org, const Vec3<T>& dir) noexcept
+    Ray(const Vertex<T>& org, const Normal<T>& dir) noexcept
       : _org{org}
       , _dir{dir.normalized()}
     {
@@ -55,23 +55,24 @@ namespace geom {
 
     ~Ray() noexcept = default;
 
-    constexpr Vec3<T> operator()(const T& t) const
+    constexpr Vertex<T> operator()(const T& t) const
     {
       return _org + t*_dir;
     }
 
-    constexpr Vec3<T> origin() const
+    constexpr Vertex<T> origin() const
     {
       return _org;
     }
 
-    constexpr Vec3<T> direction() const
+    constexpr Normal<T> direction() const
     {
       return _dir;
     }
 
   private:
-    Vec3<T> _org{}, _dir{};
+    Vertex<T> _org{};
+    Normal<T> _dir{};
   };
 
 } // namespace geom

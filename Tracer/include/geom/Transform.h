@@ -32,7 +32,8 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include "geom/Mat3.h"
+#include "geom/Matrix.h"
+#include "geom/Vector.h"
 #include "geom/Ray.h"
 
 namespace geom {
@@ -50,38 +51,60 @@ namespace geom {
 
     ~Transform() noexcept = default;
 
-    Transform(const Mat3<T>& X = Mat3<T>::identity(), const Vec3<T>& t = Vec3<T>{}) noexcept
+    Transform(const Matrix<T>& X = Matrix<T>::identity(), const Vertex<T>& t = Vertex<T>{}) noexcept
       : _t{t}
       , _X{X}
     {
       _Xinv = _X.inverse(&_haveInv);
     }
 
+    // Operators /////////////////////////////////////////////////////////////
+
+    constexpr Normal<T> operator*(const Normal<T>& n) const
+    {
+      return _Xinv.transposed()*n;
+    }
+
+    constexpr Vertex<T> operator*(const Vertex<T>& v) const
+    {
+      return _X*v + _t;
+    }
+
+    constexpr Transform<T> operator*(const Transform<T>& other) const
+    {
+      return Transform<T>{_X*other._X, _t + _X*other._t};
+    }
+
+    constexpr Ray<T> operator*(const Ray<T>& ray) const
+    {
+      return Ray<T>{_X*ray.origin() + _t, _X*ray.direction()};
+    }
+
     // Special Transforms ////////////////////////////////////////////////////
 
     static constexpr Transform<T> rotateX(const T& angle)
     {
-      return Transform<T>{Mat3<T>::rotateX(angle)};
+      return Transform<T>{Matrix<T>::rotateX(angle)};
     }
 
     static constexpr Transform<T> rotateY(const T& angle)
     {
-      return Transform<T>{Mat3<T>::rotateY(angle)};
+      return Transform<T>{Matrix<T>::rotateY(angle)};
     }
 
     static constexpr Transform<T> rotateZ(const T& angle)
     {
-      return Transform<T>{Mat3<T>::rotateZ(angle)};
+      return Transform<T>{Matrix<T>::rotateZ(angle)};
     }
 
     static constexpr Transform<T> scale(const T& sx, const T& sy, const T& sz)
     {
-      return Transform<T>{Mat3<T>::scale(sx, sy, sz)};
+      return Transform<T>{Matrix<T>::scale(sx, sy, sz)};
     }
 
-    static constexpr Transform<T> translate(const Vec3<T>& t)
+    static constexpr Transform<T> translate(const Vertex<T>& t)
     {
-      return Transform<T>{Mat3<T>::identity(), t};
+      return Transform<T>{Matrix<T>::identity(), t};
     }
 
     // Inverse ///////////////////////////////////////////////////////////////
@@ -96,7 +119,7 @@ namespace geom {
 
     // Normal Transform //////////////////////////////////////////////////////
 
-    inline Mat3<T> normalTransform(bool *ok = nullptr) const
+    inline Matrix<T> normalTransform(bool *ok = nullptr) const
     {
       if( ok != nullptr ) {
         *ok = _haveInv;
@@ -106,50 +129,21 @@ namespace geom {
 
     // Element Access ////////////////////////////////////////////////////////
 
-    constexpr const Mat3<T>& scaledRotation() const
+    constexpr const Matrix<T>& scaledRotation() const
     {
       return _X;
     }
 
-    constexpr const Vec3<T>& translation() const
+    constexpr const Vertex<T>& translation() const
     {
       return _t;
     }
 
   private:
     bool _haveInv{};
-    Vec3<T> _t{};
-    Mat3<T> _X{}, _Xinv{};
-
-    template<typename U>
-    friend constexpr Vec3<U> operator*(const Transform<U>&, const Vec3<U>&);
-
-    template<typename U>
-    friend constexpr Transform<U> operator*(const Transform<U>&, const Transform<U>&);
-
-    template<typename U>
-    friend constexpr Ray<U> operator*(const Transform<U>&, const Ray<U>&);
+    Vertex<T> _t{};
+    Matrix<T> _X{}, _Xinv{};
   };
-
-  // Operators ///////////////////////////////////////////////////////////////
-
-  template<typename T>
-  constexpr Vec3<T> operator*(const Transform<T>& M, const Vec3<T>& v)
-  {
-    return M._X*v + M._t;
-  }
-
-  template<typename T>
-  constexpr Transform<T> operator*(const Transform<T>& M2, const Transform<T>& M1)
-  {
-    return Transform<T>{M2._X*M1._X, M2._t + M2._X*M1._t};
-  }
-
-  template<typename T>
-  constexpr Ray<T> operator*(const Transform<T>& M, const Ray<T>& ray)
-  {
-    return Ray<T>{M*ray.origin(), M.scaledRotation()*ray.direction()};
-  }
 
 } // namespace geom
 

@@ -48,10 +48,10 @@ namespace rt {
                             const real_T width, const real_T height);
 
   private:
-    real_T _width{};
-    real_T _height{};
-    Vec3f  _Oobj{0, 0, 0};
-    Vec3f  _Nobj{Vec3f::zAxis()};
+    real_T   _width{};
+    real_T   _height{};
+    Vertex3f _Oobj{0, 0, 0};
+    Normal3f _Nobj{Normal3f::zAxis()};
   };
 
 } // namespace rt

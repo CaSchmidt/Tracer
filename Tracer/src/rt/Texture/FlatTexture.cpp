@@ -33,7 +33,7 @@
 
 namespace rt {
 
-  FlatTexture::FlatTexture(const Vec3f& color) noexcept
+  FlatTexture::FlatTexture(const Color3f& color) noexcept
     : _color{color}
   {
   }
@@ -42,12 +42,12 @@ namespace rt {
   {
   }
 
-  Vec3f FlatTexture::lookup(const real_T /*s*/, const real_T /*t*/) const
+  Color3f FlatTexture::lookup(const real_T /*s*/, const real_T /*t*/) const
   {
     return _color;
   }
 
-  TexturePtr FlatTexture::create(const Vec3f& color)
+  TexturePtr FlatTexture::create(const Color3f& color)
   {
     return std::make_unique<FlatTexture>(color);
   }

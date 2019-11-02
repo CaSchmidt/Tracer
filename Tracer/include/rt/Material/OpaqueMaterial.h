@@ -48,14 +48,14 @@ namespace rt {
 
     void setDiffuse(TexturePtr& tex);
     void setDiffuse(TexturePtr&& tex);
-    Vec3f diffuse(const real_T s, const real_T t) const;
+    Color3f diffuse(const real_T s, const real_T t) const;
 
     void setShininess(const real_T mSpec);
     real_T shininess() const;
 
     void setSpecular(TexturePtr& tex);
     void setSpecular(TexturePtr&& tex);
-    Vec3f specular(const real_T s, const real_T t) const;
+    Color3f specular(const real_T s, const real_T t) const;
 
     static MaterialPtr create();
 

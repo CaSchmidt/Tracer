@@ -29,27 +29,85 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Color.h"
+#ifndef VECTOR_H
+#define VECTOR_H
 
-namespace rt {
+#include "geom/VectorBase.h"
 
-  namespace Color {
+namespace geom {
 
-    const Vec3f black{0, 0, 0};
-    const Vec3f white{1, 1, 1};
+  enum class VectorId : unsigned int {
+    Vertex = 0,
+    Normal = 1
+  };
 
-    const Vec3f red  {1, 0, 0};
-    const Vec3f green{0, 1, 0};
-    const Vec3f blue {0, 0, 1};
+  template<typename T, VectorId ID>
+  struct Vector : public VectorBase<T,Vector<T,ID>> {
+    using base_type = VectorBase<T,Vector<T,ID>>;
 
-    const Vec3f cyan   {0, 1, 1};
-    const Vec3f magenta{1, 0, 1};
-    const Vec3f yellow {1, 1, 0};
+    Vector() noexcept = default;
 
-    const Vec3f orange{1,  0.5, 0};
-    const Vec3f indigo{0.25, 0, 1};
-    const Vec3f violet{0.5,  0, 1};
+    Vector(const Vector<T,ID>&) noexcept = default;
+    Vector<T,ID>& operator=(const Vector<T,ID>&) noexcept = default;
 
-  } // namespace Color
+    Vector(Vector<T,ID>&&) noexcept = default;
+    Vector<T,ID>& operator=(Vector<T,ID>&&) noexcept = default;
 
-} // namespace rt
+    Vector(const T& x, const T& y, const T& z) noexcept
+      : base_type{x, y, z}
+    {
+    }
+
+    Vector(const base_type& other) noexcept
+      : base_type{other}
+    {
+    }
+
+    Vector<T,ID>& operator=(const base_type& other) noexcept
+    {
+      if( this != &other ) {
+        base_type::operator=(other);
+      }
+      return *this;
+    }
+
+    Vector(base_type&& other) noexcept
+      : base_type{std::move(other)}
+    {
+    }
+
+    Vector<T,ID>& operator=(base_type&& other) noexcept
+    {
+      if( this != &other ) {
+        base_type::operator=(std::move(other));
+      }
+      return *this;
+    }
+
+    // Special Vectors ///////////////////////////////////////////////////////
+
+    static constexpr Vector<T,ID> xAxis()
+    {
+      return Vector<T,ID>{1, 0, 0};
+    }
+
+    static constexpr Vector<T,ID> yAxis()
+    {
+      return Vector<T,ID>{0, 1, 0};
+    }
+
+    static constexpr Vector<T,ID> zAxis()
+    {
+      return Vector<T,ID>{0, 0, 1};
+    }
+  };
+
+  template<typename T>
+  using Vertex = Vector<T,VectorId::Vertex>;
+
+  template<typename T>
+  using Normal = Vector<T,VectorId::Normal>;
+
+} // namespace geom
+
+#endif // VECTOR_H

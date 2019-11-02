@@ -9,12 +9,13 @@ set(Tracer_HEADERS
   include/scenes.h
   include/tests.h
   include/geom/Intersect.h
-  include/geom/Mat3.h
+  include/geom/Matrix.h
   include/geom/Optics.h
   include/geom/Ray.h
   include/geom/Transform.h
   include/geom/Util.h
-  include/geom/Vec3.h
+  include/geom/Vector.h
+  include/geom/VectorBase.h
   include/math/Logical.h
   include/math/Pythagoras.h
   include/math/Quadratic.h
@@ -52,7 +53,6 @@ set(Tracer_SOURCES
   src/test_intersect.cpp
   src/test_matrix.cpp
   src/rt/Camera.cpp
-  src/rt/Color.cpp
   src/rt/Refraction.cpp
   src/rt/Renderer.cpp
   src/rt/Light/DirectionalLight.cpp

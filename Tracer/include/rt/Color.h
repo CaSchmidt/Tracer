@@ -32,28 +32,132 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#include "geom/VectorBase.h"
 #include "rt/Types.h"
 
 namespace rt {
 
-  namespace Color {
+  template<typename T>
+  struct Color : public geom::VectorBase<T,Color<T>> {
+    using base_type = geom::VectorBase<T,Color<T>>;
 
-    extern const Vec3f black;
-    extern const Vec3f white;
+    // Construction & Assignment /////////////////////////////////////////////
 
-    extern const Vec3f red;
-    extern const Vec3f green;
-    extern const Vec3f blue;
+    Color() noexcept = default;
 
-    extern const Vec3f cyan;
-    extern const Vec3f magenta;
-    extern const Vec3f yellow;
+    Color(const Color<T>&) noexcept = default;
+    Color<T>& operator=(const Color<T>&) noexcept = default;
 
-    extern const Vec3f orange;
-    extern const Vec3f indigo;
-    extern const Vec3f violet;
+    Color(Color<T>&&) noexcept = default;
+    Color<T>& operator=(Color<T>&&) noexcept = default;
 
-  } // namespace Color
+    Color(const T& x, const T& y, const T& z) noexcept
+      : base_type{x, y, z}
+    {
+    }
+
+    Color(const base_type& other) noexcept
+      : base_type{other}
+    {
+    }
+
+    Color<T>& operator=(const base_type& other) noexcept
+    {
+      if( this != &other ) {
+        base_type::operator=(other);
+      }
+      return *this;
+    }
+
+    Color(base_type&& other) noexcept
+      : base_type{std::move(other)}
+    {
+    }
+
+    Color<T>& operator=(base_type&& other) noexcept
+    {
+      if( this != &other ) {
+        base_type::operator=(std::move(other));
+      }
+      return *this;
+    }
+
+    // Conversion ////////////////////////////////////////////////////////////
+
+    constexpr uint8_t r8() const
+    {
+      return static_cast<uint8_t>(geom::clamp<T>(this->x, 0, 1)*T{255});
+    }
+
+    constexpr uint8_t g8() const
+    {
+      return static_cast<uint8_t>(geom::clamp<T>(this->y, 0, 1)*T{255});
+    }
+
+    constexpr uint8_t b8() const
+    {
+      return static_cast<uint8_t>(geom::clamp<T>(this->z, 0, 1)*T{255});
+    }
+
+    // Constants /////////////////////////////////////////////////////////////
+
+    static constexpr Color<T> black()
+    {
+      return Color<T>{0, 0, 0};
+    }
+
+    static constexpr Color<T> white()
+    {
+      return Color<T>{1, 1, 1};
+    }
+
+    static constexpr Color<T> red()
+    {
+      return Color<T>{1, 0, 0};
+    }
+
+    static constexpr Color<T> green()
+    {
+      return Color<T>{0, 1, 0};
+    }
+
+    static constexpr Color<T> blue()
+    {
+      return Color<T>{0, 0, 1};
+    }
+
+    static constexpr Color<T> cyan()
+    {
+      return Color<T>{0, 1, 1};
+    }
+
+    static constexpr Color<T> magenta()
+    {
+      return Color<T>{1, 0, 1};
+    }
+
+    static constexpr Color<T> yellow()
+    {
+      return Color<T>{1, 1, 0};
+    }
+
+    static constexpr Color<T> orange()
+    {
+      return Color<T>{1,  0.5, 0};
+    }
+
+    static constexpr Color<T> indigo()
+    {
+      return Color<T>{0.25, 0, 1};
+    }
+
+    static constexpr Color<T> violet()
+    {
+      return Color<T>{0.5,  0, 1};
+    }
+  };
+
+  using Color3f = Color<real_T>;
 
 } // namespace rt
 

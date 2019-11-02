@@ -41,10 +41,10 @@ namespace rt {
   struct RenderOptions {
     RenderOptions() = default;
 
-    Vec3f        backgroundColor{};
-    Vec3f        eye{};
-    Vec3f        lookAt{};
-    Vec3f        cameraUp{};
+    Color3f      backgroundColor{};
+    Vertex3f     eye{};
+    Vertex3f     lookAt{};
+    Normal3f     cameraUp{};
     dim_T        width{};
     dim_T        height{};
     real_T       fov_rad{};
@@ -68,8 +68,8 @@ namespace rt {
 
   private:
     // NOTE: All arguments passed to/returned from these methods are in WORLD coordinates!
-    Vec3f castRay(const Rayf& ray, const real_T tMax = MAX_REAL_T, const unsigned int depth = 0) const;
-    Vec3f shade(const SurfaceInfo& sinfo, const Vec3f& v) const;
+    Color3f castRay(const Rayf& ray, const real_T tMax = MAX_REAL_T, const unsigned int depth = 0) const;
+    Color3f shade(const SurfaceInfo& sinfo, const Normal3f& v) const;
     bool trace(SurfaceInfo& result, const Rayf& ray, const real_T tMax, const bool isShadowRay) const;
 
     Camera        _camera{};

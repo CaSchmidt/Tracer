@@ -59,10 +59,10 @@ namespace rt {
     }
 
     // NOTE: All members are in world coordinates!
-    real_T t{NAN_REAL_T};
-    Vec3f  P{};
-    Vec3f  N{};
-    real_T u{}, v{};
+    real_T   t{NAN_REAL_T};
+    Vertex3f P{};
+    Normal3f N{};
+    real_T   u{}, v{};
     const IObject *object{nullptr};
   };
 

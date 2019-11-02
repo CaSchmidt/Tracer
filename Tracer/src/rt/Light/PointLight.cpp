@@ -35,7 +35,7 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  PointLight::PointLight(const Vec3f& IL, const Vec3f& PL) noexcept
+  PointLight::PointLight(const Color3f& IL, const Vertex3f& PL) noexcept
     : _IL{IL}
     , _PL{PL}
   {
@@ -45,16 +45,16 @@ namespace rt {
   {
   }
 
-  LightInfo PointLight::info(const Vec3f& P) const
+  LightInfo PointLight::info(const Vertex3f& P) const
   {
     LightInfo i;
-    i.l  = geom::direction(P, _PL);
+    i.l  = geom::direction(P, _PL).cast_to<Normal3f>();
     i.r  = geom::distance(P, _PL);
     i.EL = _IL*attenuation(i.r);
     return i;
   }
 
-  LightSourcePtr PointLight::create(const Vec3f& IL, const Vec3f& PL)
+  LightSourcePtr PointLight::create(const Color3f& IL, const Vertex3f& PL)
   {
     return std::make_unique<PointLight>(IL, PL);
   }

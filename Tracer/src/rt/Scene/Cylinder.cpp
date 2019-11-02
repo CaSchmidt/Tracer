@@ -100,15 +100,15 @@ namespace rt {
       return SurfaceInfo();
     }
 
-    const Vec3f Pobj = rayObj(info.t);
-    const real_T   h = geom::dot(Pobj - _Oobj, _Nobj);
+    const Vertex3f Pobj = rayObj(info.t);
+    const real_T      h = geom::dot(Pobj - _Oobj, _Nobj);
     if( std::abs(h) > _height/2 ) {
       return SurfaceInfo();
     }
 
-    const Vec3f Nobj = Vec3f{Pobj.x - _Oobj.x, Pobj.y - _Oobj.y, 0}.normalized();
-    const real_T   u = (std::atan2(Nobj.y, Nobj.x)/PI + 1)/2;
-    const real_T   v = (h + _height/2)/_height;
+    const Normal3f Nobj = Normal3f{Pobj.x - _Oobj.x, Pobj.y - _Oobj.y, 0}.normalized();
+    const real_T      u = (std::atan2(Nobj.y, Nobj.x)/PI + 1)/2;
+    const real_T      v = (h + _height/2)/_height;
 
     info.N = _xfrmWO.normalTransform()*Nobj;
     info.P = _xfrmWO*Pobj;
@@ -124,17 +124,17 @@ namespace rt {
 
     const real_T sign = bottom  ?  -ONE : ONE;
 
-    const Vec3f Nobj = sign*_Nobj;
-    const Vec3f Oobj = _Oobj + Nobj*_height/static_cast<real_T>(2);
+    const Normal3f Nobj = sign*_Nobj;
+    const Vertex3f Oobj = _Oobj + Nobj*_height/static_cast<real_T>(2);
 
     info.t = geom::intersectPlane(rayObj, Oobj, Nobj);
     if( !isHit(info.t) ) {
       return SurfaceInfo();
     }
 
-    const Vec3f Pobj = rayObj(info.t);
-    const real_T   u = (std::atan2(Pobj.y, Pobj.x)/PI + 1)/2;
-    const real_T   v = geom::distance(Oobj, Pobj)/_radius;
+    const Vertex3f Pobj = rayObj(info.t);
+    const real_T      u = (std::atan2(Pobj.y, Pobj.x)/PI + 1)/2;
+    const real_T      v = geom::distance(Oobj, Pobj)/_radius;
     if( v > 1 ) {
       return SurfaceInfo();
     }

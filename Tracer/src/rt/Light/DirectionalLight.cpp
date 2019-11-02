@@ -33,7 +33,7 @@
 
 namespace rt {
 
-  DirectionalLight::DirectionalLight(const Vec3f& EL, const Vec3f& l) noexcept
+  DirectionalLight::DirectionalLight(const Color3f& EL, const Normal3f& l) noexcept
     : _EL{EL}
     , _l{l.normalized()}
   {
@@ -43,7 +43,7 @@ namespace rt {
   {
   }
 
-  LightInfo DirectionalLight::info(const Vec3f& /*P*/) const
+  LightInfo DirectionalLight::info(const Vertex3f& /*P*/) const
   {
     LightInfo i;
     i.EL = _EL;
@@ -52,7 +52,7 @@ namespace rt {
     return i;
   }
 
-  LightSourcePtr DirectionalLight::create(const Vec3f& EL, const Vec3f& l)
+  LightSourcePtr DirectionalLight::create(const Color3f& EL, const Normal3f& l)
   {
     return std::make_unique<DirectionalLight>(EL, l);
   }

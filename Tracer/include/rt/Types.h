@@ -95,10 +95,11 @@ namespace rt {
 
   ////// Spatial Types ///////////////////////////////////////////////////////
 
-  using      Mat3f = geom::Mat3<real_T>;
+  using   Matrix3f = geom::Matrix<real_T>;
+  using   Normal3f = geom::Normal<real_T>;
   using       Rayf = geom::Ray<real_T>;
   using Transformf = geom::Transform<real_T>;
-  using      Vec3f = geom::Vec3<real_T>;
+  using   Vertex3f = geom::Vertex<real_T>;
 
 } // namespace rt
 

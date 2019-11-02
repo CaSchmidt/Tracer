@@ -69,23 +69,25 @@ namespace rt {
     if( y >= _options.height  ||  row == nullptr ) {
       return false;
     }
-    for(dim_T x = 0; x < _options.width; x++) {
-      if( samples > 1 ) {
-        Vec3f result;
+    if( samples > 1 ) {
+      for(dim_T x = 0; x < _options.width; x++) {
+        Color3f result;
         for(uint8_t s = 0; s < samples; s++) {
-          const Vec3f color = castRay(_xfrmWC*_camera.ray(x, y, true));
+          const Color3f color = castRay(_xfrmWC*_camera.ray(x, y, true));
           result += color.clamped(ZERO, ONE);
         }
         result /= samples;
-        *row++ = result.r();
-        *row++ = result.g();
-        *row++ = result.b();
+        *row++ = result.r8();
+        *row++ = result.g8();
+        *row++ = result.b8();
         *row++ = 0xFF;
-      } else {
-        const Vec3f color = castRay(_xfrmWC*_camera.ray(x, y));
-        *row++ = color.r();
-        *row++ = color.g();
-        *row++ = color.b();
+      }
+    } else {
+      for(dim_T x = 0; x < _options.width; x++) {
+        const Color3f color = castRay(_xfrmWC*_camera.ray(x, y));
+        *row++ = color.r8();
+        *row++ = color.g8();
+        *row++ = color.b8();
         *row++ = 0xFF;
       }
     }
@@ -94,7 +96,7 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Vec3f Renderer::castRay(const Rayf& ray, const real_T tMax, const unsigned int depth) const
+  Color3f Renderer::castRay(const Rayf& ray, const real_T tMax, const unsigned int depth) const
   {
     if( depth >= _options.maxDepth ) {
       return _options.backgroundColor;
@@ -105,22 +107,22 @@ namespace rt {
       return _options.backgroundColor;
     }
 
-    Vec3f color;
+    Color3f color;
     if(        sinfo->material()->isOpaque() ) {
       color = shade(sinfo, -ray.direction());
 
     } else if( sinfo->material()->isMirror() ) {
-      const Vec3f      R = geom::reflect(ray.direction(), sinfo.N);
-      const Vec3f rcolor = castRay({sinfo.P + TRACE_BIAS*sinfo.N, R}, MAX_REAL_T, depth + 1);
+      const Normal3f     R = geom::reflect(ray.direction(), sinfo.N);
+      const Color3f rcolor = castRay({sinfo.P + TRACE_BIAS*sinfo.N, R}, MAX_REAL_T, depth + 1);
       color = sinfo->material()->mirror()->reflectance()*rcolor;
 
     } else if( sinfo->material()->isTransparent() ) {
       // (1) Set up Snell's law //////////////////////////////////////////////
 
-      const Vec3f I = ray.direction();
+      const Normal3f I = ray.direction();
       const bool entering = geom::dot(I, sinfo.N) < ZERO;
-      const Vec3f N = entering
-          ?  sinfo.N
+      const Normal3f N = entering
+          ? sinfo.N
           : -sinfo.N;
       const real_T etai = entering
           ? _options.globalRefraction
@@ -137,13 +139,13 @@ namespace rt {
 
       // (3) Reflectance /////////////////////////////////////////////////////
 
-      const Vec3f R = geom::reflect(I, N);
+      const Normal3f R = geom::reflect(I, N);
       color = kR*castRay({sinfo.P + TRACE_BIAS*N, R}, MAX_REAL_T, depth + 1);
 
       // (4) Transmittance ///////////////////////////////////////////////////
 
       if( kT > ZERO ) {
-        const Vec3f T = geom::refract(I, N, eta);
+        const Normal3f T = geom::refract(I, N, eta);
         color += kT*castRay({sinfo.P - TRACE_BIAS*N, T}, MAX_REAL_T, depth + 1);
       }
 
@@ -152,9 +154,9 @@ namespace rt {
     return color;
   }
 
-  Vec3f Renderer::shade(const SurfaceInfo& sinfo, const Vec3f& v) const
+  Color3f Renderer::shade(const SurfaceInfo& sinfo, const Normal3f& v) const
   {
-    Vec3f result;
+    Color3f result;
 
     const OpaqueMaterial *opaque = sinfo->material()->opaque();
 
@@ -172,11 +174,11 @@ namespace rt {
       }
 
       // Lambertian/Diffuse contribution
-      Vec3f scolor = opaque->diffuse(sinfo.u, sinfo.v);
+      Color3f scolor = opaque->diffuse(sinfo.u, sinfo.v);
 
       // Specular contribution
       if( opaque->isSpecular() ) {
-        const Vec3f h = (linfo.l + v).normalized();
+        const Normal3f h = (linfo.l + v).normalized();
         const real_T cosTh = geom::dot01(sinfo.N, h);
         scolor += opaque->specular(sinfo.u, sinfo.v)*std::pow(cosTh, opaque->shininess());
       }

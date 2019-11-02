@@ -35,7 +35,7 @@
 #include <list>
 #include <memory>
 
-#include "rt/Types.h"
+#include "rt/Color.h"
 
 namespace rt {
 
@@ -43,9 +43,9 @@ namespace rt {
     LightInfo() noexcept = default;
 
     // NOTE: All members are in world coordinates!
-    Vec3f  EL{};
-    Vec3f  l{};
-    real_T r{MAX_REAL_T};
+    Color3f  EL{};
+    Normal3f  l{};
+    real_T    r{MAX_REAL_T};
   };
 
   class ILightSource {
@@ -53,7 +53,7 @@ namespace rt {
     virtual ~ILightSource() noexcept;
 
     // NOTE: P is in world coordinates!
-    virtual LightInfo info(const Vec3f& P) const = 0;
+    virtual LightInfo info(const Vertex3f& P) const = 0;
   };
 
   using LightSourcePtr = std::unique_ptr<ILightSource>;

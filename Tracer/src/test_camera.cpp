@@ -53,7 +53,8 @@ void pos(const rt::real_T x, const rt::real_T y,
   printf("(%6.3f,%6.3f)", d1, d2);
 }
 
-void print(const rt::Vec3f& v, const bool lf = false)
+template<typename T, typename DerivedT>
+inline void print(const geom::VectorBase<T,DerivedT>& v, const bool lf = false)
 {
   printf("(%9.6f,%9.6f,%9.6f)",
          double(v.x), double(v.y), double(v.z));
@@ -82,8 +83,8 @@ void test_camera()
   rt::Camera cam({0, 0, 1}, {0, 0, 0}, {0, 1, 0}, width, height, rt::PI_HALF);
   for(rt::dim_T y = 0; y < height; y++) {
     for(rt::dim_T x = 0; x < width; x++) {
-      const rt::Rayf  ray = cam.ray(x, y);
-      const rt::Vec3f org = ray.origin();
+      const rt::Rayf     ray = cam.ray(x, y);
+      const rt::Vertex3f org = ray.origin();
       printf("  (%5.2f,%5.2f,%5.2f)",
              double(org.x), double(org.y), double(org.z));
     }
@@ -97,18 +98,18 @@ void test_camera()
   const rt::real_T angle = std::atan(rt::ONE_HALF);
   printf("angle = %.3fdeg\n", double(angle)/M_PI*180.0);
 
-  using Samples2x2 = std::array<rt::Vec3f,4>;
+  using Samples2x2 = std::array<rt::Vertex3f,4>;
   using  size_type = Samples2x2::size_type;
 
   Samples2x2 samples;
-  samples[0] = { -0.25,  0.25, 0 };
-  samples[1] = {  0.25,  0.25, 0 };
-  samples[2] = { -0.25, -0.25, 0 };
-  samples[3] = {  0.25, -0.25, 0 };
+  samples[0] = rt::Vertex3f{ -0.25,  0.25, 0 };
+  samples[1] = rt::Vertex3f{  0.25,  0.25, 0 };
+  samples[2] = rt::Vertex3f{ -0.25, -0.25, 0 };
+  samples[3] = rt::Vertex3f{  0.25, -0.25, 0 };
 
   Samples2x2 rotSamples;
   for(size_type i = 0; i < samples.size(); i++) {
-    rotSamples[i] = rt::Mat3f::rotateZ(angle)*samples[i];
+    rotSamples[i] = rt::Matrix3f::rotateZ(angle)*samples[i];
   }
 
   for(size_type i = 0; i < samples.size(); i++) {

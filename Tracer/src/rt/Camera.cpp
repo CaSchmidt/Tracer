@@ -45,7 +45,7 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  Camera::Camera(const Vec3f& eye, const Vec3f& lookAt, const Vec3f& up,
+  Camera::Camera(const Vertex3f& eye, const Vertex3f& lookAt, const Normal3f& up,
                  const dim_T width, const dim_T height, const real_T fov_rad) noexcept
     : _aspect{static_cast<real_T>(width)/height}
     , _width{width}
@@ -54,11 +54,11 @@ namespace rt {
   {
     rand_init();
 
-    const Vec3f z = geom::direction(lookAt, _eye); // Looking along the NEGATIVE z-axis!
-    const Vec3f x = geom::cross(up, z).normalized();
-    const Vec3f y = geom::cross(z, x).normalized();
+    const Normal3f z = geom::direction(lookAt, _eye).cast_to<Normal3f>(); // Looking along the NEGATIVE z-axis!
+    const Normal3f x = geom::cross(up, z).normalized();
+    const Normal3f y = geom::cross(z, x).normalized();
 
-    _cam = Mat3f{ x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z };
+    _cam = Matrix3f{ x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z };
 
     _near = -_aspect/std::tan(fov_rad/2);
   }
@@ -79,8 +79,8 @@ namespace rt {
     const real_T x = priv::scaledPos(_x, _width, _aspect, dx);
     const real_T y = priv::scaledPos(_y, _height, -1, dy);
 
-    const Vec3f org = _cam*Vec3f{x, y, _near} + _eye;
-    const Vec3f dir = geom::direction(_eye, org);
+    const Vertex3f org = _cam*Vertex3f{x, y, _near} + _eye;
+    const Normal3f dir = geom::direction(_eye, org).cast_to<Normal3f>();
 
     return Rayf{org, dir};
   }

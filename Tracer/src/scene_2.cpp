@@ -38,11 +38,11 @@ rt::RenderOptions options_scene_2(const rt::dim_T width, const rt::dim_T height)
   opt.width           = width;
   opt.height          = height;
   opt.fov_rad         = rt::PI/rt::real_T{3.0};
-  opt.backgroundColor = {0, static_cast<rt::real_T>(0.8), 1};
-  opt.lookAt          = {0, 0, 0};
-  opt.eye             = {0, 4, 7.5};
-  opt.cameraUp        = {0, 1, 0};
-  opt.worldToCamera   = rt::Transformf{rt::Mat3f::rotateX(-rt::PI_HALF)};
+  opt.backgroundColor = rt::Color3f{0, static_cast<rt::real_T>(0.8), 1};
+  opt.lookAt          = rt::Vertex3f{0, 0, 0};
+  opt.eye             = rt::Vertex3f{0, 4, 7.5};
+  opt.cameraUp        = rt::Normal3f{0, 1, 0};
+  opt.worldToCamera   = rt::Transformf{rt::Matrix3f::rotateX(-rt::PI_HALF)};
 
   return opt;
 }
@@ -51,7 +51,7 @@ rt::Objects create_scene_2()
 {
   rt::Objects objs;
 
-  const rt::Vec3f    cw = rt::Color::white;
+  const rt::Color3f  cw = rt::Color3f::white();
   const rt::real_T cdim = 0.8;
 
   const rt::real_T a = 1.5;
@@ -100,7 +100,7 @@ void initialize_scene_2(rt::Renderer& renderer, const rt::dim_T width, const rt:
   // (2) Add Light ///////////////////////////////////////////////////////////
 
   rt::LightSourcePtr light =
-      rt::PointLight::create(rt::Color::white*rt::TEN, {0, 0, 2});
+      rt::PointLight::create(rt::Color3f::white()*rt::TEN, {0, 0, 2});
   renderer.addLight(light);
 
   // (3) Initialize Renderer /////////////////////////////////////////////////

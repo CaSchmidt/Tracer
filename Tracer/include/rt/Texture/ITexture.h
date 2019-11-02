@@ -34,7 +34,7 @@
 
 #include <memory>
 
-#include "rt/Types.h"
+#include "rt/Color.h"
 
 namespace rt {
 
@@ -42,7 +42,7 @@ namespace rt {
   public:
     virtual ~ITexture();
 
-    virtual Vec3f lookup(const real_T s, const real_T t) const = 0;
+    virtual Color3f lookup(const real_T s, const real_T t) const = 0;
   };
 
   using TexturePtr = std::unique_ptr<ITexture>;

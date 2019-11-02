@@ -43,7 +43,7 @@ namespace rt {
     Camera() = default;
     ~Camera() noexcept = default;
 
-    Camera(const Vec3f& eye, const Vec3f& lookAt, const Vec3f& up,
+    Camera(const Vertex3f& eye, const Vertex3f& lookAt, const Normal3f& up,
            const dim_T width, const dim_T height, const real_T fov_rad) noexcept;
 
     Rayf ray(const dim_T _x, const dim_T _y, const bool random = false) const;
@@ -54,8 +54,8 @@ namespace rt {
 
     real_T _aspect{}, _near{};
     dim_T _width{}, _height{};
-    Vec3f _eye{};
-    Mat3f _cam{};
+    Vertex3f _eye{};
+    Matrix3f _cam{};
 
     std::uniform_real_distribution<rt::real_T> _randDis{};
     std::mt19937                               _randGen{};

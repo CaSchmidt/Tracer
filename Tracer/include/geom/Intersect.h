@@ -41,17 +41,17 @@ namespace geom {
 
   template<typename T>
   inline T intersectCylinder(const Ray<T>& ray,
-                             const Vec3<T>& C, // cylinder's origin
-                             const Vec3<T>& N, // cylinder's normalized z-axis
-                             const T& r)       // cylinder's radius
+                             const Vertex<T>& C, // cylinder's origin
+                             const Normal<T>& N, // cylinder's normalized z-axis
+                             const T& r)         // cylinder's radius
   {
     constexpr T NO_INTERSECTION = std::numeric_limits<T>::quiet_NaN();
 
-    const Vec3<T> C_ = C               - dot(C,               N)*N;
-    const Vec3<T> D_ = ray.direction() - dot(ray.direction(), N)*N;
-    const Vec3<T> O_ = ray.origin()    - dot(ray.origin(),    N)*N;
+    const Vertex<T> C_ = C               - dot(C,               N)*N;
+    const Normal<T> D_ = ray.direction() - dot(ray.direction(), N)*N;
+    const Vertex<T> O_ = ray.origin()    - dot(ray.origin(),    N)*N;
 
-    const Vec3<T> D = O_ - C_;
+    const Vertex<T> D = O_ - C_;
 
     const T a = dot(D_, D_);
     const T b = static_cast<T>(2)*dot(D_, D);
@@ -74,8 +74,8 @@ namespace geom {
 
   template<typename T>
   inline T intersectPlane(const Ray<T>& ray,
-                          const Vec3<T>& P, // plane's origin
-                          const Vec3<T>& N) // plane's normal
+                          const Vertex<T>& P, // plane's origin
+                          const Normal<T>& N) // plane's normal
   {
     constexpr T NO_INTERSECTION = std::numeric_limits<T>::quiet_NaN();
 
@@ -92,12 +92,12 @@ namespace geom {
 
   template<typename T>
   inline T intersectSphere(const Ray<T>& ray,
-                           const Vec3<T>& S, // sphere's origin
-                           const T& r)       // sphere's radius
+                           const Vertex<T>& S, // sphere's origin
+                           const T& r)         // sphere's radius
   {
     constexpr T NO_INTERSECTION = std::numeric_limits<T>::quiet_NaN();
 
-    const Vec3<T> D{ray.origin() - S};
+    const Vertex<T> D{ray.origin() - S};
 
     const T a = 1;
     const T b = static_cast<T>(2)*dot(ray.direction(), D);

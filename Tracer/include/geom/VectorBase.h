@@ -29,8 +29,8 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef VEC3_H
-#define VEC3_H
+#ifndef VECTORBASE_H
+#define VECTORBASE_H
 
 #include <cmath>
 #include <cstdint>
@@ -41,62 +41,40 @@
 
 namespace geom {
 
-  template<typename T>
-  struct Vec3 {
+  template<typename T, typename DerivedT>
+  struct VectorBase {
     using value_type = std::enable_if_t<std::is_floating_point_v<T>,T>;
 
     // Construction & Assignment /////////////////////////////////////////////
 
-    Vec3() noexcept = default;
+    VectorBase() noexcept = default;
 
-    Vec3(const Vec3<T>&) noexcept = default;
-    Vec3<T>& operator=(const Vec3<T>&) noexcept = default;
+    VectorBase(const VectorBase<T,DerivedT>&) noexcept = default;
+    VectorBase<T,DerivedT>& operator=(const VectorBase<T,DerivedT>&) noexcept = default;
 
-    Vec3(Vec3<T>&&) noexcept = default;
-    Vec3<T>& operator=(Vec3<T>&&) noexcept = default;
+    VectorBase(VectorBase<T,DerivedT>&&) noexcept = default;
+    VectorBase<T,DerivedT>& operator=(VectorBase<T,DerivedT>&&) noexcept = default;
 
-    Vec3(const T& _x, const T& _y, const T& _z) noexcept
+    VectorBase(const T& _x, const T& _y, const T& _z) noexcept
       : x{_x}
       , y{_y}
       , z{_z}
     {
     }
 
-    // Special Vectors ///////////////////////////////////////////////////////
-
-    static constexpr Vec3<T> zero()
-    {
-      return Vec3<T>{0, 0, 0};
-    }
-
-    static constexpr Vec3<T> xAxis()
-    {
-      return Vec3<T>{1, 0, 0};
-    }
-
-    static constexpr Vec3<T> yAxis()
-    {
-      return Vec3<T>{0, 1, 0};
-    }
-
-    static constexpr Vec3<T> zAxis()
-    {
-      return Vec3<T>{0, 0, 1};
-    }
-
     // Operators /////////////////////////////////////////////////////////////
 
-    constexpr Vec3<T> operator+() const
+    constexpr VectorBase<T,DerivedT> operator+() const
     {
-      return Vec3<T>{x, y, z};
+      return VectorBase<T,DerivedT>{x, y, z};
     }
 
-    constexpr Vec3<T> operator-() const
+    constexpr VectorBase<T,DerivedT> operator-() const
     {
-      return Vec3<T>{-x, -y, -z};
+      return VectorBase<T,DerivedT>{-x, -y, -z};
     }
 
-    inline Vec3<T>& operator+=(const Vec3<T>& v)
+    inline VectorBase<T,DerivedT>& operator+=(const VectorBase<T,DerivedT>& v)
     {
       x += v.x;
       y += v.y;
@@ -104,7 +82,7 @@ namespace geom {
       return *this;
     }
 
-    inline Vec3<T>& operator-=(const Vec3<T>& v)
+    inline VectorBase<T,DerivedT>& operator-=(const VectorBase<T,DerivedT>& v)
     {
       x -= v.x;
       y -= v.y;
@@ -112,7 +90,7 @@ namespace geom {
       return *this;
     }
 
-    inline Vec3<T>& operator*=(const T& s)
+    inline VectorBase<T,DerivedT>& operator*=(const T& s)
     {
       x *= s;
       y *= s;
@@ -120,7 +98,7 @@ namespace geom {
       return *this;
     }
 
-    inline Vec3<T>& operator/=(const T& s)
+    inline VectorBase<T,DerivedT>& operator/=(const T& s)
     {
       x /= s;
       y /= s;
@@ -135,7 +113,7 @@ namespace geom {
       return std::sqrt(x*x + y*y + z*z);
     }
 
-    inline Vec3<T>& normalize()
+    inline VectorBase<T,DerivedT>& normalize()
     {
       const T len = length();
       x /= len;
@@ -144,31 +122,22 @@ namespace geom {
       return *this;
     }
 
-    constexpr Vec3<T> normalized() const
+    constexpr VectorBase<T,DerivedT> normalized() const
     {
-      return Vec3<T>{x/length(), y/length(), z/length()};
+      return VectorBase<T,DerivedT>{x/length(), y/length(), z/length()};
     }
 
     // Conversion ////////////////////////////////////////////////////////////
 
-    constexpr Vec3<T> clamped(const T& lo, const T& hi) const
+    template<typename Type>
+    constexpr VectorBase<T,Type> cast_to() const
     {
-      return Vec3<T>{clamp<T>(x, lo, hi), clamp<T>(y, lo, hi), clamp<T>(z, lo, hi)};
+      return VectorBase<T,Type>{x, y, z};
     }
 
-    constexpr uint8_t r() const
+    constexpr VectorBase<T,DerivedT> clamped(const T& lo, const T& hi) const
     {
-      return static_cast<uint8_t>(clamp<T>(x, 0, 1)*T{255});
-    }
-
-    constexpr uint8_t g() const
-    {
-      return static_cast<uint8_t>(clamp<T>(y, 0, 1)*T{255});
-    }
-
-    constexpr uint8_t b() const
-    {
-      return static_cast<uint8_t>(clamp<T>(z, 0, 1)*T{255});
+      return VectorBase<T,DerivedT>{clamp<T>(x, lo, hi), clamp<T>(y, lo, hi), clamp<T>(z, lo, hi)};
     }
 
     // Elements //////////////////////////////////////////////////////////////
@@ -182,78 +151,78 @@ namespace geom {
 
   // Operators ///////////////////////////////////////////////////////////////
 
-  template<typename T>
-  constexpr Vec3<T> operator+(const Vec3<T>& a, const Vec3<T>& b)
+  template<typename T, typename TypeA, typename TypeB>
+  constexpr VectorBase<T,TypeA> operator+(const VectorBase<T,TypeA>& a, const VectorBase<T,TypeB>& b)
   {
-    return Vec3<T>{a.x + b.x, a.y + b.y, a.z + b.z};
+    return VectorBase<T,TypeA>{a.x + b.x, a.y + b.y, a.z + b.z};
   }
 
-  template<typename T>
-  constexpr Vec3<T> operator-(const Vec3<T>& a, const Vec3<T>& b)
+  template<typename T, typename TypeA, typename TypeB>
+  constexpr VectorBase<T,TypeA> operator-(const VectorBase<T,TypeA>& a, const VectorBase<T,TypeB>& b)
   {
-    return Vec3<T>{a.x - b.x, a.y - b.y, a.z - b.z};
+    return VectorBase<T,TypeA>{a.x - b.x, a.y - b.y, a.z - b.z};
   }
 
-  template<typename T>
-  constexpr Vec3<T> operator*(const T& s, const Vec3<T>& v)
+  template<typename T, typename DerivedT>
+  constexpr VectorBase<T,DerivedT> operator*(const T& s, const VectorBase<T,DerivedT>& v)
   {
-    return Vec3<T>{v.x*s, v.y*s, v.z*s};
+    return VectorBase<T,DerivedT>{v.x*s, v.y*s, v.z*s};
   }
 
-  template<typename T>
-  constexpr Vec3<T> operator*(const Vec3<T>& v, const T& s)
+  template<typename T, typename DerivedT>
+  constexpr VectorBase<T,DerivedT> operator*(const VectorBase<T,DerivedT>& v, const T& s)
   {
-    return Vec3<T>{v.x*s, v.y*s, v.z*s};
+    return VectorBase<T,DerivedT>{v.x*s, v.y*s, v.z*s};
   }
 
-  template<typename T>
-  constexpr Vec3<T> operator/(const Vec3<T>& v, const T& s)
+  template<typename T, typename DerivedT>
+  constexpr VectorBase<T,DerivedT> operator/(const VectorBase<T,DerivedT>& v, const T& s)
   {
-    return Vec3<T>{v.x/s, v.y/s, v.z/s};
+    return VectorBase<T,DerivedT>{v.x/s, v.y/s, v.z/s};
   }
 
   // Functions ///////////////////////////////////////////////////////////////
 
-  template<typename T>
-  constexpr Vec3<T> cross(const Vec3<T>& a, const Vec3<T>& b)
+  template<typename T, typename TypeA, typename TypeB>
+  constexpr VectorBase<T,TypeA> cross(const VectorBase<T,TypeA>& a, const VectorBase<T,TypeB>& b)
   {
-    return Vec3<T>{
+    return VectorBase<T,TypeA>{
       a.y*b.z - a.z*b.y,
           a.z*b.x - a.x*b.z,
           a.x*b.y - a.y*b.x
     };
   }
 
-  template<typename T>
-  constexpr Vec3<T> direction(const Vec3<T>& from, const Vec3<T>& to)
+  template<typename T, typename TypeA, typename TypeB>
+  constexpr VectorBase<T,TypeA> direction(const VectorBase<T,TypeA>& from, const VectorBase<T,TypeB>& to)
   {
     return (to - from).normalized();
   }
 
-  template<typename T>
-  constexpr T distance(const Vec3<T>& from, const Vec3<T>& to)
+  template<typename T, typename TypeA, typename TypeB>
+  constexpr T distance(const VectorBase<T,TypeA>& from, const VectorBase<T,TypeB>& to)
   {
     return (to - from).length();
   }
 
-  template<typename T>
-  constexpr T dot(const Vec3<T>& a, const Vec3<T>& b)
+  template<typename T, typename TypeA, typename TypeB>
+  constexpr T dot(const VectorBase<T,TypeA>& a, const VectorBase<T,TypeB>& b)
   {
     return a.x*b.x + a.y*b.y + a.z*b.z;
   }
 
-  template<typename T>
-  constexpr T dot01(const Vec3<T>& a, const Vec3<T>& b)
+  template<typename T, typename TypeA, typename TypeB>
+  constexpr T dot01(const VectorBase<T,TypeA>& a, const VectorBase<T,TypeB>& b)
   {
-    return std::max<T>(0, dot(a,b));
+    return std::max<T>(0, dot(a, b));
   }
 
-  template<typename T>
-  constexpr Vec3<T> mulCWise(const Vec3<T>& a, const Vec3<T>& b)
+  template<typename T, typename TypeA, typename TypeB>
+  constexpr VectorBase<T,TypeA> mulCWise(const VectorBase<T,TypeA>& a, const VectorBase<T,TypeB>& b)
   {
-    return Vec3<T>{a.x*b.x, a.y*b.y, a.z*b.z};
+    return VectorBase<T,TypeA>{a.x*b.x, a.y*b.y, a.z*b.z};
   }
 
 } // namespace geom
 
-#endif // VEC3_H
+#endif // VECTORBASE_H

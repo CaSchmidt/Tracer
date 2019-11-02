@@ -38,20 +38,20 @@ namespace rt {
 
   class CheckedTexture : public ITexture {
   public:
-    CheckedTexture(const Vec3f& colorA, const Vec3f& colorB,
+    CheckedTexture(const Color3f& colorA, const Color3f& colorB,
                    const real_T scaleS, const real_T scaleT) noexcept;
     ~CheckedTexture();
 
-    Vec3f lookup(const real_T s, const real_T t) const final;
+    Color3f lookup(const real_T s, const real_T t) const final;
 
-    static TexturePtr create(const Vec3f& colorA, const Vec3f& colorB,
+    static TexturePtr create(const Color3f& colorA, const Color3f& colorB,
                              const real_T scaleS, const real_T scaleT);
 
   private:
-    Vec3f  _colorA{};
-    Vec3f  _colorB{};
-    real_T _scaleS{};
-    real_T _scaleT{};
+    Color3f _colorA{};
+    Color3f _colorB{};
+    real_T  _scaleS{};
+    real_T  _scaleT{};
   };
 
 } // namespace rt

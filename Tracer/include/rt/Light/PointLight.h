@@ -38,18 +38,18 @@ namespace rt {
 
   class PointLight : public ILightSource {
   public:
-    PointLight(const Vec3f& IL, const Vec3f& PL) noexcept;
+    PointLight(const Color3f& IL, const Vertex3f& PL) noexcept;
     ~PointLight() noexcept;
 
-    LightInfo info(const Vec3f& P) const;
+    LightInfo info(const Vertex3f& P) const;
 
-    static LightSourcePtr create(const Vec3f& IL, const Vec3f& PL);
+    static LightSourcePtr create(const Color3f& IL, const Vertex3f& PL);
 
   private:
     real_T attenuation(const real_T r) const;
 
-    Vec3f _IL{};
-    Vec3f _PL{};
+    Color3f  _IL{};
+    Vertex3f _PL{};
   };
 
 } // namespace rt

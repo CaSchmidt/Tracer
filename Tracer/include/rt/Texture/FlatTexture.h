@@ -38,15 +38,15 @@ namespace rt {
 
   class FlatTexture : public ITexture {
   public:
-    FlatTexture(const Vec3f& color) noexcept;
+    FlatTexture(const Color3f& color) noexcept;
     ~FlatTexture();
 
-    Vec3f lookup(const real_T s, const real_T t) const final;
+    Color3f lookup(const real_T s, const real_T t) const final;
 
-    static TexturePtr create(const Vec3f& color);
+    static TexturePtr create(const Color3f& color);
 
   private:
-    Vec3f _color{};
+    Color3f _color{};
   };
 
 } // namespace rt

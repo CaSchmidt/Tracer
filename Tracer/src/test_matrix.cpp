@@ -38,14 +38,15 @@
 #include "rt/Types.h"
 
 template<typename T>
-double print_prep(const T& value)
+inline double print_prep(const T& value)
 {
   return std::abs(value) == T{0}
   ? static_cast<double>(0)
   : static_cast<double>(value);
 }
 
-void print(const rt::Vec3f& v, const char *text = nullptr)
+template<typename T, typename DerivedT>
+inline void print(const geom::VectorBase<T,DerivedT>& v, const char *text = nullptr)
 {
   if( text != nullptr ) {
     printf("%s = \n", text);
@@ -60,7 +61,7 @@ void print(const rt::Vec3f& v, const char *text = nullptr)
   printf("    %8.3f\n", z);
 }
 
-void print(const rt::Mat3f& M, const char *text = nullptr)
+void print(const rt::Matrix3f& M, const char *text = nullptr)
 {
   if( text != nullptr ) {
     printf("%s = \n", text);
@@ -110,7 +111,7 @@ void print(const rt::Transformf& M, const char *text = nullptr)
   printf("    %8.3f  %8.3f  %8.3f  %8.3f\n", m20, m21, m22, z);
 }
 
-void inverse(const rt::Mat3f& M, const char *text, const char *invText)
+void inverse(const rt::Matrix3f& M, const char *text, const char *invText)
 {
   print(M, text);
   print(M.inverse(), invText);
@@ -118,73 +119,73 @@ void inverse(const rt::Mat3f& M, const char *text, const char *invText)
 
 void test_matrix()
 {
-  const rt::Mat3f A{3, 1, 1, 5, 2, 1, 3, 1, 2};
+  const rt::Matrix3f A{3, 1, 1, 5, 2, 1, 3, 1, 2};
   inverse(A, "A", "A^-1");
 
-  inverse(rt::Mat3f::identity(), "I", "I^-1");
+  inverse(rt::Matrix3f::identity(), "I", "I^-1");
 
-  inverse(rt::Mat3f::scale(5, 5, 5), "S", "S^-1");
+  inverse(rt::Matrix3f::scale(5, 5, 5), "S", "S^-1");
 
-  print(rt::Mat3f::rotateX(rt::PI_HALF), "rotateX(90)");
-  print(rt::Mat3f::rotateY(rt::PI_HALF), "rotateY(90)");
-  print(rt::Mat3f::rotateZ(rt::PI_HALF), "rotateZ(90)");
+  print(rt::Matrix3f::rotateX(rt::PI_HALF), "rotateX(90)");
+  print(rt::Matrix3f::rotateY(rt::PI_HALF), "rotateY(90)");
+  print(rt::Matrix3f::rotateZ(rt::PI_HALF), "rotateZ(90)");
 
-  const rt::Mat3f M{1, 2, 3, 4, 5, 6, 7, 8, 9};
+  const rt::Matrix3f M{1, 2, 3, 4, 5, 6, 7, 8, 9};
   print(M, "M");
   print(M + M, "M + M");
   print(M - M, "M - M");
   print(M - rt::TWO*M, "M - 2*M");
   print(M - M*rt::TWO, "M - M*2");
   print(M - M/rt::TWO, "M - M/2");
-  print(M*rt::Mat3f::identity(), "M*I");
-  print(rt::Mat3f::identity()*M, "I*M");
+  print(M*rt::Matrix3f::identity(), "M*I");
+  print(rt::Matrix3f::identity()*M, "I*M");
   bool ok = false;
   print(A*A.inverse(&ok), "A*A^-1");
   printf("ok = %s\n", ok ? "true" : "false");
-  print(rt::Mat3f::identity()*rt::Vec3f{1,2,3}, "I*v");
+  print(rt::Matrix3f::identity()*rt::Vertex3f{1,2,3}, "I*v");
   print(M.transposed(), "M^T");
-  rt::Mat3f M2{M};
+  rt::Matrix3f M2{M};
   M2.transpose();
   print(M2, "M2^T");
 
   printf("****************************************************************\n");
 
-  const rt::Mat3f world2Cam = rt::Mat3f::rotateX(-rt::PI_HALF);
+  const rt::Matrix3f world2Cam = rt::Matrix3f::rotateX(-rt::PI_HALF);
 
-  const rt::Vec3f p1{1,1,1};
+  const rt::Vertex3f p1{1,1,1};
   print(world2Cam*p1, "p1");
 
-  const rt::Vec3f p2{1,-1,1};
+  const rt::Vertex3f p2{1,-1,1};
   print(world2Cam*p2, "p2");
 }
 
 void test_optics()
 {
-  const rt::Vec3f I = rt::Vec3f{1, 0, -1}.normalized();
+  const rt::Normal3f I = rt::Normal3f{1, 0, -1}.normalized();
   print(I, "I");
 
-  const rt::Vec3f N{0, 0, 1};
+  const rt::Normal3f N{0, 0, 1};
   print(N, "N");
 
   printf("dot(I,N) = %.3f\n", double(geom::dot(I, N)));
 
-  const rt::Vec3f T = geom::refract(I, N, rt::real_T(1.333));
+  const rt::Normal3f T = geom::refract(I, N, rt::real_T(1.333));
   print(T, "T");
   printf("length(T) = %.3f\n", double(T.length()));
 }
 
 void test_transform()
 {
-  const rt::Mat3f X{1, 2, 3, 5, 6, 7, 9, 10, 11};
+  const rt::Matrix3f X{1, 2, 3, 5, 6, 7, 9, 10, 11};
   print(X, "X");
-  const rt::Vec3f t{4, 8, 12};
+  const rt::Vertex3f t{4, 8, 12};
   print(t, "t");
 
   print(rt::Transformf{X, t}, "M");
 
   const rt::Transformf M1{X};
   print(M1, "M1");
-  const rt::Transformf M2{rt::Mat3f::identity(), t};
+  const rt::Transformf M2{rt::Matrix3f::identity(), t};
   print(M2, "M2");
 
   print(M2*M1, "M2*M1");
@@ -193,13 +194,13 @@ void test_transform()
 
 void test_vector()
 {
-  rt::Vec3f v;
+  rt::Vertex3f v;
   float f = v.length();
   float a = 1 + f;
-  rt::Vec3f u = v.normalized();
+  rt::Vertex3f u = v.normalized();
   u.normalize();
   a = geom::dot01(u, v);
-  rt::Vec3f w = geom::cross(u, v);
+  rt::Vertex3f w = geom::cross(u, v);
 
   a = geom::distance(u, v);
   w = geom::direction(u, v);

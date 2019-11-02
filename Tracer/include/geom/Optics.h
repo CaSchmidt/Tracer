@@ -33,7 +33,7 @@
 #define OPTICS_H
 
 #include "geom/Util.h"
-#include "geom/Vec3.h"
+#include "geom/Vector.h"
 #include "math/Pythagoras.h"
 
 /*
@@ -55,7 +55,7 @@
 namespace geom {
 
   template<typename T>
-  inline T fresnel(const Vec3<T>& I, const Vec3<T>& N, const T& eta)
+  inline T fresnel(const Normal<T>& I, const Normal<T>& N, const T& eta)
   {
     constexpr T ONE = static_cast<T>(1);
     constexpr T TWO = static_cast<T>(2);
@@ -77,13 +77,13 @@ namespace geom {
   }
 
   template<typename T> // cf. GLSL v4.60, 8.5. Geometric Functions
-  constexpr Vec3<T> reflect(const Vec3<T>& I, const Vec3<T>& N)
+  constexpr Normal<T> reflect(const Normal<T>& I, const Normal<T>& N)
   {
     return I - static_cast<T>(2)*dot(I, N)*N;
   }
 
   template<typename T> // cf. GLSL v4.60, 8.5. Geometric Functions
-  inline Vec3<T> refract(const Vec3<T>& I, const Vec3<T>& N, const T& eta)
+  inline Normal<T> refract(const Normal<T>& I, const Normal<T>& N, const T& eta)
   {
     constexpr T  ONE = static_cast<T>(1);
     constexpr T ZERO = static_cast<T>(0);
@@ -92,7 +92,7 @@ namespace geom {
 
     const T k = ONE - eta*eta*(ONE - DOT*DOT);
     if( k < ZERO ) {
-      return Vec3<T>::zero();
+      return Normal<T>{};
     }
 
     return eta*I - (eta*DOT + std::sqrt(k))*N;
