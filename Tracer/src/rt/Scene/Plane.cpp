@@ -39,7 +39,7 @@ namespace rt {
 
     constexpr bool isBounding(const real_T& value)
     {
-      return 0 <= value  &&  value < 1;
+      return ZERO <= value  &&  value <= ONE;
     }
 
     constexpr real_T normalized(const real_T& value, const real_T& lower, const real_T& scale)
