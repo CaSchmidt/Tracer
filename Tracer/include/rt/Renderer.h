@@ -48,7 +48,6 @@ namespace rt {
     dim_T        width{};
     dim_T        height{};
     real_T       fov_rad{};
-    Transformf   worldToCamera{};
     unsigned int maxDepth{15};
     real_T       globalRefraction{1};
   };

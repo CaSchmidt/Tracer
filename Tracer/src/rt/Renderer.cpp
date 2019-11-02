@@ -47,14 +47,20 @@ namespace rt {
 
   bool Renderer::initialize(const RenderOptions& options, Objects& scene)
   {
+    const Transformf xfrmCW{Transformf::rotateX(-PI_HALF)};
+
     _options = options;
 
     _scene = std::move(scene);
 
-    _camera = Camera(_options.eye, _options.lookAt, _options.cameraUp,
+    const Vertex3f      eye = xfrmCW*_options.eye;
+    const Vertex3f   lookAt = xfrmCW*_options.lookAt;
+    const Normal3f cameraUp = xfrmCW.scaledRotation()*_options.cameraUp;
+
+    _camera = Camera(eye, lookAt, cameraUp,
                      _options.width, _options.height, _options.fov_rad);
 
-    _xfrmWC = _options.worldToCamera.inverse();
+    _xfrmWC = xfrmCW.inverse();
 
     return true;
   }

@@ -40,9 +40,8 @@ rt::RenderOptions options_scene_1(const rt::dim_T width, const rt::dim_T height)
   opt.fov_rad         = rt::PI/rt::real_T{3.0};
   opt.backgroundColor = rt::Color3f{0, static_cast<rt::real_T>(0.8), 1};
   opt.lookAt          = rt::Vertex3f{0, 0, 0};
-  opt.eye             = rt::Vertex3f{-4, 2, 7.5};
-  opt.cameraUp        = rt::Normal3f{0, 1, 0};
-  opt.worldToCamera   = rt::Transformf{rt::Matrix3f::rotateX(-rt::PI_HALF)};
+  opt.eye             = rt::Vertex3f{-4, -7.5, 2};
+  opt.cameraUp        = rt::Normal3f::zAxis();
 
   return opt;
 }
