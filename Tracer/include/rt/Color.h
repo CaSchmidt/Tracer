@@ -33,7 +33,6 @@
 #define COLOR_H
 
 #include "geom/VectorBase.h"
-#include "rt/Types.h"
 
 namespace rt {
 
@@ -156,8 +155,6 @@ namespace rt {
       return Color<T>{0.5,  0, 1};
     }
   };
-
-  using Color3f = Color<real_T>;
 
 } // namespace rt
 

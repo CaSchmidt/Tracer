@@ -38,6 +38,7 @@
 
 #include "geom/Ray.h"
 #include "geom/Transform.h"
+#include "rt/Color.h"
 
 namespace rt {
 
@@ -95,6 +96,7 @@ namespace rt {
 
   ////// Spatial Types ///////////////////////////////////////////////////////
 
+  using    Color3f = Color<real_T>;
   using   Matrix3f = geom::Matrix<real_T>;
   using   Normal3f = geom::Normal<real_T>;
   using       Rayf = geom::Ray<real_T>;

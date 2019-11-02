@@ -35,7 +35,7 @@
 #include <list>
 #include <memory>
 
-#include "rt/Color.h"
+#include "rt/Types.h"
 
 namespace rt {
 
