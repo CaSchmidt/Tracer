@@ -50,7 +50,7 @@ int main(int /*argc*/, char ** /*argv*/)
 {
   rt::Renderer renderer;
 #if 1
-  initialize_scene_4(renderer, 1000, 1000);
+  initialize_scene_1(renderer, 1000, 1000);
 #else
   initialize_scene_text(renderer, 2000, 2000,
                         "C++", 0.15, 0.3, 0.3, rt::Transformf::translate({0, 0, 1}));
