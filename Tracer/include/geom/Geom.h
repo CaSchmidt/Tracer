@@ -36,8 +36,6 @@
 
 #include <cs/NumericArray.h>
 
-#include "geom/GeomBase.h"
-
 namespace geom {
 
   // Traits //////////////////////////////////////////////////////////////////
@@ -65,13 +63,13 @@ namespace geom {
   // Types ///////////////////////////////////////////////////////////////////
 
   template<typename T>
-  using Vertex = VectorBase<cs::RowMajorPolicy<VertexTraits<T,uint8_t,3,1>>>;
+  using Vertex = cs::Array<cs::Vector3Manip<cs::RowMajorPolicy<VertexTraits<T,uint8_t,3,1>>>>;
 
   template<typename T>
-  using Normal = VectorBase<cs::RowMajorPolicy<NormalTraits<T,uint8_t,3,1>>>;
+  using Normal = cs::Array<cs::Vector3Manip<cs::RowMajorPolicy<NormalTraits<T,uint8_t,3,1>>>>;
 
   template<typename T>
-  using Matrix = cs::Array<cs::RowMajorPolicy<VertexTraits<T,uint8_t,3,3>>>;
+  using Matrix = cs::Array<cs::NoManipulator<cs::RowMajorPolicy<VertexTraits<T,uint8_t,3,3>>>>;
 
   // Helpers /////////////////////////////////////////////////////////////////
 

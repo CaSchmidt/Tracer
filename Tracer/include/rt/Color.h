@@ -36,6 +36,7 @@
 
 #include <cs/Array.h>
 #include <cs/ArrayPolicy.h>
+#include <cs/Manipulator.h>
 #include <cs/Math.h>
 
 namespace rt {
@@ -85,9 +86,9 @@ namespace rt {
   };
 
   template<typename T>
-  class Color : public cs::Array<cs::RowMajorPolicy<ColorTraits<T,uint8_t,3,1>>> {
+  class Color : public cs::Array<cs::NoManipulator<cs::RowMajorPolicy<ColorTraits<T,uint8_t,3,1>>>> {
   public:
-    using base_type = cs::Array<cs::RowMajorPolicy<ColorTraits<T,uint8_t,3,1>>>;
+    using base_type = cs::Array<cs::NoManipulator<cs::RowMajorPolicy<ColorTraits<T,uint8_t,3,1>>>>;
     using typename base_type::size_type;
     using typename base_type::traits_type;
     using typename base_type::value_type;

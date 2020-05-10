@@ -20,7 +20,6 @@ set(Tracer_HEADERS
   include/scenes.h
   include/tests.h
   include/geom/Geom.h
-  include/geom/GeomBase.h
   include/geom/Intersect.h
   include/geom/Optics.h
   include/geom/Ray.h
