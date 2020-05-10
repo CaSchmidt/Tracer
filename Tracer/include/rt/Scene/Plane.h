@@ -51,7 +51,7 @@ namespace rt {
     real_T   _width{};
     real_T   _height{};
     Vertex3f _Oobj{0, 0, 0};
-    Normal3f _Nobj{Normal3f::zAxis()};
+    Normal3f _Nobj{geom::zAxis<real_T>()};
   };
 
 } // namespace rt

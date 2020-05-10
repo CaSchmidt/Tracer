@@ -32,8 +32,7 @@
 #ifndef OPTICS_H
 #define OPTICS_H
 
-#include "geom/Util.h"
-#include "geom/Vector.h"
+#include "geom/Geom.h"
 #include "math/Pythagoras.h"
 
 /*

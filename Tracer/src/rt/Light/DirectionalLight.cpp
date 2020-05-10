@@ -35,7 +35,7 @@ namespace rt {
 
   DirectionalLight::DirectionalLight(const Color3f& EL, const Normal3f& l) noexcept
     : _EL{EL}
-    , _l{l.normalized()}
+    , _l{cs::normalize(l)}
   {
   }
 

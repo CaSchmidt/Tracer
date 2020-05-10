@@ -32,7 +32,7 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "geom/Vector.h"
+#include "geom/Geom.h"
 
 namespace geom {
 
@@ -49,7 +49,7 @@ namespace geom {
 
     Ray(const Vertex<T>& org, const Normal<T>& dir) noexcept
       : _org{org}
-      , _dir{dir.normalized()}
+      , _dir{cs::normalize(dir)}
     {
     }
 
@@ -57,7 +57,7 @@ namespace geom {
 
     constexpr Vertex<T> operator()(const T& t) const
     {
-      return _org + t*_dir;
+      return _org + geom::to_vertex<T>(t*_dir);
     }
 
     constexpr Vertex<T> origin() const

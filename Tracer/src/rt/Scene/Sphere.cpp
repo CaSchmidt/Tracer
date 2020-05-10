@@ -57,7 +57,7 @@ namespace rt {
     }
 
     const Vertex3f Pobj = rayObj(info.t);
-    const Normal3f Nobj = (Pobj - _Oobj).normalized().cast_to<Normal3f>();
+    const Normal3f Nobj = geom::to_normal<real_T>(cs::normalize(Pobj - _Oobj));
     const real_T      u = (std::atan2(Nobj.y, Nobj.x)/PI + 1)/2;
     const real_T      v = std::acos(Nobj.z)/PI;
 

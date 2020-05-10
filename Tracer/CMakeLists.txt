@@ -4,18 +4,27 @@ cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
 project(Tracer)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+### Dependencies #############################################################
+
+add_subdirectory(../NumericArray/NumericArray
+  ${CMAKE_CURRENT_BINARY_DIR}/NumericArray
+  )
+
+### Tracer ###################################################################
+
 set(Tracer_HEADERS
   include/Image.h
   include/scenes.h
   include/tests.h
+  include/geom/Geom.h
+  include/geom/GeomBase.h
   include/geom/Intersect.h
-  include/geom/Matrix.h
   include/geom/Optics.h
   include/geom/Ray.h
   include/geom/Transform.h
-  include/geom/Util.h
-  include/geom/Vector.h
-  include/geom/VectorBase.h
   include/math/Logical.h
   include/math/Pythagoras.h
   include/math/Quadratic.h
@@ -49,9 +58,6 @@ set(Tracer_SOURCES
   src/scene_3.cpp
   src/scene_4.cpp
   src/scene_text.cpp
-  src/test_camera.cpp
-  src/test_intersect.cpp
-  src/test_matrix.cpp
   src/rt/Camera.cpp
   src/rt/Refraction.cpp
   src/rt/Renderer.cpp
@@ -84,9 +90,12 @@ add_executable(Tracer
   ${Tracer_3rdparty}
   )
 
+add_dependencies(Tracer NumericArray)
+
 target_include_directories(Tracer PRIVATE
   ${Tracer_SOURCE_DIR}/3rdparty/font8x8/include
   ${Tracer_SOURCE_DIR}/3rdparty/stb/include
+  ${NumericArray_SOURCE_DIR}/include
   ${Tracer_SOURCE_DIR}/include
   )
 

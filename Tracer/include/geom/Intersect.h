@@ -47,15 +47,17 @@ namespace geom {
   {
     constexpr T NO_INTERSECTION = std::numeric_limits<T>::quiet_NaN();
 
-    const Vertex<T> C_ = C               - dot(C,               N)*N;
-    const Normal<T> D_ = ray.direction() - dot(ray.direction(), N)*N;
-    const Vertex<T> O_ = ray.origin()    - dot(ray.origin(),    N)*N;
+    const auto Nv = geom::to_vertex<T>(N);
+
+    const Vertex<T> C_ = C               - cs::dot(C,               Nv)*Nv;
+    const Normal<T> D_ = ray.direction() - cs::dot(ray.direction(), N)*N;
+    const Vertex<T> O_ = ray.origin()    - cs::dot(ray.origin(),    Nv)*Nv;
 
     const Vertex<T> D = O_ - C_;
 
-    const T a = dot(D_, D_);
-    const T b = static_cast<T>(2)*dot(D_, D);
-    const T c = dot(D, D) - r*r;
+    const T a = cs::dot(D_, D_);
+    const T b = static_cast<T>(2)*cs::dot(geom::to_vertex<T>(D_), D);
+    const T c = cs::dot(D, D) - r*r;
 
     T t1, t2;
     if( !math::solveQuadratic(a, b, c, t1, t2) ) {
@@ -84,7 +86,7 @@ namespace geom {
       return NO_INTERSECTION;
     }
 
-    const T tHit = dot(N, P - ray.origin())/den;
+    const T tHit = cs::dot(geom::to_vertex<T>(N), P - ray.origin())/den;
     return tHit >= 0
         ? tHit
         : NO_INTERSECTION;
@@ -100,8 +102,8 @@ namespace geom {
     const Vertex<T> D{ray.origin() - S};
 
     const T a = 1;
-    const T b = static_cast<T>(2)*dot(ray.direction(), D);
-    const T c = dot(D, D) - r*r;
+    const T b = static_cast<T>(2)*cs::dot(ray.direction(), geom::to_normal<T>(D));
+    const T c = cs::dot(D, D) - r*r;
 
     T t1, t2;
     if( !math::solveQuadratic(a, b, c, t1, t2) ) {

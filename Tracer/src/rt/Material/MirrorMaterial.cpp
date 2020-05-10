@@ -49,7 +49,7 @@ namespace rt {
 
   void MirrorMaterial::setReflectance(const real_T r)
   {
-    _reflectance = geom::clamp<real_T>(r, 0, 1);
+    _reflectance = csClamp(r, real_T{0}, real_T{1});
   }
 
   real_T MirrorMaterial::reflectance() const

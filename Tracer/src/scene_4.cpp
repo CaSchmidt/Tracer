@@ -41,7 +41,7 @@ rt::RenderOptions options_scene_4(const rt::dim_T width, const rt::dim_T height)
   opt.backgroundColor = rt::Color3f{0, static_cast<rt::real_T>(0.8), 1};
   opt.lookAt          = rt::Vertex3f{0, 0, 0};
   opt.eye             = rt::Vertex3f{0, -7.5, 4};
-  opt.cameraUp        = rt::Normal3f::zAxis();
+  opt.cameraUp        = geom::zAxis<rt::real_T>();
 
   return opt;
 }
@@ -73,7 +73,7 @@ rt::Objects create_scene_4()
 
   material = rt::OpaqueMaterial::create();
   material->opaque()->setDiffuse(rt::CheckedTexture::create(cb, cdim*cb, 4, 1));
-  objs.push_back(rt::Cylinder::create({rt::Matrix3f::rotateY(rt::PI/6), {0, 0, 1.5}},
+  objs.push_back(rt::Cylinder::create({geom::rotateY<rt::real_T>(rt::PI/6), {0, 0, 1.5}},
                                       material, 3, .1));
 
   return objs;

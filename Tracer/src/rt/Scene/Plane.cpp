@@ -74,8 +74,8 @@ namespace rt {
     }
 
     const Vertex3f Pobj = rayObj(info.t);
-    const real_T      u = priv::normalized(geom::dot(Pobj - _Oobj, Vertex3f::xAxis()), -_width/2,  _width);
-    const real_T      v = priv::normalized(geom::dot(Pobj - _Oobj, Vertex3f::yAxis()), -_height/2, _height);
+    const real_T      u = priv::normalized(cs::dot(Pobj - _Oobj, Vertex3f{geom::xAxis<real_T>()}), -_width/2,  _width);
+    const real_T      v = priv::normalized(cs::dot(Pobj - _Oobj, Vertex3f{geom::yAxis<real_T>()}), -_height/2, _height);
     if( !priv::isBounding(u)  ||  !priv::isBounding(v) ) {
       return info.isHit();
     }

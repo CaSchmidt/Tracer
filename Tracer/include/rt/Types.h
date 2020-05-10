@@ -32,9 +32,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <cstdint>
-
-#include <numeric>
+#include <limits>
+#include <type_traits>
 
 #include "geom/Ray.h"
 #include "geom/Transform.h"
@@ -45,30 +44,42 @@ namespace rt {
   ////// Floating-Point Type /////////////////////////////////////////////////
 
   template<typename T>
-  using if_real_T = std::enable_if_t<std::is_floating_point_v<T>,T>;
+  inline constexpr bool if_real_v = std::is_floating_point_v<T>;
 
-  using real_T = if_real_T<float>; // Implementation
+  template<typename T>
+  using if_real_t = std::enable_if_t<if_real_v<T>,T>;
+
+  using real_T = if_real_t<float>; // Implementation
+
 
   ////// Other Types /////////////////////////////////////////////////////////
 
   template<typename T>
-  using if_dim_T = std::enable_if_t<std::is_unsigned_v<T>,T>;
-
-  using dim_T = if_dim_T<uint16_t>; // Implementation
+  inline constexpr bool if_dim_v = std::is_unsigned_v<T>;
 
   template<typename T>
-  using if_enum_T = std::enable_if_t<std::is_unsigned_v<T>,T>;
+  using if_dim_t = std::enable_if_t<if_dim_v<T>,T>;
 
-  using enum_T = if_enum_T<unsigned int>; // Implementation
+  using dim_T = if_dim_t<uint16_t>; // Implementation
+
+
+  template<typename T>
+  inline constexpr bool if_enum_v = std::is_unsigned_v<T>;
+
+  template<typename T>
+  using if_enum_t = std::enable_if_t<if_enum_v<T>,T>;
+
+  using enum_T = if_enum_t<unsigned int>; // Implementation
+
 
   ////// Special Values //////////////////////////////////////////////////////
 
-  constexpr real_T INF_REAL_T = std::numeric_limits<real_T>::infinity();
+  inline constexpr real_T INF_REAL_T = std::numeric_limits<real_T>::infinity();
 
-  constexpr real_T MAX_REAL_T = std::numeric_limits<real_T>::max();
-  constexpr real_T MIN_REAL_T = std::numeric_limits<real_T>::lowest();
+  inline constexpr real_T MAX_REAL_T = std::numeric_limits<real_T>::max();
+  inline constexpr real_T MIN_REAL_T = std::numeric_limits<real_T>::lowest();
 
-  constexpr real_T NAN_REAL_T = std::numeric_limits<real_T>::quiet_NaN();
+  inline constexpr real_T NAN_REAL_T = std::numeric_limits<real_T>::quiet_NaN();
 
   ////// Constants ///////////////////////////////////////////////////////////
 
@@ -76,23 +87,23 @@ namespace rt {
 # define M_PI  3.14159265358979323846
 #endif
 
-  constexpr real_T  ZERO = static_cast<real_T>(0);
-  constexpr real_T   ONE = static_cast<real_T>(1);
-  constexpr real_T   TWO = static_cast<real_T>(2);
-  constexpr real_T THREE = static_cast<real_T>(3);
-  constexpr real_T  FOUR = static_cast<real_T>(4);
-  constexpr real_T EIGHT = static_cast<real_T>(8);
-  constexpr real_T   TEN = static_cast<real_T>(10);
+  inline constexpr real_T  ZERO = static_cast<real_T>(0);
+  inline constexpr real_T   ONE = static_cast<real_T>(1);
+  inline constexpr real_T   TWO = static_cast<real_T>(2);
+  inline constexpr real_T THREE = static_cast<real_T>(3);
+  inline constexpr real_T  FOUR = static_cast<real_T>(4);
+  inline constexpr real_T EIGHT = static_cast<real_T>(8);
+  inline constexpr real_T   TEN = static_cast<real_T>(10);
 
-  constexpr real_T ONE_HALF = static_cast<real_T>(0.5);
+  inline constexpr real_T ONE_HALF = static_cast<real_T>(0.5);
 
-  constexpr real_T      PI = static_cast<real_T>(M_PI);
-  constexpr real_T PI_HALF = static_cast<real_T>(M_PI/2.0);
+  inline constexpr real_T      PI = static_cast<real_T>(M_PI);
+  inline constexpr real_T PI_HALF = static_cast<real_T>(M_PI/2.0);
 
-  constexpr real_T TRACE_BIAS = static_cast<real_T>((1.0/1024.0)/10.0);
+  inline constexpr real_T TRACE_BIAS = static_cast<real_T>((1.0/1024.0)/10.0);
 
-  constexpr bool NO_SHADOW_RAY = false;
-  constexpr bool    SHADOW_RAY = true;
+  inline constexpr bool NO_SHADOW_RAY = false;
+  inline constexpr bool    SHADOW_RAY = true;
 
   ////// Spatial Types ///////////////////////////////////////////////////////
 

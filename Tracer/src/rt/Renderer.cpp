@@ -80,20 +80,20 @@ namespace rt {
         Color3f result;
         for(uint8_t s = 0; s < samples; s++) {
           const Color3f color = castRay(_xfrmWC*_camera.ray(x, y, true));
-          result += color.clamped(ZERO, ONE);
+          result += cs::clamp(color, ZERO, ONE);
         }
         result /= samples;
-        *row++ = result.r8();
-        *row++ = result.g8();
-        *row++ = result.b8();
+        *row++ = result.r;
+        *row++ = result.g;
+        *row++ = result.b;
         *row++ = 0xFF;
       }
     } else {
       for(dim_T x = 0; x < _options.width; x++) {
         const Color3f color = castRay(_xfrmWC*_camera.ray(x, y));
-        *row++ = color.r8();
-        *row++ = color.g8();
-        *row++ = color.b8();
+        *row++ = color.r;
+        *row++ = color.g;
+        *row++ = color.b;
         *row++ = 0xFF;
       }
     }
@@ -119,17 +119,17 @@ namespace rt {
 
     } else if( sinfo->material()->isMirror() ) {
       const Normal3f     R = geom::reflect(ray.direction(), sinfo.N);
-      const Color3f rcolor = castRay({sinfo.P + TRACE_BIAS*sinfo.N, R}, MAX_REAL_T, depth + 1);
+      const Color3f rcolor = castRay({sinfo.P + geom::to_vertex<real_T>(TRACE_BIAS*sinfo.N), R}, MAX_REAL_T, depth + 1);
       color = sinfo->material()->mirror()->reflectance()*rcolor;
 
     } else if( sinfo->material()->isTransparent() ) {
       // (1) Set up Snell's law //////////////////////////////////////////////
 
       const Normal3f I = ray.direction();
-      const bool entering = geom::dot(I, sinfo.N) < ZERO;
+      const bool entering = cs::dot(I, sinfo.N) < ZERO;
       const Normal3f N = entering
-          ? sinfo.N
-          : -sinfo.N;
+          ? Normal3f(sinfo.N)
+          : Normal3f(-sinfo.N);
       const real_T etai = entering
           ? _options.globalRefraction
           : sinfo->material()->transparent()->refraction();
@@ -146,13 +146,13 @@ namespace rt {
       // (3) Reflectance /////////////////////////////////////////////////////
 
       const Normal3f R = geom::reflect(I, N);
-      color = kR*castRay({sinfo.P + TRACE_BIAS*N, R}, MAX_REAL_T, depth + 1);
+      color = kR*castRay({sinfo.P + geom::to_vertex<real_T>(TRACE_BIAS*N), R}, MAX_REAL_T, depth + 1);
 
       // (4) Transmittance ///////////////////////////////////////////////////
 
       if( kT > ZERO ) {
         const Normal3f T = geom::refract(I, N, eta);
-        color += kT*castRay({sinfo.P - TRACE_BIAS*N, T}, MAX_REAL_T, depth + 1);
+        color += kT*castRay({sinfo.P - geom::to_vertex<real_T>(TRACE_BIAS*N), T}, MAX_REAL_T, depth + 1);
       }
 
     }
@@ -170,11 +170,11 @@ namespace rt {
       const LightInfo linfo = light->info(sinfo.P);
 
       SurfaceInfo dummy;
-      if( trace(dummy, {sinfo.P + TRACE_BIAS*sinfo.N, linfo.l}, linfo.r, SHADOW_RAY) ) {
+      if( trace(dummy, {sinfo.P + geom::to_vertex<real_T>(TRACE_BIAS*sinfo.N), linfo.l}, linfo.r, SHADOW_RAY) ) {
         continue; // Light is obscured by an object!
       }
 
-      const real_T cosTi = geom::dot01(sinfo.N, linfo.l);
+      const real_T cosTi = cs::dot1(sinfo.N, linfo.l);
       if( cosTi <= 0 ) {
         continue;
       }
@@ -184,13 +184,13 @@ namespace rt {
 
       // Specular contribution
       if( opaque->isSpecular() ) {
-        const Normal3f h = (linfo.l + v).normalized();
-        const real_T cosTh = geom::dot01(sinfo.N, h);
+        const Normal3f h = cs::normalize(linfo.l + v);
+        const real_T cosTh = cs::dot1(sinfo.N, h);
         scolor += opaque->specular(sinfo.u, sinfo.v)*std::pow(cosTh, opaque->shininess());
       }
 
       // Account for light's irradiance
-      result += geom::mulCWise(scolor, linfo.EL)*cosTi;
+      result += (scolor%linfo.EL)*cosTi;
     }
 
     return result;

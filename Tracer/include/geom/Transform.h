@@ -32,8 +32,7 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include "geom/Matrix.h"
-#include "geom/Vector.h"
+#include "geom/Geom.h"
 #include "geom/Ray.h"
 
 namespace geom {
@@ -51,11 +50,16 @@ namespace geom {
 
     ~Transform() noexcept = default;
 
-    Transform(const Matrix<T>& X = Matrix<T>::identity(), const Vertex<T>& t = Vertex<T>{}) noexcept
+    Transform(const Matrix<T>& X = geom::identity<T>(), const Vertex<T>& t = Vertex<T>{}) noexcept
       : _t{t}
       , _X{X}
     {
-      _Xinv = _X.inverse(&_haveInv);
+      _haveInv = cs::determinant(X) != 0;
+      if( _haveInv ) {
+        _Xinv = cs::inverse(X);
+      } else {
+        _Xinv = 0;
+      }
     }
 
     // Operators /////////////////////////////////////////////////////////////
@@ -84,27 +88,27 @@ namespace geom {
 
     static constexpr Transform<T> rotateX(const T& angle)
     {
-      return Transform<T>{Matrix<T>::rotateX(angle)};
+      return Transform<T>{geom::rotateX<T>(angle)};
     }
 
     static constexpr Transform<T> rotateY(const T& angle)
     {
-      return Transform<T>{Matrix<T>::rotateY(angle)};
+      return Transform<T>{geom::rotateY<T>(angle)};
     }
 
     static constexpr Transform<T> rotateZ(const T& angle)
     {
-      return Transform<T>{Matrix<T>::rotateZ(angle)};
+      return Transform<T>{geom::rotateZ<T>(angle)};
     }
 
     static constexpr Transform<T> scale(const T& sx, const T& sy, const T& sz)
     {
-      return Transform<T>{Matrix<T>::scale(sx, sy, sz)};
+      return Transform<T>{geom::scale<T>(sx, sy, sz)};
     }
 
     static constexpr Transform<T> translate(const Vertex<T>& t)
     {
-      return Transform<T>{Matrix<T>::identity(), t};
+      return Transform<T>{geom::identity<T>(), t};
     }
 
     // Inverse ///////////////////////////////////////////////////////////////
@@ -124,7 +128,7 @@ namespace geom {
       if( ok != nullptr ) {
         *ok = _haveInv;
       }
-      return _Xinv.transposed();
+      return cs::transpose(_Xinv);
     }
 
     // Element Access ////////////////////////////////////////////////////////
