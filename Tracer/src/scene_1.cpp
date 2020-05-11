@@ -50,9 +50,9 @@ rt::Objects create_scene_1()
 {
   rt::Objects objs;
 
-  const rt::Color3f cr = rt::Color3f::red();
-  const rt::Color3f cg = rt::Color3f::green();
-  const rt::Color3f cb = rt::Color3f::blue();
+  const rt::Color3f cr = rt::Colors<rt::real_T>::red();
+  const rt::Color3f cg = rt::Colors<rt::real_T>::green();
+  const rt::Color3f cb = rt::Colors<rt::real_T>::blue();
 
   const rt::real_T cdim(0.8);
 
@@ -74,7 +74,7 @@ rt::Objects create_scene_1()
 
   material = rt::OpaqueMaterial::create();
   material->opaque()->setDiffuse(rt::CheckedTexture::create(cb, cdim*cb, 4, 2));
-  material->opaque()->setSpecular(rt::FlatTexture::create(rt::Color3f::white()));
+  material->opaque()->setSpecular(rt::FlatTexture::create(rt::Colors<rt::real_T>::white()));
   material->opaque()->setShininess(64);
   objs.push_back(rt::Sphere::create(rt::Transformf::translate({1, -1, 1.5}), material, 1));
 
@@ -90,7 +90,7 @@ void initialize_scene_1(rt::Renderer& renderer, const rt::dim_T width, const rt:
   // (2) Add Light ///////////////////////////////////////////////////////////
 
   rt::LightSourcePtr light =
-      rt::DirectionalLight::create(rt::Color3f::white()*rt::THREE, {1, -1, 4});
+      rt::DirectionalLight::create(rt::Colors<rt::real_T>::white()*rt::THREE, {1, -1, 4});
   renderer.addLight(light);
 
   // (3) Initialize Renderer /////////////////////////////////////////////////

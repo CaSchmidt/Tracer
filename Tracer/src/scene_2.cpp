@@ -50,7 +50,7 @@ rt::Objects create_scene_2()
 {
   rt::Objects objs;
 
-  const rt::Color3f  cw = rt::Color3f::white();
+  const rt::Color3f  cw = rt::Colors<rt::real_T>::white();
   const rt::real_T cdim = 0.8;
 
   const rt::real_T a = 1.5;
@@ -99,7 +99,7 @@ void initialize_scene_2(rt::Renderer& renderer, const rt::dim_T width, const rt:
   // (2) Add Light ///////////////////////////////////////////////////////////
 
   rt::LightSourcePtr light =
-      rt::PointLight::create(rt::Color3f::white()*rt::TEN, {0, 0, 2});
+      rt::PointLight::create(rt::Colors<rt::real_T>::white()*rt::TEN, {0, 0, 2});
   renderer.addLight(light);
 
   // (3) Initialize Renderer /////////////////////////////////////////////////

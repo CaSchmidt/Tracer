@@ -70,9 +70,9 @@ rt::Objects create_scene_text(std::string text, const rt::real_T radius,
     }
   });
 
-  const rt::Color3f  cb = rt::Color3f::blue();
-  const rt::Color3f  cg = rt::Color3f::green();
-  const rt::Color3f  cr = rt::Color3f::red();
+  const rt::Color3f  cb = rt::Colors<rt::real_T>::blue();
+  const rt::Color3f  cg = rt::Colors<rt::real_T>::green();
+  const rt::Color3f  cr = rt::Colors<rt::real_T>::red();
   const rt::real_T cdim = 0.8;
 
   rt::MaterialPtr material;
@@ -127,7 +127,7 @@ void initialize_scene_text(rt::Renderer& renderer, const rt::dim_T width, const 
   // (2) Add Light ///////////////////////////////////////////////////////////
 
   rt::LightSourcePtr light =
-      rt::DirectionalLight::create(rt::Color3f::white()*rt::THREE, {-1, -1, 1});
+      rt::DirectionalLight::create(rt::Colors<rt::real_T>::white()*rt::THREE, {-1, -1, 1});
   renderer.addLight(light);
 
   // (3) Initialize Renderer /////////////////////////////////////////////////

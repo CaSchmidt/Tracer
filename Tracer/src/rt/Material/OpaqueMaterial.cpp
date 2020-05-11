@@ -66,7 +66,7 @@ namespace rt {
   {
     return _diffTex
         ? _diffTex->lookup(s, t)/PI
-        : Color3f::black();
+        : Colors<rt::real_T>::black();
   }
 
   void OpaqueMaterial::setShininess(const real_T mSpec)
@@ -93,7 +93,7 @@ namespace rt {
   {
     return isSpecular()
         ? _specTex->lookup(s, t)*(_shininess + EIGHT)/EIGHT/PI
-        : Color3f::black();
+        : Colors<rt::real_T>::black();
   }
 
   MaterialPtr OpaqueMaterial::create()
