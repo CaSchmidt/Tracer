@@ -32,7 +32,6 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include "geom/Geom.h"
 #include "geom/Ray.h"
 
 namespace geom {
