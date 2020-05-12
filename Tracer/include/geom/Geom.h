@@ -118,19 +118,19 @@ namespace geom {
   template<typename T>
   constexpr auto xAxis()
   {
-    return std::initializer_list<T>{1, 0, 0};
+    return T(cs::xAxis<typename T::traits_type>());
   }
 
   template<typename T>
   constexpr auto yAxis()
   {
-    return std::initializer_list<T>{0, 1, 0};
+    return T(cs::yAxis<typename T::traits_type>());
   }
 
   template<typename T>
   constexpr auto zAxis()
   {
-    return std::initializer_list<T>{0, 0, 1};
+    return T(cs::zAxis<typename T::traits_type>());
   }
 
   // Operators ///////////////////////////////////////////////////////////////

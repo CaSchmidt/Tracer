@@ -39,6 +39,25 @@
 
 namespace geom {
 
+  namespace intersect {
+
+    template<typename T>
+    inline constexpr T NO_INTERSECTION = std::numeric_limits<T>::quiet_NaN();
+
+    template<typename T>
+    inline T plane(const Ray<T>& ray)
+    {
+      if( ray.direction().z == 0.0 ) {
+        return NO_INTERSECTION<T>;
+      }
+      const T t = -ray.origin().z/ray.direction().z;
+      return t >= 0.0
+          ? t
+          : NO_INTERSECTION<T>;
+    }
+
+  } // namespace intersect
+
   template<typename T>
   inline T intersectCylinder(const Ray<T>& ray,
                              const Vertex<T>& C, // cylinder's origin

@@ -41,7 +41,7 @@ rt::RenderOptions options_scene_4(const rt::dim_T width, const rt::dim_T height)
   opt.backgroundColor = rt::Color3f{0, static_cast<rt::real_T>(0.8), 1};
   opt.lookAt          = rt::Vertex3f{0, 0, 0};
   opt.eye             = rt::Vertex3f{0, -7.5, 4};
-  opt.cameraUp        = geom::zAxis<rt::real_T>();
+  opt.cameraUp        = geom::zAxis<rt::Normal3f>();
 
   return opt;
 }

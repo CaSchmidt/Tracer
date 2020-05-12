@@ -68,20 +68,20 @@ namespace rt {
     info = SurfaceInfo();
 
     const Rayf rayObj = _xfrmOW*ray;
-    info.t = geom::intersectPlane(rayObj, _Oobj, _Nobj);
+    info.t = geom::intersect::plane(rayObj);
     if( !isHit(info.t) ) {
       return info.isHit();
     }
 
     const Vertex3f Pobj = rayObj(info.t);
-    const real_T      u = priv::normalized(cs::dot(Pobj - _Oobj, Vertex3f{geom::xAxis<real_T>()}), -_width/2,  _width);
-    const real_T      v = priv::normalized(cs::dot(Pobj - _Oobj, Vertex3f{geom::yAxis<real_T>()}), -_height/2, _height);
+    const real_T      u = priv::normalized(cs::dot(Pobj, cs::xAxis<Vertex3f::traits_type>()), -_width/2,  _width);
+    const real_T      v = priv::normalized(cs::dot(Pobj, cs::yAxis<Vertex3f::traits_type>()), -_height/2, _height);
     if( !priv::isBounding(u)  ||  !priv::isBounding(v) ) {
       return info.isHit();
     }
 
     info.object = this;
-    info.N      = _xfrmWO.normalTransform()*_Nobj;
+    info.N      = _xfrmWO*geom::zAxis<Normal3f>();
     info.P      = _xfrmWO*Pobj;
     info.u      = u;
     info.v      = v;

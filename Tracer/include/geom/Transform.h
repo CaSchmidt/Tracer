@@ -59,13 +59,14 @@ namespace geom {
       } else {
         _Xinv = 0;
       }
+      _Xn = cs::transpose(_Xinv);
     }
 
     // Operators /////////////////////////////////////////////////////////////
 
     constexpr Normal<T> operator*(const Normal<T>& n) const
     {
-      return _Xinv.transposed()*n;
+      return _Xn*n;
     }
 
     constexpr Vertex<T> operator*(const Vertex<T>& v) const
@@ -127,7 +128,7 @@ namespace geom {
       if( ok != nullptr ) {
         *ok = _haveInv;
       }
-      return cs::transpose(_Xinv);
+      return _Xn;
     }
 
     // Element Access ////////////////////////////////////////////////////////
@@ -145,7 +146,7 @@ namespace geom {
   private:
     bool _haveInv{};
     Vertex<T> _t{};
-    Matrix<T> _X{}, _Xinv{};
+    Matrix<T> _X{}, _Xinv{}, _Xn{};
   };
 
 } // namespace geom
