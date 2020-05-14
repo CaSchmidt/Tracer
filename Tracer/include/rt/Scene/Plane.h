@@ -48,8 +48,8 @@ namespace rt {
                             const real_T width, const real_T height);
 
   private:
-    real_T   _width{};
-    real_T   _height{};
+    real_T _width{};
+    real_T _height{};
   };
 
 } // namespace rt
