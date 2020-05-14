@@ -41,18 +41,28 @@ namespace geom {
 
   namespace intersect {
 
+    // Constants /////////////////////////////////////////////////////////////
+
     template<typename T>
     inline constexpr T NO_INTERSECTION = std::numeric_limits<T>::quiet_NaN();
 
     template<typename T>
+    inline constexpr T TWO = static_cast<T>(2);
+
+    template<typename T>
+    inline constexpr T ZERO = static_cast<T>(0);
+
+    // Intersection Tests ////////////////////////////////////////////////////
+
+    template<typename T>
     inline T plane(const Ray<T>& ray)
     {
-      if( ray.direction().z == 0.0 ) {
+      if( ray.direction().z == ZERO<T> ) {
         return NO_INTERSECTION<T>;
       }
-      const T t = -ray.origin().z/ray.direction().z;
-      return t >= 0.0
-          ? t
+      const T t0 = -ray.origin().z/ray.direction().z;
+      return t0 >= ZERO<T>
+          ? t0
           : NO_INTERSECTION<T>;
     }
 
