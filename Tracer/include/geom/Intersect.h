@@ -55,12 +55,12 @@ namespace geom {
     // Intersection Tests ////////////////////////////////////////////////////
 
     template<typename T>
-    inline T plane(const Ray<T>& ray)
+    inline T plane(const Ray<T>& ray, const T h = ZERO<T>)
     {
       if( ray.direction().z == ZERO<T> ) {
         return NO_INTERSECTION<T>;
       }
-      const T t0 = -ray.origin().z/ray.direction().z;
+      const T t0 = (h - ray.origin().z)/ray.direction().z;
       return t0 >= ZERO<T>
           ? t0
           : NO_INTERSECTION<T>;

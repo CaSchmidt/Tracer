@@ -59,7 +59,7 @@ namespace rt {
     const Vertex3f Pobj = rayObj(info.t);
     const Normal3f Nobj = geom::to_normal<real_T>(cs::normalize(Pobj));
     const real_T      u = (std::atan2(Nobj.y, Nobj.x)/PI + ONE)/TWO;
-    const real_T      v = std::acos(Nobj.z)/PI;
+    const real_T      v = std::acos(csClamp(Nobj.z, -ONE, ONE))/PI;
 
     info.object = this;
     info.N      = _xfrmWO*Nobj;
