@@ -48,8 +48,7 @@ namespace rt {
                             const real_T radius);
 
   private:
-    real_T   _radius{};
-    Vertex3f _Oobj{0, 0, 0};
+    real_T _radius{};
   };
 
 } // namespace rt

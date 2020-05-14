@@ -51,18 +51,18 @@ namespace rt {
     info = SurfaceInfo();
 
     const Rayf rayObj = _xfrmOW*ray;
-    info.t = geom::intersectSphere(rayObj, _Oobj, _radius);
+    info.t = geom::intersect::sphere(rayObj, _radius);
     if( !isHit(info.t) ) {
       return info.isHit();
     }
 
     const Vertex3f Pobj = rayObj(info.t);
-    const Normal3f Nobj = geom::to_normal<real_T>(cs::normalize(Pobj - _Oobj));
-    const real_T      u = (std::atan2(Nobj.y, Nobj.x)/PI + 1)/2;
+    const Normal3f Nobj = geom::to_normal<real_T>(cs::normalize(Pobj));
+    const real_T      u = (std::atan2(Nobj.y, Nobj.x)/PI + ONE)/TWO;
     const real_T      v = std::acos(Nobj.z)/PI;
 
     info.object = this;
-    info.N      = _xfrmWO.normalTransform()*Nobj;
+    info.N      = _xfrmWO*Nobj;
     info.P      = _xfrmWO*Pobj;
     info.u      = u;
     info.v      = v;

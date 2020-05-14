@@ -66,6 +66,25 @@ namespace geom {
           : NO_INTERSECTION<T>;
     }
 
+    template<typename T>
+    inline T sphere(const Ray<T>& ray, const T r)
+    {
+      const T a =        cs::dot(ray.direction(), ray.direction());
+      const T b = TWO<T>*cs::dot(ray.direction(), to_normal<T>(ray.origin()));
+      const T c =        cs::dot(ray.origin(),    ray.origin()) - r*r;
+      T t1, t2;
+      if( !math::solveQuadratic(a, b, c, t1, t2) ) {
+        return NO_INTERSECTION<T>;
+      }
+      if( t1 < ZERO<T> ) { // ray is at least inside sphere
+        t1 = t2;
+        if( t1 < ZERO<T> ) { // sphere is behind ray
+          return NO_INTERSECTION<T>;
+        }
+      }
+      return t1; // return nearest hit from the ray's origin
+    }
+
   } // namespace intersect
 
   template<typename T>
