@@ -56,6 +56,8 @@ void initialize_scene_3(rt::Renderer& renderer, const rt::dim_T width, const rt:
 
 void initialize_scene_4(rt::Renderer& renderer, const rt::dim_T width, const rt::dim_T height);
 
+void initialize_scene_cylinder(rt::Renderer& renderer, const rt::dim_T width, const rt::dim_T height);
+
 void initialize_scene_text(rt::Renderer& renderer, const rt::dim_T width, const rt::dim_T height,
                            const std::string& text, const rt::real_T radius,
                            const rt::real_T dh, const rt::real_T dv,

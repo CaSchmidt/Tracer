@@ -56,6 +56,7 @@ set(Tracer_SOURCES
   src/scene_2.cpp
   src/scene_3.cpp
   src/scene_4.cpp
+  src/scene_cylinder.cpp
   src/scene_text.cpp
   src/rt/Camera.cpp
   src/rt/Refraction.cpp
