@@ -41,6 +41,12 @@
 namespace math {
 
   template<typename T>
+  constexpr T abs(const T& x, const T& y)
+  {
+    return std::sqrt(x*x + y*y);
+  }
+
+  template<typename T>
   constexpr T phase(const T& x, const T& y)
   {
     T phi = std::atan2(y, x);

@@ -51,10 +51,8 @@ namespace rt {
     SurfaceInfo intersectCylinder(const Rayf& rayObj) const;
     SurfaceInfo intersectDisc(const Rayf& rayObj, const bool bottom) const;
 
-    real_T   _height{};
-    real_T   _radius{};
-    Normal3f _Nobj{geom::zAxis<Normal3f>()};
-    Vertex3f _Oobj{0, 0, 0};
+    real_T _height{};
+    real_T _radius{};
   };
 
 } // namespace rt
