@@ -58,7 +58,7 @@ namespace rt {
 
     const Vertex3f Pobj = rayObj(info.t);
     const Normal3f Nobj = geom::to_normal<real_T>(cs::normalize(Pobj));
-    const real_T      u = (std::atan2(Nobj.y, Nobj.x)/PI + ONE)/TWO;
+    const real_T      u = math::phase<real_T>(Nobj.x, Nobj.y)/TWO_PI;
     const real_T      v = std::acos(csClamp(Nobj.z, -ONE, ONE))/PI;
 
     info.object = this;
