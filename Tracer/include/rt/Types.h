@@ -37,6 +37,7 @@
 
 #include "geom/Ray.h"
 #include "geom/Transform.h"
+#include "math/Constants.h"
 #include "rt/Color.h"
 
 namespace rt {
@@ -83,10 +84,6 @@ namespace rt {
 
   ////// Constants ///////////////////////////////////////////////////////////
 
-#ifndef M_PI
-# define M_PI  3.14159265358979323846
-#endif
-
   inline constexpr real_T  ZERO = static_cast<real_T>(0);
   inline constexpr real_T   ONE = static_cast<real_T>(1);
   inline constexpr real_T   TWO = static_cast<real_T>(2);
@@ -97,8 +94,9 @@ namespace rt {
 
   inline constexpr real_T ONE_HALF = static_cast<real_T>(0.5);
 
-  inline constexpr real_T      PI = static_cast<real_T>(M_PI);
-  inline constexpr real_T PI_HALF = static_cast<real_T>(M_PI/2.0);
+  inline constexpr real_T      PI      = math::PI<real_T>;
+  inline constexpr real_T      PI_HALF = math::PI_HALF<real_T>;
+  inline constexpr real_T  TWO_PI      = math::TWO_PI<real_T>;
 
   inline constexpr real_T TRACE_BIAS = static_cast<real_T>((1.0/1024.0)/10.0);
 

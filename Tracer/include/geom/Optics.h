@@ -33,7 +33,7 @@
 #define OPTICS_H
 
 #include "geom/Geom.h"
-#include "math/Pythagoras.h"
+#include "math/Solver.h"
 
 /*
  * Optics API:

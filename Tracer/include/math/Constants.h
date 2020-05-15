@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,20 +29,33 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef PYTHAGORAS_H
-#define PYTHAGORAS_H
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
-#include <algorithm>
+#include <limits>
 
 namespace math {
 
-  template<typename T>
-  constexpr T pythagoras(const T& x)
-  {
-    // x^2 + y^2 = 1  =>  y = sqrt(1 - x^2)
-    return std::sqrt(std::max<T>(0, static_cast<T>(1) - x*x));
-  }
+  template<typename T> inline constexpr T  Inf = std::numeric_limits<T>::infinity();
+  template<typename T> inline constexpr T qNaN = std::numeric_limits<T>::quiet_NaN();
+
+  template<typename T> inline constexpr T  ZERO = static_cast<T>(0);
+  template<typename T> inline constexpr T   ONE = static_cast<T>(1);
+  template<typename T> inline constexpr T   TWO = static_cast<T>(2);
+  template<typename T> inline constexpr T THREE = static_cast<T>(3);
+  template<typename T> inline constexpr T  FOUR = static_cast<T>(4);
+
+  template<typename T> inline constexpr T ONE_HALF    = static_cast<T>(0.5);
+  template<typename T> inline constexpr T ONE_QUARTER = static_cast<T>(0.25);
+
+#ifndef M_PI
+# define M_PI  3.14159265358979323846
+#endif
+
+  template<typename T> inline constexpr T     PI      = static_cast<T>(M_PI);
+  template<typename T> inline constexpr T     PI_HALF = static_cast<T>(M_PI/2.0);
+  template<typename T> inline constexpr T TWO_PI      = static_cast<T>(2.0*M_PI);
 
 } // namespace math
 
-#endif // PYTHAGORAS_H
+#endif // CONSTANTS_H

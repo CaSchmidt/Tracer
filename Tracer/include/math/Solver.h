@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,35 +29,53 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef QUADRATIC_H
-#define QUADRATIC_H
+#ifndef SOLVER_H
+#define SOLVER_H
 
 #include <cmath>
 
 #include <algorithm>
-#include <limits>
+
+#include "math/Constants.h"
 
 namespace math {
 
   template<typename T>
-  bool solveQuadratic(const T& _a, const T& _b, const T& _c,
-                      T& x1, T& x2)
+  constexpr T phase(const T& x, const T& y)
   {
-    x1 = x2 = std::numeric_limits<T>::quiet_NaN();
+    T phi = std::atan2(y, x);
+    if( phi < ZERO<T> ) {
+      phi += TWO_PI<T>;
+    }
+    return phi;
+  }
+
+  template<typename T>
+  constexpr T pythagoras(const T& x)
+  {
+    // x^2 + y^2 = 1  =>  y = sqrt(1 - x^2)
+    return std::sqrt(std::max<T>(0, ONE<T> - x*x));
+  }
+
+  template<typename T>
+  constexpr bool quadratic(const T& _a, const T& _b, const T& _c,
+                           T& x1, T& x2)
+  {
+    x1 = x2 = qNaN<T>;
 
     const double a = static_cast<double>(_a);
     const double b = static_cast<double>(_b);
     const double c = static_cast<double>(_c);
 
-    const double discrim = b*b - 4.0*a*c;
-    if( discrim < 0 ) {
+    const double discrim = b*b - FOUR<double>*a*c;
+    if( discrim < ZERO<double> ) {
       return false;
     }
 
     const double rootDiscrim = std::sqrt(discrim);
-    const double q = b < 0
-        ? -0.5*(b - rootDiscrim)
-        : -0.5*(b + rootDiscrim);
+    const double q = b < ZERO<double>
+        ? -ONE_HALF<double>*(b - rootDiscrim)
+        : -ONE_HALF<double>*(b + rootDiscrim);
 
     x1 = static_cast<T>(q/a);
     x2 = static_cast<T>(c/q);
@@ -71,4 +89,4 @@ namespace math {
 
 } // namespace math
 
-#endif // QUADRATIC_H
+#endif // SOLVER_H

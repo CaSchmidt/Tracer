@@ -24,9 +24,9 @@ set(Tracer_HEADERS
   include/geom/Optics.h
   include/geom/Ray.h
   include/geom/Transform.h
+  include/math/Constants.h
   include/math/Logical.h
-  include/math/Pythagoras.h
-  include/math/Quadratic.h
+  include/math/Solver.h
   include/rt/Camera.h
   include/rt/Color.h
   include/rt/Refraction.h

@@ -32,10 +32,8 @@
 #ifndef INTERSECT_H
 #define INTERSECT_H
 
-#include <limits>
-
 #include "geom/Ray.h"
-#include "math/Quadratic.h"
+#include "math/Solver.h"
 
 namespace geom {
 
@@ -44,15 +42,35 @@ namespace geom {
     // Constants /////////////////////////////////////////////////////////////
 
     template<typename T>
-    inline constexpr T NO_INTERSECTION = std::numeric_limits<T>::quiet_NaN();
+    inline constexpr T NO_INTERSECTION = math::qNaN<T>;
 
-    template<typename T>
-    inline constexpr T TWO = static_cast<T>(2);
-
-    template<typename T>
-    inline constexpr T ZERO = static_cast<T>(0);
+    template<typename T> inline constexpr T ZERO = math::ZERO<T>;
+    template<typename T> inline constexpr T  TWO = math::TWO<T>;
 
     // Intersection Tests ////////////////////////////////////////////////////
+
+    template<typename T>
+    inline T cylinder(const Ray<T>& ray, const T r)
+    {
+      const T ox = ray.origin().x;
+      const T oy = ray.origin().y;
+      const T dx = ray.direction().x;
+      const T dy = ray.direction().y;
+      const T  a =         dx*dx + dy*dy;
+      const T  b = TWO<T>*(dx*ox + dy*oy);
+      const T  c =         ox*ox + oy*oy - r*r;
+      T t1, t2;
+      if( !math::quadratic(a, b, c, t1, t2) ) {
+        return NO_INTERSECTION<T>;
+      }
+      if( t1 < ZERO<T> ) {
+        t1 = t2;
+        if( t1 < ZERO<T> ) {
+          return NO_INTERSECTION<T>;
+        }
+      }
+      return t1;
+    }
 
     template<typename T>
     inline T plane(const Ray<T>& ray, const T h = ZERO<T>)
@@ -73,7 +91,7 @@ namespace geom {
       const T b = TWO<T>*cs::dot(ray.direction(), to_normal<T>(ray.origin()));
       const T c =        cs::dot(ray.origin(),    ray.origin()) - r*r;
       T t1, t2;
-      if( !math::solveQuadratic(a, b, c, t1, t2) ) {
+      if( !math::quadratic(a, b, c, t1, t2) ) {
         return NO_INTERSECTION<T>;
       }
       if( t1 < ZERO<T> ) { // ray is at least inside sphere
@@ -108,7 +126,7 @@ namespace geom {
     const T c = cs::dot(D, D) - r*r;
 
     T t1, t2;
-    if( !math::solveQuadratic(a, b, c, t1, t2) ) {
+    if( !math::quadratic(a, b, c, t1, t2) ) {
       return NO_INTERSECTION;
     }
 
@@ -154,7 +172,7 @@ namespace geom {
     const T c = cs::dot(D, D) - r*r;
 
     T t1, t2;
-    if( !math::solveQuadratic(a, b, c, t1, t2) ) {
+    if( !math::quadratic(a, b, c, t1, t2) ) {
       return NO_INTERSECTION;
     }
 
