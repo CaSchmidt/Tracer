@@ -51,6 +51,7 @@ namespace math {
   template<typename T>
   constexpr T phase(const T& x, const T& y)
   {
+    // atan2(y,x) -> phi := [-pi,pi]
     T phi = csATan2(y, x);
     if( phi < ZERO<T> ) {
       phi += TWO_PI<T>;
