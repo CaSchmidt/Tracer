@@ -50,8 +50,8 @@ namespace rt {
 
   Color3f CheckedTexture::lookup(const real_T s, const real_T t) const
   {
-    const bool a = std::fmod(s*_scaleS, 1) > 0.5;
-    const bool b = std::fmod(t*_scaleT, 1) > 0.5;
+    const bool a = csRemndr(s*_scaleS, ONE) > ONE_HALF;
+    const bool b = csRemndr(t*_scaleT, ONE) > ONE_HALF;
     return math::XOR(a, b)
         ? _colorA
         : _colorB;

@@ -63,7 +63,7 @@ namespace rt {
 
   real_T PointLight::attenuation(const real_T r) const
   {
-    const real_T rL = std::max<real_T>(r, 1);
+    const real_T rL = csMax(r, ONE);
     return ONE/rL/rL;
   }
 

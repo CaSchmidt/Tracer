@@ -36,6 +36,8 @@
 
 #include <algorithm>
 
+#include <cs/Math.h>
+
 #include "math/Constants.h"
 
 namespace math {
@@ -43,13 +45,13 @@ namespace math {
   template<typename T>
   constexpr T abs(const T& x, const T& y)
   {
-    return std::sqrt(x*x + y*y);
+    return csSqrt(x*x + y*y);
   }
 
   template<typename T>
   constexpr T phase(const T& x, const T& y)
   {
-    T phi = std::atan2(y, x);
+    T phi = csATan2(y, x);
     if( phi < ZERO<T> ) {
       phi += TWO_PI<T>;
     }
@@ -60,7 +62,7 @@ namespace math {
   constexpr T pythagoras(const T& x)
   {
     // x^2 + y^2 = 1  =>  y = sqrt(1 - x^2)
-    return std::sqrt(std::max<T>(0, ONE<T> - x*x));
+    return csSqrt(csMax(ZERO<T>, ONE<T> - x*x));
   }
 
   template<typename T>
@@ -78,7 +80,7 @@ namespace math {
       return false;
     }
 
-    const double rootDiscrim = std::sqrt(discrim);
+    const double rootDiscrim = csSqrt(discrim);
     const double q = b < ZERO<double>
         ? -ONE_HALF<double>*(b - rootDiscrim)
         : -ONE_HALF<double>*(b + rootDiscrim);

@@ -71,7 +71,7 @@ namespace rt {
 
   void OpaqueMaterial::setShininess(const real_T mSpec)
   {
-    _shininess = std::max<real_T>(mSpec, 0);
+    _shininess = csMax(mSpec, ZERO);
   }
 
   real_T OpaqueMaterial::shininess() const

@@ -94,7 +94,7 @@ namespace geom {
       return Normal<T>{};
     }
 
-    return eta*I - (eta*DOT + std::sqrt(k))*N;
+    return eta*I - (eta*DOT + csSqrt(k))*N;
   }
 
 } // namespace geom

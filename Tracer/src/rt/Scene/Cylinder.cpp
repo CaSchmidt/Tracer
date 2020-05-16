@@ -101,7 +101,7 @@ namespace rt {
     }
 
     const Vertex3f Pobj = rayObj(info.t);
-    if( std::abs(Pobj.z) > _height/2 ) {
+    if( csAbs(Pobj.z) > _height/2 ) {
       return SurfaceInfo();
     }
 
