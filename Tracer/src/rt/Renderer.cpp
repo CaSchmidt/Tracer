@@ -186,7 +186,7 @@ namespace rt {
       if( opaque->isSpecular() ) {
         const Normal3f h = cs::normalize(linfo.l + v);
         const real_T cosTh = cs::dot1(sinfo.N, h);
-        scolor += opaque->specular(sinfo.u, sinfo.v)*std::pow(cosTh, opaque->shininess());
+        scolor += opaque->specular(sinfo.u, sinfo.v)*csPow(cosTh, opaque->shininess());
       }
 
       // Account for light's irradiance

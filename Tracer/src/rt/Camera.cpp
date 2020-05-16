@@ -60,7 +60,7 @@ namespace rt {
 
     _cam = Matrix3f{ x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z };
 
-    _near = -_aspect/std::tan(fov_rad/2);
+    _near = -_aspect/csTan(fov_rad/TWO);
   }
 
   Rayf Camera::ray(const dim_T _x, const dim_T _y, const bool random) const
