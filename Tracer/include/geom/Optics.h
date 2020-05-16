@@ -56,15 +56,12 @@ namespace geom {
   template<typename T>
   inline T fresnel(const Normal<T>& I, const Normal<T>& N, const T& eta)
   {
-    constexpr T ONE = static_cast<T>(1);
-    constexpr T TWO = static_cast<T>(2);
-
     const T cosTi = -dot(I, N);
     const T sinTi = math::pythagoras(cosTi);
 
     const T sinTt = eta*sinTi; // Snell's law
-    if( sinTt >= ONE ) { // total internal reflection
-      return ONE;
+    if( sinTt >= math::ONE<T> ) { // total internal reflection
+      return math::ONE<T>;
     }
 
     const T cosTt = math::pythagoras(sinTt);
@@ -72,25 +69,22 @@ namespace geom {
     const T para = (cosTi - eta*cosTt)/(cosTi + eta*cosTt);
     const T perp = (eta*cosTi - cosTt)/(eta*cosTi + cosTt);
 
-    return (para*para + perp*perp)/TWO;
+    return (para*para + perp*perp)*math::ONE_HALF<T>;
   }
 
   template<typename T> // cf. GLSL v4.60, 8.5. Geometric Functions
   constexpr Normal<T> reflect(const Normal<T>& I, const Normal<T>& N)
   {
-    return I - static_cast<T>(2)*dot(I, N)*N;
+    return I - math::TWO<T>*dot(I, N)*N;
   }
 
   template<typename T> // cf. GLSL v4.60, 8.5. Geometric Functions
   inline Normal<T> refract(const Normal<T>& I, const Normal<T>& N, const T& eta)
   {
-    constexpr T  ONE = static_cast<T>(1);
-    constexpr T ZERO = static_cast<T>(0);
-
     const T DOT = dot(I, N);
 
-    const T k = ONE - eta*eta*(ONE - DOT*DOT);
-    if( k < ZERO ) {
+    const T k = math::ONE<T> - eta*eta*(math::ONE<T> - DOT*DOT);
+    if( k < math::ZERO<T> ) {
       return Normal<T>{};
     }
 
