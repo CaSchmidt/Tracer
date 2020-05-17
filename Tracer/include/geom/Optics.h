@@ -56,7 +56,7 @@ namespace geom {
   template<typename T>
   inline T fresnel(const Normal<T>& I, const Normal<T>& N, const T& eta)
   {
-    const T cosTi = -dot(I, N);
+    const T cosTi = -cs::dot(I, N);
     const T sinTi = math::pythagoras(cosTi);
 
     const T sinTt = eta*sinTi; // Snell's law
@@ -75,13 +75,13 @@ namespace geom {
   template<typename T> // cf. GLSL v4.60, 8.5. Geometric Functions
   constexpr Normal<T> reflect(const Normal<T>& I, const Normal<T>& N)
   {
-    return I - math::TWO<T>*dot(I, N)*N;
+    return I - math::TWO<T>*cs::dot(I, N)*N;
   }
 
   template<typename T> // cf. GLSL v4.60, 8.5. Geometric Functions
   inline Normal<T> refract(const Normal<T>& I, const Normal<T>& N, const T& eta)
   {
-    const T DOT = dot(I, N);
+    const T DOT = cs::dot(I, N);
 
     const T k = math::ONE<T> - eta*eta*(math::ONE<T> - DOT*DOT);
     if( k < math::ZERO<T> ) {

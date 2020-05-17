@@ -38,7 +38,7 @@ namespace rt {
     constexpr real_T scaledPos(const real_T& in, const real_T& s1, const real_T& s2,
                                const real_T& delta = ONE_HALF)
     {
-      return s2*(TWO*(in + delta)/s1 - 1);
+      return s2*(TWO*(in + delta)/s1 - ONE);
     }
 
   } // namespace priv
@@ -77,7 +77,7 @@ namespace rt {
         : ONE_HALF;
 
     const real_T x = priv::scaledPos(_x, _width, _aspect, dx);
-    const real_T y = priv::scaledPos(_y, _height, -1, dy);
+    const real_T y = priv::scaledPos(_y, _height, -ONE, dy);
 
     const Vertex3f org = _cam*Vertex3f{x, y, _near} + _eye;
     const Normal3f dir = geom::to_normal<real_T>(cs::direction(_eye, org));
