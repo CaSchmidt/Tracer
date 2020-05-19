@@ -49,6 +49,12 @@ namespace math {
   }
 
   template<typename T>
+  constexpr T degree(const T& x)
+  {
+    return x*static_cast<T>(180)/PI<T>;
+  }
+
+  template<typename T>
   constexpr T phase(const T& x, const T& y)
   {
     // atan2(y,x) -> phi := [-pi,pi]
@@ -94,6 +100,12 @@ namespace math {
     }
 
     return true;
+  }
+
+  template<typename T>
+  constexpr T radian(const T& x)
+  {
+    return x*PI<T>/static_cast<T>(180);
   }
 
 } // namespace math
