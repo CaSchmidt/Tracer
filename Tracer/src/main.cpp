@@ -35,7 +35,6 @@
 #include "Image.h"
 
 #include "scenes.h"
-#include "tests.h"
 
 void print_progress(const int y, const int height, const bool force = false, const int blockSize = 20)
 {
