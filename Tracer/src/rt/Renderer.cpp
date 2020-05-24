@@ -45,8 +45,19 @@ namespace rt {
     _lights.push_back(std::move(light));
   }
 
+  void Renderer::clear()
+  {
+    _camera  = Camera();
+    _options = RenderOptions();
+    _xfrmWC  = Transformf();
+    _scene.clear();
+    _lights.clear();
+  }
+
   bool Renderer::initialize(const RenderOptions& options, Objects& scene)
   {
+    clear();
+
     const Transformf xfrmCW{Transformf::rotateX(-PI_HALF)};
 
     _options = options;

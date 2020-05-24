@@ -59,6 +59,8 @@ namespace rt {
 
     void addLight(LightSourcePtr& light);
 
+    void clear();
+
     bool initialize(const RenderOptions& options, Objects& scene);
 
     const RenderOptions& options() const;
