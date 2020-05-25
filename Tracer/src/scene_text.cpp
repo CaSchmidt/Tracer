@@ -124,13 +124,13 @@ void initialize_scene_text(rt::Renderer& renderer, const rt::dim_T width, const 
 
   rt::Objects objs = create_scene_text(text, radius, dh, dv, transform);
 
-  // (2) Add Light ///////////////////////////////////////////////////////////
+  // (2) Initialize Renderer /////////////////////////////////////////////////
+
+  renderer.initialize(options_scene_text(width, height), objs);
+
+  // (3) Add Light ///////////////////////////////////////////////////////////
 
   rt::LightSourcePtr light =
       rt::DirectionalLight::create(rt::Colors<rt::real_T>::white()*rt::THREE, {-1, -1, 1});
   renderer.addLight(light);
-
-  // (3) Initialize Renderer /////////////////////////////////////////////////
-
-  renderer.initialize(options_scene_text(width, height), objs);
 }

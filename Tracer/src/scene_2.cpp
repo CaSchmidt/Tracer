@@ -96,13 +96,13 @@ void initialize_scene_2(rt::Renderer& renderer, const rt::dim_T width, const rt:
 
   rt::Objects objs = create_scene_2();
 
-  // (2) Add Light ///////////////////////////////////////////////////////////
+  // (2) Initialize Renderer /////////////////////////////////////////////////
+
+  renderer.initialize(options_scene_2(width, height), objs);
+
+  // (3) Add Light ///////////////////////////////////////////////////////////
 
   rt::LightSourcePtr light =
       rt::PointLight::create(rt::Colors<rt::real_T>::white()*rt::TEN, {0, 0, 2});
   renderer.addLight(light);
-
-  // (3) Initialize Renderer /////////////////////////////////////////////////
-
-  renderer.initialize(options_scene_2(width, height), objs);
 }

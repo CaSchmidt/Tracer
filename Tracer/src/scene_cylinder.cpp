@@ -80,13 +80,13 @@ void initialize_scene_cylinder(rt::Renderer& renderer, const rt::dim_T width, co
 
   rt::Objects objs = create_scene_cylinder();
 
-  // (2) Add Light ///////////////////////////////////////////////////////////
+  // (2) Initialize Renderer /////////////////////////////////////////////////
+
+  renderer.initialize(options_scene_cylinder(width, height), objs);
+
+  // (3) Add Light ///////////////////////////////////////////////////////////
 
   rt::LightSourcePtr light =
       rt::DirectionalLight::create(rt::Colors<rt::real_T>::white()*rt::THREE, {1, -1, 4});
   renderer.addLight(light);
-
-  // (3) Initialize Renderer /////////////////////////////////////////////////
-
-  renderer.initialize(options_scene_cylinder(width, height), objs);
 }

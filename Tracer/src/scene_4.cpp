@@ -85,13 +85,13 @@ void initialize_scene_4(rt::Renderer& renderer, const rt::dim_T width, const rt:
 
   rt::Objects objs = create_scene_4();
 
-  // (2) Add Light ///////////////////////////////////////////////////////////
+  // (2) Initialize Renderer /////////////////////////////////////////////////
+
+  renderer.initialize(options_scene_4(width, height), objs);
+
+  // (3) Add Light ///////////////////////////////////////////////////////////
 
   rt::LightSourcePtr light =
       rt::DirectionalLight::create(rt::Colors<rt::real_T>::white()*rt::THREE, {-1, -1, 1});
   renderer.addLight(light);
-
-  // (3) Initialize Renderer /////////////////////////////////////////////////
-
-  renderer.initialize(options_scene_4(width, height), objs);
 }
