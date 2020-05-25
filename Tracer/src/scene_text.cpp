@@ -120,13 +120,16 @@ void initialize_scene_text(rt::Renderer& renderer, const rt::dim_T width, const 
                            const rt::real_T dh, const rt::real_T dv,
                            const rt::Transformf& transform)
 {
-  // (1) Create Scene ////////////////////////////////////////////////////////
+  renderer.clear();
+
+  // (1) Initialize Renderer /////////////////////////////////////////////////
+
+  renderer.initialize(options_scene_text(width, height));
+
+  // (2) Create Scene ////////////////////////////////////////////////////////
 
   rt::Objects objs = create_scene_text(text, radius, dh, dv, transform);
-
-  // (2) Initialize Renderer /////////////////////////////////////////////////
-
-  renderer.initialize(options_scene_text(width, height), objs);
+  renderer.setScene(objs);
 
   // (3) Add Light ///////////////////////////////////////////////////////////
 

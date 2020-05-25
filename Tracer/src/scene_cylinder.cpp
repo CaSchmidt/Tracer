@@ -76,13 +76,16 @@ rt::Objects create_scene_cylinder()
 
 void initialize_scene_cylinder(rt::Renderer& renderer, const rt::dim_T width, const rt::dim_T height)
 {
-  // (1) Create Scene ////////////////////////////////////////////////////////
+  renderer.clear();
+
+  // (1) Initialize Renderer /////////////////////////////////////////////////
+
+  renderer.initialize(options_scene_cylinder(width, height));
+
+  // (2) Create Scene ////////////////////////////////////////////////////////
 
   rt::Objects objs = create_scene_cylinder();
-
-  // (2) Initialize Renderer /////////////////////////////////////////////////
-
-  renderer.initialize(options_scene_cylinder(width, height), objs);
+  renderer.setScene(objs);
 
   // (3) Add Light ///////////////////////////////////////////////////////////
 

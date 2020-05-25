@@ -73,13 +73,16 @@ rt::Objects create_scene_3()
 
 void initialize_scene_3(rt::Renderer& renderer, const rt::dim_T width, const rt::dim_T height)
 {
-  // (1) Create Scene ////////////////////////////////////////////////////////
+  renderer.clear();
+
+  // (1) Initialize Renderer /////////////////////////////////////////////////
+
+  renderer.initialize(options_scene_3(width, height));
+
+  // (2) Create Scene ////////////////////////////////////////////////////////
 
   rt::Objects objs = create_scene_3();
-
-  // (2) Initialize Renderer /////////////////////////////////////////////////
-
-  renderer.initialize(options_scene_3(width, height), objs);
+  renderer.setScene(objs);
 
   // (3) Add Light ///////////////////////////////////////////////////////////
 
