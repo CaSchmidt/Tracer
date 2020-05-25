@@ -45,6 +45,11 @@ namespace rt {
     _lights.push_back(std::move(light));
   }
 
+  void Renderer::addObject(ObjectPtr& object)
+  {
+    _scene.push_back(std::move(object));
+  }
+
   void Renderer::clear()
   {
     _camera  = Camera();
@@ -54,15 +59,11 @@ namespace rt {
     _lights.clear();
   }
 
-  bool Renderer::initialize(const RenderOptions& options, Objects& scene)
+  bool Renderer::initialize(const RenderOptions& options)
   {
-    clear();
-
     const Transformf xfrmCW{Transformf::rotateX(-PI_HALF)};
 
     _options = options;
-
-    _scene = std::move(scene);
 
     const Vertex3f      eye = xfrmCW*_options.eye;
     const Vertex3f   lookAt = xfrmCW*_options.lookAt;
@@ -109,6 +110,11 @@ namespace rt {
       }
     }
     return true;
+  }
+
+  void Renderer::setScene(Objects& objects)
+  {
+    _scene = std::move(objects);
   }
 
   ////// private /////////////////////////////////////////////////////////////

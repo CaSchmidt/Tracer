@@ -59,13 +59,17 @@ namespace rt {
 
     void addLight(LightSourcePtr& light);
 
+    void addObject(ObjectPtr& object);
+
     void clear();
 
-    bool initialize(const RenderOptions& options, Objects& scene);
+    bool initialize(const RenderOptions& options);
 
     const RenderOptions& options() const;
 
     bool render(const dim_T y, uint8_t *row, const uint8_t samples = 1) const;
+
+    void setScene(Objects& objects);
 
   private:
     // NOTE: All arguments passed to/returned from these methods are in WORLD coordinates!
