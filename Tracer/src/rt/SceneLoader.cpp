@@ -41,6 +41,8 @@
 #include "rt/SceneLoader.h"
 
 #include "math/Solver.h"
+#include "rt/Light/DirectionalLight.h"
+#include "rt/Light/PointLight.h"
 #include "rt/Renderer.h"
 
 namespace rt {
@@ -62,10 +64,10 @@ namespace rt {
     }
 
     template<typename CharT>
-    constexpr bool compare(const CharT *s1, const CharT *s2)
+    inline bool compare(const CharT *s1, const CharT *s2)
     {
-      constexpr std::size_t l1 = length(s1);
-      constexpr std::size_t l2 = length(s2);
+      const std::size_t l1 = length(s1);
+      const std::size_t l2 = length(s2);
       return l1 > 0  &&  l1 == l2
           ? std::char_traits<CharT>::compare(s1, s2, l1)
           : false;
@@ -227,13 +229,15 @@ namespace rt {
       return parseVector3D<Vertex3f>(node, "x", "y", "z", ok);
     }
 
-    RenderOptions parseOptions(const tinyxml2::XMLElement *xml_Options, bool *ok = nullptr)
+    // Parse Options /////////////////////////////////////////////////////////
+
+    RenderOptions parseOptions(const tinyxml2::XMLElement *node, bool *ok = nullptr)
     {
       if( ok != nullptr ) {
         *ok = false;
       }
 
-      if( xml_Options == nullptr ) {
+      if( node == nullptr ) {
         return RenderOptions();
       }
 
@@ -241,43 +245,43 @@ namespace rt {
       RenderOptions opts;
 
       myOk = false;
-      opts.width = parseSize(xml_Options->FirstChildElement("width"), &myOk);
+      opts.width = parseSize(node->FirstChildElement("width"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
       myOk = false;
-      opts.height = parseSize(xml_Options->FirstChildElement("height"), &myOk);
+      opts.height = parseSize(node->FirstChildElement("height"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
       myOk = false;
-      opts.fov_rad = parseAngle(xml_Options->FirstChildElement("fov"), &myOk);
+      opts.fov_rad = parseAngle(node->FirstChildElement("fov"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
       myOk = false;
-      opts.backgroundColor = parseColor(xml_Options->FirstChildElement("backgroundColor"), &myOk);
+      opts.backgroundColor = parseColor(node->FirstChildElement("backgroundColor"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
       myOk = false;
-      opts.eye = parseVertex(xml_Options->FirstChildElement("eye"), &myOk);
+      opts.eye = parseVertex(node->FirstChildElement("eye"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
       myOk = false;
-      opts.lookAt = parseVertex(xml_Options->FirstChildElement("lookAt"), &myOk);
+      opts.lookAt = parseVertex(node->FirstChildElement("lookAt"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
       myOk = false;
-      opts.cameraUp = parseNormal(xml_Options->FirstChildElement("cameraUp"), &myOk);
+      opts.cameraUp = parseNormal(node->FirstChildElement("cameraUp"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
@@ -287,6 +291,94 @@ namespace rt {
       }
 
       return opts;
+    }
+
+    // Parse Light ///////////////////////////////////////////////////////////
+
+    LightSourcePtr parseDirectionalLight(const tinyxml2::XMLElement *node, bool *ok = nullptr)
+    {
+      if( ok != nullptr ) {
+        *ok = false;
+      }
+
+      bool myOk = false;
+
+      const Color3f EL = parseColor(node->FirstChildElement("irradiance"), &myOk, false);
+      if( !myOk ) {
+        return LightSourcePtr();
+      }
+
+      const Normal3f dir = parseNormal(node->FirstChildElement("direction"), &myOk);
+      if( !myOk ) {
+        return LightSourcePtr();
+      }
+
+      if( ok != nullptr ) {
+        *ok = true;
+      }
+
+      return DirectionalLight::create(EL, dir);
+    }
+
+    LightSourcePtr parsePointLight(const tinyxml2::XMLElement *node, bool *ok = nullptr)
+    {
+      if( ok != nullptr ) {
+        *ok = false;
+      }
+
+      bool myOk = false;
+
+      const Color3f IL = parseColor(node->FirstChildElement("intensity"), &myOk, false);
+      if( !myOk ) {
+        return LightSourcePtr();
+      }
+
+      const Vertex3f pos = parseVertex(node->FirstChildElement("position"), &myOk);
+      if( !myOk ) {
+        return LightSourcePtr();
+      }
+
+      if( ok != nullptr ) {
+        *ok = true;
+      }
+
+      return PointLight::create(IL, pos);
+    }
+
+    LightSourcePtr parseLight(const tinyxml2::XMLElement *node, bool *ok = nullptr)
+    {
+      if( ok != nullptr ) {
+        *ok = false;
+      }
+
+      if( node == nullptr ) {
+        return LightSourcePtr();
+      }
+
+      if(        node->Attribute("type", "directional") != nullptr ) {
+        return parseDirectionalLight(node, ok);
+      } else if( node->Attribute("type", "point") != nullptr ) {
+        return parsePointLight(node, ok);
+      }
+
+      return LightSourcePtr();
+    }
+
+    // Parse Object //////////////////////////////////////////////////////////
+
+    ObjectPtr parseObject(const tinyxml2::XMLElement *node, bool *ok = nullptr)
+    {
+      if( ok != nullptr ) {
+        *ok = false;
+      }
+
+      if( node == nullptr ) {
+        return ObjectPtr();
+      }
+
+      // TODO
+
+      return ObjectPtr();
     }
 
   } // namespace priv
@@ -303,6 +395,38 @@ namespace rt {
     const tinyxml2::XMLElement *xml_Tracer = doc.FirstChildElement("Tracer");
     if( xml_Tracer == nullptr ) {
       return false;
+    }
+
+    bool ok = false;
+
+    const tinyxml2::XMLElement *xml_Options = xml_Tracer->FirstChildElement("Options");
+    const RenderOptions opts = priv::parseOptions(xml_Options, &ok);
+    if( !ok ) {
+      return false;
+    }
+    if( !renderer.initialize(opts) ) {
+      return false;
+    }
+
+    const tinyxml2::XMLElement *node = xml_Tracer->FirstChildElement();
+    while( node != nullptr ) {
+      ok = false;
+
+      if(        priv::compare(node->Name(), "Light") ) {
+        LightSourcePtr light = priv::parseLight(node, &ok);
+        if( !ok ) {
+          return false;
+        }
+        renderer.addLight(light);
+      } else if( priv::compare(node->Name(), "Object") ) {
+        ObjectPtr object = priv::parseObject(node, &ok);
+        if( !ok ) {
+          return false;
+        }
+        renderer.addObject(object);
+      }
+
+      node = node->NextSiblingElement();
     }
 
     return true;
