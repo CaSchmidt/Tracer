@@ -38,6 +38,7 @@ set(Tracer_HEADERS
   include/rt/Color.h
   include/rt/Refraction.h
   include/rt/Renderer.h
+  include/rt/SceneLoader.h
   include/rt/SurfaceInfo.h
   include/rt/Types.h
   include/rt/Light/DirectionalLight.h
@@ -68,6 +69,7 @@ set(Tracer_SOURCES
   src/rt/Camera.cpp
   src/rt/Refraction.cpp
   src/rt/Renderer.cpp
+  src/rt/SceneLoader.cpp
   src/rt/Light/DirectionalLight.cpp
   src/rt/Light/ILightSoruce.cpp
   src/rt/Light/PointLight.cpp
