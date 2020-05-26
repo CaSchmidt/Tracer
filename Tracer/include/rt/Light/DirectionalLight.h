@@ -46,7 +46,7 @@ namespace rt {
     static LightSourcePtr create(const Color3f& EL, const Normal3f& l);
 
   private:
-    Color3f  _EL{};
+    Color3f  _EL{}; // irradiance
     Normal3f _l{};
   };
 

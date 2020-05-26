@@ -48,7 +48,7 @@ namespace rt {
   private:
     real_T attenuation(const real_T r) const;
 
-    Color3f  _IL{};
+    Color3f  _IL{}; // radiant intensity
     Vertex3f _PL{};
   };
 
