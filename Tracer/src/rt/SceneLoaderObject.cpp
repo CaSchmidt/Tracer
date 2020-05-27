@@ -30,9 +30,9 @@
 *****************************************************************************/
 
 #include "priv/rt/SceneLoaderBase.h"
-#include "rt/Scene/Cylinder.h"
-#include "rt/Scene/Plane.h"
-#include "rt/Scene/Sphere.h"
+#include "rt/Object/Cylinder.h"
+#include "rt/Object/Plane.h"
+#include "rt/Object/Sphere.h"
 
 namespace rt {
 

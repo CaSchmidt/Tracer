@@ -34,7 +34,7 @@
 
 #include "rt/Camera.h"
 #include "rt/Light/ILightSource.h"
-#include "rt/Scene/IObject.h"
+#include "rt/Object/IObject.h"
 
 namespace rt {
 

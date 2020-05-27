@@ -29,28 +29,29 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SPHERE_H
-#define SPHERE_H
+#ifndef PLANE_H
+#define PLANE_H
 
-#include "rt/Scene/IObject.h"
+#include "rt/Object/IObject.h"
 
 namespace rt {
 
-  class Sphere : public IObject {
+  class Plane : public IObject {
   public:
-    Sphere(const Transformf& objectToWorld, MaterialPtr& material,
-           const real_T radius) noexcept;
-    ~Sphere() noexcept;
+    Plane(const Transformf& objectToWorld, MaterialPtr& material,
+          const real_T width, const real_T height) noexcept;
+    ~Plane() noexcept;
 
     bool intersect(SurfaceInfo& info, const Rayf& ray) const final;
 
     static ObjectPtr create(const Transformf& objectToWorld, MaterialPtr& material,
-                            const real_T radius);
+                            const real_T width, const real_T height);
 
   private:
-    real_T _radius{};
+    real_T _width{};
+    real_T _height{};
   };
 
 } // namespace rt
 
-#endif // SPHERE_H
+#endif // PLANE_H

@@ -50,10 +50,10 @@ set(Tracer_HEADERS
   include/rt/Material/MirrorMaterial.h
   include/rt/Material/OpaqueMaterial.h
   include/rt/Material/TransparentMaterial.h
-  include/rt/Scene/Cylinder.h
-  include/rt/Scene/IObject.h
-  include/rt/Scene/Plane.h
-  include/rt/Scene/Sphere.h
+  include/rt/Object/Cylinder.h
+  include/rt/Object/IObject.h
+  include/rt/Object/Plane.h
+  include/rt/Object/Sphere.h
   include/rt/Texture/CheckedTexture.h
   include/rt/Texture/FlatTexture.h
   include/rt/Texture/ITexture.h
@@ -83,10 +83,10 @@ set(Tracer_SOURCES
   src/rt/Material/MirrorMaterial.cpp
   src/rt/Material/OpaqueMaterial.cpp
   src/rt/Material/TransparentMaterial.cpp
-  src/rt/Scene/Cylinder.cpp
-  src/rt/Scene/IObject.cpp
-  src/rt/Scene/Plane.cpp
-  src/rt/Scene/Sphere.cpp
+  src/rt/Object/Cylinder.cpp
+  src/rt/Object/IObject.cpp
+  src/rt/Object/Plane.cpp
+  src/rt/Object/Sphere.cpp
   src/rt/Texture/CheckedTexture.cpp
   src/rt/Texture/FlatTexture.cpp
   src/rt/Texture/ITexture.cpp

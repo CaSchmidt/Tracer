@@ -29,7 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Scene/Cylinder.h"
+#include "rt/Object/Cylinder.h"
 
 #include "geom/Intersect.h"
 

@@ -29,59 +29,40 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Scene/Plane.h"
+#include "rt/Object/Sphere.h"
 
 #include "geom/Intersect.h"
 
 namespace rt {
 
-  namespace priv {
-
-    constexpr bool isBounding(const real_T& value)
-    {
-      return ZERO <= value  &&  value <= ONE;
-    }
-
-    constexpr real_T normalized(const real_T& value, const real_T& lower, const real_T& scale)
-    {
-      return (value - lower)/scale;
-    }
-
-  } // namespace priv
-
-  ////// public //////////////////////////////////////////////////////////////
-
-  Plane::Plane(const Transformf& objectToWorld, MaterialPtr& material,
-               const real_T width, const real_T height) noexcept
+  Sphere::Sphere(const Transformf& objectToWorld, MaterialPtr& material,
+                 const real_T radius) noexcept
     : IObject(objectToWorld, material)
-    , _width{width}
-    , _height{height}
+    , _radius{radius}
   {
   }
 
-  Plane::~Plane() noexcept
+  Sphere::~Sphere() noexcept
   {
   }
 
-  bool Plane::intersect(SurfaceInfo& info, const Rayf& ray) const
+  bool Sphere::intersect(SurfaceInfo& info, const Rayf& ray) const
   {
     info = SurfaceInfo();
 
     const Rayf rayObj = _xfrmOW*ray;
-    info.t = geom::intersect::plane(rayObj);
+    info.t = geom::intersect::sphere(rayObj, _radius);
     if( !isHit(info.t) ) {
       return info.isHit();
     }
 
     const Vertex3f Pobj = rayObj(info.t);
-    const real_T      u = priv::normalized(cs::dot(Pobj, cs::xAxis<Vertex3f::traits_type>()), -_width/2,  _width);
-    const real_T      v = priv::normalized(cs::dot(Pobj, cs::yAxis<Vertex3f::traits_type>()), -_height/2, _height);
-    if( !priv::isBounding(u)  ||  !priv::isBounding(v) ) {
-      return info.isHit();
-    }
+    const Normal3f Nobj = geom::to_normal<real_T>(cs::normalize(Pobj));
+    const real_T      u = math::phase<real_T>(Nobj.x, Nobj.y)/TWO_PI;
+    const real_T      v = csACos(csClamp(Nobj.z, -ONE, ONE))/PI;
 
     info.object = this;
-    info.N      = _xfrmWO*geom::zAxis<Normal3f>();
+    info.N      = _xfrmWO*Nobj;
     info.P      = _xfrmWO*Pobj;
     info.u      = u;
     info.v      = v;
@@ -89,10 +70,10 @@ namespace rt {
     return info.isHit();
   }
 
-  ObjectPtr Plane::create(const Transformf& objectToWorld, MaterialPtr& material,
-                          const real_T width, const real_T height)
+  ObjectPtr Sphere::create(const Transformf& objectToWorld, MaterialPtr& material,
+                           const real_T radius)
   {
-    return std::make_unique<Plane>(objectToWorld, material, width, height);
+    return std::make_unique<Sphere>(objectToWorld, material, radius);
   }
 
 } // namespace rt

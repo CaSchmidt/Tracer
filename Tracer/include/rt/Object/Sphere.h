@@ -29,29 +29,28 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Scene/IObject.h"
+#ifndef SPHERE_H
+#define SPHERE_H
+
+#include "rt/Object/IObject.h"
 
 namespace rt {
 
-  IObject::IObject(const Transformf& objectToWorld, MaterialPtr& material) noexcept
-    : _xfrmWO{objectToWorld}
-    , _material{std::move(material)}
-  {
-    _xfrmOW = _xfrmWO.inverse();
-  }
+  class Sphere : public IObject {
+  public:
+    Sphere(const Transformf& objectToWorld, MaterialPtr& material,
+           const real_T radius) noexcept;
+    ~Sphere() noexcept;
 
-  IObject::~IObject() noexcept
-  {
-  }
+    bool intersect(SurfaceInfo& info, const Rayf& ray) const final;
 
-  IMaterial *IObject::material()
-  {
-    return _material.get();
-  }
+    static ObjectPtr create(const Transformf& objectToWorld, MaterialPtr& material,
+                            const real_T radius);
 
-  const IMaterial *IObject::material() const
-  {
-    return _material.get();
-  }
+  private:
+    real_T _radius{};
+  };
 
 } // namespace rt
+
+#endif // SPHERE_H

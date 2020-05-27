@@ -29,51 +29,29 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Scene/Sphere.h"
-
-#include "geom/Intersect.h"
+#include "rt/Object/IObject.h"
 
 namespace rt {
 
-  Sphere::Sphere(const Transformf& objectToWorld, MaterialPtr& material,
-                 const real_T radius) noexcept
-    : IObject(objectToWorld, material)
-    , _radius{radius}
+  IObject::IObject(const Transformf& objectToWorld, MaterialPtr& material) noexcept
+    : _xfrmWO{objectToWorld}
+    , _material{std::move(material)}
+  {
+    _xfrmOW = _xfrmWO.inverse();
+  }
+
+  IObject::~IObject() noexcept
   {
   }
 
-  Sphere::~Sphere() noexcept
+  IMaterial *IObject::material()
   {
+    return _material.get();
   }
 
-  bool Sphere::intersect(SurfaceInfo& info, const Rayf& ray) const
+  const IMaterial *IObject::material() const
   {
-    info = SurfaceInfo();
-
-    const Rayf rayObj = _xfrmOW*ray;
-    info.t = geom::intersect::sphere(rayObj, _radius);
-    if( !isHit(info.t) ) {
-      return info.isHit();
-    }
-
-    const Vertex3f Pobj = rayObj(info.t);
-    const Normal3f Nobj = geom::to_normal<real_T>(cs::normalize(Pobj));
-    const real_T      u = math::phase<real_T>(Nobj.x, Nobj.y)/TWO_PI;
-    const real_T      v = csACos(csClamp(Nobj.z, -ONE, ONE))/PI;
-
-    info.object = this;
-    info.N      = _xfrmWO*Nobj;
-    info.P      = _xfrmWO*Pobj;
-    info.u      = u;
-    info.v      = v;
-
-    return info.isHit();
-  }
-
-  ObjectPtr Sphere::create(const Transformf& objectToWorld, MaterialPtr& material,
-                           const real_T radius)
-  {
-    return std::make_unique<Sphere>(objectToWorld, material, radius);
+    return _material.get();
   }
 
 } // namespace rt

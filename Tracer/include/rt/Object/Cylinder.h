@@ -32,7 +32,7 @@
 #ifndef CYLINDER_H
 #define CYLINDER_H
 
-#include "rt/Scene/IObject.h"
+#include "rt/Object/IObject.h"
 
 namespace rt {
 

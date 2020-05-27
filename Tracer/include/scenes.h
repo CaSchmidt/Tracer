@@ -42,9 +42,9 @@
 #include "rt/Material/TransparentMaterial.h"
 #include "rt/Refraction.h"
 #include "rt/Renderer.h"
-#include "rt/Scene/Cylinder.h"
-#include "rt/Scene/Plane.h"
-#include "rt/Scene/Sphere.h"
+#include "rt/Object/Cylinder.h"
+#include "rt/Object/Plane.h"
+#include "rt/Object/Sphere.h"
 #include "rt/Texture/CheckedTexture.h"
 #include "rt/Texture/FlatTexture.h"
 

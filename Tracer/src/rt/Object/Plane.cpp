@@ -29,29 +29,70 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef PLANE_H
-#define PLANE_H
+#include "rt/Object/Plane.h"
 
-#include "rt/Scene/IObject.h"
+#include "geom/Intersect.h"
 
 namespace rt {
 
-  class Plane : public IObject {
-  public:
-    Plane(const Transformf& objectToWorld, MaterialPtr& material,
-          const real_T width, const real_T height) noexcept;
-    ~Plane() noexcept;
+  namespace priv {
 
-    bool intersect(SurfaceInfo& info, const Rayf& ray) const final;
+    constexpr bool isBounding(const real_T& value)
+    {
+      return ZERO <= value  &&  value <= ONE;
+    }
 
-    static ObjectPtr create(const Transformf& objectToWorld, MaterialPtr& material,
-                            const real_T width, const real_T height);
+    constexpr real_T normalized(const real_T& value, const real_T& lower, const real_T& scale)
+    {
+      return (value - lower)/scale;
+    }
 
-  private:
-    real_T _width{};
-    real_T _height{};
-  };
+  } // namespace priv
+
+  ////// public //////////////////////////////////////////////////////////////
+
+  Plane::Plane(const Transformf& objectToWorld, MaterialPtr& material,
+               const real_T width, const real_T height) noexcept
+    : IObject(objectToWorld, material)
+    , _width{width}
+    , _height{height}
+  {
+  }
+
+  Plane::~Plane() noexcept
+  {
+  }
+
+  bool Plane::intersect(SurfaceInfo& info, const Rayf& ray) const
+  {
+    info = SurfaceInfo();
+
+    const Rayf rayObj = _xfrmOW*ray;
+    info.t = geom::intersect::plane(rayObj);
+    if( !isHit(info.t) ) {
+      return info.isHit();
+    }
+
+    const Vertex3f Pobj = rayObj(info.t);
+    const real_T      u = priv::normalized(cs::dot(Pobj, cs::xAxis<Vertex3f::traits_type>()), -_width/2,  _width);
+    const real_T      v = priv::normalized(cs::dot(Pobj, cs::yAxis<Vertex3f::traits_type>()), -_height/2, _height);
+    if( !priv::isBounding(u)  ||  !priv::isBounding(v) ) {
+      return info.isHit();
+    }
+
+    info.object = this;
+    info.N      = _xfrmWO*geom::zAxis<Normal3f>();
+    info.P      = _xfrmWO*Pobj;
+    info.u      = u;
+    info.v      = v;
+
+    return info.isHit();
+  }
+
+  ObjectPtr Plane::create(const Transformf& objectToWorld, MaterialPtr& material,
+                          const real_T width, const real_T height)
+  {
+    return std::make_unique<Plane>(objectToWorld, material, width, height);
+  }
 
 } // namespace rt
-
-#endif // PLANE_H
