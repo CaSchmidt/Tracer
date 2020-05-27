@@ -34,6 +34,8 @@ set(Tracer_HEADERS
   include/math/Constants.h
   include/math/Logical.h
   include/math/Solver.h
+  include/priv/rt/SceneLoaderBase.h
+  include/priv/rt/SceneLoaderStringUtil.h
   include/rt/Camera.h
   include/rt/Color.h
   include/rt/Refraction.h
@@ -70,6 +72,10 @@ set(Tracer_SOURCES
   src/rt/Refraction.cpp
   src/rt/Renderer.cpp
   src/rt/SceneLoader.cpp
+  src/rt/SceneLoaderBase.cpp
+  src/rt/SceneLoaderLight.cpp
+  src/rt/SceneLoaderObject.cpp
+  src/rt/SceneLoaderOptions.cpp
   src/rt/Light/DirectionalLight.cpp
   src/rt/Light/ILightSoruce.cpp
   src/rt/Light/PointLight.cpp

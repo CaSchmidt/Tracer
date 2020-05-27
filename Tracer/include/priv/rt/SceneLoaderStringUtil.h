@@ -29,79 +29,61 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
+#ifndef SCENELOADERSTRINGUTIL_H
+#define SCENELOADERSTRINGUTIL_H
+
 #include <cctype>
-#include <cstdint>
 
 #include <algorithm>
-#include <charconv>
-#include <limits>
-
-#include <tinyxml2.h>
-
-#include "rt/SceneLoader.h"
-
-#include "priv/rt/SceneLoaderStringUtil.h"
-#include "rt/Renderer.h"
+#include <string>
 
 namespace rt {
 
   namespace priv {
 
-    // Imports ///////////////////////////////////////////////////////////////
+    template<typename CharT>
+    inline bool isSpace(const CharT& ch)
+    {
+      return std::isspace(static_cast<int>(ch)) != 0;
+    }
 
-    LightSourcePtr parseLight(const tinyxml2::XMLElement *node);
+    template<typename CharT>
+    constexpr std::size_t length(const CharT *s)
+    {
+      return s != nullptr
+          ? std::char_traits<CharT>::length(s)
+          : 0;
+    }
 
-    ObjectPtr parseObject(const tinyxml2::XMLElement *node);
+    template<typename CharT>
+    inline bool compare(const CharT *s1, const CharT *s2)
+    {
+      const std::size_t l1 = length(s1);
+      const std::size_t l2 = length(s2);
+      return l1 > 0  &&  l1 == l2
+          ? std::char_traits<CharT>::compare(s1, s2, l1)
+          : false;
+    }
 
-    RenderOptions parseOptions(const tinyxml2::XMLElement *node, bool *ok);
+    template<typename CharT>
+    constexpr bool isHexPrefix(const CharT *s)
+    {
+      constexpr CharT digit_0 = static_cast<CharT>('0');
+      constexpr CharT  char_x = static_cast<CharT>('x');
+      constexpr CharT  char_X = static_cast<CharT>('X');
+      return length(s) > 2  &&  s[0] == digit_0  &&  (s[1] == char_x  ||  s[1] == char_X);
+    }
+
+    template<typename CharT>
+    inline const CharT *skipSpace(const CharT *s)
+    {
+      return std::find_if_not(s, s + length(s), [](const CharT c) -> bool {
+        return isSpace(c);
+      });
+    }
 
   } // namespace priv
 
-  bool loadScene(Renderer& renderer, const char *filename)
-  {
-    renderer.clear();
-
-    tinyxml2::XMLDocument doc;
-    if( doc.LoadFile(filename) != tinyxml2::XML_SUCCESS ) {
-      return false;
-    }
-
-    const tinyxml2::XMLElement *xml_Tracer = doc.FirstChildElement("Tracer");
-    if( xml_Tracer == nullptr ) {
-      return false;
-    }
-
-    bool ok = false;
-
-    const tinyxml2::XMLElement *xml_Options = xml_Tracer->FirstChildElement("Options");
-    const RenderOptions opts = priv::parseOptions(xml_Options, &ok);
-    if( !ok ) {
-      return false;
-    }
-    if( !renderer.initialize(opts) ) {
-      return false;
-    }
-
-    const tinyxml2::XMLElement *node = xml_Tracer->FirstChildElement();
-    while( node != nullptr ) {
-      if(        priv::compare(node->Name(), "Light") ) {
-        LightSourcePtr light = priv::parseLight(node);
-        if( !light ) {
-          return false;
-        }
-        renderer.addLight(light);
-      } else if( priv::compare(node->Name(), "Object") ) {
-        ObjectPtr object = priv::parseObject(node);
-        if( !object ) {
-          return false;
-        }
-        renderer.addObject(object);
-      }
-
-      node = node->NextSiblingElement();
-    }
-
-    return true;
-  }
-
 } // namespace rt
+
+#endif // SCENELOADERSTRINGUTIL_H

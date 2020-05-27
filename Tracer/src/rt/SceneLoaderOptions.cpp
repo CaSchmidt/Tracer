@@ -29,79 +29,75 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <cctype>
-#include <cstdint>
-
-#include <algorithm>
-#include <charconv>
-#include <limits>
-
-#include <tinyxml2.h>
-
-#include "rt/SceneLoader.h"
-
-#include "priv/rt/SceneLoaderStringUtil.h"
+#include "priv/rt/SceneLoaderBase.h"
 #include "rt/Renderer.h"
 
 namespace rt {
 
   namespace priv {
 
-    // Imports ///////////////////////////////////////////////////////////////
-
-    LightSourcePtr parseLight(const tinyxml2::XMLElement *node);
-
-    ObjectPtr parseObject(const tinyxml2::XMLElement *node);
-
-    RenderOptions parseOptions(const tinyxml2::XMLElement *node, bool *ok);
-
-  } // namespace priv
-
-  bool loadScene(Renderer& renderer, const char *filename)
-  {
-    renderer.clear();
-
-    tinyxml2::XMLDocument doc;
-    if( doc.LoadFile(filename) != tinyxml2::XML_SUCCESS ) {
-      return false;
-    }
-
-    const tinyxml2::XMLElement *xml_Tracer = doc.FirstChildElement("Tracer");
-    if( xml_Tracer == nullptr ) {
-      return false;
-    }
-
-    bool ok = false;
-
-    const tinyxml2::XMLElement *xml_Options = xml_Tracer->FirstChildElement("Options");
-    const RenderOptions opts = priv::parseOptions(xml_Options, &ok);
-    if( !ok ) {
-      return false;
-    }
-    if( !renderer.initialize(opts) ) {
-      return false;
-    }
-
-    const tinyxml2::XMLElement *node = xml_Tracer->FirstChildElement();
-    while( node != nullptr ) {
-      if(        priv::compare(node->Name(), "Light") ) {
-        LightSourcePtr light = priv::parseLight(node);
-        if( !light ) {
-          return false;
-        }
-        renderer.addLight(light);
-      } else if( priv::compare(node->Name(), "Object") ) {
-        ObjectPtr object = priv::parseObject(node);
-        if( !object ) {
-          return false;
-        }
-        renderer.addObject(object);
+    RenderOptions parseOptions(const tinyxml2::XMLElement *node, bool *ok)
+    {
+      if( ok != nullptr ) {
+        *ok = false;
       }
 
-      node = node->NextSiblingElement();
+      if( node == nullptr ) {
+        return RenderOptions();
+      }
+
+      bool myOk;
+      RenderOptions opts;
+
+      myOk = false;
+      opts.width = parseSize(node->FirstChildElement("width"), &myOk);
+      if( !myOk ) {
+        return RenderOptions();
+      }
+
+      myOk = false;
+      opts.height = parseSize(node->FirstChildElement("height"), &myOk);
+      if( !myOk ) {
+        return RenderOptions();
+      }
+
+      myOk = false;
+      opts.fov_rad = parseAngle(node->FirstChildElement("fov"), &myOk);
+      if( !myOk ) {
+        return RenderOptions();
+      }
+
+      myOk = false;
+      opts.backgroundColor = parseColor(node->FirstChildElement("backgroundColor"), &myOk);
+      if( !myOk ) {
+        return RenderOptions();
+      }
+
+      myOk = false;
+      opts.eye = parseVertex(node->FirstChildElement("eye"), &myOk);
+      if( !myOk ) {
+        return RenderOptions();
+      }
+
+      myOk = false;
+      opts.lookAt = parseVertex(node->FirstChildElement("lookAt"), &myOk);
+      if( !myOk ) {
+        return RenderOptions();
+      }
+
+      myOk = false;
+      opts.cameraUp = parseNormal(node->FirstChildElement("cameraUp"), &myOk);
+      if( !myOk ) {
+        return RenderOptions();
+      }
+
+      if( ok != nullptr ) {
+        *ok = true;
+      }
+
+      return opts;
     }
 
-    return true;
-  }
+  } // namespace priv
 
 } // namespace rt

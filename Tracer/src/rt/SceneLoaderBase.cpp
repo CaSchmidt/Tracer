@@ -29,79 +29,42 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <cctype>
-#include <cstdint>
+#include "priv/rt/SceneLoaderBase.h"
 
-#include <algorithm>
-#include <charconv>
-#include <limits>
-
-#include <tinyxml2.h>
-
-#include "rt/SceneLoader.h"
-
-#include "priv/rt/SceneLoaderStringUtil.h"
-#include "rt/Renderer.h"
+#include "math/Solver.h"
 
 namespace rt {
 
   namespace priv {
 
-    // Imports ///////////////////////////////////////////////////////////////
+    real_T parseAngle(const tinyxml2::XMLElement *node, bool *ok)
+    {
+      return math::radian(parseNodeAsFloat<real_T>(node, ok));
+    }
 
-    LightSourcePtr parseLight(const tinyxml2::XMLElement *node);
+    Color3f parseColor(const tinyxml2::XMLElement *node, bool *ok, const bool clamp)
+    {
+      const Color3f result = parseVector3D<Color3f>(node, "r", "g", "b", ok);
+      return clamp
+          ? Color3f(cs::clamp(result, 0, 1))
+          : Color3f(cs::max(result, 0));
+    }
 
-    ObjectPtr parseObject(const tinyxml2::XMLElement *node);
+    Normal3f parseNormal(const tinyxml2::XMLElement *node, bool *ok)
+    {
+      return cs::normalize(parseVector3D<Normal3f>(node, "x", "y", "z", ok));
+    }
 
-    RenderOptions parseOptions(const tinyxml2::XMLElement *node, bool *ok);
+    dim_T parseSize(const tinyxml2::XMLElement *node, bool *ok)
+    {
+      return parseNodeAsInt<dim_T>(node, ok);
+    }
+
+    Vertex3f parseVertex(const tinyxml2::XMLElement *node, bool *ok)
+    {
+      return parseVector3D<Vertex3f>(node, "x", "y", "z", ok);
+    }
 
   } // namespace priv
-
-  bool loadScene(Renderer& renderer, const char *filename)
-  {
-    renderer.clear();
-
-    tinyxml2::XMLDocument doc;
-    if( doc.LoadFile(filename) != tinyxml2::XML_SUCCESS ) {
-      return false;
-    }
-
-    const tinyxml2::XMLElement *xml_Tracer = doc.FirstChildElement("Tracer");
-    if( xml_Tracer == nullptr ) {
-      return false;
-    }
-
-    bool ok = false;
-
-    const tinyxml2::XMLElement *xml_Options = xml_Tracer->FirstChildElement("Options");
-    const RenderOptions opts = priv::parseOptions(xml_Options, &ok);
-    if( !ok ) {
-      return false;
-    }
-    if( !renderer.initialize(opts) ) {
-      return false;
-    }
-
-    const tinyxml2::XMLElement *node = xml_Tracer->FirstChildElement();
-    while( node != nullptr ) {
-      if(        priv::compare(node->Name(), "Light") ) {
-        LightSourcePtr light = priv::parseLight(node);
-        if( !light ) {
-          return false;
-        }
-        renderer.addLight(light);
-      } else if( priv::compare(node->Name(), "Object") ) {
-        ObjectPtr object = priv::parseObject(node);
-        if( !object ) {
-          return false;
-        }
-        renderer.addObject(object);
-      }
-
-      node = node->NextSiblingElement();
-    }
-
-    return true;
-  }
 
 } // namespace rt
