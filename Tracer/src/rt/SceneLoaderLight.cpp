@@ -41,12 +41,12 @@ namespace rt {
     {
       bool myOk = false;
 
-      const Color3f EL = parseColor(node->FirstChildElement("irradiance"), &myOk, false);
+      const Color3f EL = parseColor(node->FirstChildElement("Irradiance"), &myOk, false);
       if( !myOk ) {
         return LightSourcePtr();
       }
 
-      const Normal3f dir = parseNormal(node->FirstChildElement("direction"), &myOk);
+      const Normal3f dir = parseNormal(node->FirstChildElement("Direction"), &myOk);
       if( !myOk ) {
         return LightSourcePtr();
       }
@@ -58,12 +58,12 @@ namespace rt {
     {
       bool myOk = false;
 
-      const Color3f IL = parseColor(node->FirstChildElement("intensity"), &myOk, false);
+      const Color3f IL = parseColor(node->FirstChildElement("Intensity"), &myOk, false);
       if( !myOk ) {
         return LightSourcePtr();
       }
 
-      const Vertex3f pos = parseVertex(node->FirstChildElement("position"), &myOk);
+      const Vertex3f pos = parseVertex(node->FirstChildElement("Position"), &myOk);
       if( !myOk ) {
         return LightSourcePtr();
       }
@@ -77,9 +77,9 @@ namespace rt {
         return LightSourcePtr();
       }
 
-      if(        node->Attribute("type", "directional") != nullptr ) {
+      if(        node->Attribute("type", "Directional") != nullptr ) {
         return parseDirectionalLight(node);
-      } else if( node->Attribute("type", "point") != nullptr ) {
+      } else if( node->Attribute("type", "Point") != nullptr ) {
         return parsePointLight(node);
       }
 

@@ -46,47 +46,40 @@ namespace rt {
         return RenderOptions();
       }
 
-      bool myOk;
+      bool myOk = false;
       RenderOptions opts;
 
-      myOk = false;
-      opts.width = parseSize(node->FirstChildElement("width"), &myOk);
+      opts.width = parseSize(node->FirstChildElement("Width"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
-      myOk = false;
-      opts.height = parseSize(node->FirstChildElement("height"), &myOk);
+      opts.height = parseSize(node->FirstChildElement("Height"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
-      myOk = false;
-      opts.fov_rad = parseAngle(node->FirstChildElement("fov"), &myOk);
+      opts.fov_rad = parseAngle(node->FirstChildElement("FoV"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
-      myOk = false;
-      opts.backgroundColor = parseColor(node->FirstChildElement("backgroundColor"), &myOk);
+      opts.backgroundColor = parseColor(node->FirstChildElement("BackgroundColor"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
-      myOk = false;
-      opts.eye = parseVertex(node->FirstChildElement("eye"), &myOk);
+      opts.eye = parseVertex(node->FirstChildElement("Eye"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
-      myOk = false;
-      opts.lookAt = parseVertex(node->FirstChildElement("lookAt"), &myOk);
+      opts.lookAt = parseVertex(node->FirstChildElement("LookAt"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
-      myOk = false;
-      opts.cameraUp = parseNormal(node->FirstChildElement("cameraUp"), &myOk);
+      opts.cameraUp = parseNormal(node->FirstChildElement("CameraUp"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
