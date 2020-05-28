@@ -1,0 +1,73 @@
+<Tracer>
+  <Options>
+    <Width>size</Width>
+    <Height>size</Height>
+    <FoV>angle</FoV>
+    <BackgroundColor>
+      <r>float</r>
+      <g>float</g>
+      <b>float</b>
+    </BackgroundColor>
+    <Eye>
+      <x>float</x>
+      <y>float</y>
+      <z>float</z>
+    </Eye>
+    <LookAt>
+      <x>float</x>
+      <y>float</y>
+      <z>float</z>
+    </LookAt>
+    <CameraUp>
+      <x>float</x>
+      <y>float</y>
+      <z>float</z>
+    </CameraUp>
+  </Options>
+  <Light type="Directional">
+    <Irradiance>
+      <r>float</r>
+      <g>float</g>
+      <b>float</b>
+    </Irradiance>
+    <Direction>
+      <x>float</x>
+      <y>float</y>
+      <z>float</z>
+    </Direction>
+  </Light>
+  <Light type="Point">
+    <Intensity>
+      <r>float</r>
+      <g>float</g>
+      <b>float</b>
+    </Intensity>
+    <Position>
+      <x>float</x>
+      <y>float</y>
+      <z>float</z>
+    </Position>
+  </Light>
+  <!-- Child of Material! -->
+  <Texture type="Checked">
+    <ColorA>
+      <r>float</r>
+      <g>float</g>
+      <b>float</b>
+    </ColorA>
+    <ColorB>
+      <r>float</r>
+      <g>float</g>
+      <b>float</b>
+    </ColorB>
+    <ScaleS>float</ScaleS>
+    <ScaleT>float</ScaleT>
+  </Texture>
+  <Texture type="Flat">
+    <Color>
+      <r>float</r>
+      <g>float</g>
+      <b>float</b>
+    </Color>
+  </Texture>
+</Tracer>
