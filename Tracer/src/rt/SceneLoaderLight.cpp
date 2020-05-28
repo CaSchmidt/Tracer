@@ -37,6 +37,8 @@ namespace rt {
 
   namespace priv {
 
+    // Implementation ////////////////////////////////////////////////////////
+
     LightSourcePtr parseDirectionalLight(const tinyxml2::XMLElement *node)
     {
       bool myOk = false;
@@ -70,6 +72,8 @@ namespace rt {
 
       return PointLight::create(IL, pos);
     }
+
+    // Export ////////////////////////////////////////////////////////////////
 
     LightSourcePtr parseLight(const tinyxml2::XMLElement *node)
     {

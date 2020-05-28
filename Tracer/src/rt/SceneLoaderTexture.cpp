@@ -37,6 +37,8 @@ namespace rt {
 
   namespace priv {
 
+    // Implementation ////////////////////////////////////////////////////////
+
     TexturePtr parseCheckedTexture(const tinyxml2::XMLElement *node)
     {
       bool myOk = false;
@@ -75,6 +77,8 @@ namespace rt {
 
       return FlatTexture::create(color);
     }
+
+    // Export ////////////////////////////////////////////////////////////////
 
     TexturePtr parseTexture(const tinyxml2::XMLElement *node)
     {
