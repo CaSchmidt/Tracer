@@ -74,6 +74,7 @@ set(Tracer_SOURCES
   src/rt/SceneLoader.cpp
   src/rt/SceneLoaderBase.cpp
   src/rt/SceneLoaderLight.cpp
+  src/rt/SceneLoaderMaterial.cpp
   src/rt/SceneLoaderObject.cpp
   src/rt/SceneLoaderOptions.cpp
   src/rt/SceneLoaderTexture.cpp
