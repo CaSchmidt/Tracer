@@ -48,7 +48,6 @@
       <z>float</z>
     </Position>
   </Light>
-  <!-- Child of Material! -->
   <Texture type="Checked">
     <ColorA>
       <r>float</r>
@@ -70,4 +69,15 @@
       <b>float</b>
     </Color>
   </Texture>
+  <Material type="Mirror">
+    <Reflectance>float</Reflectance>
+  </Material>
+  <Material type="Opaque">
+    <Diffuse>texture</Diffuse>
+    <Shininess>float</Shininess>
+    <Specular>texture</Specular>
+  </Material>
+  <Material type="Transparent">
+    <Refraction>float</Refraction>
+  </Material>
 </Tracer>
