@@ -38,13 +38,103 @@ namespace rt {
 
   namespace priv {
 
+    // Import ////////////////////////////////////////////////////////////////
+
+    MaterialPtr parseMaterial(const tinyxml2::XMLElement *node);
+
+    // Implementation ////////////////////////////////////////////////////////
+
+    ObjectPtr parseCylinder(const tinyxml2::XMLElement *node)
+    {
+      bool myOk = false;
+
+      const real_T height = parseNodeAsFloat<real_T>(node->FirstChildElement("Hieght"), &myOk);
+      if( !myOk  ||  height <= 0 ) {
+        return ObjectPtr();
+      }
+
+      MaterialPtr material = parseMaterial(node->FirstChildElement("Material"));
+      if( !material ) {
+        return ObjectPtr();
+      }
+
+      const real_T radius = parseNodeAsFloat<real_T>(node->FirstChildElement("Radius"), &myOk);
+      if( !myOk  ||  radius <= 0 ) {
+        return ObjectPtr();
+      }
+
+      Transformf transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
+      if( !myOk ) {
+        return ObjectPtr();
+      }
+
+      return Cylinder::create(transform, material, height, radius);
+    }
+
+    ObjectPtr parsePlane(const tinyxml2::XMLElement *node)
+    {
+      bool myOk = false;
+
+      const real_T height = parseNodeAsFloat<real_T>(node->FirstChildElement("Height"), &myOk);
+      if( !myOk  ||  height <= 0 ) {
+        return ObjectPtr();
+      }
+
+      MaterialPtr material = parseMaterial(node->FirstChildElement("Material"));
+      if( !material ) {
+        return ObjectPtr();
+      }
+
+      Transformf transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
+      if( !myOk ) {
+        return ObjectPtr();
+      }
+
+      const real_T width = parseNodeAsFloat<real_T>(node->FirstChildElement("Width"), &myOk);
+      if( !myOk  ||  width <= 0 ) {
+        return ObjectPtr();
+      }
+
+      return Plane::create(transform, material, width, height);
+    }
+
+    ObjectPtr parseSphere(const tinyxml2::XMLElement *node)
+    {
+      bool myOk = false;
+
+      MaterialPtr material = parseMaterial(node->FirstChildElement("Material"));
+      if( !material ) {
+        return ObjectPtr();
+      }
+
+      const real_T radius = parseNodeAsFloat<real_T>(node->FirstChildElement("Radius"), &myOk);
+      if( !myOk  ||  radius <= 0 ) {
+        return ObjectPtr();
+      }
+
+      Transformf transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
+      if( !myOk ) {
+        return ObjectPtr();
+      }
+
+      return Sphere::create(transform, material, radius);
+    }
+
+    // Export ////////////////////////////////////////////////////////////////
+
     ObjectPtr parseObject(const tinyxml2::XMLElement *node)
     {
       if( node == nullptr ) {
         return ObjectPtr();
       }
 
-      // TODO
+      if(        node->Attribute("type", "Cylinder") != nullptr ) {
+        return parseCylinder(node);
+      } else if( node->Attribute("type", "Plane") != nullptr ) {
+        return parsePlane(node);
+      } else if( node->Attribute("type", "Sphere") != nullptr ) {
+        return parseSphere(node);
+      }
 
       return ObjectPtr();
     }
