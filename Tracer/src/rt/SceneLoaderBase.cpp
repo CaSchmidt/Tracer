@@ -55,9 +55,87 @@ namespace rt {
       return cs::normalize(parseVector3D<Normal3f>(node, "x", "y", "z", ok));
     }
 
+    Matrix3f parseRotation(const tinyxml2::XMLElement *node, bool *ok)
+    {
+      if( ok != nullptr ) {
+        *ok = false;
+      }
+
+      if( node == nullptr ) {
+        return Matrix3f();
+      }
+
+      bool myOk = false;
+
+      real_T rx = 0;
+      if( node->FirstChildElement("rx") != nullptr ) {
+        rx = parseAngle(node->FirstChildElement("rx"), &myOk);
+        if( !myOk ) {
+          return Matrix3f();
+        }
+      }
+
+      real_T ry = 0;
+      if( node->FirstChildElement("ry") != nullptr ) {
+        ry = parseAngle(node->FirstChildElement("ry"), &myOk);
+        if( !myOk ) {
+          return Matrix3f();
+        }
+      }
+
+      real_T rz = 0;
+      if( node->FirstChildElement("rz") != nullptr ) {
+        rz = parseAngle(node->FirstChildElement("rz"), &myOk);
+        if( !myOk ) {
+          return Matrix3f();
+        }
+      }
+
+      if( ok != nullptr ) {
+        *ok = true;
+      }
+
+      return geom::rotateZ(rz)*geom::rotateY(ry)*geom::rotateX(rx);
+    }
+
     dim_T parseSize(const tinyxml2::XMLElement *node, bool *ok)
     {
       return parseNodeAsInt<dim_T>(node, ok);
+    }
+
+    Transformf parseTransform(const tinyxml2::XMLElement *node, bool *ok)
+    {
+      if( ok != nullptr ) {
+        *ok = false;
+      }
+
+      if( node == nullptr ) {
+        return Transformf();
+      }
+
+      bool myOk = false;
+
+      Vertex3f t = 0;
+      if( node->FirstChildElement("Translate") != nullptr ) {
+        t = parseVertex(node->FirstChildElement("Translate"), &myOk);
+        if( !myOk ) {
+          return Transformf();
+        }
+      }
+
+      Matrix3f R = geom::identity<real_T>();
+      if( node->FirstChildElement("Rotate") != nullptr ) {
+        R = parseRotation(node->FirstChildElement("Rotate"), &myOk);
+        if( !myOk ) {
+          return Transformf();
+        }
+      }
+
+      if( ok != nullptr ) {
+        *ok = true;
+      }
+
+      return Transformf(R, t);
     }
 
     Vertex3f parseVertex(const tinyxml2::XMLElement *node, bool *ok)

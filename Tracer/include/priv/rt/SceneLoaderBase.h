@@ -161,7 +161,11 @@ namespace rt {
 
     Normal3f parseNormal(const tinyxml2::XMLElement *node, bool *ok);
 
+    Matrix3f parseRotation(const tinyxml2::XMLElement *node, bool *ok);
+
     dim_T parseSize(const tinyxml2::XMLElement *node, bool *ok);
+
+    Transformf parseTransform(const tinyxml2::XMLElement *node, bool *ok);
 
     Vertex3f parseVertex(const tinyxml2::XMLElement *node, bool *ok);
 
