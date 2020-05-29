@@ -48,7 +48,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      const real_T height = parseNodeAsFloat<real_T>(node->FirstChildElement("Hieght"), &myOk);
+      const real_T height = parseNodeAsFloat<real_T>(node->FirstChildElement("Height"), &myOk);
       if( !myOk  ||  height <= 0 ) {
         return ObjectPtr();
       }
