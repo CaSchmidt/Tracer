@@ -96,4 +96,22 @@
       <z>float</z>
     </Translate>
   </Transform>
+  <!-- SPACE -->
+  <Object type="Cylinder">
+    <Height>float</Height>
+    <Material>material</Material>
+    <Radius>float</Radius>
+    <Transform>transform</Transform>
+  </Object>
+  <Object type="Plane">
+    <Height>float</Height>
+    <Material>material</Material>
+    <Transform>transform</Transform>
+    <Width>float</Width>
+  </Object>
+  <Object type="Sphere">
+    <Material>material</Material>
+    <Radius>float</Radius>
+    <Transform>transform</Transform>
+  </Object>
 </Tracer>
