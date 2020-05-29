@@ -63,11 +63,13 @@ namespace rt {
 
     tinyxml2::XMLDocument doc;
     if( doc.LoadFile(filename) != tinyxml2::XML_SUCCESS ) {
+      fprintf(stderr, "Unable to load XML scene \"%s\"!\n", filename);
       return false;
     }
 
     const tinyxml2::XMLElement *xml_Tracer = doc.FirstChildElement("Tracer");
     if( xml_Tracer == nullptr ) {
+      fprintf(stderr, "Invalid XML scene!\n");
       return false;
     }
 
@@ -75,10 +77,8 @@ namespace rt {
 
     const tinyxml2::XMLElement *xml_Options = xml_Tracer->FirstChildElement("Options");
     const RenderOptions opts = priv::parseOptions(xml_Options, &ok);
-    if( !ok ) {
-      return false;
-    }
-    if( !renderer.initialize(opts) ) {
+    if( !ok  ||  !renderer.initialize(opts) ) {
+      fprintf(stderr, "Unable to initialize renderer!\n");
       return false;
     }
 
@@ -87,12 +87,14 @@ namespace rt {
       if(        priv::compare(node->Name(), "Light") ) {
         LightSourcePtr light = priv::parseLight(node);
         if( !light ) {
+          fprintf(stderr, "Unable to add light of type \"%s\"!\n", node->Attribute("type"));
           return false;
         }
         renderer.addLight(light);
       } else if( priv::compare(node->Name(), "Object") ) {
         ObjectPtr object = priv::parseObject(node);
         if( !object ) {
+          fprintf(stderr, "Unable to add object of type \"%s\"!\n", node->Attribute("type"));
           return false;
         }
         renderer.addObject(object);
