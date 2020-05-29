@@ -61,7 +61,7 @@ namespace rt {
       const std::size_t l1 = length(s1);
       const std::size_t l2 = length(s2);
       return l1 > 0  &&  l1 == l2
-          ? std::char_traits<CharT>::compare(s1, s2, l1)
+          ? std::char_traits<CharT>::compare(s1, s2, l1) == 0
           : false;
     }
 
