@@ -24,6 +24,7 @@
       <z>float</z>
     </CameraUp>
   </Options>
+  <!-- SPACE -->
   <Light type="Directional">
     <Irradiance>
       <r>float</r>
@@ -48,6 +49,7 @@
       <z>float</z>
     </Position>
   </Light>
+  <!-- SPACE -->
   <Texture type="Checked">
     <ColorA>
       <r>float</r>
@@ -69,6 +71,7 @@
       <b>float</b>
     </Color>
   </Texture>
+  <!-- SPACE -->
   <Material type="Mirror">
     <Reflectance>float</Reflectance>
   </Material>
@@ -80,4 +83,17 @@
   <Material type="Transparent">
     <Refraction>float</Refraction>
   </Material>
+  <!-- SPACE -->
+  <Transform>
+    <Rotate>
+      <rx>float</rx>
+      <ry>float</ry>
+      <rz>float</rz>
+    </Rotate>
+    <Translate>
+      <x>float</x>
+      <y>float</y>
+      <z>float</z>
+    </Translate>
+  </Transform>
 </Tracer>
