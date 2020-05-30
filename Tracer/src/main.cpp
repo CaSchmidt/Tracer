@@ -34,7 +34,15 @@
 
 #include "Image.h"
 
-#include "scenes.h"
+#include "rt/Renderer.h"
+#include "rt/SceneLoader.h"
+
+#define BASE_PATH  "../../Tracer/Tracer/scenes/"
+#define FILE_1     BASE_PATH "scene_1.xml"
+#define FILE_2     BASE_PATH "scene_2.xml"
+#define FILE_3     BASE_PATH "scene_3.xml"
+#define FILE_4     BASE_PATH "scene_4.xml"
+#define FILE_TEXT  BASE_PATH "scene_text.xml"
 
 void print_progress(const int y, const int height, const bool force = false, const int blockSize = 20)
 {
@@ -47,13 +55,12 @@ void print_progress(const int y, const int height, const bool force = false, con
 
 int main(int /*argc*/, char ** /*argv*/)
 {
+  const char *filename = FILE_1;
+
   rt::Renderer renderer;
-#if 1
-  initialize_scene_1(renderer, 1000, 1000);
-#else
-  initialize_scene_text(renderer, 2000, 2000,
-                        "C++", 0.15, 0.3, 0.3, rt::Transformf::translate({0, 0, 1}));
-#endif
+  if( !rt::loadScene(renderer, filename) ) {
+    return EXIT_FAILURE;
+  }
 
   Image image(renderer.options().width, renderer.options().height);
 
