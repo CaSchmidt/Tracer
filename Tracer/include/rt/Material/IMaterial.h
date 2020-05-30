@@ -42,7 +42,9 @@ namespace rt {
 
   class IMaterial {
   public:
-    virtual ~IMaterial();
+    virtual ~IMaterial() noexcept;
+
+    virtual std::unique_ptr<IMaterial> copy() const = 0;
 
     virtual bool isShadowCaster() const = 0;
 

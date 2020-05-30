@@ -33,13 +33,26 @@
 
 namespace rt {
 
-  OpaqueMaterial::OpaqueMaterial()
+  OpaqueMaterial::OpaqueMaterial() noexcept
     : IMaterial()
   {
   }
 
-  OpaqueMaterial::~OpaqueMaterial()
+  OpaqueMaterial::~OpaqueMaterial() noexcept
   {
+  }
+
+  MaterialPtr OpaqueMaterial::copy() const
+  {
+    MaterialPtr result = create();
+    if( _diffTex ) {
+      result->opaque()->setDiffuse(_diffTex->copy());
+    }
+    result->opaque()->setShininess(_shininess);
+    if( _specTex ) {
+      result->opaque()->setSpecular(_specTex->copy());
+    }
+    return result;
   }
 
   bool OpaqueMaterial::isShadowCaster() const

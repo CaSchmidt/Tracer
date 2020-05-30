@@ -33,13 +33,20 @@
 
 namespace rt {
 
-  TransparentMaterial::TransparentMaterial()
+  TransparentMaterial::TransparentMaterial() noexcept
     : IMaterial()
   {
   }
 
-  TransparentMaterial::~TransparentMaterial()
+  TransparentMaterial::~TransparentMaterial() noexcept
   {
+  }
+
+  MaterialPtr TransparentMaterial::copy() const
+  {
+    MaterialPtr result = create();
+    result->transparent()->setRefraction(_refraction);
+    return result;
   }
 
   bool TransparentMaterial::isShadowCaster() const

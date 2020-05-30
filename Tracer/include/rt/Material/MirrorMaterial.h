@@ -39,8 +39,10 @@ namespace rt {
 
   class MirrorMaterial : public IMaterial {
   public:
-    MirrorMaterial();
-    ~MirrorMaterial();
+    MirrorMaterial() noexcept;
+    ~MirrorMaterial() noexcept;
+
+    MaterialPtr copy() const;
 
     bool isShadowCaster() const;
 

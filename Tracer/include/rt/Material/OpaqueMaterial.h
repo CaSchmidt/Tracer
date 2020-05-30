@@ -39,8 +39,10 @@ namespace rt {
 
   class OpaqueMaterial : public IMaterial {
   public:
-    OpaqueMaterial();
-    ~OpaqueMaterial();
+    OpaqueMaterial() noexcept;
+    ~OpaqueMaterial() noexcept;
+
+    MaterialPtr copy() const;
 
     bool isShadowCaster() const;
 

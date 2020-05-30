@@ -33,13 +33,20 @@
 
 namespace rt {
 
-  MirrorMaterial::MirrorMaterial()
+  MirrorMaterial::MirrorMaterial() noexcept
     : IMaterial()
   {
   }
 
-  MirrorMaterial::~MirrorMaterial()
+  MirrorMaterial::~MirrorMaterial() noexcept
   {
+  }
+
+  MaterialPtr MirrorMaterial::copy() const
+  {
+    MaterialPtr result = create();
+    result->mirror()->setReflectance(_reflectance);
+    return result;
   }
 
   bool MirrorMaterial::isShadowCaster() const

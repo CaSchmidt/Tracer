@@ -37,7 +37,7 @@
 
 namespace rt {
 
-  IMaterial::~IMaterial()
+  IMaterial::~IMaterial() noexcept
   {
   }
 
