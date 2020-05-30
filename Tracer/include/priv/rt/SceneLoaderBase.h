@@ -33,6 +33,7 @@
 #define SCENELOADERBASE_H
 
 #include <charconv>
+#include <string>
 #include <type_traits>
 
 #include <tinyxml2.h>
@@ -164,6 +165,8 @@ namespace rt {
     Matrix3f parseRotation(const tinyxml2::XMLElement *node, bool *ok);
 
     dim_T parseSize(const tinyxml2::XMLElement *node, bool *ok);
+
+    std::string parseString(const tinyxml2::XMLElement *node, bool *ok);
 
     Transformf parseTransform(const tinyxml2::XMLElement *node, bool *ok);
 

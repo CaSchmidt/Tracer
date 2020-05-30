@@ -55,6 +55,8 @@ namespace rt {
 
     RenderOptions parseOptions(const tinyxml2::XMLElement *node, bool *ok);
 
+    Objects parseText(const tinyxml2::XMLElement *node);
+
   } // namespace priv
 
   bool loadScene(Renderer& renderer, const char *filename)
@@ -98,6 +100,15 @@ namespace rt {
           return false;
         }
         renderer.addObject(object);
+      } else if( priv::compare(node->Name(), "Text") ) {
+        Objects objects = priv::parseText(node);
+        if( objects.empty() ) {
+          fprintf(stderr, "Unable to add text!\n");
+          return false;
+        }
+        for(ObjectPtr& object : objects) {
+          renderer.addObject(object);
+        }
       }
 
       node = node->NextSiblingElement();

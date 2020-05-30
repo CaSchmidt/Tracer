@@ -103,6 +103,27 @@ namespace rt {
       return parseNodeAsInt<dim_T>(node, ok);
     }
 
+    std::string parseString(const tinyxml2::XMLElement *node, bool *ok)
+    {
+      if( ok != nullptr ) {
+        *ok = false;
+      }
+
+      if( node == nullptr ) {
+        return std::string();
+      }
+
+      if( node->GetText() == nullptr ) {
+        return std::string();
+      }
+
+      if( ok != nullptr ) {
+        *ok = true;
+      }
+
+      return std::string(node->GetText());
+    }
+
     Transformf parseTransform(const tinyxml2::XMLElement *node, bool *ok)
     {
       if( ok != nullptr ) {
