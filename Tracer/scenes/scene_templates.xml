@@ -114,4 +114,13 @@
     <Radius>float</Radius>
     <Transform>transform</Transform>
   </Object>
+  <!-- SPACE -->
+  <Text>
+    <dx>float</dx>
+    <dz>float</dz>
+    <Material>material</Material>
+    <Radius>float</Radius>
+    <String>string</String>
+    <Transform>transform</Transform>
+  </Text>
 </Tracer>
