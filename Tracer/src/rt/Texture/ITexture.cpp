@@ -33,7 +33,7 @@
 
 namespace rt {
 
-  ITexture::~ITexture()
+  ITexture::~ITexture() noexcept
   {
   }
 

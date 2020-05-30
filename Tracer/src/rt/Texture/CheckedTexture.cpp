@@ -44,8 +44,13 @@ namespace rt {
   {
   }
 
-  CheckedTexture::~CheckedTexture()
+  CheckedTexture::~CheckedTexture() noexcept
   {
+  }
+
+  TexturePtr CheckedTexture::copy() const
+  {
+    return std::make_unique<CheckedTexture>(_colorA, _colorB, _scaleS, _scaleT);
   }
 
   Color3f CheckedTexture::lookup(const real_T s, const real_T t) const

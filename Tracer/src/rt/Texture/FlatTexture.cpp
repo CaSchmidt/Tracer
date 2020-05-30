@@ -38,8 +38,13 @@ namespace rt {
   {
   }
 
-  FlatTexture::~FlatTexture()
+  FlatTexture::~FlatTexture() noexcept
   {
+  }
+
+  TexturePtr FlatTexture::copy() const
+  {
+    return std::make_unique<FlatTexture>(_color);
   }
 
   Color3f FlatTexture::lookup(const real_T /*s*/, const real_T /*t*/) const

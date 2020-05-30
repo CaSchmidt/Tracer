@@ -40,7 +40,9 @@ namespace rt {
 
   class ITexture {
   public:
-    virtual ~ITexture();
+    virtual ~ITexture() noexcept;
+
+    virtual std::unique_ptr<ITexture> copy() const = 0;
 
     virtual Color3f lookup(const real_T s, const real_T t) const = 0;
   };

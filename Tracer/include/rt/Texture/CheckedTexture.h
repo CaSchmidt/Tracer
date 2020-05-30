@@ -40,7 +40,9 @@ namespace rt {
   public:
     CheckedTexture(const Color3f& colorA, const Color3f& colorB,
                    const real_T scaleS, const real_T scaleT) noexcept;
-    ~CheckedTexture();
+    ~CheckedTexture() noexcept;
+
+    TexturePtr copy() const;
 
     Color3f lookup(const real_T s, const real_T t) const final;
 

@@ -39,7 +39,9 @@ namespace rt {
   class FlatTexture : public ITexture {
   public:
     FlatTexture(const Color3f& color) noexcept;
-    ~FlatTexture();
+    ~FlatTexture() noexcept;
+
+    TexturePtr copy() const;
 
     Color3f lookup(const real_T s, const real_T t) const final;
 
