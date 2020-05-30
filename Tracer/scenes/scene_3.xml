@@ -1,0 +1,76 @@
+<Tracer>
+  <Options>
+    <Width>1000</Width>
+    <Height>1000</Height>
+    <FoV>60</FoV>
+    <BackgroundColor>
+      <r>0</r>
+      <g>0.8</g>
+      <b>1</b>
+    </BackgroundColor>
+    <Eye>
+      <x>0</x>
+      <y>-7.5</y>
+      <z>4</z>
+    </Eye>
+    <LookAt>
+      <x>0</x>
+      <y>0</y>
+      <z>0</z>
+    </LookAt>
+    <CameraUp>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </CameraUp>
+  </Options>
+  <!-- SPACE -->
+  <Light type="Directional">
+    <Irradiance>
+      <r>3</r>
+      <g>3</g>
+      <b>3</b>
+    </Irradiance>
+    <Direction>
+      <x>1</x>
+      <y>-1</y>
+      <z>1</z>
+    </Direction>
+  </Light>
+  <!-- ground plane -->
+  <Object type="Plane">
+    <Width>10</Width>
+    <Height>10</Height>
+    <Material type="Opaque">
+      <Diffuse type="Checked">
+        <ColorA>
+          <r>1</r>
+          <g>0</g>
+          <b>0</b>
+        </ColorA>
+        <ColorB>
+          <r>0.8</r>
+          <g>0</g>
+          <b>0</b>
+        </ColorB>
+        <ScaleS>5</ScaleS>
+        <ScaleT>5</ScaleT>
+      </Diffuse>
+    </Material>
+    <Transform/>
+  </Object>
+  <!-- sphere -->
+  <Object type="Sphere">
+    <Material type="Mirror">
+      <Reflectance>0.8</Reflectance>
+    </Material>
+    <Radius>1</Radius>
+    <Transform>
+      <Translate>
+        <x>0</x>
+        <y>0</y>
+        <z>1</z>
+      </Translate>
+    </Transform>
+  </Object>
+</Tracer>
