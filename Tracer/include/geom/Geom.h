@@ -40,36 +40,34 @@ namespace geom {
 
   // Traits //////////////////////////////////////////////////////////////////
 
-  template<typename value_T, typename size_T, size_T ROWS, size_T COLS>
+  template<typename value_T, std::size_t ROWS, std::size_t COLS>
   struct VertexTraits {
-    using  size_type = size_T;
     using value_type = value_T;
 
-    static constexpr size_type Columns = COLS;
-    static constexpr size_type    Rows = ROWS;
-    static constexpr size_type    Size = COLS*ROWS;
+    static constexpr std::size_t Columns = COLS;
+    static constexpr std::size_t    Rows = ROWS;
+    static constexpr std::size_t    Size = COLS*ROWS;
   };
 
-  template<typename value_T, typename size_T, size_T ROWS, size_T COLS>
+  template<typename value_T, std::size_t ROWS, std::size_t COLS>
   struct NormalTraits {
-    using  size_type = size_T;
     using value_type = value_T;
 
-    static constexpr size_type Columns = COLS;
-    static constexpr size_type    Rows = ROWS;
-    static constexpr size_type    Size = COLS*ROWS;
+    static constexpr std::size_t Columns = COLS;
+    static constexpr std::size_t    Rows = ROWS;
+    static constexpr std::size_t    Size = COLS*ROWS;
   };
 
   // Types ///////////////////////////////////////////////////////////////////
 
   template<typename T>
-  using Vertex = cs::Array<cs::Vector3Manip<cs::RowMajorPolicy<VertexTraits<T,uint8_t,3,1>>>>;
+  using Vertex = cs::Array<cs::Vector3Manip<cs::RowMajorPolicy<VertexTraits<T,3,1>>>>;
 
   template<typename T>
-  using Normal = cs::Array<cs::Vector3Manip<cs::RowMajorPolicy<NormalTraits<T,uint8_t,3,1>>>>;
+  using Normal = cs::Array<cs::Vector3Manip<cs::RowMajorPolicy<NormalTraits<T,3,1>>>>;
 
   template<typename T>
-  using Matrix = cs::Array<cs::NoManipulator<cs::RowMajorPolicy<VertexTraits<T,uint8_t,3,3>>>>;
+  using Matrix = cs::Array<cs::NoManipulator<cs::RowMajorPolicy<VertexTraits<T,3,3>>>>;
 
   // Helpers /////////////////////////////////////////////////////////////////
 
