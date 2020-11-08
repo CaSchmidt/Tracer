@@ -40,7 +40,7 @@
 
 ////// public ////////////////////////////////////////////////////////////////
 
-Image::Image(const int width, const int height,
+Image::Image(const size_type width, const size_type height,
              const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a) noexcept
 {
   resize(width, height, r, g, b, a);
@@ -57,9 +57,8 @@ void Image::clear()
   _buffer.clear();
 }
 
-bool Image::resize(const int width, const int height,
-                   const uint8_t r, const uint8_t g, const uint8_t b,
-                   const uint8_t a)
+bool Image::resize(const size_type width, const size_type height,
+                   const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a)
 {
   if( width < 1  ||  height < 1 ) {
     return false;
@@ -69,7 +68,7 @@ bool Image::resize(const int width, const int height,
   _height = height;
 
   try {
-    _buffer.resize(static_cast<size_type>(stride()*_height), 0xFF);
+    _buffer.resize(stride()*_height, 0xFF);
   } catch(...) {
     clear();
     return false;
@@ -80,19 +79,19 @@ bool Image::resize(const int width, const int height,
   return true;
 }
 
-uint8_t *Image::row(const int y) const
+uint8_t *Image::row(const size_type y) const
 {
   if( isEmpty()  ||  y < 0  ||  y >= _height ) {
     return nullptr;
   }
-  return const_cast<uint8_t*>(_buffer.data() + static_cast<size_type>(stride()*y));
+  return const_cast<uint8_t*>(_buffer.data() + stride()*y);
 }
 
 void Image::fill(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a)
 {
-  for(int y = 0; y < _height; y++) {
+  for(size_type y = 0; y < _height; y++) {
     uint8_t *data = row(y);
-    for(int x = 0; x < _width; x++) {
+    for(size_type x = 0; x < _width; x++) {
       *data++ = r;
       *data++ = g;
       *data++ = b;
@@ -101,17 +100,17 @@ void Image::fill(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_
   }
 }
 
-int Image::stride() const
+Image::size_type Image::stride() const
 {
   return _width*4;
 }
 
-int Image::width() const
+Image::size_type Image::width() const
 {
   return _width;
 }
 
-int Image::height() const
+Image::size_type Image::height() const
 {
   return _height;
 }
@@ -121,5 +120,8 @@ bool Image::saveAsPNG(const char *filename) const
   if( isEmpty() ) {
     return false;
   }
-  return stbi_write_png(filename, width(), height(), STBI_COMP_RGBA8888, row(0), stride()) != 0;
+  const int w = static_cast<int>(width());
+  const int h = static_cast<int>(height());
+  const int s = static_cast<int>(stride());
+  return stbi_write_png(filename, w, h, STBI_COMP_RGBA8888, row(0), s) != 0;
 }

@@ -38,36 +38,37 @@
 
 class Image {
 public:
+  using    Buffer = std::vector<uint8_t>;
+  using size_type = Buffer::size_type;
+
   Image() = default;
   ~Image() noexcept = default;
 
-  Image(const int width, const int height,
+  Image(const size_type width, const size_type height,
         const uint8_t r = 0x00, const uint8_t g = 0x00, const uint8_t b = 0x00,
         const uint8_t a = 0xFF) noexcept;
 
   bool isEmpty() const;
 
   void clear();
-  bool resize(const int width, const int height,
+  bool resize(const size_type width, const size_type height,
               const uint8_t r = 0x00, const uint8_t g = 0x00, const uint8_t b = 0x00,
               const uint8_t a = 0xFF);
 
-  uint8_t *row(const int y) const;
+  uint8_t *row(const size_type y) const;
 
-  void fill(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a = 0xFF);
+  void fill(const uint8_t r, const uint8_t g, const uint8_t b,
+            const uint8_t a = 0xFF);
 
-  int stride() const;
-  int width() const;
-  int height() const;
+  size_type stride() const;
+  size_type width() const;
+  size_type height() const;
 
   bool saveAsPNG(const char *filename) const;
 
 private:
-  using    Buffer = std::vector<uint8_t>;
-  using size_type = Buffer::size_type;
-
   Buffer _buffer{};
-  int _width{}, _height{};
+  size_type _width{}, _height{};
 };
 
 #endif // IMAGE_H
