@@ -53,26 +53,6 @@ namespace rt {
   using real_T = if_real_t<float>; // Implementation
 
 
-  ////// Other Types /////////////////////////////////////////////////////////
-
-  template<typename T>
-  inline constexpr bool if_dim_v = std::is_unsigned_v<T>;
-
-  template<typename T>
-  using if_dim_t = std::enable_if_t<if_dim_v<T>,T>;
-
-  using dim_T = if_dim_t<uint16_t>; // Implementation
-
-
-  template<typename T>
-  inline constexpr bool if_enum_v = std::is_unsigned_v<T>;
-
-  template<typename T>
-  using if_enum_t = std::enable_if_t<if_enum_v<T>,T>;
-
-  using enum_T = if_enum_t<unsigned int>; // Implementation
-
-
   ////// Special Values //////////////////////////////////////////////////////
 
   inline constexpr real_T INF_REAL_T = std::numeric_limits<real_T>::infinity();

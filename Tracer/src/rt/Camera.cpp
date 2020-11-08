@@ -46,7 +46,7 @@ namespace rt {
   ////// public //////////////////////////////////////////////////////////////
 
   Camera::Camera(const Vertex3f& eye, const Vertex3f& lookAt, const Normal3f& up,
-                 const dim_T width, const dim_T height, const real_T fov_rad) noexcept
+                 const std::size_t width, const std::size_t height, const real_T fov_rad) noexcept
     : _aspect{static_cast<real_T>(width)/height}
     , _width{width}
     , _height{height}
@@ -59,7 +59,7 @@ namespace rt {
     _near = -_aspect/csTan(fov_rad/TWO);
   }
 
-  Rayf Camera::ray(const dim_T _x, const dim_T _y, const bool random) const
+  Rayf Camera::ray(const std::size_t _x, const std::size_t _y, const bool random) const
   {
     if( _x >= _width  ||  _y >= _height ) {
       return Rayf();
@@ -72,8 +72,8 @@ namespace rt {
         ? rand()
         : ONE_HALF;
 
-    const real_T x = priv::scaledPos(_x, _width, _aspect, dx);
-    const real_T y = priv::scaledPos(_y, _height, -ONE, dy);
+    const real_T x = priv::scaledPos(real_T(_x), real_T(_width), _aspect, dx);
+    const real_T y = priv::scaledPos(real_T(_y), real_T(_height), -ONE, dy);
 
     const Vertex3f org = _cam*Vertex3f{x, y, _near};
     const Normal3f dir = geom::to_normal<real_T>(cs::direction(_eye, org));

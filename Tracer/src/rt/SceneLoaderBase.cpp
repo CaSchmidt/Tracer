@@ -98,9 +98,9 @@ namespace rt {
       return geom::rotateZ(rz)*geom::rotateY(ry)*geom::rotateX(rx);
     }
 
-    dim_T parseSize(const tinyxml2::XMLElement *node, bool *ok)
+    std::size_t parseSize(const tinyxml2::XMLElement *node, bool *ok)
     {
-      return parseNodeAsInt<dim_T>(node, ok);
+      return parseNodeAsInt<std::size_t>(node, ok);
     }
 
     std::string parseString(const tinyxml2::XMLElement *node, bool *ok)

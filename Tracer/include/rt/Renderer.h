@@ -45,8 +45,8 @@ namespace rt {
     Vertex3f     eye{};
     Vertex3f     lookAt{};
     Normal3f     cameraUp{};
-    dim_T        width{};
-    dim_T        height{};
+    std::size_t  width{};
+    std::size_t  height{};
     real_T       fov_rad{};
     unsigned int maxDepth{15};
     real_T       globalRefraction{1};
@@ -67,7 +67,7 @@ namespace rt {
 
     const RenderOptions& options() const;
 
-    bool render(const dim_T y, uint8_t *row, const uint8_t samples = 1) const;
+    bool render(const std::size_t y, uint8_t *row, const uint8_t samples = 1) const;
 
     void setScene(Objects& objects);
 

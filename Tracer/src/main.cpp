@@ -44,13 +44,14 @@
 #define FILE_4     BASE_PATH "scene_4.xml"
 #define FILE_TEXT  BASE_PATH "scene_text.xml"
 
-void print_progress(const int y, const int height, const bool force = false, const int blockSize = 20)
+void print_progress(const std::size_t y, const std::size_t height,
+                    const bool force = false, const std::size_t blockSize = 20)
 {
-  if( y % std::max<int>(blockSize, 1) != 0  &&  !force ) {
+  if( y % std::max<std::size_t>(blockSize, 1) != 0  &&  !force ) {
     return;
   }
-  const int p = (y*100)/height;
-  printf("Progress: %3d%% (%4d/%4d)\n", p, y, height); fflush(stdout);
+  const std::size_t p = (y*100)/height;
+  printf("Progress: %3d%% (%4d/%4d)\n", int(p), int(y), int(height)); fflush(stdout);
 }
 
 int main(int /*argc*/, char ** /*argv*/)
@@ -64,7 +65,7 @@ int main(int /*argc*/, char ** /*argv*/)
 
   Image image(renderer.options().width, renderer.options().height);
 
-  for(rt::dim_T y = 0; y < renderer.options().height; y++) {
+  for(std::size_t y = 0; y < renderer.options().height; y++) {
     print_progress(y, renderer.options().height);
     renderer.render(y, image.row(y), 64);
   }

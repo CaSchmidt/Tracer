@@ -44,16 +44,16 @@ namespace rt {
     ~Camera() noexcept = default;
 
     Camera(const Vertex3f& eye, const Vertex3f& lookAt, const Normal3f& up,
-           const dim_T width, const dim_T height, const real_T fov_rad) noexcept;
+           const std::size_t width, const std::size_t height, const real_T fov_rad) noexcept;
 
-    Rayf ray(const dim_T _x, const dim_T _y, const bool random = false) const;
+    Rayf ray(const std::size_t _x, const std::size_t _y, const bool random = false) const;
 
   private:
     void rand_init();
     real_T rand() const;
 
     real_T _aspect{}, _near{};
-    dim_T _width{}, _height{};
+    std::size_t _width{}, _height{};
     Vertex3f _eye{};
     Transformf _cam{};
 

@@ -82,13 +82,13 @@ namespace rt {
     return _options;
   }
 
-  bool Renderer::render(const dim_T y, uint8_t *row, const uint8_t samples) const
+  bool Renderer::render(const std::size_t y, uint8_t *row, const uint8_t samples) const
   {
     if( y >= _options.height  ||  row == nullptr ) {
       return false;
     }
     if( samples > 1 ) {
-      for(dim_T x = 0; x < _options.width; x++) {
+      for(std::size_t x = 0; x < _options.width; x++) {
         Color3f result;
         for(uint8_t s = 0; s < samples; s++) {
           const Color3f color = castRay(_xfrmWC*_camera.ray(x, y, true));
@@ -101,7 +101,7 @@ namespace rt {
         *row++ = 0xFF;
       }
     } else {
-      for(dim_T x = 0; x < _options.width; x++) {
+      for(std::size_t x = 0; x < _options.width; x++) {
         const Color3f color = castRay(_xfrmWC*_camera.ray(x, y));
         *row++ = color.r;
         *row++ = color.g;
