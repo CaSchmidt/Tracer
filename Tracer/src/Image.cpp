@@ -43,8 +43,26 @@
 Image::Image(const int width, const int height,
              const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a) noexcept
 {
+  resize(width, height, r, g, b, a);
+}
+
+bool Image::isEmpty() const
+{
+  return _buffer.empty();
+}
+
+void Image::clear()
+{
+  _width = _height = 0;
+  _buffer.clear();
+}
+
+bool Image::resize(const int width, const int height,
+                   const uint8_t r, const uint8_t g, const uint8_t b,
+                   const uint8_t a)
+{
   if( width < 1  ||  height < 1 ) {
-    return;
+    return false;
   }
 
   _width  = width;
@@ -53,17 +71,13 @@ Image::Image(const int width, const int height,
   try {
     _buffer.resize(static_cast<size_type>(stride()*_height), 0xFF);
   } catch(...) {
-    _width = _height = 0;
-    _buffer.clear();
-    return;
+    clear();
+    return false;
   }
 
   fill(r, g, b, a);
-}
 
-bool Image::isEmpty() const
-{
-  return _buffer.empty();
+  return true;
 }
 
 uint8_t *Image::row(const int y) const
