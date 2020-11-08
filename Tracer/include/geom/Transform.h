@@ -86,6 +86,15 @@ namespace geom {
 
     // Special Transforms ////////////////////////////////////////////////////
 
+    static constexpr Transform<T> lookAt(const Vertex<T>& from, const Vertex<T>& to,
+                                         const Normal<T>& up)
+    {
+      const Normal<T> z = geom::to_normal<T>(cs::direction(to, from)); // Looking along the NEGATIVE z-axis!
+      const Normal<T> x = cs::normalize(cs::cross(up, z));
+      const Normal<T> y = cs::normalize(cs::cross(z, x));
+      return Transform<T>{{ x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z }, from};
+    }
+
     static constexpr Transform<T> rotateX(const T& angle)
     {
       return Transform<T>{geom::rotateX<T>(angle)};

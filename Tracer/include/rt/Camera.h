@@ -55,7 +55,7 @@ namespace rt {
     real_T _aspect{}, _near{};
     dim_T _width{}, _height{};
     Vertex3f _eye{};
-    Matrix3f _cam{};
+    Transformf _cam{};
 
     std::uniform_real_distribution<rt::real_T> _randDis{};
     std::mt19937                               _randGen{};

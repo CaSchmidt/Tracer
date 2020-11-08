@@ -54,11 +54,7 @@ namespace rt {
   {
     rand_init();
 
-    const Normal3f z = geom::to_normal<real_T>(cs::direction(lookAt, _eye)); // Looking along the NEGATIVE z-axis!
-    const Normal3f x = cs::normalize(cs::cross(up, z));
-    const Normal3f y = cs::normalize(cs::cross(z, x));
-
-    _cam = Matrix3f{ x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z };
+    _cam = Transformf::lookAt(eye, lookAt, up);
 
     _near = -_aspect/csTan(fov_rad/TWO);
   }
@@ -79,7 +75,7 @@ namespace rt {
     const real_T x = priv::scaledPos(_x, _width, _aspect, dx);
     const real_T y = priv::scaledPos(_y, _height, -ONE, dy);
 
-    const Vertex3f org = _cam*Vertex3f{x, y, _near} + _eye;
+    const Vertex3f org = _cam*Vertex3f{x, y, _near};
     const Normal3f dir = geom::to_normal<real_T>(cs::direction(_eye, org));
 
     return Rayf{org, dir};
