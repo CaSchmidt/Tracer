@@ -75,10 +75,9 @@ namespace rt {
     const real_T x = priv::scaledPos(real_T(_x), real_T(_width), _aspect, dx);
     const real_T y = priv::scaledPos(real_T(_y), real_T(_height), -ONE, dy);
 
-    const Vertex3f org = _cam*Vertex3f{x, y, _near};
-    const Normal3f dir = geom::to_normal<real_T>(cs::direction(_eye, org));
+    const Vertex3f org{x, y, _near};
 
-    return Rayf{org, dir};
+    return (_cam*Rayf{org, geom::to_normal<real_T>(org)});
   }
 
   ////// private /////////////////////////////////////////////////////////////
