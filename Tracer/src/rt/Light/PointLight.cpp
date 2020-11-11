@@ -48,7 +48,7 @@ namespace rt {
   LightInfo PointLight::info(const Vertex3f& P) const
   {
     LightInfo i;
-    i.l  = geom::to_normal<real_T>(cs::direction(P, _PL));
+    i.l  = to_normal(cs::direction(P, _PL));
     i.r  = cs::distance(P, _PL);
     i.EL = _IL*attenuation(i.r);
     return i;

@@ -77,7 +77,7 @@ namespace rt {
 
     const Vertex3f org{x, y, _near};
 
-    return (_cam*Rayf{org, geom::to_normal<real_T>(org)});
+    return (_cam*Rayf{org, to_normal(org)});
   }
 
   ////// private /////////////////////////////////////////////////////////////

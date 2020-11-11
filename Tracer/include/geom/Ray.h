@@ -57,7 +57,7 @@ namespace geom {
 
     constexpr Vertex<T> operator()(const T& t) const
     {
-      return _org + geom::to_vertex<T>(t*_dir);
+      return _org + to_vertex<T>(t*_dir);
     }
 
     constexpr Vertex<T> origin() const

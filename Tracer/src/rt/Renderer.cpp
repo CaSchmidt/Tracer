@@ -136,7 +136,7 @@ namespace rt {
 
     } else if( sinfo->material()->isMirror() ) {
       const Normal3f     R = geom::reflect(ray.direction(), sinfo.N);
-      const Color3f rcolor = castRay({sinfo.P + geom::to_vertex<real_T>(TRACE_BIAS*sinfo.N), R}, MAX_REAL_T, depth + 1);
+      const Color3f rcolor = castRay({sinfo.P + to_vertex(TRACE_BIAS*sinfo.N), R}, MAX_REAL_T, depth + 1);
       color = sinfo->material()->mirror()->reflectance()*rcolor;
 
     } else if( sinfo->material()->isTransparent() ) {
@@ -163,13 +163,13 @@ namespace rt {
       // (3) Reflectance /////////////////////////////////////////////////////
 
       const Normal3f R = geom::reflect(I, N);
-      color = kR*castRay({sinfo.P + geom::to_vertex<real_T>(TRACE_BIAS*N), R}, MAX_REAL_T, depth + 1);
+      color = kR*castRay({sinfo.P + to_vertex(TRACE_BIAS*N), R}, MAX_REAL_T, depth + 1);
 
       // (4) Transmittance ///////////////////////////////////////////////////
 
       if( kT > ZERO ) {
         const Normal3f T = geom::refract(I, N, eta);
-        color += kT*castRay({sinfo.P - geom::to_vertex<real_T>(TRACE_BIAS*N), T}, MAX_REAL_T, depth + 1);
+        color += kT*castRay({sinfo.P - to_vertex(TRACE_BIAS*N), T}, MAX_REAL_T, depth + 1);
       }
 
     }
@@ -187,7 +187,7 @@ namespace rt {
       const LightInfo linfo = light->info(sinfo.P);
 
       SurfaceInfo dummy;
-      if( trace(dummy, {sinfo.P + geom::to_vertex<real_T>(TRACE_BIAS*sinfo.N), linfo.l}, linfo.r, SHADOW_RAY) ) {
+      if( trace(dummy, {sinfo.P + to_vertex(TRACE_BIAS*sinfo.N), linfo.l}, linfo.r, SHADOW_RAY) ) {
         continue; // Light is obscured by an object!
       }
 

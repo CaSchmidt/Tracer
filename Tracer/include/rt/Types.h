@@ -92,6 +92,18 @@ namespace rt {
   using Transformf = geom::Transform<real_T>;
   using   Vertex3f = geom::Vertex<real_T>;
 
+  template<typename EXPR>
+  inline auto to_normal(const EXPR& expr)
+  {
+    return cs::array_cast<Normal3f::traits_type>(expr);
+  }
+
+  template<typename EXPR>
+  inline auto to_vertex(const EXPR& expr)
+  {
+    return cs::array_cast<Vertex3f::traits_type>(expr);
+  }
+
 } // namespace rt
 
 #endif // TYPES_H
