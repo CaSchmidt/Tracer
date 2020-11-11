@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,57 +29,81 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <cstdio>
-#include <cstdlib>
+#ifndef SIMPLECAMERA_H
+#define SIMPLECAMERA_H
 
-#include "Image.h"
+#include "rt/Camera/ICamera.h"
 
-#include "rt/Camera/SimpleCamera.h"
-#include "rt/Renderer.h"
-#include "rt/SceneLoader.h"
+namespace rt {
 
-#define BASE_PATH  "../../Tracer/Tracer/scenes/"
-#define FILE_1     BASE_PATH "scene_1.xml"
-#define FILE_2     BASE_PATH "scene_2.xml"
-#define FILE_3     BASE_PATH "scene_3.xml"
-#define FILE_4     BASE_PATH "scene_4.xml"
-#define FILE_TEXT  BASE_PATH "scene_text.xml"
+  class SimpleCamera : public ICamera {
+  public:
+    SimpleCamera();
+    ~SimpleCamera();
 
-void print_progress(const std::size_t y, const std::size_t height,
-                    const bool force = false, const std::size_t blockSize = 20)
-{
-  if( y % std::max<std::size_t>(blockSize, 1) != 0  &&  !force ) {
-    return;
-  }
-  const std::size_t p = (y*100)/height;
-  printf("Progress: %3d%% (%4d/%4d)\n", int(p), int(y), int(height)); fflush(stdout);
-}
+    void setup(const real_T fov_rad);
 
-int main(int /*argc*/, char ** /*argv*/)
-{
-  const char *filename = FILE_1;
+    Image render(const std::size_t width, const std::size_t height,
+                 std::size_t y0, std::size_t y1,
+                 const Renderer& renderer, const std::size_t samples = 0) const;
 
-  rt::Renderer renderer;
-  if( !rt::loadScene(renderer, filename) ) {
-    return EXIT_FAILURE;
-  }
+  private:
+    class Screen {
+    public:
+      Screen(const std::size_t width, const std::size_t height)
+      {
+        _width  = static_cast<real_T>(width);
+        _height = static_cast<real_T>(height);
+        _aspect = _width/_height;
+        _x = _y = 0;
+      }
 
-#if 1
-  rt::SimpleCamera cam;
-  cam.setup(renderer.options().fov_rad);
-  Image image = cam.render(renderer.options().width, renderer.options().height,
-                           0, renderer.options().height, renderer, 1);
-#else
-  Image image(renderer.options().width, renderer.options().height);
+      ~Screen()
+      {
+      }
 
-  for(std::size_t y = 0; y < renderer.options().height; y++) {
-    print_progress(y, renderer.options().height);
-    renderer.render(y, image.row(y), 64);
-  }
-  print_progress(renderer.options().height, renderer.options().height, true);
-#endif
+      real_T aspect() const
+      {
+        return _aspect;
+      }
 
-  image.saveAsPNG("output.png");
+      real_T width() const
+      {
+        return _width;
+      }
 
-  return EXIT_SUCCESS;
-}
+      real_T height() const
+      {
+        return _height;
+      }
+
+      real_T x() const
+      {
+        return _x;
+      }
+
+      real_T y() const
+      {
+        return _y;
+      }
+
+      void setPos(const std::size_t x, const std::size_t y)
+      {
+        _x = static_cast<real_T>(x);
+        _y = static_cast<real_T>(y);
+      }
+
+    private:
+      Screen() = delete;
+      real_T _aspect{}, _width{}, _height{}, _x{}, _y{};
+    };
+
+    Rayf ray(const Screen& screen, const real_T near, const bool random = false) const;
+    real_T scale(const real_T in, const real_T s1, const real_T s2) const;
+
+    real_T _fov_rad;
+  };
+
+} // namespace rt
+
+#endif // SIMPLECAMERA_H

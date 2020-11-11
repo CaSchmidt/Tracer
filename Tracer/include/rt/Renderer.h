@@ -61,6 +61,8 @@ namespace rt {
 
     void addObject(ObjectPtr& object);
 
+    Color3f castCameraRay(const Rayf& ray) const;
+
     void clear();
 
     bool initialize(const RenderOptions& options);
@@ -79,6 +81,7 @@ namespace rt {
 
     Camera        _camera{};
     RenderOptions _options{};
+    Transformf    _view{};
     Transformf    _xfrmWC{}; // Camera -> World
     Objects       _scene{};
     LightSources  _lights{};

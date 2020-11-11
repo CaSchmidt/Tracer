@@ -50,10 +50,16 @@ namespace rt {
     _scene.push_back(std::move(object));
   }
 
+  Color3f Renderer::castCameraRay(const Rayf& ray) const
+  {
+    return castRay(_view*ray);
+  }
+
   void Renderer::clear()
   {
     _camera  = Camera();
     _options = RenderOptions();
+    _view    = Transformf();
     _xfrmWC  = Transformf();
     _scene.clear();
     _lights.clear();
@@ -62,6 +68,8 @@ namespace rt {
   bool Renderer::initialize(const RenderOptions& options)
   {
     const Transformf xfrmCW{Transformf::rotateX(-PI_HALF)};
+
+    _xfrmWC = xfrmCW.inverse();
 
     _options = options;
 
@@ -72,7 +80,7 @@ namespace rt {
     _camera = Camera(eye, lookAt, cameraUp,
                      _options.width, _options.height, _options.fov_rad);
 
-    _xfrmWC = xfrmCW.inverse();
+    _view = xfrmCW.inverse()*Transformf::lookAt(eye, lookAt, cameraUp);
 
     return true;
   }

@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,57 +29,52 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <cstdio>
-#include <cstdlib>
+#include "rt/Camera/ICamera.h"
 
-#include "Image.h"
+namespace rt {
 
-#include "rt/Camera/SimpleCamera.h"
-#include "rt/Renderer.h"
-#include "rt/SceneLoader.h"
+  ////// public //////////////////////////////////////////////////////////////
 
-#define BASE_PATH  "../../Tracer/Tracer/scenes/"
-#define FILE_1     BASE_PATH "scene_1.xml"
-#define FILE_2     BASE_PATH "scene_2.xml"
-#define FILE_3     BASE_PATH "scene_3.xml"
-#define FILE_4     BASE_PATH "scene_4.xml"
-#define FILE_TEXT  BASE_PATH "scene_text.xml"
-
-void print_progress(const std::size_t y, const std::size_t height,
-                    const bool force = false, const std::size_t blockSize = 20)
-{
-  if( y % std::max<std::size_t>(blockSize, 1) != 0  &&  !force ) {
-    return;
-  }
-  const std::size_t p = (y*100)/height;
-  printf("Progress: %3d%% (%4d/%4d)\n", int(p), int(y), int(height)); fflush(stdout);
-}
-
-int main(int /*argc*/, char ** /*argv*/)
-{
-  const char *filename = FILE_1;
-
-  rt::Renderer renderer;
-  if( !rt::loadScene(renderer, filename) ) {
-    return EXIT_FAILURE;
+  ICamera::ICamera()
+  {
+    rand_init();
   }
 
-#if 1
-  rt::SimpleCamera cam;
-  cam.setup(renderer.options().fov_rad);
-  Image image = cam.render(renderer.options().width, renderer.options().height,
-                           0, renderer.options().height, renderer, 1);
-#else
-  Image image(renderer.options().width, renderer.options().height);
-
-  for(std::size_t y = 0; y < renderer.options().height; y++) {
-    print_progress(y, renderer.options().height);
-    renderer.render(y, image.row(y), 64);
+  ICamera::~ICamera()
+  {
   }
-  print_progress(renderer.options().height, renderer.options().height, true);
-#endif
 
-  image.saveAsPNG("output.png");
+  ////// protected ///////////////////////////////////////////////////////////
 
-  return EXIT_SUCCESS;
-}
+  Image ICamera::create_image(const std::size_t width, const std::size_t height,
+                              std::size_t& y0, std::size_t& y1) const
+  {
+    if( width < 1  ||  height < 1 ) {
+      return Image();
+    }
+    y0 = std::clamp<std::size_t>(y0, 0, height);
+    y1 = std::clamp<std::size_t>(y1, 0, height);
+    if(        y1 <  y0 ) {
+      std::swap(y0, y1);
+    } else if( y0 == y1 ) {
+      return Image();
+    }
+    return Image(width, y1 - y0);
+  }
+
+  real_T ICamera::rand() const
+  {
+    return _randDis(*const_cast<std::mt19937*>(&_randGen));
+  }
+
+  ////// private /////////////////////////////////////////////////////////////
+
+  void ICamera::rand_init()
+  {
+    _randDis = std::uniform_real_distribution<real_T>(ZERO, ONE);
+
+    std::random_device randDev;
+    _randGen.seed(randDev());
+  }
+
+} // namespace rt

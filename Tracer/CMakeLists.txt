@@ -41,6 +41,8 @@ set(Tracer_HEADERS
   include/rt/SceneLoader.h
   include/rt/SurfaceInfo.h
   include/rt/Types.h
+  include/rt/Camera/ICamera.h
+  include/rt/Camera/SimpleCamera.h
   include/rt/Light/DirectionalLight.h
   include/rt/Light/ILightSource.h
   include/rt/Light/PointLight.h
@@ -71,6 +73,8 @@ set(Tracer_SOURCES
   src/rt/SceneLoaderOptions.cpp
   src/rt/SceneLoaderText.cpp
   src/rt/SceneLoaderTexture.cpp
+  src/rt/Camera/ICamera.cpp
+  src/rt/Camera/SimpleCamera.cpp
   src/rt/Light/DirectionalLight.cpp
   src/rt/Light/ILightSoruce.cpp
   src/rt/Light/PointLight.cpp
