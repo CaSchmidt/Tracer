@@ -57,28 +57,21 @@ namespace rt {
 
   void Renderer::clear()
   {
-    _camera  = Camera();
     _options = RenderOptions();
     _view    = Transformf();
-    _xfrmWC  = Transformf();
     _scene.clear();
     _lights.clear();
   }
 
   bool Renderer::initialize(const RenderOptions& options)
   {
-    const Transformf xfrmCW{Transformf::rotateX(-PI_HALF)};
-
-    _xfrmWC = xfrmCW.inverse();
-
     _options = options;
+
+    const Transformf xfrmCW{Transformf::rotateX(-PI_HALF)};
 
     const Vertex3f      eye = xfrmCW*_options.eye;
     const Vertex3f   lookAt = xfrmCW*_options.lookAt;
     const Normal3f cameraUp = xfrmCW.scaledRotation()*_options.cameraUp;
-
-    _camera = Camera(eye, lookAt, cameraUp,
-                     _options.width, _options.height, _options.fov_rad);
 
     _view = xfrmCW.inverse()*Transformf::lookAt(eye, lookAt, cameraUp);
 
@@ -88,36 +81,6 @@ namespace rt {
   const RenderOptions& Renderer::options() const
   {
     return _options;
-  }
-
-  bool Renderer::render(const std::size_t y, uint8_t *row, const uint8_t samples) const
-  {
-    if( y >= _options.height  ||  row == nullptr ) {
-      return false;
-    }
-    if( samples > 1 ) {
-      for(std::size_t x = 0; x < _options.width; x++) {
-        Color3f result;
-        for(uint8_t s = 0; s < samples; s++) {
-          const Color3f color = castRay(_xfrmWC*_camera.ray(x, y, true));
-          result += cs::clamp(color, ZERO, ONE);
-        }
-        result /= samples;
-        *row++ = result.r;
-        *row++ = result.g;
-        *row++ = result.b;
-        *row++ = 0xFF;
-      }
-    } else {
-      for(std::size_t x = 0; x < _options.width; x++) {
-        const Color3f color = castRay(_xfrmWC*_camera.ray(x, y));
-        *row++ = color.r;
-        *row++ = color.g;
-        *row++ = color.b;
-        *row++ = 0xFF;
-      }
-    }
-    return true;
   }
 
   void Renderer::setScene(Objects& objects)

@@ -32,7 +32,6 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "rt/Camera.h"
 #include "rt/Light/ILightSource.h"
 #include "rt/Object/IObject.h"
 
@@ -69,8 +68,6 @@ namespace rt {
 
     const RenderOptions& options() const;
 
-    bool render(const std::size_t y, uint8_t *row, const uint8_t samples = 1) const;
-
     void setScene(Objects& objects);
 
   private:
@@ -79,10 +76,8 @@ namespace rt {
     Color3f shade(const SurfaceInfo& sinfo, const Normal3f& v) const;
     bool trace(SurfaceInfo& result, const Rayf& ray, const real_T tMax, const bool isShadowRay) const;
 
-    Camera        _camera{};
     RenderOptions _options{};
     Transformf    _view{};
-    Transformf    _xfrmWC{}; // Camera -> World
     Objects       _scene{};
     LightSources  _lights{};
   };

@@ -34,7 +34,6 @@ set(Tracer_HEADERS
   include/math/Solver.h
   include/priv/rt/SceneLoaderBase.h
   include/priv/rt/SceneLoaderStringUtil.h
-  include/rt/Camera.h
   include/rt/Color.h
   include/rt/Refraction.h
   include/rt/Renderer.h
@@ -62,7 +61,6 @@ set(Tracer_HEADERS
 set(Tracer_SOURCES
   src/Image.cpp
   src/main.cpp
-  src/rt/Camera.cpp
   src/rt/Refraction.cpp
   src/rt/Renderer.cpp
   src/rt/SceneLoader.cpp
