@@ -48,58 +48,8 @@ namespace rt {
                  const Renderer& renderer, const std::size_t samples = 0) const;
 
   private:
-    class Screen {
-    public:
-      Screen(const std::size_t width, const std::size_t height)
-      {
-        _width  = static_cast<real_T>(width);
-        _height = static_cast<real_T>(height);
-        _aspect = _width/_height;
-        _x = _y = 0;
-      }
-
-      ~Screen()
-      {
-      }
-
-      real_T aspect() const
-      {
-        return _aspect;
-      }
-
-      real_T width() const
-      {
-        return _width;
-      }
-
-      real_T height() const
-      {
-        return _height;
-      }
-
-      real_T x() const
-      {
-        return _x;
-      }
-
-      real_T y() const
-      {
-        return _y;
-      }
-
-      void setPos(const std::size_t x, const std::size_t y)
-      {
-        _x = static_cast<real_T>(x);
-        _y = static_cast<real_T>(y);
-      }
-
-    private:
-      Screen() = delete;
-      real_T _aspect{}, _width{}, _height{}, _x{}, _y{};
-    };
-
-    Rayf ray(const Screen& screen, const real_T near, const bool random = false) const;
-    real_T scale(const real_T in, const real_T s1, const real_T s2) const;
+    Rayf ray(const Matrix3f& W, const std::size_t x, const std::size_t y, const bool random = false) const;
+    Matrix3f windowTransform(const std::size_t width, const std::size_t height) const;
 
     real_T _fov_rad;
   };

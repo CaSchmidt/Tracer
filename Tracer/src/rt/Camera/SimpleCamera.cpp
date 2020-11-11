@@ -63,17 +63,15 @@ namespace rt {
       return Image();
     }
 
-    Screen screen(width, height);
-    const real_T near = -screen.aspect()/csTan(_fov_rad/TWO);
+    const Matrix3f W = windowTransform(width, height);
 
     for(std::size_t y = y0; y < y1; y++) {
       uint8_t *row = image.row(y - y0);
       if( samples > 1 ) {
         for(std::size_t x = 0; x < width; x++) {
-          screen.setPos(x, y);
           Color3f result;
           for(std::size_t s = 0; s < samples; s++) {
-            const Color3f color = renderer.castCameraRay(ray(screen, near, true));
+            const Color3f color = renderer.castCameraRay(ray(W, x, y, true));
             result += cs::clamp(color, ZERO, ONE);
           }
           result /= static_cast<real_T>(samples);
@@ -84,8 +82,7 @@ namespace rt {
         }
       } else {
         for(std::size_t x = 0; x < width; x++) {
-          screen.setPos(x, y);
-          const Color3f color = cs::clamp(renderer.castCameraRay(ray(screen, near)), ZERO, ONE);
+          const Color3f color = cs::clamp(renderer.castCameraRay(ray(W, x, y)), ZERO, ONE);
           *row++ = color.r;
           *row++ = color.g;
           *row++ = color.b;
@@ -99,7 +96,8 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Rayf SimpleCamera::ray(const Screen& screen, const real_T near, const bool random) const
+  Rayf SimpleCamera::ray(const Matrix3f& W, const std::size_t x, const std::size_t y,
+                         const bool random) const
   {
     const real_T dx = random
         ? rand()
@@ -108,17 +106,18 @@ namespace rt {
         ? rand()
         : ONE_HALF;
 
-    const real_T x = scale(screen.x() + dx, screen.width(), screen.aspect());
-    const real_T y = scale(screen.y() + dy, screen.height(), -ONE);
-
-    const Vertex3f org = Vertex3f{x, y, near};
+    const Vertex3f org = W*Vertex3f{static_cast<real_T>(x) + dx, static_cast<real_T>(y) + dy, 1};
 
     return Rayf{org, to_normal(org)};
   }
 
-  real_T SimpleCamera::scale(const real_T in, const real_T s1, const real_T s2) const
+  Matrix3f SimpleCamera::windowTransform(const std::size_t width, const std::size_t height) const
   {
-    return s2*(TWO*in/s1 - ONE);
+    const real_T w = static_cast<real_T>(width);
+    const real_T h = static_cast<real_T>(height);
+    const real_T a = w/h;
+    const real_T n = -a/csTan(_fov_rad/TWO);
+    return Matrix3f{ TWO*a/w, 0, -a, 0, -TWO/h, 1, 0, 0, n };
   }
 
 } // namespace rt
