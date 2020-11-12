@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,47 +29,30 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <cstdio>
-#include <cstdlib>
+#ifndef RENDERLOOP_H
+#define RENDERLOOP_H
 
 #include "Image.h"
+#include "rt/Types.h"
 
-#include "rt/Camera/SimpleCamera.h"
-#include "rt/Renderer.h"
-#include "rt/SceneLoader.h"
+namespace rt {
 
-#define BASE_PATH  "../../Tracer/Tracer/scenes/"
-#define FILE_1     BASE_PATH "scene_1.xml"
-#define FILE_2     BASE_PATH "scene_2.xml"
-#define FILE_3     BASE_PATH "scene_3.xml"
-#define FILE_4     BASE_PATH "scene_4.xml"
-#define FILE_TEXT  BASE_PATH "scene_text.xml"
-
-void print_progress(const std::size_t y, const std::size_t height,
-                    const bool force = false, const std::size_t blockSize = 20)
-{
-  if( y % std::max<std::size_t>(blockSize, 1) != 0  &&  !force ) {
-    return;
-  }
-  const std::size_t p = (y*100)/height;
-  printf("Progress: %3d%% (%4d/%4d)\n", int(p), int(y), int(height)); fflush(stdout);
-}
-
-int main(int /*argc*/, char ** /*argv*/)
-{
-  const char *filename = FILE_1;
-
-  rt::Renderer renderer;
-  if( !rt::loadScene(renderer, filename) ) {
-    return EXIT_FAILURE;
+  template<typename RadianceFunc>
+  void render_loop(Image& image, const std::size_t y0, const RadianceFunc& radiance)
+  {
+    const std::size_t y1 = y0 + image.height();
+    for(std::size_t y = y0; y < y1; y++) {
+      uint8_t *row = image.row(y - y0);
+      for(std::size_t x = 0; x < image.width(); x++) {
+        const Color3f color = cs::clamp(radiance(x, y), 0, 1)*255;
+        *row++ = static_cast<real_T>(color.eval<0,0>());
+        *row++ = static_cast<real_T>(color.eval<1,0>());
+        *row++ = static_cast<real_T>(color.eval<2,0>());
+        *row++ = 0xFF;
+      }
+    }
   }
 
-  rt::SimpleCamera cam;
-  cam.setup(renderer.options().fov_rad);
-  Image image = cam.render(renderer.options().width, renderer.options().height,
-                           0, renderer.options().height, renderer, 64);
+} // namespace rt
 
-  image.saveAsPNG("output.png");
-
-  return EXIT_SUCCESS;
-}
+#endif // RENDERLOOP_H

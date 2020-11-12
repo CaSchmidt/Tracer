@@ -41,6 +41,7 @@ set(Tracer_HEADERS
   include/rt/SurfaceInfo.h
   include/rt/Types.h
   include/rt/Camera/ICamera.h
+  include/rt/Camera/RenderLoop.h
   include/rt/Camera/SimpleCamera.h
   include/rt/Light/DirectionalLight.h
   include/rt/Light/ILightSource.h

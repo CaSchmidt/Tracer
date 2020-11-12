@@ -31,6 +31,8 @@
 
 #include "rt/Camera/SimpleCamera.h"
 
+#include "rt/Camera/RenderLoop.h"
+
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
@@ -47,11 +49,7 @@ namespace rt {
 
   void SimpleCamera::setup(const real_T fov_rad)
   {
-    if( fov_rad <= 0  ||  fov_rad >= PI ) {
-      _fov_rad = PI_HALF;
-    } else {
-      _fov_rad = fov_rad;
-    }
+    _fov_rad = fov_rad;
   }
 
   Image SimpleCamera::render(const std::size_t width, const std::size_t height,
@@ -65,30 +63,19 @@ namespace rt {
 
     const Matrix3f W = windowTransform(width, height);
 
-    for(std::size_t y = y0; y < y1; y++) {
-      uint8_t *row = image.row(y - y0);
-      if( samples > 1 ) {
-        for(std::size_t x = 0; x < width; x++) {
-          Color3f result;
-          for(std::size_t s = 0; s < samples; s++) {
-            const Color3f color = renderer.castCameraRay(ray(W, x, y, true));
-            result += cs::clamp(color, ZERO, ONE);
-          }
-          result /= static_cast<real_T>(samples);
-          *row++ = result.r;
-          *row++ = result.g;
-          *row++ = result.b;
-          *row++ = 0xFF;
+    if( samples > 1 ) {
+      render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color3f {
+        Color3f color;
+        for(std::size_t s = 0; s < samples; s++) {
+          color += cs::clamp(renderer.castCameraRay(ray(W, x, y, true)), 0, 1);
         }
-      } else {
-        for(std::size_t x = 0; x < width; x++) {
-          const Color3f color = cs::clamp(renderer.castCameraRay(ray(W, x, y)), ZERO, ONE);
-          *row++ = color.r;
-          *row++ = color.g;
-          *row++ = color.b;
-          *row++ = 0xFF;
-        }
-      }
+        color /= static_cast<real_T>(samples);
+        return color;
+                  });
+    } else {
+      render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color3f {
+                    return renderer.castCameraRay(ray(W, x, y));
+                  });
     }
 
     return image;
