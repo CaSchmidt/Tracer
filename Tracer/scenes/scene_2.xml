@@ -24,147 +24,149 @@
       <z>1</z>
     </CameraUp>
   </Options>
-  <!-- SPACE -->
-  <Light type="Point">
-    <Intensity>
-      <r>10</r>
-      <g>10</g>
-      <b>10</b>
-    </Intensity>
-    <Position>
-      <x>0</x>
-      <y>0</y>
-      <z>2</z>
-    </Position>
-  </Light>
-  <!-- ground plane -->
-  <Object type="Plane">
-    <Width>10</Width>
-    <Height>10</Height>
-    <Material type="Opaque">
-      <Diffuse type="Checked">
-        <ColorA>
-          <r>1</r>
-          <g>1</g>
-          <b>1</b>
-        </ColorA>
-        <ColorB>
-          <r>0.8</r>
-          <g>0.8</g>
-          <b>0.8</b>
-        </ColorB>
-        <ScaleS>5</ScaleS>
-        <ScaleT>5</ScaleT>
-      </Diffuse>
-    </Material>
-    <Transform/>
-  </Object>
-  <!-- Sphere #1 -->
-  <Object type="Sphere">
-    <Material type="Opaque">
-      <Diffuse type="Checked">
-        <ColorA>
-          <r>1</r>
-          <g>1</g>
-          <b>1</b>
-        </ColorA>
-        <ColorB>
-          <r>0.8</r>
-          <g>0.8</g>
-          <b>0.8</b>
-        </ColorB>
-        <ScaleS>4</ScaleS>
-        <ScaleT>2</ScaleT>
-      </Diffuse>
-    </Material>
-    <Radius>1</Radius>
-    <Transform>
-      <Translate>
-        <x>1.5</x>
-        <y>1.5</y>
-        <z>1</z>
-      </Translate>
-    </Transform>
-  </Object>
-  <!-- Sphere #2 -->
-  <Object type="Sphere">
-    <Material type="Opaque">
-      <Diffuse type="Checked">
-        <ColorA>
-          <r>1</r>
-          <g>1</g>
-          <b>1</b>
-        </ColorA>
-        <ColorB>
-          <r>0.8</r>
-          <g>0.8</g>
-          <b>0.8</b>
-        </ColorB>
-        <ScaleS>4</ScaleS>
-        <ScaleT>2</ScaleT>
-      </Diffuse>
-    </Material>
-    <Radius>1</Radius>
-    <Transform>
-      <Translate>
-        <x>-1.5</x>
-        <y>1.5</y>
-        <z>1</z>
-      </Translate>
-    </Transform>
-  </Object>
-  <!-- Sphere #3 -->
-  <Object type="Sphere">
-    <Material type="Opaque">
-      <Diffuse type="Checked">
-        <ColorA>
-          <r>1</r>
-          <g>1</g>
-          <b>1</b>
-        </ColorA>
-        <ColorB>
-          <r>0.8</r>
-          <g>0.8</g>
-          <b>0.8</b>
-        </ColorB>
-        <ScaleS>4</ScaleS>
-        <ScaleT>2</ScaleT>
-      </Diffuse>
-    </Material>
-    <Radius>1</Radius>
-    <Transform>
-      <Translate>
-        <x>-1.5</x>
-        <y>-1.5</y>
-        <z>1</z>
-      </Translate>
-    </Transform>
-  </Object>
-  <!-- Sphere #4 -->
-  <Object type="Sphere">
-    <Material type="Opaque">
-      <Diffuse type="Checked">
-        <ColorA>
-          <r>1</r>
-          <g>1</g>
-          <b>1</b>
-        </ColorA>
-        <ColorB>
-          <r>0.8</r>
-          <g>0.8</g>
-          <b>0.8</b>
-        </ColorB>
-        <ScaleS>4</ScaleS>
-        <ScaleT>2</ScaleT>
-      </Diffuse>
-    </Material>
-    <Radius>1</Radius>
-    <Transform>
-      <Translate>
-        <x>1.5</x>
-        <y>-1.5</y>
-        <z>1</z>
-      </Translate>
-    </Transform>
-  </Object>
+  <Scene>
+    <!-- SPACE -->
+    <Light type="Point">
+      <Intensity>
+        <r>10</r>
+        <g>10</g>
+        <b>10</b>
+      </Intensity>
+      <Position>
+        <x>0</x>
+        <y>0</y>
+        <z>2</z>
+      </Position>
+    </Light>
+    <!-- ground plane -->
+    <Object type="Plane">
+      <Width>10</Width>
+      <Height>10</Height>
+      <Material type="Opaque">
+        <Diffuse type="Checked">
+          <ColorA>
+            <r>1</r>
+            <g>1</g>
+            <b>1</b>
+          </ColorA>
+          <ColorB>
+            <r>0.8</r>
+            <g>0.8</g>
+            <b>0.8</b>
+          </ColorB>
+          <ScaleS>5</ScaleS>
+          <ScaleT>5</ScaleT>
+        </Diffuse>
+      </Material>
+      <Transform/>
+    </Object>
+    <!-- Sphere #1 -->
+    <Object type="Sphere">
+      <Material type="Opaque">
+        <Diffuse type="Checked">
+          <ColorA>
+            <r>1</r>
+            <g>1</g>
+            <b>1</b>
+          </ColorA>
+          <ColorB>
+            <r>0.8</r>
+            <g>0.8</g>
+            <b>0.8</b>
+          </ColorB>
+          <ScaleS>4</ScaleS>
+          <ScaleT>2</ScaleT>
+        </Diffuse>
+      </Material>
+      <Radius>1</Radius>
+      <Transform>
+        <Translate>
+          <x>1.5</x>
+          <y>1.5</y>
+          <z>1</z>
+        </Translate>
+      </Transform>
+    </Object>
+    <!-- Sphere #2 -->
+    <Object type="Sphere">
+      <Material type="Opaque">
+        <Diffuse type="Checked">
+          <ColorA>
+            <r>1</r>
+            <g>1</g>
+            <b>1</b>
+          </ColorA>
+          <ColorB>
+            <r>0.8</r>
+            <g>0.8</g>
+            <b>0.8</b>
+          </ColorB>
+          <ScaleS>4</ScaleS>
+          <ScaleT>2</ScaleT>
+        </Diffuse>
+      </Material>
+      <Radius>1</Radius>
+      <Transform>
+        <Translate>
+          <x>-1.5</x>
+          <y>1.5</y>
+          <z>1</z>
+        </Translate>
+      </Transform>
+    </Object>
+    <!-- Sphere #3 -->
+    <Object type="Sphere">
+      <Material type="Opaque">
+        <Diffuse type="Checked">
+          <ColorA>
+            <r>1</r>
+            <g>1</g>
+            <b>1</b>
+          </ColorA>
+          <ColorB>
+            <r>0.8</r>
+            <g>0.8</g>
+            <b>0.8</b>
+          </ColorB>
+          <ScaleS>4</ScaleS>
+          <ScaleT>2</ScaleT>
+        </Diffuse>
+      </Material>
+      <Radius>1</Radius>
+      <Transform>
+        <Translate>
+          <x>-1.5</x>
+          <y>-1.5</y>
+          <z>1</z>
+        </Translate>
+      </Transform>
+    </Object>
+    <!-- Sphere #4 -->
+    <Object type="Sphere">
+      <Material type="Opaque">
+        <Diffuse type="Checked">
+          <ColorA>
+            <r>1</r>
+            <g>1</g>
+            <b>1</b>
+          </ColorA>
+          <ColorB>
+            <r>0.8</r>
+            <g>0.8</g>
+            <b>0.8</b>
+          </ColorB>
+          <ScaleS>4</ScaleS>
+          <ScaleT>2</ScaleT>
+        </Diffuse>
+      </Material>
+      <Radius>1</Radius>
+      <Transform>
+        <Translate>
+          <x>1.5</x>
+          <y>-1.5</y>
+          <z>1</z>
+        </Translate>
+      </Transform>
+    </Object>
+  </Scene>
 </Tracer>

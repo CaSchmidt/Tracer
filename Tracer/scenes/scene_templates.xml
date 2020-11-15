@@ -24,103 +24,105 @@
       <z>float</z>
     </CameraUp>
   </Options>
-  <!-- SPACE -->
-  <Light type="Directional">
-    <Irradiance>
-      <r>float</r>
-      <g>float</g>
-      <b>float</b>
-    </Irradiance>
-    <Direction>
-      <x>float</x>
-      <y>float</y>
-      <z>float</z>
-    </Direction>
-  </Light>
-  <Light type="Point">
-    <Intensity>
-      <r>float</r>
-      <g>float</g>
-      <b>float</b>
-    </Intensity>
-    <Position>
-      <x>float</x>
-      <y>float</y>
-      <z>float</z>
-    </Position>
-  </Light>
-  <!-- SPACE -->
-  <Texture type="Checked">
-    <ColorA>
-      <r>float</r>
-      <g>float</g>
-      <b>float</b>
-    </ColorA>
-    <ColorB>
-      <r>float</r>
-      <g>float</g>
-      <b>float</b>
-    </ColorB>
-    <ScaleS>float</ScaleS>
-    <ScaleT>float</ScaleT>
-  </Texture>
-  <Texture type="Flat">
-    <Color>
-      <r>float</r>
-      <g>float</g>
-      <b>float</b>
-    </Color>
-  </Texture>
-  <!-- SPACE -->
-  <Material type="Mirror">
-    <Reflectance>float</Reflectance>
-  </Material>
-  <Material type="Opaque">
-    <Diffuse>texture</Diffuse>
-    <Shininess>float</Shininess>
-    <Specular>texture</Specular>
-  </Material>
-  <Material type="Transparent">
-    <Refraction>float</Refraction>
-  </Material>
-  <!-- SPACE -->
-  <Transform>
-    <Rotate>
-      <rx>float</rx>
-      <ry>float</ry>
-      <rz>float</rz>
-    </Rotate>
-    <Translate>
-      <x>float</x>
-      <y>float</y>
-      <z>float</z>
-    </Translate>
-  </Transform>
-  <!-- SPACE -->
-  <Object type="Cylinder">
-    <Height>float</Height>
-    <Material>material</Material>
-    <Radius>float</Radius>
-    <Transform>transform</Transform>
-  </Object>
-  <Object type="Plane">
-    <Height>float</Height>
-    <Material>material</Material>
-    <Transform>transform</Transform>
-    <Width>float</Width>
-  </Object>
-  <Object type="Sphere">
-    <Material>material</Material>
-    <Radius>float</Radius>
-    <Transform>transform</Transform>
-  </Object>
-  <!-- SPACE -->
-  <Text>
-    <dx>float</dx>
-    <dz>float</dz>
-    <Material>material</Material>
-    <Radius>float</Radius>
-    <String>string</String>
-    <Transform>transform</Transform>
-  </Text>
+  <Scene>
+    <!-- SPACE -->
+    <Light type="Directional">
+      <Irradiance>
+        <r>float</r>
+        <g>float</g>
+        <b>float</b>
+      </Irradiance>
+      <Direction>
+        <x>float</x>
+        <y>float</y>
+        <z>float</z>
+      </Direction>
+    </Light>
+    <Light type="Point">
+      <Intensity>
+        <r>float</r>
+        <g>float</g>
+        <b>float</b>
+      </Intensity>
+      <Position>
+        <x>float</x>
+        <y>float</y>
+        <z>float</z>
+      </Position>
+    </Light>
+    <!-- SPACE -->
+    <Texture type="Checked">
+      <ColorA>
+        <r>float</r>
+        <g>float</g>
+        <b>float</b>
+      </ColorA>
+      <ColorB>
+        <r>float</r>
+        <g>float</g>
+        <b>float</b>
+      </ColorB>
+      <ScaleS>float</ScaleS>
+      <ScaleT>float</ScaleT>
+    </Texture>
+    <Texture type="Flat">
+      <Color>
+        <r>float</r>
+        <g>float</g>
+        <b>float</b>
+      </Color>
+    </Texture>
+    <!-- SPACE -->
+    <Material type="Mirror">
+      <Reflectance>float</Reflectance>
+    </Material>
+    <Material type="Opaque">
+      <Diffuse>texture</Diffuse>
+      <Shininess>float</Shininess>
+      <Specular>texture</Specular>
+    </Material>
+    <Material type="Transparent">
+      <Refraction>float</Refraction>
+    </Material>
+    <!-- SPACE -->
+    <Transform>
+      <Rotate>
+        <rx>float</rx>
+        <ry>float</ry>
+        <rz>float</rz>
+      </Rotate>
+      <Translate>
+        <x>float</x>
+        <y>float</y>
+        <z>float</z>
+      </Translate>
+    </Transform>
+    <!-- SPACE -->
+    <Object type="Cylinder">
+      <Height>float</Height>
+      <Material>material</Material>
+      <Radius>float</Radius>
+      <Transform>transform</Transform>
+    </Object>
+    <Object type="Plane">
+      <Height>float</Height>
+      <Material>material</Material>
+      <Transform>transform</Transform>
+      <Width>float</Width>
+    </Object>
+    <Object type="Sphere">
+      <Material>material</Material>
+      <Radius>float</Radius>
+      <Transform>transform</Transform>
+    </Object>
+    <!-- SPACE -->
+    <Text>
+      <dx>float</dx>
+      <dz>float</dz>
+      <Material>material</Material>
+      <Radius>float</Radius>
+      <String>string</String>
+      <Transform>transform</Transform>
+    </Text>
+  </Scene>
 </Tracer>

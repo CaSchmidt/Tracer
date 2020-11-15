@@ -24,56 +24,58 @@
       <z>1</z>
     </CameraUp>
   </Options>
-  <!-- ground plane -->
-  <Object type="Plane">
-    <Width>10</Width>
-    <Height>10</Height>
-    <Material type="Opaque">
-      <Diffuse type="Checked">
-        <ColorA>
-          <r>1</r>
-          <g>0</g>
-          <b>0</b>
-        </ColorA>
-        <ColorB>
-          <r>0.8</r>
-          <g>0</g>
-          <b>0</b>
-        </ColorB>
-        <ScaleS>5</ScaleS>
-        <ScaleT>5</ScaleT>
-      </Diffuse>
-    </Material>
-    <Transform/>
-  </Object>
-  <!-- SPACE -->
-  <Light type="Directional">
-    <Irradiance>
-      <r>3</r>
-      <g>3</g>
-      <b>3</b>
-    </Irradiance>
-    <Direction>
-      <x>-1</x>
-      <y>-1</y>
-      <z>1</z>
-    </Direction>
-  </Light>
-  <!-- SPACE -->
-  <Text>
-    <dx>0.3</dx>
-    <dz>0.3</dz>
-    <Material type="Mirror">
-      <Reflectance>0.8</Reflectance>
-    </Material>
-    <Radius>0.15</Radius>
-    <String>C++</String>
-    <Transform>
-      <Translate>
-        <x>0</x>
-        <y>0</y>
-        <z>1.2</z>
-      </Translate>
-    </Transform>
-  </Text>
+  <Scene>
+    <!-- ground plane -->
+    <Object type="Plane">
+      <Width>10</Width>
+      <Height>10</Height>
+      <Material type="Opaque">
+        <Diffuse type="Checked">
+          <ColorA>
+            <r>1</r>
+            <g>0</g>
+            <b>0</b>
+          </ColorA>
+          <ColorB>
+            <r>0.8</r>
+            <g>0</g>
+            <b>0</b>
+          </ColorB>
+          <ScaleS>5</ScaleS>
+          <ScaleT>5</ScaleT>
+        </Diffuse>
+      </Material>
+      <Transform/>
+    </Object>
+    <!-- SPACE -->
+    <Light type="Directional">
+      <Irradiance>
+        <r>3</r>
+        <g>3</g>
+        <b>3</b>
+      </Irradiance>
+      <Direction>
+        <x>-1</x>
+        <y>-1</y>
+        <z>1</z>
+      </Direction>
+    </Light>
+    <!-- SPACE -->
+    <Text>
+      <dx>0.3</dx>
+      <dz>0.3</dz>
+      <Material type="Mirror">
+        <Reflectance>0.8</Reflectance>
+      </Material>
+      <Radius>0.15</Radius>
+      <String>C++</String>
+      <Transform>
+        <Translate>
+          <x>0</x>
+          <y>0</y>
+          <z>1.2</z>
+        </Translate>
+      </Transform>
+    </Text>
+  </Scene>
 </Tracer>
