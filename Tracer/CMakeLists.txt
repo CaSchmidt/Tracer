@@ -24,6 +24,7 @@ add_subdirectory(3rdparty/tinyxml2-800)
 
 set(Tracer_HEADERS
   include/Image.h
+  include/Worker.h
   include/geom/Geom.h
   include/geom/Intersect.h
   include/geom/Optics.h
@@ -62,6 +63,7 @@ set(Tracer_HEADERS
 set(Tracer_SOURCES
   src/Image.cpp
   src/main.cpp
+  src/Worker.cpp
   src/rt/Refraction.cpp
   src/rt/Renderer.cpp
   src/rt/SceneLoader.cpp

@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,37 +29,28 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <cstdio>
-#include <cstdlib>
+#ifndef WORKER_H
+#define WORKER_H
 
-#include "rt/Camera/SimpleCamera.h"
-#include "rt/Renderer.h"
-#include "rt/SceneLoader.h"
+#include <list>
+#include <utility>
 
-#include "Worker.h"
+#include "rt/Camera/ICamera.h"
 
-#define BASE_PATH  "../../Tracer/Tracer/scenes/"
-#define FILE_1     BASE_PATH "scene_1.xml"
-#define FILE_2     BASE_PATH "scene_2.xml"
-#define FILE_3     BASE_PATH "scene_3.xml"
-#define FILE_4     BASE_PATH "scene_4.xml"
-#define FILE_TEXT  BASE_PATH "scene_text.xml"
+using  Block = std::pair<std::size_t, std::size_t>;
+using Blocks = std::list<Block>;
 
-int main(int /*argc*/, char ** /*argv*/)
-{
-  const char *filename = FILE_1;
+class Worker {
+public:
+  Worker() = default;
+  ~Worker() = default;
 
-  rt::Renderer renderer;
-  if( !rt::loadScene(renderer, filename) ) {
-    return EXIT_FAILURE;
-  }
+  Image execute(const rt::ICamera *cam, const rt::Renderer& renderer,
+                const std::size_t numSamples = 64, const std::size_t blockSize = 32) const;
 
-  rt::SimpleCamera cam;
-  cam.setup(renderer.options().fov_rad);
+private:
+  static Blocks makeBlocks(const std::size_t height, const std::size_t blockSize);
+  static void progress(const std::size_t y, const std::size_t height);
+};
 
-  Worker worker;
-  const Image image = worker.execute(&cam, renderer);
-  image.saveAsPNG("output.png");
-
-  return EXIT_SUCCESS;
-}
+#endif // WORKER_H

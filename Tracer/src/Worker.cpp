@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,37 +29,68 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <cstdio>
-#include <cstdlib>
+#include <algorithm>
+#include <execution>
+#include <mutex>
 
-#include "rt/Camera/SimpleCamera.h"
 #include "rt/Renderer.h"
 #include "rt/SceneLoader.h"
 
 #include "Worker.h"
 
-#define BASE_PATH  "../../Tracer/Tracer/scenes/"
-#define FILE_1     BASE_PATH "scene_1.xml"
-#define FILE_2     BASE_PATH "scene_2.xml"
-#define FILE_3     BASE_PATH "scene_3.xml"
-#define FILE_4     BASE_PATH "scene_4.xml"
-#define FILE_TEXT  BASE_PATH "scene_text.xml"
-
-int main(int /*argc*/, char ** /*argv*/)
+Image Worker::execute(const rt::ICamera *cam, const rt::Renderer& renderer,
+                      const std::size_t numSamples, const std::size_t blockSize) const
 {
-  const char *filename = FILE_1;
-
-  rt::Renderer renderer;
-  if( !rt::loadScene(renderer, filename) ) {
-    return EXIT_FAILURE;
+  Image image(renderer.options().width, renderer.options().height);
+  if( image.isEmpty() ) {
+    return Image();
   }
 
-  rt::SimpleCamera cam;
-  cam.setup(renderer.options().fov_rad);
+  const Blocks blocks = makeBlocks(image.height(), blockSize);
+  if( blocks.empty() ) {
+    return Image();
+  }
 
-  Worker worker;
-  const Image image = worker.execute(&cam, renderer);
-  image.saveAsPNG("output.png");
+  std::size_t done = 0;
+  std::mutex mutex;
+  std::for_each(std::execution::par_unseq,
+                blocks.begin(), blocks.end(), [&](const Block& block) -> void {
+    const auto [y0, y1] = block;
+    const Image slice = cam->render(image.width(), image.height(), y0, y1, renderer, numSamples);
+    {
+      std::lock_guard<std::mutex> lock(mutex);
+      image.copy(y0, slice);
+      done += y1 - y0;
+      progress(done, image.height());
+    }
+  });
 
-  return EXIT_SUCCESS;
+  return image;
+}
+
+////// private ///////////////////////////////////////////////////////////////
+
+Blocks Worker::makeBlocks(const std::size_t height, const std::size_t blockSize)
+{
+  Blocks blocks;
+
+  const std::size_t numBlocks = height/blockSize;
+  for(std::size_t i = 0; i < numBlocks; i++) {
+    const std::size_t y0 = i*blockSize;
+    blocks.emplace_back(y0, y0 + blockSize);
+  }
+
+  const std::size_t numRemain = height%blockSize;
+  if( numRemain > 0 ) {
+    const std::size_t y0 = numBlocks*blockSize;
+    blocks.emplace_back(y0, y0 + numRemain);
+  }
+
+  return blocks;
+}
+
+void Worker::progress(const std::size_t y, const std::size_t height)
+{
+  const std::size_t p = (y*100)/height;
+  printf("Progress: %3d%% (%6d/%6d)\n", int(p), int(y), int(height)); fflush(stdout);
 }
