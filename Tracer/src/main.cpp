@@ -52,7 +52,16 @@ void print_progress(const std::size_t y, const std::size_t height,
     return;
   }
   const std::size_t p = (y*100)/height;
-  printf("Progress: %3d%% (%4d/%4d)\n", int(p), int(y), int(height)); fflush(stdout);
+  printf("Progress: %3d%% (%6d/%6d)\n", int(p), int(y), int(height)); fflush(stdout);
+}
+
+void render_block(Image& image, const rt::ICamera *cam,
+                  const std::size_t y0, const std::size_t y1,
+                  const rt::Renderer& renderer, const std::size_t numSamples)
+{
+  const Image block = cam->render(image.width(), image.height(), y0, y1, renderer, numSamples);
+  image.copy(y0, block);
+  print_progress(y1, image.height(), true);
 }
 
 int main(int /*argc*/, char ** /*argv*/)
@@ -66,8 +75,25 @@ int main(int /*argc*/, char ** /*argv*/)
 
   rt::SimpleCamera cam;
   cam.setup(renderer.options().fov_rad);
-  Image image = cam.render(renderer.options().width, renderer.options().height,
-                           0, renderer.options().height, renderer, 64);
+
+  constexpr std::size_t  blockSize = 32;
+  constexpr std::size_t numSamples = 64;
+
+  const std::size_t  width = renderer.options().width;
+  const std::size_t height = renderer.options().height;
+  Image image(width, height);
+
+  const std::size_t numBlocks = height/blockSize;
+  for(std::size_t i = 0; i < numBlocks; i++) {
+    const std::size_t y = i*blockSize;
+    render_block(image, &cam, y, y + blockSize, renderer, numSamples);
+  }
+
+  const std::size_t numRemain = height%blockSize;
+  if( numRemain > 0 ) {
+    const std::size_t y = numBlocks*blockSize;
+    render_block(image, &cam, y, y + numRemain, renderer, numSamples);
+  }
 
   image.saveAsPNG("output.png");
 
