@@ -99,13 +99,19 @@ namespace rt {
     return Rayf{org, to_normal(org)};
   }
 
+  /*
+   * NOTE:
+   * Cf. to Scratchapixel v2.0 for the derivation of the window transform:
+   * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays/generating-camera-rays
+   */
+
   Matrix3f SimpleCamera::windowTransform(const std::size_t width, const std::size_t height) const
   {
     const real_T w = static_cast<real_T>(width);
     const real_T h = static_cast<real_T>(height);
     const real_T a = w/h;
-    const real_T n = -a/csTan(_fov_rad/TWO);
-    return Matrix3f{ TWO*a/w, 0, -a, 0, -TWO/h, 1, 0, 0, n };
+    const real_T n = csTan(_fov_rad/TWO);
+    return Matrix3f{ TWO*a*n/w, 0, -a*n, 0, -TWO*n/h, n, 0, 0, -1 };
   }
 
 } // namespace rt
