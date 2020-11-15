@@ -35,10 +35,11 @@
 #include <random>
 
 #include "Image.h"
-#include "rt/Renderer.h"
 #include "rt/Types.h"
 
 namespace rt {
+
+  class Renderer;
 
   class ICamera {
   public:

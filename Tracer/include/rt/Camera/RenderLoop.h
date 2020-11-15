@@ -45,9 +45,9 @@ namespace rt {
       uint8_t *row = image.row(y - y0);
       for(std::size_t x = 0; x < image.width(); x++) {
         const Color3f color = cs::clamp(radiance(x, y), 0, 1)*255;
-        *row++ = static_cast<real_T>(color.eval<0,0>());
-        *row++ = static_cast<real_T>(color.eval<1,0>());
-        *row++ = static_cast<real_T>(color.eval<2,0>());
+        *row++ = static_cast<uint8_t>(color.eval<0,0>());
+        *row++ = static_cast<uint8_t>(color.eval<1,0>());
+        *row++ = static_cast<uint8_t>(color.eval<2,0>());
         *row++ = 0xFF;
       }
     }

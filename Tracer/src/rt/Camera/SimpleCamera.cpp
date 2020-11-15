@@ -32,6 +32,7 @@
 #include "rt/Camera/SimpleCamera.h"
 
 #include "rt/Camera/RenderLoop.h"
+#include "rt/Renderer.h"
 
 namespace rt {
 
