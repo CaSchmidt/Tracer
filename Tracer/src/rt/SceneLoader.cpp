@@ -84,7 +84,13 @@ namespace rt {
       return false;
     }
 
-    const tinyxml2::XMLElement *node = xml_Tracer->FirstChildElement();
+    const tinyxml2::XMLElement *xml_Scene = xml_Tracer->FirstChildElement("Scene");
+    if( xml_Scene == nullptr ) {
+      fprintf(stderr, "Unable to initialize scene!\n");
+      return false;
+    }
+
+    const tinyxml2::XMLElement *node = xml_Scene->FirstChildElement();
     while( node != nullptr ) {
       if(        priv::compare(node->Name(), "Light") ) {
         LightSourcePtr light = priv::parseLight(node);
