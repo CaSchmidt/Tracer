@@ -54,9 +54,7 @@ namespace rt {
     }
     y0 = std::clamp<std::size_t>(y0, 0, height);
     y1 = std::clamp<std::size_t>(y1, 0, height);
-    if(        y1 <  y0 ) {
-      std::swap(y0, y1);
-    } else if( y0 == y1 ) {
+    if( y0 == y1  ||  y0 >= height ) {
       return Image();
     }
     return Image(width, y1 - y0);
