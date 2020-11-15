@@ -29,6 +29,8 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
+#include <cstring>
+
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
 
@@ -49,6 +51,16 @@ Image::Image(const size_type width, const size_type height,
 bool Image::isEmpty() const
 {
   return _buffer.empty();
+}
+
+bool Image::isValidX(const size_type x) const
+{
+  return !isEmpty()  &&  x >= 0  &&  x < width();
+}
+
+bool Image::isValidY(const size_type y) const
+{
+  return !isEmpty()  &&  y >= 0  &&  y < height();
 }
 
 void Image::clear()
@@ -81,7 +93,7 @@ bool Image::resize(const size_type width, const size_type height,
 
 uint8_t *Image::row(const size_type y) const
 {
-  if( isEmpty()  ||  y < 0  ||  y >= _height ) {
+  if( !isValidY(y) ) {
     return nullptr;
   }
   return const_cast<uint8_t*>(_buffer.data() + stride()*y);
@@ -89,9 +101,9 @@ uint8_t *Image::row(const size_type y) const
 
 void Image::fill(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a)
 {
-  for(size_type y = 0; y < _height; y++) {
+  for(size_type y = 0; y < height(); y++) {
     uint8_t *data = row(y);
-    for(size_type x = 0; x < _width; x++) {
+    for(size_type x = 0; x < width(); x++) {
       *data++ = r;
       *data++ = g;
       *data++ = b;
@@ -113,6 +125,16 @@ Image::size_type Image::width() const
 Image::size_type Image::height() const
 {
   return _height;
+}
+
+bool Image::copy(const size_type y, const Image& src)
+{
+  if( !isValidY(y)  ||  src.isEmpty()  ||
+      stride() != src.stride()  ||  y + src.height() > height() ) {
+    return false;
+  }
+  std::memcpy(row(y), src.row(0), src.height()*stride());
+  return true;
 }
 
 bool Image::saveAsPNG(const char *filename) const

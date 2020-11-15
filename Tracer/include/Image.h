@@ -49,6 +49,8 @@ public:
         const uint8_t a = 0xFF) noexcept;
 
   bool isEmpty() const;
+  bool isValidX(const size_type x) const;
+  bool isValidY(const size_type y) const;
 
   void clear();
   bool resize(const size_type width, const size_type height,
@@ -63,6 +65,8 @@ public:
   size_type stride() const;
   size_type width() const;
   size_type height() const;
+
+  bool copy(const size_type y, const Image& src);
 
   bool saveAsPNG(const char *filename) const;
 
