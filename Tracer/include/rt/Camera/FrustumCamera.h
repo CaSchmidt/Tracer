@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,46 +29,31 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <cstdio>
-#include <cstdlib>
+#ifndef FRUSTUMCAMERA_H
+#define FRUSTUMCAMERA_H
 
-#include "rt/Camera/FrustumCamera.h"
-#include "rt/Camera/SimpleCamera.h"
-#include "rt/Renderer.h"
-#include "rt/SceneLoader.h"
+#include "rt/Camera/ICamera.h"
 
-#include "Worker.h"
+namespace rt {
 
-#define BASE_PATH  "../../Tracer/Tracer/scenes/"
-#define FILE_1     BASE_PATH "scene_1.xml"
-#define FILE_2     BASE_PATH "scene_2.xml"
-#define FILE_3     BASE_PATH "scene_3.xml"
-#define FILE_4     BASE_PATH "scene_4.xml"
-#define FILE_TEXT  BASE_PATH "scene_text.xml"
+  class FrustumCamera : public ICamera {
+  public:
+    FrustumCamera();
+    ~FrustumCamera();
 
-constexpr std::size_t   numSamples = 64;
-constexpr rt::real_T worldToScreen =  2;
+    void setup(const real_T fov_rad, const real_T worldToScreen);
 
-int main(int /*argc*/, char ** /*argv*/)
-{
-  const char *filename = FILE_1;
+    Image render(const std::size_t width, const std::size_t height,
+                 std::size_t y0, std::size_t y1,
+                 const Renderer& renderer, const std::size_t samples = 0) const;
 
-  rt::Renderer renderer;
-  if( !rt::loadScene(renderer, filename) ) {
-    return EXIT_FAILURE;
-  }
+  private:
+    Matrix3f windowTransform(const std::size_t width, const std::size_t height) const;
 
-#if 1
-  rt::FrustumCamera cam;
-  cam.setup(renderer.options().fov_rad, worldToScreen);
-#else
-  rt::SimpleCamera cam;
-  cam.setup(renderer.options().fov_rad);
-#endif
+    real_T _fov_rad{};
+    real_T _worldToScreen{};
+  };
 
-  Worker worker;
-  const Image image = worker.execute(&cam, renderer, numSamples);
-  image.saveAsPNG("output.png");
+} // namespace rt
 
-  return EXIT_SUCCESS;
-}
+#endif // FRUSTUMCAMERA_H

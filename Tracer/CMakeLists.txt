@@ -41,6 +41,7 @@ set(Tracer_HEADERS
   include/rt/SceneLoader.h
   include/rt/SurfaceInfo.h
   include/rt/Types.h
+  include/rt/Camera/FrustumCamera.h
   include/rt/Camera/ICamera.h
   include/rt/Camera/RenderLoop.h
   include/rt/Camera/SimpleCamera.h
@@ -74,6 +75,7 @@ set(Tracer_SOURCES
   src/rt/SceneLoaderOptions.cpp
   src/rt/SceneLoaderText.cpp
   src/rt/SceneLoaderTexture.cpp
+  src/rt/Camera/FrustumCamera.cpp
   src/rt/Camera/ICamera.cpp
   src/rt/Camera/SimpleCamera.cpp
   src/rt/Light/DirectionalLight.cpp
