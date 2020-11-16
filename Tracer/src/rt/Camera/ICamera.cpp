@@ -65,6 +65,21 @@ namespace rt {
     return _randDis(*const_cast<std::mt19937*>(&_randGen));
   }
 
+  Rayf ICamera::ray(const Matrix3f& W, const std::size_t x, const std::size_t y,
+                    const bool random) const
+  {
+    const real_T dx = random
+        ? rand()
+        : ONE_HALF;
+    const real_T dy = random
+        ? rand()
+        : ONE_HALF;
+
+    const Vertex3f org = W*Vertex3f{static_cast<real_T>(x) + dx, static_cast<real_T>(y) + dy, 1};
+
+    return Rayf{org, to_normal(org)};
+  }
+
   ////// private /////////////////////////////////////////////////////////////
 
   void ICamera::rand_init()

@@ -48,10 +48,9 @@ namespace rt {
                  const Renderer& renderer, const std::size_t samples = 0) const;
 
   private:
-    Rayf ray(const Matrix3f& W, const std::size_t x, const std::size_t y, const bool random = false) const;
     Matrix3f windowTransform(const std::size_t width, const std::size_t height) const;
 
-    real_T _fov_rad;
+    real_T _fov_rad{};
   };
 
 } // namespace rt

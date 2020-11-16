@@ -54,6 +54,8 @@ namespace rt {
     Image create_image(const std::size_t width, const std::size_t height,
                        std::size_t& y0, std::size_t& y1) const;
     real_T rand() const;
+    Rayf ray(const Matrix3f& W, const std::size_t x, const std::size_t y,
+             const bool random = false) const;
 
   private:
     void rand_init();
