@@ -106,7 +106,7 @@ namespace rt {
     const real_T r =  wwrl/TWO;
     const real_T b = -hwrl/TWO;
     const real_T t =  hwrl/TWO;
-    const real_T n = wwrl/TWO/csTan(_fov_rad/TWO);
+    const real_T n = (r - l)/TWO/csTan(_fov_rad/TWO);
 
     const Matrix3f frustumInv{ // glFrustum()
       (r - l)/TWO, 0, (r + l)/TWO,
