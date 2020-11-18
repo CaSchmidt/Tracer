@@ -64,30 +64,30 @@ namespace geom {
 
     // Operators /////////////////////////////////////////////////////////////
 
-    constexpr Normal<T> operator*(const Normal<T>& n) const
+    inline Normal<T> operator*(const Normal<T>& n) const
     {
       return _Xn*n;
     }
 
-    constexpr Vertex<T> operator*(const Vertex<T>& v) const
+    inline Vertex<T> operator*(const Vertex<T>& v) const
     {
       return _X*v + _t;
     }
 
-    constexpr Transform<T> operator*(const Transform<T>& other) const
+    inline Transform<T> operator*(const Transform<T>& other) const
     {
       return Transform<T>{_X*other._X, _t + _X*other._t};
     }
 
-    constexpr Ray<T> operator*(const Ray<T>& ray) const
+    inline Ray<T> operator*(const Ray<T>& ray) const
     {
       return Ray<T>{_X*ray.origin() + _t, _X*ray.direction()};
     }
 
     // Special Transforms ////////////////////////////////////////////////////
 
-    static constexpr Transform<T> lookAt(const Vertex<T>& from, const Vertex<T>& to,
-                                         const Normal<T>& up)
+    static inline Transform<T> lookAt(const Vertex<T>& from, const Vertex<T>& to,
+                                      const Normal<T>& up)
     {
       const Normal<T> z = to_normal<T>(cs::direction(to, from)); // Looking along the NEGATIVE z-axis!
       const Normal<T> x = cs::normalize(cs::cross(up, z));
@@ -95,27 +95,27 @@ namespace geom {
       return Transform<T>{{ x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z }, from};
     }
 
-    static constexpr Transform<T> rotateX(const T& angle)
+    static inline Transform<T> rotateX(const T& angle)
     {
       return Transform<T>{geom::rotateX<T>(angle)};
     }
 
-    static constexpr Transform<T> rotateY(const T& angle)
+    static inline Transform<T> rotateY(const T& angle)
     {
       return Transform<T>{geom::rotateY<T>(angle)};
     }
 
-    static constexpr Transform<T> rotateZ(const T& angle)
+    static inline Transform<T> rotateZ(const T& angle)
     {
       return Transform<T>{geom::rotateZ<T>(angle)};
     }
 
-    static constexpr Transform<T> scale(const T& sx, const T& sy, const T& sz)
+    static inline Transform<T> scale(const T& sx, const T& sy, const T& sz)
     {
       return Transform<T>{geom::scale<T>(sx, sy, sz)};
     }
 
-    static constexpr Transform<T> translate(const Vertex<T>& t)
+    static inline Transform<T> translate(const Vertex<T>& t)
     {
       return Transform<T>{geom::identity<T>(), t};
     }
@@ -132,7 +132,7 @@ namespace geom {
 
     // Normal Transform //////////////////////////////////////////////////////
 
-    inline Matrix<T> normalTransform(bool *ok = nullptr) const
+    inline const Matrix<T>& normalTransform(bool *ok = nullptr) const
     {
       if( ok != nullptr ) {
         *ok = _haveInv;
@@ -142,12 +142,12 @@ namespace geom {
 
     // Element Access ////////////////////////////////////////////////////////
 
-    constexpr const Matrix<T>& scaledRotation() const
+    inline const Matrix<T>& scaledRotation() const
     {
       return _X;
     }
 
-    constexpr const Vertex<T>& translation() const
+    inline const Vertex<T>& translation() const
     {
       return _t;
     }

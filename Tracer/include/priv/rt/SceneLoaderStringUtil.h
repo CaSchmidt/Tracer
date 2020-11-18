@@ -48,7 +48,7 @@ namespace rt {
     }
 
     template<typename CharT>
-    constexpr std::size_t length(const CharT *s)
+    inline std::size_t length(const CharT *s)
     {
       return s != nullptr
           ? std::char_traits<CharT>::length(s)
@@ -66,7 +66,7 @@ namespace rt {
     }
 
     template<typename CharT>
-    constexpr bool isHexPrefix(const CharT *s)
+    inline bool isHexPrefix(const CharT *s)
     {
       constexpr CharT digit_0 = static_cast<CharT>('0');
       constexpr CharT  char_x = static_cast<CharT>('x');

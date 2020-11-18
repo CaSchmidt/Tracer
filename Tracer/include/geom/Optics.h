@@ -73,7 +73,7 @@ namespace geom {
   }
 
   template<typename T> // cf. GLSL v4.60, 8.5. Geometric Functions
-  constexpr Normal<T> reflect(const Normal<T>& I, const Normal<T>& N)
+  inline Normal<T> reflect(const Normal<T>& I, const Normal<T>& N)
   {
     return I - math::TWO<T>*cs::dot(I, N)*N;
   }

@@ -53,7 +53,7 @@ namespace rt {
       return ::rt::isHit(t)  &&  object != nullptr;
     }
 
-    constexpr const IObject *operator->() const
+    inline const IObject *operator->() const
     {
       return object;
     }

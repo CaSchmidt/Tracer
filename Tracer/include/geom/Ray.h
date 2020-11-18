@@ -67,17 +67,17 @@ namespace geom {
       return *this;
     }
 
-    constexpr Vertex<T> operator()(const T& t) const
+    inline Vertex<T> operator()(const T& t) const
     {
       return _org + to_vertex<T>(t*_dir);
     }
 
-    constexpr Vertex<T> origin() const
+    inline Vertex<T> origin() const
     {
       return _org;
     }
 
-    constexpr Normal<T> direction() const
+    inline Normal<T> direction() const
     {
       return _dir;
     }

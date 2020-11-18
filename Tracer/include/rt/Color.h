@@ -40,72 +40,71 @@
 
 namespace rt {
 
-  template<typename value_T, typename size_T, size_T ROWS, size_T COLS>
+  template<typename value_T, std::size_t ROWS, std::size_t COLS>
   struct ColorTraits {
-    using  size_type = size_T;
     using value_type = value_T;
 
-    static constexpr size_type Columns = COLS;
-    static constexpr size_type    Rows = ROWS;
-    static constexpr size_type    Size = COLS*ROWS;
+    static constexpr std::size_t Columns = COLS;
+    static constexpr std::size_t    Rows = ROWS;
+    static constexpr std::size_t    Size = COLS*ROWS;
   };
 
   template<typename T>
-  using Color = cs::Array<cs::Color3Manip<cs::RowMajorPolicy<ColorTraits<T,uint8_t,3,1>>>>;
+  using Color = cs::Array<cs::Color3Manip<cs::RowMajorPolicy<ColorTraits<T,3,1>>>>;
 
   template<typename T>
   struct Colors {
-    static constexpr auto black()
+    static inline auto black()
     {
       return Color<T>{0, 0, 0};
     }
 
-    static constexpr auto white()
+    static inline auto white()
     {
       return Color<T>{1, 1, 1};
     }
 
-    static constexpr auto red()
+    static inline auto red()
     {
       return Color<T>{1, 0, 0};
     }
 
-    static constexpr auto green()
+    static inline auto green()
     {
       return Color<T>{0, 1, 0};
     }
 
-    static constexpr auto blue()
+    static inline auto blue()
     {
       return Color<T>{0, 0, 1};
     }
 
-    static constexpr auto cyan()
+    static inline auto cyan()
     {
       return Color<T>{0, 1, 1};
     }
 
-    static constexpr auto magenta()
+    static inline auto magenta()
     {
       return Color<T>{1, 0, 1};
     }
 
-    static constexpr auto yellow()
+    static inline auto yellow()
     {
       return Color<T>{1, 1, 0};
     }
 
-    static constexpr auto orange()
+    static inline auto orange()
     {
       return Color<T>{1,  0.5, 0};
     }
 
-    static constexpr auto indigo()
+    static inline auto indigo()
     {
       return Color<T>{0.25, 0, 1};
     }
 
-    static constexpr auto violet()
+    static inline auto violet()
     {
       return Color<T>{0.5,  0, 1};
     }

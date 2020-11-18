@@ -43,7 +43,7 @@
 namespace math {
 
   template<typename T>
-  constexpr T abs(const T& x, const T& y)
+  inline T abs(const T& x, const T& y)
   {
     return csSqrt(x*x + y*y);
   }
@@ -55,7 +55,7 @@ namespace math {
   }
 
   template<typename T>
-  constexpr T phase(const T& x, const T& y)
+  inline T phase(const T& x, const T& y)
   {
     // atan2(y,x) -> phi := [-pi,pi]
     T phi = csATan2(y, x);
@@ -66,15 +66,15 @@ namespace math {
   }
 
   template<typename T>
-  constexpr T pythagoras(const T& x)
+  inline T pythagoras(const T& x)
   {
     // x^2 + y^2 = 1  =>  y = sqrt(1 - x^2)
     return csSqrt(csMax(ZERO<T>, ONE<T> - x*x));
   }
 
   template<typename T>
-  constexpr bool quadratic(const T& _a, const T& _b, const T& _c,
-                           T& x1, T& x2)
+  inline bool quadratic(const T& _a, const T& _b, const T& _c,
+                        T& x1, T& x2)
   {
     x1 = x2 = qNaN<T>;
 

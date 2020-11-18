@@ -72,61 +72,61 @@ namespace geom {
   // Helpers /////////////////////////////////////////////////////////////////
 
   template<typename T>
-  constexpr auto identity()
+  inline auto identity()
   {
     return cs::identity<Matrix<T>::traits_type>();
   }
 
   template<typename T>
-  constexpr auto rotateX(const T& angle)
+  inline auto rotateX(const T& angle)
   {
     return cs::rotateX<Matrix<T>::traits_type>(angle);
   }
 
   template<typename T>
-  constexpr auto rotateY(const T& angle)
+  inline auto rotateY(const T& angle)
   {
     return cs::rotateY<Matrix<T>::traits_type>(angle);
   }
 
   template<typename T>
-  constexpr auto rotateZ(const T& angle)
+  inline auto rotateZ(const T& angle)
   {
     return cs::rotateZ<Matrix<T>::traits_type>(angle);
   }
 
   template<typename T>
-  constexpr auto scale(const T& sx, const T& sy, const T& sz)
+  inline auto scale(const T& sx, const T& sy, const T& sz)
   {
     return cs::scale<Matrix<T>::traits_type>(sx, sy, sz);
   }
 
   template<typename T, typename EXPR>
-  constexpr auto to_normal(const EXPR& expr)
+  inline auto to_normal(const EXPR& expr)
   {
     return cs::array_cast<Normal<T>::traits_type>(expr);
   }
 
   template<typename T, typename EXPR>
-  constexpr auto to_vertex(const EXPR& expr)
+  inline auto to_vertex(const EXPR& expr)
   {
     return cs::array_cast<Vertex<T>::traits_type>(expr);
   }
 
   template<typename T>
-  constexpr auto xAxis()
+  inline auto xAxis()
   {
     return T(cs::xAxis<typename T::traits_type>());
   }
 
   template<typename T>
-  constexpr auto yAxis()
+  inline auto yAxis()
   {
     return T(cs::yAxis<typename T::traits_type>());
   }
 
   template<typename T>
-  constexpr auto zAxis()
+  inline auto zAxis()
   {
     return T(cs::zAxis<typename T::traits_type>());
   }
@@ -134,7 +134,7 @@ namespace geom {
   // Operators ///////////////////////////////////////////////////////////////
 
   template<typename T>
-  constexpr Normal<T> operator*(const Matrix<T>& M, const Normal<T>& n)
+  inline Normal<T> operator*(const Matrix<T>& M, const Normal<T>& n)
   {
     return to_normal<T>(M*to_vertex<T>(n));
   }
