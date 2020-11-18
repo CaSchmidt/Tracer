@@ -48,12 +48,24 @@ namespace geom {
     Ray& operator=(Ray&&) noexcept = default;
 
     Ray(const Vertex<T>& org, const Normal<T>& dir) noexcept
-      : _org{org}
-      , _dir{cs::normalize(dir)}
     {
+      operator=(org);
+      operator=(dir);
     }
 
     ~Ray() noexcept = default;
+
+    Ray<T>& operator=(const Vertex<T>& org)
+    {
+      _org = org;
+      return *this;
+    }
+
+    Ray<T>& operator=(const Normal<T>& dir)
+    {
+      _dir = cs::normalize(dir);
+      return *this;
+    }
 
     constexpr Vertex<T> operator()(const T& t) const
     {
