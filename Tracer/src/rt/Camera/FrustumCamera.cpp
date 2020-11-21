@@ -47,10 +47,27 @@ namespace rt {
   {
   }
 
-  void FrustumCamera::setup(const real_T fov_rad, const real_T worldToScreen)
+  bool FrustumCamera::setup(const real_T fov_rad, const real_T worldToScreen,
+                            const real_T aperture, const real_T focus)
   {
-    _fov_rad       = fov_rad;
+    _fov_rad = _worldToScreen = 0;
+
+    if( fov_rad <= ZERO  ||  fov_rad >= static_cast<real_T>(0.99)*PI  ||
+        worldToScreen <= ZERO ) {
+      return false;
+    }
+
+    _fov_rad = fov_rad;
     _worldToScreen = worldToScreen;
+
+    if( aperture >= ZERO  &&  focus >= ZERO ) {
+      _rLens  = aperture/TWO;
+      _zFocus = -focus;
+    } else {
+      _rLens = _zFocus = 0;
+    }
+
+    return true;
   }
 
   Image FrustumCamera::render(const std::size_t width, const std::size_t height,
@@ -62,17 +79,53 @@ namespace rt {
       return Image();
     }
 
-    const Matrix3f W = windowTransform(width, height);
+    const Matrix3f W = windowTransform(width, height, _fov_rad, _worldToScreen);
 
     if( samples > 1 ) {
-      render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color3f {
-        Color3f color;
-        for(std::size_t s = 0; s < samples; s++) {
-          color += cs::clamp(renderer.castCameraRay(ray(W, x, y, true)), 0, 1);
-        }
-        color /= static_cast<real_T>(samples);
-        return color;
-      });
+      if( _rLens > ZERO  &&  _zFocus < ZERO ) {
+        const real_T _zNear = W(2, 2);
+        render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color3f {
+                      Color3f color;
+                      for(std::size_t s = 0; s < samples; s++) {
+                        // (1) Sample Disc ///////////////////////////////////
+
+                        const Vertex3f pl = _rLens*sampleDisc();
+
+                        // (2) Primary Ray to Screen /////////////////////////
+
+                        const Vertex3f ps = ray(W, x, y).origin();
+
+                        // (3) Primary Ray's Focus ///////////////////////////
+
+                        const Vertex3f pf{ ps.x*_zFocus/_zNear, ps.y*_zFocus/_zNear, _zFocus};
+
+                        // (4) Image Ray's Direction /////////////////////////
+
+                        const Normal3f di = to_normal(cs::direction(pl, pf));
+
+                        // (5) Image Ray /////////////////////////////////////
+
+                        const real_T tNear = _zNear/di.z;
+                        const Vertex3f  oi{ pl.x + tNear*di.x, pl.y + tNear*di.y, _zNear};
+                        const Rayf    rayi{ oi, di };
+
+                        // (6) Cast Ray //////////////////////////////////////
+
+                        color += cs::clamp(renderer.castCameraRay(rayi), 0, 1);
+                      }
+                      color /= static_cast<real_T>(samples);
+                      return color;
+                    });
+      } else {
+        render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color3f {
+          Color3f color;
+          for(std::size_t s = 0; s < samples; s++) {
+            color += cs::clamp(renderer.castCameraRay(ray(W, x, y, true)), 0, 1);
+          }
+          color /= static_cast<real_T>(samples);
+          return color;
+        });
+      }
     } else {
       render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color3f {
         return renderer.castCameraRay(ray(W, x, y));
@@ -84,7 +137,17 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Matrix3f FrustumCamera::windowTransform(const std::size_t width, const std::size_t height) const
+  Vertex3f FrustumCamera::sampleDisc() const
+  {
+    Vertex3f v;
+    do {
+      v = TWO*Vertex3f{rand(), rand(), 0} - Vertex3f{1, 1, 0};
+    } while( cs::dot(v, v) >= ONE );
+    return v;
+  }
+
+  Matrix3f FrustumCamera::windowTransform(const std::size_t width, const std::size_t height,
+                                          const real_T fov_rad, const real_T worldToScreen)
   {
     // Screen
     const real_T wscr = static_cast<real_T>(width);
@@ -98,7 +161,7 @@ namespace rt {
 
     // World
     const real_T a = wscr/hscr;
-    const real_T hwrl = _worldToScreen;
+    const real_T hwrl = worldToScreen;
     const real_T wwrl = a*hwrl;
 
     // Frustum
@@ -106,7 +169,7 @@ namespace rt {
     const real_T r =  wwrl/TWO;
     const real_T b = -hwrl/TWO;
     const real_T t =  hwrl/TWO;
-    const real_T n = (r - l)/TWO/csTan(_fov_rad/TWO);
+    const real_T n = (r - l)/TWO/csTan(fov_rad/TWO);
 
     const Matrix3f frustumInv{ // glFrustum()
       (r - l)/TWO, 0, (r + l)/TWO,

@@ -41,17 +41,22 @@ namespace rt {
     FrustumCamera();
     ~FrustumCamera();
 
-    void setup(const real_T fov_rad, const real_T worldToScreen);
+    bool setup(const real_T fov_rad, const real_T worldToScreen,
+               const real_T aperture = 0, const real_T focus = 0);
 
     Image render(const std::size_t width, const std::size_t height,
                  std::size_t y0, std::size_t y1,
                  const Renderer& renderer, const std::size_t samples = 0) const;
 
   private:
-    Matrix3f windowTransform(const std::size_t width, const std::size_t height) const;
+    Vertex3f sampleDisc() const;
+    static Matrix3f windowTransform(const std::size_t width, const std::size_t height,
+                                    const real_T fov_rad, const real_T worldToScreen);
 
     real_T _fov_rad{};
+    real_T _rLens{};
     real_T _worldToScreen{};
+    real_T _zFocus{};
   };
 
 } // namespace rt
