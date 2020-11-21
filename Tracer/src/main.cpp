@@ -39,19 +39,20 @@
 
 #include "Worker.h"
 
-#define BASE_PATH  "../../Tracer/Tracer/scenes/"
-#define FILE_1     BASE_PATH "scene_1.xml"
-#define FILE_2     BASE_PATH "scene_2.xml"
-#define FILE_3     BASE_PATH "scene_3.xml"
-#define FILE_4     BASE_PATH "scene_4.xml"
-#define FILE_TEXT  BASE_PATH "scene_text.xml"
+#define BASE_PATH     "../../Tracer/Tracer/scenes/"
+#define FILE_1        BASE_PATH "scene_1.xml"
+#define FILE_2        BASE_PATH "scene_2.xml"
+#define FILE_3        BASE_PATH "scene_3.xml"
+#define FILE_4        BASE_PATH "scene_4.xml"
+#define FILE_SPHERES  BASE_PATH "scene_spheres.xml"
+#define FILE_TEXT     BASE_PATH "scene_text.xml"
 
-constexpr std::size_t   numSamples = 64;
+constexpr std::size_t   numSamples = 128;
 constexpr rt::real_T worldToScreen =  2;
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-  const char *filename = FILE_1;
+  const char *filename = FILE_SPHERES;
 
   rt::Renderer renderer;
   if( !rt::loadScene(renderer, filename) ) {
@@ -59,8 +60,18 @@ int main(int /*argc*/, char ** /*argv*/)
   }
 
 #if 1
+# if 0
+  const rt::real_T aperture = 0;
+  const rt::real_T    focus = 0;
+# else
+  const rt::real_T aperture = 0.5;
+  const rt::real_T    focus = cs::distance(renderer.options().eye, renderer.options().lookAt);
+# endif
+  printf("aperture = %.3f\n", aperture);
+  printf("   focus = %.3f\n", focus);
+  fflush(stdout);
   rt::FrustumCamera cam;
-  cam.setup(renderer.options().fov_rad, worldToScreen);
+  cam.setup(renderer.options().fov_rad, worldToScreen, aperture, focus);
 #else
   rt::SimpleCamera cam;
   cam.setup(renderer.options().fov_rad);
