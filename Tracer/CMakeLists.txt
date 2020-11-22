@@ -68,20 +68,20 @@ set(Tracer_SOURCES
   src/Worker.cpp
   src/rt/Refraction.cpp
   src/rt/Renderer.cpp
-  src/rt/SceneLoader.cpp
-  src/rt/SceneLoaderBase.cpp
-  src/rt/SceneLoaderLight.cpp
-  src/rt/SceneLoaderMaterial.cpp
-  src/rt/SceneLoaderObject.cpp
-  src/rt/SceneLoaderOptions.cpp
-  src/rt/SceneLoaderText.cpp
-  src/rt/SceneLoaderTexture.cpp
   src/rt/Camera/FrustumCamera.cpp
   src/rt/Camera/ICamera.cpp
   src/rt/Camera/SimpleCamera.cpp
   src/rt/Light/DirectionalLight.cpp
   src/rt/Light/ILightSoruce.cpp
   src/rt/Light/PointLight.cpp
+  src/rt/Loader/SceneLoader.cpp
+  src/rt/Loader/SceneLoaderBase.cpp
+  src/rt/Loader/SceneLoaderLight.cpp
+  src/rt/Loader/SceneLoaderMaterial.cpp
+  src/rt/Loader/SceneLoaderObject.cpp
+  src/rt/Loader/SceneLoaderOptions.cpp
+  src/rt/Loader/SceneLoaderText.cpp
+  src/rt/Loader/SceneLoaderTexture.cpp
   src/rt/Material/IMaterial.cpp
   src/rt/Material/MirrorMaterial.cpp
   src/rt/Material/OpaqueMaterial.cpp
