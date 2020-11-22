@@ -48,7 +48,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      const real_T height = parseNodeAsFloat<real_T>(node->FirstChildElement("Height"), &myOk);
+      const real_T height = parseReal(node->FirstChildElement("Height"), &myOk);
       if( !myOk  ||  height <= 0 ) {
         return ObjectPtr();
       }
@@ -58,7 +58,7 @@ namespace rt {
         return ObjectPtr();
       }
 
-      const real_T radius = parseNodeAsFloat<real_T>(node->FirstChildElement("Radius"), &myOk);
+      const real_T radius = parseReal(node->FirstChildElement("Radius"), &myOk);
       if( !myOk  ||  radius <= 0 ) {
         return ObjectPtr();
       }
@@ -75,7 +75,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      const real_T height = parseNodeAsFloat<real_T>(node->FirstChildElement("Height"), &myOk);
+      const real_T height = parseReal(node->FirstChildElement("Height"), &myOk);
       if( !myOk  ||  height <= 0 ) {
         return ObjectPtr();
       }
@@ -90,7 +90,7 @@ namespace rt {
         return ObjectPtr();
       }
 
-      const real_T width = parseNodeAsFloat<real_T>(node->FirstChildElement("Width"), &myOk);
+      const real_T width = parseReal(node->FirstChildElement("Width"), &myOk);
       if( !myOk  ||  width <= 0 ) {
         return ObjectPtr();
       }
@@ -107,7 +107,7 @@ namespace rt {
         return ObjectPtr();
       }
 
-      const real_T radius = parseNodeAsFloat<real_T>(node->FirstChildElement("Radius"), &myOk);
+      const real_T radius = parseReal(node->FirstChildElement("Radius"), &myOk);
       if( !myOk  ||  radius <= 0 ) {
         return ObjectPtr();
       }

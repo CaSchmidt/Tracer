@@ -108,12 +108,12 @@ namespace rt {
 
       bool myOk = false;
 
-      const real_T dx = parseNodeAsFloat<real_T>(node->FirstChildElement("dx"), &myOk);
+      const real_T dx = parseReal(node->FirstChildElement("dx"), &myOk);
       if( !myOk  ||  dx <= 0 ) {
         return Objects();
       }
 
-      const real_T dz = parseNodeAsFloat<real_T>(node->FirstChildElement("dz"), &myOk);
+      const real_T dz = parseReal(node->FirstChildElement("dz"), &myOk);
       if( !myOk  ||  dz <= 0 ) {
         return Objects();
       }
@@ -123,7 +123,7 @@ namespace rt {
         return Objects();
       }
 
-      const real_T radius = parseNodeAsFloat<real_T>(node->FirstChildElement("Radius"), &myOk);
+      const real_T radius = parseReal(node->FirstChildElement("Radius"), &myOk);
       if( !myOk  ||  radius <= 0 ) {
         return Objects();
       }

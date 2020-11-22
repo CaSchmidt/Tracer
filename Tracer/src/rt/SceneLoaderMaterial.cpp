@@ -49,7 +49,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      const real_T reflectance = parseNodeAsFloat<real_T>(node->FirstChildElement("Reflectance"), &myOk);
+      const real_T reflectance = parseReal(node->FirstChildElement("Reflectance"), &myOk);
       if( !myOk  ||  reflectance <= 0 ) {
         return MaterialPtr();
       }
@@ -71,7 +71,7 @@ namespace rt {
 
       real_T shininess = 0;
       if( node->FirstChildElement("Shininess") != nullptr ) {
-        shininess = parseNodeAsFloat<real_T>(node->FirstChildElement("Shininess"), &myOk);
+        shininess = parseReal(node->FirstChildElement("Shininess"), &myOk);
         if( !myOk  ||  shininess < 1 ) {
           return MaterialPtr();
         }
@@ -97,7 +97,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      const real_T refraction = parseNodeAsFloat<real_T>(node->FirstChildElement("Refraction"), &myOk);
+      const real_T refraction = parseReal(node->FirstChildElement("Refraction"), &myOk);
       if( !myOk  ||  refraction < 1 ) {
         return MaterialPtr();
       }

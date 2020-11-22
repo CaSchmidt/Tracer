@@ -38,129 +38,19 @@
 
 #include <tinyxml2.h>
 
-#include "rt/Loader/SceneLoaderStringUtil.h"
 #include "rt/Types.h"
 
 namespace rt {
 
   namespace priv {
 
-    template<typename T>
-    inline T parseNodeAsInt(const tinyxml2::XMLElement *node, bool *ok = nullptr)
-    {
-      if( ok != nullptr ) {
-        *ok = false;
-      }
-
-      if( node == nullptr  ||  length(node->GetText()) < 1 ) {
-        return T();
-      }
-
-      int base = 10;
-      const char *s = skipSpace(node->GetText());
-      if( length(s) > 0  &&  s[0] == '+' ) {
-        s += 1;
-      }
-      if( isHexPrefix(s) ) {
-        base = 16;
-        s += 2;
-      }
-
-      std::enable_if_t<std::is_integral_v<T>,T> value;
-      const std::from_chars_result result = std::from_chars(s, s + length(s), value, base);
-      if( result.ec != std::errc() ) {
-        return T();
-      }
-
-      if( ok != nullptr ) {
-        *ok = true;
-      }
-
-      return value;
-    }
-
-    template<typename T>
-    inline T parseNodeAsFloat(const tinyxml2::XMLElement *node, bool *ok = nullptr)
-    {
-      if( ok != nullptr ) {
-        *ok = false;
-      }
-
-      if( node == nullptr  ||  length(node->GetText()) < 1 ) {
-        return T();
-      }
-
-      std::chars_format fmt = std::chars_format::general;
-      const char *s = skipSpace(node->GetText());
-      if( length(s) > 0  &&  s[0] == '+' ) {
-        s += 1;
-      }
-      if( isHexPrefix(s) ) {
-        fmt = std::chars_format::hex;
-        s += 2;
-      }
-
-      std::enable_if_t<std::is_floating_point_v<T>,T> value;
-      const std::from_chars_result result = std::from_chars(s, s + length(s), value, fmt);
-      if( result.ec != std::errc() ) {
-        return T();
-      }
-
-      if( ok != nullptr ) {
-        *ok = true;
-      }
-
-      return value;
-    }
-
-    template<typename T>
-    T parseVector3D(const tinyxml2::XMLElement *node,
-                    const char *id0, const char *id1, const char *id2,
-                    bool *ok = nullptr)
-    {
-      using value_type = typename T::value_type;
-
-      if( ok != nullptr ) {
-        *ok = false;
-      }
-
-      if( node == nullptr ) {
-        return T();
-      }
-
-      bool myOk;
-      T result;
-
-      myOk = false;
-      result[0] = parseNodeAsFloat<value_type>(node->FirstChildElement(id0), &myOk);
-      if( !myOk ) {
-        return T();
-      }
-
-      myOk = false;
-      result[1] = parseNodeAsFloat<value_type>(node->FirstChildElement(id1), &myOk);
-      if( !myOk ) {
-        return T();
-      }
-
-      myOk = false;
-      result[2] = parseNodeAsFloat<value_type>(node->FirstChildElement(id2), &myOk);
-      if( !myOk ) {
-        return T();
-      }
-
-      if( ok != nullptr ) {
-        *ok = true;
-      }
-
-      return result;
-    }
-
     real_T parseAngle(const tinyxml2::XMLElement *node, bool *ok);
 
     Color3f parseColor(const tinyxml2::XMLElement *node, bool *ok, const bool clamp = true);
 
     Normal3f parseNormal(const tinyxml2::XMLElement *node, bool *ok);
+
+    real_T parseReal(const tinyxml2::XMLElement *node, bool *ok);
 
     Matrix3f parseRotation(const tinyxml2::XMLElement *node, bool *ok);
 

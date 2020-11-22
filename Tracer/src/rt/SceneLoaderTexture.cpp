@@ -53,12 +53,12 @@ namespace rt {
         return TexturePtr();
       }
 
-      const real_T scaleS = parseNodeAsFloat<real_T>(node->FirstChildElement("ScaleS"), &myOk);
+      const real_T scaleS = parseReal(node->FirstChildElement("ScaleS"), &myOk);
       if( !myOk  ||  scaleS <= 0 ) {
         return TexturePtr();
       }
 
-      const real_T scaleT = parseNodeAsFloat<real_T>(node->FirstChildElement("ScaleT"), &myOk);
+      const real_T scaleT = parseReal(node->FirstChildElement("ScaleT"), &myOk);
       if( !myOk  ||  scaleT <= 0 ) {
         return TexturePtr();
       }
