@@ -74,6 +74,12 @@ namespace rt {
     const Vertex3f   lookAtC = xfrmCW*_options.lookAt;
     const Normal3f cameraUpC = xfrmCW.scaledRotation()*_options.cameraUp;
 
+    /*
+     * NOTE:
+     * The view transform is comprised of two transforms:
+     * 1. camera coordinates are aligned using a look-at transform in camera space
+     * 2. camera space is transformed to world space
+     */
     _view = xfrmCW.inverse()*Transformf::lookAt(eyeC, lookAtC, cameraUpC);
 
     return true;
