@@ -36,11 +36,14 @@
 
 namespace rt {
 
+  struct RenderOptions;
+
   class FrustumCamera : public ICamera {
   public:
     FrustumCamera();
     ~FrustumCamera();
 
+    bool setup(const RenderOptions& options);
     bool setup(const real_T fov_rad, const real_T worldToScreen,
                const real_T aperture = 0, const real_T focus = 0);
 

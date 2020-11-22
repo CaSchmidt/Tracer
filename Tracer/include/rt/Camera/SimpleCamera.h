@@ -36,11 +36,14 @@
 
 namespace rt {
 
+  struct RenderOptions;
+
   class SimpleCamera : public ICamera {
   public:
     SimpleCamera();
     ~SimpleCamera();
 
+    bool setup(const RenderOptions& options);
     bool setup(const real_T fov_rad);
 
     Image render(const std::size_t width, const std::size_t height,

@@ -73,12 +73,14 @@ int main(int /*argc*/, char ** /*argv*/)
 
 #if 1
   rt::FrustumCamera cam;
-  cam.setup(renderer.options().fov_rad, renderer.options().worldToScreen,
-            renderer.options().aperture, renderer.options().focus);
 #else
   rt::SimpleCamera cam;
-  cam.setup(renderer.options().fov_rad);
 #endif
+
+  if( !cam.setup(renderer.options()) ) {
+    fprintf(stderr, "Unable to setup camera!\n");
+    return EXIT_FAILURE;
+  }
 
   Worker worker;
   const Image image = worker.execute(&cam, renderer, numSamples);

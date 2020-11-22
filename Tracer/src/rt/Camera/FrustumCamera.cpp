@@ -47,6 +47,12 @@ namespace rt {
   {
   }
 
+  bool FrustumCamera::setup(const RenderOptions& options)
+  {
+    return setup(options.fov_rad, options.worldToScreen,
+                 options.aperture, options.focus);
+  }
+
   bool FrustumCamera::setup(const real_T fov_rad, const real_T worldToScreen,
                             const real_T aperture, const real_T focus)
   {

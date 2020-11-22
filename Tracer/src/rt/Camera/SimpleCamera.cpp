@@ -47,6 +47,11 @@ namespace rt {
   {
   }
 
+  bool SimpleCamera::setup(const RenderOptions& options)
+  {
+    return setup(options.fov_rad);
+  }
+
   bool SimpleCamera::setup(const real_T fov_rad)
   {
     if( !isValidFoV(fov_rad) ) {
