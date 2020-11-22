@@ -47,8 +47,7 @@
 #define FILE_SPHERES  BASE_PATH "scene_spheres.xml"
 #define FILE_TEXT     BASE_PATH "scene_text.xml"
 
-constexpr std::size_t   numSamples = 128;
-constexpr rt::real_T worldToScreen =  2;
+constexpr std::size_t numSamples = 64;
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -59,19 +58,23 @@ int main(int /*argc*/, char ** /*argv*/)
     return EXIT_FAILURE;
   }
 
+#if 0
+  {
+    rt::RenderOptions opts = renderer.options();
+    opts.aperture = 0.5;
+    opts.focus    = cs::distance(renderer.options().eye, renderer.options().lookAt);
+    renderer.initialize(opts);
+
+    printf("aperture = %.3f\n", opts.aperture);
+    printf("   focus = %.3f\n", opts.focus);
+    fflush(stdout);
+  }
+#endif
+
 #if 1
-# if 1
-  const rt::real_T aperture = 0;
-  const rt::real_T    focus = 0;
-# else
-  const rt::real_T aperture = 0.5;
-  const rt::real_T    focus = cs::distance(renderer.options().eye, renderer.options().lookAt);
-# endif
-  printf("aperture = %.3f\n", aperture);
-  printf("   focus = %.3f\n", focus);
-  fflush(stdout);
   rt::FrustumCamera cam;
-  cam.setup(renderer.options().fov_rad, worldToScreen, aperture, focus);
+  cam.setup(renderer.options().fov_rad, renderer.options().worldToScreen,
+            renderer.options().aperture, renderer.options().focus);
 #else
   rt::SimpleCamera cam;
   cam.setup(renderer.options().fov_rad);

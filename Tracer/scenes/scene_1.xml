@@ -3,6 +3,7 @@
     <Width>1000</Width>
     <Height>1000</Height>
     <FoV>60</FoV>
+    <WorldToScreen>2</WorldToScreen>
     <BackgroundColor>
       <r>0</r>
       <g>0.8</g>

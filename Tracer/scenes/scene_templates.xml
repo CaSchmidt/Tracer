@@ -3,6 +3,9 @@
     <Width>size</Width>
     <Height>size</Height>
     <FoV>angle</FoV>
+    <WorldToScreen>real</WorldToScreen>
+    <Aperture>real</Aperture> <!-- OPTIONAL -->
+    <Focus>real</Focus> <!-- OPTIONAL -->
     <BackgroundColor>
       <r>real</r>
       <g>real</g>
