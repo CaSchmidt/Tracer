@@ -46,6 +46,9 @@ namespace rt {
     std::size_t  width{};
     std::size_t  height{};
     real_T       fov_rad{};
+    real_T       worldToScreen{};
+    real_T       aperture{};
+    real_T       focus{};
     unsigned int maxDepth{15};
     real_T       globalRefraction{1};
   };

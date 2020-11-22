@@ -30,7 +30,7 @@
 *****************************************************************************/
 
 #include "rt/Loader/SceneLoaderBase.h"
-#include "rt/Renderer.h"
+#include "rt/RenderOptions.h"
 
 namespace rt {
 
@@ -62,6 +62,21 @@ namespace rt {
       opts.fov_rad = parseAngle(node->FirstChildElement("FoV"), &myOk);
       if( !myOk ) {
         return RenderOptions();
+      }
+
+      opts.worldToScreen = parseReal(node->FirstChildElement("WorldToScreen"), &myOk);
+      if( !myOk ) {
+        return RenderOptions();
+      }
+
+      opts.aperture = parseReal(node->FirstChildElement("Aperture"), &myOk);
+      if( !myOk ) {
+        opts.aperture = 0;
+      }
+
+      opts.focus = parseReal(node->FirstChildElement("Focus"), &myOk);
+      if( !myOk ) {
+        opts.focus = 0;
       }
 
       opts.backgroundColor = parseColor(node->FirstChildElement("BackgroundColor"), &myOk);
