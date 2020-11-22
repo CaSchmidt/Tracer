@@ -41,40 +41,6 @@ namespace rt {
     ////// Implementation ////////////////////////////////////////////////////
 
     template<typename T>
-    inline T parseNodeAsInt(const tinyxml2::XMLElement *node, bool *ok = nullptr)
-    {
-      if( ok != nullptr ) {
-        *ok = false;
-      }
-
-      if( node == nullptr  ||  length(node->GetText()) < 1 ) {
-        return T();
-      }
-
-      int base = 10;
-      const char *s = skipSpace(node->GetText());
-      if( length(s) > 0  &&  s[0] == '+' ) {
-        s += 1;
-      }
-      if( isHexPrefix(s) ) {
-        base = 16;
-        s += 2;
-      }
-
-      std::enable_if_t<std::is_integral_v<T>,T> value;
-      const std::from_chars_result result = std::from_chars(s, s + length(s), value, base);
-      if( result.ec != std::errc() ) {
-        return T();
-      }
-
-      if( ok != nullptr ) {
-        *ok = true;
-      }
-
-      return value;
-    }
-
-    template<typename T>
     inline T parseNodeAsFloat(const tinyxml2::XMLElement *node, bool *ok = nullptr)
     {
       if( ok != nullptr ) {
@@ -97,6 +63,40 @@ namespace rt {
 
       std::enable_if_t<std::is_floating_point_v<T>,T> value;
       const std::from_chars_result result = std::from_chars(s, s + length(s), value, fmt);
+      if( result.ec != std::errc() ) {
+        return T();
+      }
+
+      if( ok != nullptr ) {
+        *ok = true;
+      }
+
+      return value;
+    }
+
+    template<typename T>
+    inline T parseNodeAsInt(const tinyxml2::XMLElement *node, bool *ok = nullptr)
+    {
+      if( ok != nullptr ) {
+        *ok = false;
+      }
+
+      if( node == nullptr  ||  length(node->GetText()) < 1 ) {
+        return T();
+      }
+
+      int base = 10;
+      const char *s = skipSpace(node->GetText());
+      if( length(s) > 0  &&  s[0] == '+' ) {
+        s += 1;
+      }
+      if( isHexPrefix(s) ) {
+        base = 16;
+        s += 2;
+      }
+
+      std::enable_if_t<std::is_integral_v<T>,T> value;
+      const std::from_chars_result result = std::from_chars(s, s + length(s), value, base);
       if( result.ec != std::errc() ) {
         return T();
       }
