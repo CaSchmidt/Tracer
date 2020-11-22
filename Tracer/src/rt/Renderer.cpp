@@ -69,11 +69,12 @@ namespace rt {
 
     const Transformf xfrmCW{Transformf::rotateX(-PI_HALF)};
 
-    const Vertex3f      eye = xfrmCW*_options.eye;
-    const Vertex3f   lookAt = xfrmCW*_options.lookAt;
-    const Normal3f cameraUp = xfrmCW.scaledRotation()*_options.cameraUp;
+    // Transform camera setup from world to camera coordinates...
+    const Vertex3f      eyeC = xfrmCW*_options.eye;
+    const Vertex3f   lookAtC = xfrmCW*_options.lookAt;
+    const Normal3f cameraUpC = xfrmCW.scaledRotation()*_options.cameraUp;
 
-    _view = xfrmCW.inverse()*Transformf::lookAt(eye, lookAt, cameraUp);
+    _view = xfrmCW.inverse()*Transformf::lookAt(eyeC, lookAtC, cameraUpC);
 
     return true;
   }

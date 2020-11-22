@@ -86,10 +86,17 @@ namespace geom {
 
     // Special Transforms ////////////////////////////////////////////////////
 
+    /*
+     * NOTE:
+     * lookAt() uses OpenGL's camera conventions (AKA is right-handed):
+     * - the viewer looks along the negative z axis
+     * - x points right
+     * - y points up
+     */
     static inline Transform<T> lookAt(const Vertex<T>& from, const Vertex<T>& to,
                                       const Normal<T>& up)
     {
-      const Normal<T> z = to_normal<T>(cs::direction(to, from)); // Looking along the NEGATIVE z-axis!
+      const Normal<T> z = to_normal<T>(cs::direction(to, from)); // Looking along the NEGATIVE z axis!
       const Normal<T> x = cs::normalize(cs::cross(up, z));
       const Normal<T> y = cs::normalize(cs::cross(z, x));
       return Transform<T>{{ x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z }, from};
