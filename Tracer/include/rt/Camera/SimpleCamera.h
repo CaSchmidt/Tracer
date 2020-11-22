@@ -41,7 +41,7 @@ namespace rt {
     SimpleCamera();
     ~SimpleCamera();
 
-    void setup(const real_T fov_rad);
+    bool setup(const real_T fov_rad);
 
     Image render(const std::size_t width, const std::size_t height,
                  std::size_t y0, std::size_t y1,

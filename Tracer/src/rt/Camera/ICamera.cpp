@@ -60,6 +60,11 @@ namespace rt {
     return Image(width, y1 - y0);
   }
 
+  bool ICamera::isValidFoV(const real_T fov_rad)
+  {
+    return ZERO < fov_rad  &&  fov_rad < PI;
+  }
+
   real_T ICamera::rand() const
   {
     return _randDis(*const_cast<std::mt19937*>(&_randGen));

@@ -47,9 +47,13 @@ namespace rt {
   {
   }
 
-  void SimpleCamera::setup(const real_T fov_rad)
+  bool SimpleCamera::setup(const real_T fov_rad)
   {
+    if( !isValidFoV(fov_rad) ) {
+      return false;
+    }
     _fov_rad = fov_rad;
+    return true;
   }
 
   Image SimpleCamera::render(const std::size_t width, const std::size_t height,

@@ -52,8 +52,7 @@ namespace rt {
   {
     _fov_rad = _worldToScreen = 0;
 
-    if( fov_rad <= ZERO  ||  fov_rad >= static_cast<real_T>(0.99)*PI  ||
-        worldToScreen <= ZERO ) {
+    if( !isValidFoV(fov_rad)  ||  worldToScreen <= ZERO ) {
       return false;
     }
 
