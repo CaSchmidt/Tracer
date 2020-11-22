@@ -29,7 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "priv/rt/SceneLoaderBase.h"
+#include "rt/Loader/SceneLoaderBase.h"
 #include "rt/Renderer.h"
 
 namespace rt {

@@ -38,9 +38,9 @@
 
 #include <tinyxml2.h>
 
-#include "rt/SceneLoader.h"
+#include "rt/Loader/SceneLoader.h"
 
-#include "priv/rt/SceneLoaderStringUtil.h"
+#include "rt/Loader/SceneLoaderStringUtil.h"
 #include "rt/Renderer.h"
 
 namespace rt {

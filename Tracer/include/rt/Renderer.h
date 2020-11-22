@@ -34,22 +34,9 @@
 
 #include "rt/Light/ILightSource.h"
 #include "rt/Object/IObject.h"
+#include "rt/RenderOptions.h"
 
 namespace rt {
-
-  struct RenderOptions {
-    RenderOptions() = default;
-
-    Color3f      backgroundColor{};
-    Vertex3f     eye{};
-    Vertex3f     lookAt{};
-    Normal3f     cameraUp{};
-    std::size_t  width{};
-    std::size_t  height{};
-    real_T       fov_rad{};
-    unsigned int maxDepth{15};
-    real_T       globalRefraction{1};
-  };
 
   class Renderer {
   public:

@@ -34,7 +34,6 @@
 #include <mutex>
 
 #include "rt/Renderer.h"
-#include "rt/SceneLoader.h"
 
 #include "Worker.h"
 

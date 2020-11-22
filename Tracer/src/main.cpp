@@ -34,8 +34,8 @@
 
 #include "rt/Camera/FrustumCamera.h"
 #include "rt/Camera/SimpleCamera.h"
+#include "rt/Loader/SceneLoader.h"
 #include "rt/Renderer.h"
-#include "rt/SceneLoader.h"
 
 #include "Worker.h"
 
@@ -52,7 +52,7 @@ constexpr rt::real_T worldToScreen =  2;
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-  const char *filename = FILE_SPHERES;
+  const char *filename = FILE_1;
 
   rt::Renderer renderer;
   if( !rt::loadScene(renderer, filename) ) {
@@ -60,7 +60,7 @@ int main(int /*argc*/, char ** /*argv*/)
   }
 
 #if 1
-# if 0
+# if 1
   const rt::real_T aperture = 0;
   const rt::real_T    focus = 0;
 # else

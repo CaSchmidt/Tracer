@@ -33,12 +33,10 @@ set(Tracer_HEADERS
   include/math/Constants.h
   include/math/Logical.h
   include/math/Solver.h
-  include/priv/rt/SceneLoaderBase.h
-  include/priv/rt/SceneLoaderStringUtil.h
   include/rt/Color.h
   include/rt/Refraction.h
   include/rt/Renderer.h
-  include/rt/SceneLoader.h
+  include/rt/RenderOptions.h
   include/rt/SurfaceInfo.h
   include/rt/Types.h
   include/rt/Camera/FrustumCamera.h
@@ -48,6 +46,9 @@ set(Tracer_HEADERS
   include/rt/Light/DirectionalLight.h
   include/rt/Light/ILightSource.h
   include/rt/Light/PointLight.h
+  include/rt/Loader/SceneLoader.h
+  include/rt/Loader/SceneLoaderBase.h
+  include/rt/Loader/SceneLoaderStringUtil.h
   include/rt/Material/IMaterial.h
   include/rt/Material/MirrorMaterial.h
   include/rt/Material/OpaqueMaterial.h

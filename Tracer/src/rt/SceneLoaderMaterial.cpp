@@ -29,7 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "priv/rt/SceneLoaderBase.h"
+#include "rt/Loader/SceneLoaderBase.h"
 #include "rt/Material/MirrorMaterial.h"
 #include "rt/Material/OpaqueMaterial.h"
 #include "rt/Material/TransparentMaterial.h"

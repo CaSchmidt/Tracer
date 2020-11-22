@@ -29,67 +29,27 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Loader/SceneLoaderBase.h"
-#include "rt/Light/DirectionalLight.h"
-#include "rt/Light/PointLight.h"
+#ifndef RENDEROPTIONS_H
+#define RENDEROPTIONS_H
+
+#include "rt/Types.h"
 
 namespace rt {
 
-  namespace priv {
+  struct RenderOptions {
+    RenderOptions() = default;
 
-    // Implementation ////////////////////////////////////////////////////////
-
-    LightSourcePtr parseDirectionalLight(const tinyxml2::XMLElement *node)
-    {
-      bool myOk = false;
-
-      const Color3f EL = parseColor(node->FirstChildElement("Irradiance"), &myOk, false);
-      if( !myOk ) {
-        return LightSourcePtr();
-      }
-
-      const Normal3f dir = parseNormal(node->FirstChildElement("Direction"), &myOk);
-      if( !myOk ) {
-        return LightSourcePtr();
-      }
-
-      return DirectionalLight::create(EL, dir);
-    }
-
-    LightSourcePtr parsePointLight(const tinyxml2::XMLElement *node)
-    {
-      bool myOk = false;
-
-      const Color3f IL = parseColor(node->FirstChildElement("Intensity"), &myOk, false);
-      if( !myOk ) {
-        return LightSourcePtr();
-      }
-
-      const Vertex3f pos = parseVertex(node->FirstChildElement("Position"), &myOk);
-      if( !myOk ) {
-        return LightSourcePtr();
-      }
-
-      return PointLight::create(IL, pos);
-    }
-
-    // Export ////////////////////////////////////////////////////////////////
-
-    LightSourcePtr parseLight(const tinyxml2::XMLElement *node)
-    {
-      if( node == nullptr ) {
-        return LightSourcePtr();
-      }
-
-      if(        node->Attribute("type", "Directional") != nullptr ) {
-        return parseDirectionalLight(node);
-      } else if( node->Attribute("type", "Point") != nullptr ) {
-        return parsePointLight(node);
-      }
-
-      return LightSourcePtr();
-    }
-
-  } // namespace priv
+    Color3f      backgroundColor{};
+    Vertex3f     eye{};
+    Vertex3f     lookAt{};
+    Normal3f     cameraUp{};
+    std::size_t  width{};
+    std::size_t  height{};
+    real_T       fov_rad{};
+    unsigned int maxDepth{15};
+    real_T       globalRefraction{1};
+  };
 
 } // namespace rt
+
+#endif // RENDEROPTIONS_H
