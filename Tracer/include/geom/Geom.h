@@ -113,24 +113,6 @@ namespace geom {
     return cs::array_cast<Vertex<T>::traits_type>(expr);
   }
 
-  template<typename T>
-  inline auto xAxis()
-  {
-    return T(cs::xAxis<typename T::traits_type>());
-  }
-
-  template<typename T>
-  inline auto yAxis()
-  {
-    return T(cs::yAxis<typename T::traits_type>());
-  }
-
-  template<typename T>
-  inline auto zAxis()
-  {
-    return T(cs::zAxis<typename T::traits_type>());
-  }
-
   // Operators ///////////////////////////////////////////////////////////////
 
   template<typename T>
