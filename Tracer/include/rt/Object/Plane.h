@@ -43,6 +43,7 @@ namespace rt {
     ~Plane() noexcept;
 
     bool intersect(SurfaceInfo& info, const Rayf& ray) const final;
+    bool intersect(const Rayf& ray) const;
 
     static ObjectPtr create(const Transformf& objectToWorld, MaterialPtr& material,
                             const real_T width, const real_T height);

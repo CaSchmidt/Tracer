@@ -83,6 +83,15 @@ namespace rt {
     return info.isHit();
   }
 
+  bool Cylinder::intersect(const Rayf& ray) const
+  {
+    const Rayf rayObj = _xfrmOW*ray;
+    return
+        intersectCylinderB(rayObj)     ||
+        intersectDiscB(rayObj, false)  ||
+        intersectDiscB(rayObj, true);
+  }
+
   ObjectPtr Cylinder::create(const Transformf& objectToWorld, MaterialPtr& material,
                              const real_T height, const real_T radius)
   {
@@ -101,7 +110,7 @@ namespace rt {
     }
 
     const Vertex3f Pobj = rayObj(info.t);
-    if( csAbs(Pobj.z) > _height/2 ) {
+    if( csAbs(Pobj.z) > _height/TWO ) {
       return SurfaceInfo();
     }
 
@@ -115,6 +124,19 @@ namespace rt {
     info.v = v;
 
     return info;
+  }
+
+  bool Cylinder::intersectCylinderB(const Rayf& rayObj) const
+  {
+    const real_T t = geom::intersect::cylinder(rayObj, _radius);
+    if( !isHit(t) ) {
+      return false;
+    }
+    const Vertex3f Pobj = rayObj(t);
+    if( csAbs(Pobj.z) > _height/TWO ) {
+      return false;
+    }
+    return true;
   }
 
   SurfaceInfo Cylinder::intersectDisc(const Rayf& rayObj, const bool bottom) const
@@ -131,16 +153,31 @@ namespace rt {
     const Vertex3f Pobj = rayObj(info.t);
     const real_T      u = math::phase<real_T>(Pobj.x, sign*Pobj.y)/TWO_PI;
     const real_T      v = math::abs<real_T>(Pobj.x, Pobj.y)/_radius;
-    if( v > 1 ) {
+    if( v > ONE ) {
       return SurfaceInfo();
     }
 
-    info.N = sign*(_xfrmWO*geom::zAxis<Normal3f>());
+    info.N = sign*(_xfrmWO*Normal3f{0, 0, 1});
     info.P = _xfrmWO*Pobj;
     info.u = u;
     info.v = v;
 
     return info;
+  }
+
+  bool Cylinder::intersectDiscB(const Rayf& rayObj, const bool bottom) const
+  {
+    const real_T sign = bottom ? -ONE : ONE;
+    const real_T    t = geom::intersect::plane(rayObj, sign*_height/2);
+    if( !isHit(t) ) {
+      return false;
+    }
+    const Vertex3f Pobj = rayObj(t);
+    const real_T      v = math::abs<real_T>(Pobj.x, Pobj.y)/_radius;
+    if( v > ONE ) {
+      return false;
+    }
+    return true;
   }
 
 } // namespace rt

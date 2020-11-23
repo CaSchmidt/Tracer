@@ -70,6 +70,15 @@ namespace rt {
     return info.isHit();
   }
 
+  bool Sphere::intersect(const Rayf& ray) const
+  {
+    const Rayf rayObj = _xfrmOW*ray;
+    if( !isHit(geom::intersect::sphere(rayObj, _radius)) ) {
+      return false;
+    }
+    return true;
+  }
+
   ObjectPtr Sphere::create(const Transformf& objectToWorld, MaterialPtr& material,
                            const real_T radius)
   {

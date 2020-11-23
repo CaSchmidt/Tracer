@@ -46,6 +46,8 @@ namespace rt {
   class IObject;
 
   struct SurfaceInfo {
+    static constexpr real_T NO_INTERSECTION = NAN_REAL_T;
+
     SurfaceInfo() noexcept = default;
 
     inline bool isHit() const
@@ -59,7 +61,7 @@ namespace rt {
     }
 
     // NOTE: All members are in world coordinates!
-    real_T   t{NAN_REAL_T};
+    real_T   t{NO_INTERSECTION};
     Vertex3f P{};
     Normal3f N{};
     real_T   u{}, v{};

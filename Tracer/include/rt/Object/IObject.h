@@ -36,7 +36,7 @@
 #include <memory>
 
 #include "rt/Material/IMaterial.h"
-#include "rt/SurfaceInfo.h"
+#include "rt/Scene/SurfaceInfo.h"
 
 namespace rt {
 
@@ -47,6 +47,7 @@ namespace rt {
 
     // NOTE: All arguments passed to/returned from this method are in WORLD coordinates!
     virtual bool intersect(SurfaceInfo& info, const Rayf& ray) const = 0;
+    virtual bool intersect(const Rayf& ray) const = 0;
 
     IMaterial *material();
     const IMaterial *material() const;

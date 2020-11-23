@@ -74,19 +74,35 @@ namespace rt {
     }
 
     const Vertex3f Pobj = rayObj(info.t);
-    const real_T      u = priv::normalized(cs::dot(Pobj, cs::xAxis<Vertex3f::traits_type>()), -_width/2,  _width);
-    const real_T      v = priv::normalized(cs::dot(Pobj, cs::yAxis<Vertex3f::traits_type>()), -_height/2, _height);
+    const real_T      u = priv::normalized(Pobj.x, -_width/2,  _width);
+    const real_T      v = priv::normalized(Pobj.y, -_height/2, _height);
     if( !priv::isBounding(u)  ||  !priv::isBounding(v) ) {
       return info.isHit();
     }
 
     info.object = this;
-    info.N      = _xfrmWO*geom::zAxis<Normal3f>();
+    info.N      = _xfrmWO*Normal3f{0, 0, 1};
     info.P      = _xfrmWO*Pobj;
     info.u      = u;
     info.v      = v;
 
     return info.isHit();
+  }
+
+  bool Plane::intersect(const Rayf& ray) const
+  {
+    const Rayf rayObj = _xfrmOW*ray;
+    const real_T    t = geom::intersect::plane(rayObj);
+    if( !isHit(t) ) {
+      return false;
+    }
+    const Vertex3f Pobj = rayObj(t);
+    const real_T      u = priv::normalized(Pobj.x, -_width/2,  _width);
+    const real_T      v = priv::normalized(Pobj.y, -_height/2, _height);
+    if( !priv::isBounding(u)  ||  !priv::isBounding(v) ) {
+      return false;
+    }
+    return true;
   }
 
   ObjectPtr Plane::create(const Transformf& objectToWorld, MaterialPtr& material,
