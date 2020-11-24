@@ -31,6 +31,8 @@
 
 #include "rt/Object/Sphere.h"
 
+#include "rt/Scene/SurfaceInfo.h"
+
 namespace rt {
 
   Sphere::Sphere(const Transformf& objectToWorld, MaterialPtr& material,

@@ -31,6 +31,8 @@
 
 #include "rt/Object/Cylinder.h"
 
+#include "rt/Scene/SurfaceInfo.h"
+
 namespace rt {
 
   namespace priv {

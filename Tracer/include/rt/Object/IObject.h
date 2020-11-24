@@ -36,9 +36,11 @@
 #include <memory>
 
 #include "rt/Material/IMaterial.h"
-#include "rt/Scene/SurfaceInfo.h"
+#include "rt/Types.h"
 
 namespace rt {
+
+  struct SurfaceInfo;
 
   class IObject {
   public:
