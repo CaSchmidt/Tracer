@@ -46,36 +46,31 @@ namespace rt {
   {
   }
 
-  bool Sphere::intersect(SurfaceInfo& info, const Rayf& ray) const
-  {
-    info = SurfaceInfo();
-
-    const Rayf rayObj = _xfrmOW*ray;
-    info.t = geom::intersect::sphere(rayObj, _radius);
-    if( !geom::intersect::isHit(info.t) ) {
-      return info.isHit();
-    }
-
-    const Vertex3f Pobj = rayObj(info.t);
-    const Normal3f Nobj = to_normal(cs::normalize(Pobj));
-    const real_T      u = math::phase<real_T>(Nobj.x, Nobj.y)/TWO_PI;
-    const real_T      v = csACos(csClamp(Nobj.z, -ONE, ONE))/PI;
-
-    info.object = this;
-    info.N      = _xfrmWO*Nobj;
-    info.P      = _xfrmWO*Pobj;
-    info.u      = u;
-    info.v      = v;
-
-    return info.isHit();
-  }
-
-  bool Sphere::intersect(const Rayf& ray) const
+  bool Sphere::intersect(SurfaceInfo *info, const Rayf& ray) const
   {
     const Rayf rayObj = _xfrmOW*ray;
-    if( !geom::intersect::isHit(geom::intersect::sphere(rayObj, _radius)) ) {
+
+    const real_T t = geom::intersect::sphere(rayObj, _radius);
+    if( !geom::intersect::isHit(t) ) {
       return false;
     }
+
+    if( info != nullptr ) {
+      const Vertex3f Pobj = rayObj(t);
+      const Normal3f Nobj = to_normal(cs::normalize(Pobj));
+      const real_T      u = math::phase<real_T>(Nobj.x, Nobj.y)/TWO_PI;
+      const real_T      v = csACos(csClamp(Nobj.z, -ONE, ONE))/PI;
+
+      *info = SurfaceInfo();
+
+      info->object = this;
+      info->t      = t;
+      info->N      = _xfrmWO*Nobj;
+      info->P      = _xfrmWO*Pobj;
+      info->u      = u;
+      info->v      = v;
+    }
+
     return true;
   }
 

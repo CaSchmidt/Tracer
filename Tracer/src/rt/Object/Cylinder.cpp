@@ -65,31 +65,36 @@ namespace rt {
   {
   }
 
-  bool Cylinder::intersect(SurfaceInfo& info, const Rayf& ray) const
+  bool Cylinder::intersect(SurfaceInfo *info, const Rayf& ray) const
   {
-    info = SurfaceInfo();
+    constexpr bool BOTTOM = true;
+    constexpr bool    TOP = false;
 
     const Rayf rayObj = _xfrmOW*ray;
 
-    priv::assign(info, intersectCylinder(rayObj));
-    priv::assign(info, intersectDisc(rayObj, false));
-    priv::assign(info, intersectDisc(rayObj, true));
-    if( !geom::intersect::isHit(info.t) ) {
-      return info.isHit();
+    if( info != nullptr ) {
+      *info = SurfaceInfo();
+
+      SurfaceInfo localInfo;
+      if( intersectCylinder(&localInfo, rayObj) ) {
+        priv::assign(*info, localInfo);
+      }
+      if( intersectDisc(&localInfo, rayObj, TOP) ) {
+        priv::assign(*info, localInfo);
+      }
+      if( intersectDisc(&localInfo, rayObj, BOTTOM) ) {
+        priv::assign(*info, localInfo);
+      }
+
+      info->object = this;
+
+      return info->isHit();
     }
 
-    info.object = this;
-
-    return info.isHit();
-  }
-
-  bool Cylinder::intersect(const Rayf& ray) const
-  {
-    const Rayf rayObj = _xfrmOW*ray;
     return
-        intersectCylinderB(rayObj)     ||
-        intersectDiscB(rayObj, false)  ||
-        intersectDiscB(rayObj, true);
+        intersectCylinder(nullptr, rayObj)       ||
+        intersectDisc(nullptr, rayObj, TOP)      ||
+        intersectDisc(nullptr, rayObj, BOTTOM);
   }
 
   ObjectPtr Cylinder::create(const Transformf& objectToWorld, MaterialPtr& material,
@@ -100,83 +105,61 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  SurfaceInfo Cylinder::intersectCylinder(const Rayf& rayObj) const
-  {
-    SurfaceInfo info;
-
-    info.t = geom::intersect::cylinder(rayObj, _radius);
-    if( !geom::intersect::isHit(info.t) ) {
-      return SurfaceInfo();
-    }
-
-    const Vertex3f Pobj = rayObj(info.t);
-    if( csAbs(Pobj.z) > _height/TWO ) {
-      return SurfaceInfo();
-    }
-
-    const Normal3f Nobj = cs::normalize(Normal3f{Pobj.x, Pobj.y, 0});
-    const real_T      u = math::phase<real_T>(Pobj.x, Pobj.y)/TWO_PI;
-    const real_T      v = (Pobj.z + _height/2)/_height;
-
-    info.N = _xfrmWO*Nobj;
-    info.P = _xfrmWO*Pobj;
-    info.u = u;
-    info.v = v;
-
-    return info;
-  }
-
-  bool Cylinder::intersectCylinderB(const Rayf& rayObj) const
+  bool Cylinder::intersectCylinder(SurfaceInfo *info, const Rayf& rayObj) const
   {
     const real_T t = geom::intersect::cylinder(rayObj, _radius);
     if( !geom::intersect::isHit(t) ) {
       return false;
     }
+
     const Vertex3f Pobj = rayObj(t);
     if( csAbs(Pobj.z) > _height/TWO ) {
       return false;
     }
-    return true;
+
+    if( info != nullptr ) {
+      const Normal3f Nobj = cs::normalize(Normal3f{Pobj.x, Pobj.y, 0});
+      const real_T      u = math::phase<real_T>(Pobj.x, Pobj.y)/TWO_PI;
+      const real_T      v = (Pobj.z + _height/2)/_height;
+
+      *info = SurfaceInfo();
+
+      info->t = t;
+      info->N = _xfrmWO*Nobj;
+      info->P = _xfrmWO*Pobj;
+      info->u = u;
+      info->v = v;
+    }
+
+    return false;
   }
 
-  SurfaceInfo Cylinder::intersectDisc(const Rayf& rayObj, const bool bottom) const
+  bool Cylinder::intersectDisc(SurfaceInfo *info, const Rayf& rayObj, const bool bottom) const
   {
-    SurfaceInfo info;
-
     const real_T sign = bottom  ?  -ONE : ONE;
 
-    info.t = geom::intersect::plane(rayObj, sign*_height/2);
-    if( !geom::intersect::isHit(info.t) ) {
-      return SurfaceInfo();
-    }
-
-    const Vertex3f Pobj = rayObj(info.t);
-    const real_T      u = math::phase<real_T>(Pobj.x, sign*Pobj.y)/TWO_PI;
-    const real_T      v = math::abs<real_T>(Pobj.x, Pobj.y)/_radius;
-    if( v > ONE ) {
-      return SurfaceInfo();
-    }
-
-    info.N = sign*(_xfrmWO*Normal3f{0, 0, 1});
-    info.P = _xfrmWO*Pobj;
-    info.u = u;
-    info.v = v;
-
-    return info;
-  }
-
-  bool Cylinder::intersectDiscB(const Rayf& rayObj, const bool bottom) const
-  {
-    const real_T sign = bottom ? -ONE : ONE;
-    const real_T    t = geom::intersect::plane(rayObj, sign*_height/2);
+    const real_T t = geom::intersect::plane(rayObj, sign*_height/2);
     if( !geom::intersect::isHit(t) ) {
       return false;
     }
+
     const Vertex3f Pobj = rayObj(t);
+    const real_T      u = math::phase<real_T>(Pobj.x, sign*Pobj.y)/TWO_PI;
     const real_T      v = math::abs<real_T>(Pobj.x, Pobj.y)/_radius;
     if( v > ONE ) {
       return false;
     }
+
+    if( info != nullptr ) {
+      *info = SurfaceInfo();
+
+      info->t = t;
+      info->N = sign*(_xfrmWO*Normal3f{0, 0, 1});
+      info->P = _xfrmWO*Pobj;
+      info->u = u;
+      info->v = v;
+    }
+
     return true;
   }
 

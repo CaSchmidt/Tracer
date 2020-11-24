@@ -42,17 +42,14 @@ namespace rt {
              const real_T height, const real_T radius) noexcept;
     ~Cylinder() noexcept;
 
-    bool intersect(SurfaceInfo& info, const Rayf& ray) const final;
-    bool intersect(const Rayf& ray) const;
+    bool intersect(SurfaceInfo *info, const Rayf& ray) const final;;
 
     static ObjectPtr create(const Transformf& objectToWorld, MaterialPtr& material,
                             const real_T height, const real_T radius);
 
   private:
-    SurfaceInfo intersectCylinder(const Rayf& rayObj) const;
-    bool intersectCylinderB(const Rayf& rayObj) const;
-    SurfaceInfo intersectDisc(const Rayf& rayObj, const bool bottom) const;
-    bool intersectDiscB(const Rayf& rayObj, const bool bottom) const;
+    bool intersectCylinder(SurfaceInfo *info, const Rayf& rayObj) const;
+    bool intersectDisc(SurfaceInfo *info, const Rayf& rayObj, const bool bottom) const;
 
     real_T _height{};
     real_T _radius{};

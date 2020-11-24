@@ -200,7 +200,7 @@ namespace rt {
         continue;
       }
       SurfaceInfo hit;
-      if( !object->intersect(hit, ray)  ||  hit.t >= tMax ) {
+      if( !object->intersect(&hit, ray)  ||  hit.t >= tMax ) {
         continue;
       }
       if( !result.isHit()  ||  hit.t < result.t ) {

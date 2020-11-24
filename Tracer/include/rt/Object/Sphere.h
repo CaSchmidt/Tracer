@@ -42,8 +42,7 @@ namespace rt {
            const real_T radius) noexcept;
     ~Sphere() noexcept;
 
-    bool intersect(SurfaceInfo& info, const Rayf& ray) const final;
-    bool intersect(const Rayf& ray) const;
+    bool intersect(SurfaceInfo *info, const Rayf& ray) const final;
 
     static ObjectPtr create(const Transformf& objectToWorld, MaterialPtr& material,
                             const real_T radius);
