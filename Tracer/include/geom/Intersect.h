@@ -47,6 +47,14 @@ namespace geom {
     template<typename T> inline constexpr T ZERO = math::ZERO<T>;
     template<typename T> inline constexpr T  TWO = math::TWO<T>;
 
+    // Functions /////////////////////////////////////////////////////////////
+
+    template<typename T>
+    inline bool isHit(const T& t)
+    {
+      return !std::isnan(t);
+    }
+
     // Intersection Tests ////////////////////////////////////////////////////
 
     template<typename T>

@@ -32,27 +32,19 @@
 #ifndef SURFACEINFO_H
 #define SURFACEINFO_H
 
-#include <cmath>
-
+#include "geom/Intersect.h"
 #include "rt/Types.h"
 
 namespace rt {
 
-  inline bool isHit(const real_T& t)
-  {
-    return !std::isnan(t);
-  }
-
   class IObject;
 
   struct SurfaceInfo {
-    static constexpr real_T NO_INTERSECTION = NAN_REAL_T;
-
     SurfaceInfo() noexcept = default;
 
     inline bool isHit() const
     {
-      return ::rt::isHit(t)  &&  object != nullptr;
+      return geom::intersect::isHit(t)  &&  object != nullptr;
     }
 
     inline const IObject *operator->() const
@@ -61,7 +53,7 @@ namespace rt {
     }
 
     // NOTE: All members are in world coordinates!
-    real_T   t{NO_INTERSECTION};
+    real_T   t{geom::intersect::NO_INTERSECTION<real_T>};
     Vertex3f P{};
     Normal3f N{};
     real_T   u{}, v{};

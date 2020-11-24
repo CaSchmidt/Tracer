@@ -31,8 +31,6 @@
 
 #include "rt/Object/Sphere.h"
 
-#include "geom/Intersect.h"
-
 namespace rt {
 
   Sphere::Sphere(const Transformf& objectToWorld, MaterialPtr& material,
@@ -52,7 +50,7 @@ namespace rt {
 
     const Rayf rayObj = _xfrmOW*ray;
     info.t = geom::intersect::sphere(rayObj, _radius);
-    if( !isHit(info.t) ) {
+    if( !geom::intersect::isHit(info.t) ) {
       return info.isHit();
     }
 
@@ -73,7 +71,7 @@ namespace rt {
   bool Sphere::intersect(const Rayf& ray) const
   {
     const Rayf rayObj = _xfrmOW*ray;
-    if( !isHit(geom::intersect::sphere(rayObj, _radius)) ) {
+    if( !geom::intersect::isHit(geom::intersect::sphere(rayObj, _radius)) ) {
       return false;
     }
     return true;

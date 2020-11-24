@@ -31,8 +31,6 @@
 
 #include "rt/Object/Plane.h"
 
-#include "geom/Intersect.h"
-
 namespace rt {
 
   namespace priv {
@@ -69,7 +67,7 @@ namespace rt {
 
     const Rayf rayObj = _xfrmOW*ray;
     info.t = geom::intersect::plane(rayObj);
-    if( !isHit(info.t) ) {
+    if( !geom::intersect::isHit(info.t) ) {
       return info.isHit();
     }
 
@@ -93,7 +91,7 @@ namespace rt {
   {
     const Rayf rayObj = _xfrmOW*ray;
     const real_T    t = geom::intersect::plane(rayObj);
-    if( !isHit(t) ) {
+    if( !geom::intersect::isHit(t) ) {
       return false;
     }
     const Vertex3f Pobj = rayObj(t);

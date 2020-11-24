@@ -31,18 +31,16 @@
 
 #include "rt/Object/Cylinder.h"
 
-#include "geom/Intersect.h"
-
 namespace rt {
 
   namespace priv {
 
     void assign(SurfaceInfo& dest, const SurfaceInfo& src)
     {
-      if( !isHit(src.t) ) {
+      if( !geom::intersect::isHit(src.t) ) {
         return; // Nothing to do!
       }
-      if( !isHit(dest.t) ) {
+      if( !geom::intersect::isHit(dest.t) ) {
         dest = src;
       } else if( src.t < dest.t ) {
         dest = src;
@@ -74,7 +72,7 @@ namespace rt {
     priv::assign(info, intersectCylinder(rayObj));
     priv::assign(info, intersectDisc(rayObj, false));
     priv::assign(info, intersectDisc(rayObj, true));
-    if( !isHit(info.t) ) {
+    if( !geom::intersect::isHit(info.t) ) {
       return info.isHit();
     }
 
@@ -105,7 +103,7 @@ namespace rt {
     SurfaceInfo info;
 
     info.t = geom::intersect::cylinder(rayObj, _radius);
-    if( !isHit(info.t) ) {
+    if( !geom::intersect::isHit(info.t) ) {
       return SurfaceInfo();
     }
 
@@ -129,7 +127,7 @@ namespace rt {
   bool Cylinder::intersectCylinderB(const Rayf& rayObj) const
   {
     const real_T t = geom::intersect::cylinder(rayObj, _radius);
-    if( !isHit(t) ) {
+    if( !geom::intersect::isHit(t) ) {
       return false;
     }
     const Vertex3f Pobj = rayObj(t);
@@ -146,7 +144,7 @@ namespace rt {
     const real_T sign = bottom  ?  -ONE : ONE;
 
     info.t = geom::intersect::plane(rayObj, sign*_height/2);
-    if( !isHit(info.t) ) {
+    if( !geom::intersect::isHit(info.t) ) {
       return SurfaceInfo();
     }
 
@@ -169,7 +167,7 @@ namespace rt {
   {
     const real_T sign = bottom ? -ONE : ONE;
     const real_T    t = geom::intersect::plane(rayObj, sign*_height/2);
-    if( !isHit(t) ) {
+    if( !geom::intersect::isHit(t) ) {
       return false;
     }
     const Vertex3f Pobj = rayObj(t);
