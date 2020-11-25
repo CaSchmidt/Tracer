@@ -132,7 +132,7 @@ namespace rt {
       info->v = v;
     }
 
-    return false;
+    return true;
   }
 
   bool Cylinder::intersectDisc(SurfaceInfo *info, const Rayf& rayObj, const bool bottom) const
