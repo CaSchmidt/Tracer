@@ -109,7 +109,7 @@ namespace rt {
   bool Cylinder::intersectCylinder(SurfaceInfo *info, const Rayf& rayObj) const
   {
     const real_T t = geom::intersect::cylinder(rayObj, _radius);
-    if( !geom::intersect::isHit(t) ) {
+    if( !rayObj.isValid(t) ) {
       return false;
     }
 
@@ -140,7 +140,7 @@ namespace rt {
     const real_T sign = bottom  ?  -ONE : ONE;
 
     const real_T t = geom::intersect::plane(rayObj, sign*_height/2);
-    if( !geom::intersect::isHit(t) ) {
+    if( !rayObj.isValid(t) ) {
       return false;
     }
 

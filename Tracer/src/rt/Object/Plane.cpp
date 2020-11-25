@@ -69,7 +69,7 @@ namespace rt {
     const Rayf rayObj = _xfrmOW*ray;
 
     const real_T t = geom::intersect::plane(rayObj);
-    if( !geom::intersect::isHit(t) ) {
+    if( !rayObj.isValid(t) ) {
       return false;
     }
 

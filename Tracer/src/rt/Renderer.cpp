@@ -98,14 +98,14 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Color3f Renderer::castRay(const Rayf& ray, const real_T tMax, const unsigned int depth) const
+  Color3f Renderer::castRay(const Rayf& ray, const unsigned int depth) const
   {
     if( depth >= _options.maxDepth ) {
       return _options.backgroundColor;
     }
 
     SurfaceInfo sinfo;
-    if( !trace(sinfo, ray, tMax, NO_SHADOW_RAY) ) {
+    if( !trace(sinfo, ray, NO_SHADOW_RAY) ) {
       return _options.backgroundColor;
     }
 
@@ -115,7 +115,7 @@ namespace rt {
 
     } else if( sinfo->material()->isMirror() ) {
       const Normal3f     R = geom::reflect(ray.direction(), sinfo.N);
-      const Color3f rcolor = castRay({sinfo.P + to_vertex(TRACE_BIAS*sinfo.N), R}, MAX_REAL_T, depth + 1);
+      const Color3f rcolor = castRay({sinfo.P + to_vertex(TRACE_BIAS*sinfo.N), R}, depth + 1);
       color = sinfo->material()->mirror()->reflectance()*rcolor;
 
     } else if( sinfo->material()->isTransparent() ) {
@@ -142,13 +142,13 @@ namespace rt {
       // (3) Reflectance /////////////////////////////////////////////////////
 
       const Normal3f R = geom::reflect(I, N);
-      color = kR*castRay({sinfo.P + to_vertex(TRACE_BIAS*N), R}, MAX_REAL_T, depth + 1);
+      color = kR*castRay({sinfo.P + to_vertex(TRACE_BIAS*N), R}, depth + 1);
 
       // (4) Transmittance ///////////////////////////////////////////////////
 
       if( kT > ZERO ) {
         const Normal3f T = geom::refract(I, N, eta);
-        color += kT*castRay({sinfo.P - to_vertex(TRACE_BIAS*N), T}, MAX_REAL_T, depth + 1);
+        color += kT*castRay({sinfo.P - to_vertex(TRACE_BIAS*N), T}, depth + 1);
       }
 
     }
@@ -166,7 +166,7 @@ namespace rt {
       const LightInfo linfo = light->info(sinfo.P);
 
       SurfaceInfo dummy;
-      if( trace(dummy, {sinfo.P + to_vertex(TRACE_BIAS*sinfo.N), linfo.l}, linfo.r, SHADOW_RAY) ) {
+      if( trace(dummy, {sinfo.P + to_vertex(TRACE_BIAS*sinfo.N), linfo.l, linfo.r}, SHADOW_RAY) ) {
         continue; // Light is obscured by an object!
       }
 
@@ -192,7 +192,7 @@ namespace rt {
     return result;
   }
 
-  bool Renderer::trace(SurfaceInfo& result, const Rayf& ray, const real_T tMax, const bool isShadowRay) const
+  bool Renderer::trace(SurfaceInfo& result, const Rayf& ray, const bool isShadowRay) const
   {
     result = SurfaceInfo();
     for(const ObjectPtr& object : _scene) {
@@ -200,7 +200,7 @@ namespace rt {
         continue;
       }
       SurfaceInfo hit;
-      if( !object->intersect(&hit, ray)  ||  hit.t >= tMax ) {
+      if( !object->intersect(&hit, ray) ) {
         continue;
       }
       if( !result.isHit()  ||  hit.t < result.t ) {

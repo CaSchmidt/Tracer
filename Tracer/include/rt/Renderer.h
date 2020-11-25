@@ -59,9 +59,9 @@ namespace rt {
 
   private:
     // NOTE: All arguments passed to/returned from these methods are in WORLD coordinates!
-    Color3f castRay(const Rayf& ray, const real_T tMax = MAX_REAL_T, const unsigned int depth = 0) const;
+    Color3f castRay(const Rayf& ray, const unsigned int depth = 0) const;
     Color3f shade(const SurfaceInfo& sinfo, const Normal3f& v) const;
-    bool trace(SurfaceInfo& result, const Rayf& ray, const real_T tMax, const bool isShadowRay) const;
+    bool trace(SurfaceInfo& result, const Rayf& ray, const bool isShadowRay) const;
 
     RenderOptions _options{};
     Transformf    _view{};

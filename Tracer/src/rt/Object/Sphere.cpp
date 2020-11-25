@@ -52,7 +52,7 @@ namespace rt {
     const Rayf rayObj = _xfrmOW*ray;
 
     const real_T t = geom::intersect::sphere(rayObj, _radius);
-    if( !geom::intersect::isHit(t) ) {
+    if( !rayObj.isValid(t) ) {
       return false;
     }
 

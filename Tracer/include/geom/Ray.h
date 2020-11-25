@@ -48,10 +48,11 @@ namespace geom {
     Ray(Ray&&) noexcept = default;
     Ray& operator=(Ray&&) noexcept = default;
 
-    Ray(const Vertex<T>& org, const Normal<T>& dir) noexcept
+    Ray(const Vertex<T>& org, const Normal<T>& dir, const T& tMax = MAX_T) noexcept
     {
       operator=(org);
       operator=(dir);
+      setTMax(tMax);
     }
 
     ~Ray() noexcept = default;
@@ -83,9 +84,31 @@ namespace geom {
       return _dir;
     }
 
+    inline T tMax() const
+    {
+      return _tMax;
+    }
+
+    void setTMax(const T& t)
+    {
+      if( geom::intersect::isHit(t) ) {
+        _tMax = t;
+      } else {
+        _tMax = MAX_T;
+      }
+    }
+
+    inline bool isValid(const T& t) const
+    {
+      return geom::intersect::isHit(t)  &&  t < _tMax;
+    }
+
   private:
+    static constexpr T MAX_T = math::Max<T>;
+
     Vertex<T> _org{};
     Normal<T> _dir{};
+    T         _tMax{MAX_T};
   };
 
 } // namespace geom
