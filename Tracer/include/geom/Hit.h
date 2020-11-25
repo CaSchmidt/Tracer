@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,11 +29,12 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef INTERSECT_H
-#define INTERSECT_H
+#ifndef HIT_H
+#define HIT_H
 
-#include "geom/Ray.h"
-#include "math/Solver.h"
+#include <cmath>
+
+#include "math/Constants.h"
 
 namespace geom {
 
@@ -41,67 +42,19 @@ namespace geom {
 
     // Constants /////////////////////////////////////////////////////////////
 
-    template<typename T> inline constexpr T ZERO = math::ZERO<T>;
-    template<typename T> inline constexpr T  TWO = math::TWO<T>;
+    template<typename T>
+    inline constexpr T NO_INTERSECTION = math::qNaN<T>;
 
-    // Intersection Tests ////////////////////////////////////////////////////
+    // Functions /////////////////////////////////////////////////////////////
 
     template<typename T>
-    inline T cylinder(const Ray<T>& ray, const T r)
+    inline bool isHit(const T& t)
     {
-      const T ox = ray.origin().x;
-      const T oy = ray.origin().y;
-      const T dx = ray.direction().x;
-      const T dy = ray.direction().y;
-      const T  a =         dx*dx + dy*dy;
-      const T  b = TWO<T>*(dx*ox + dy*oy);
-      const T  c =         ox*ox + oy*oy - r*r;
-      T t1, t2;
-      if( !math::quadratic(a, b, c, t1, t2) ) {
-        return NO_INTERSECTION<T>;
-      }
-      if( t1 < ZERO<T> ) {
-        t1 = t2;
-        if( t1 < ZERO<T> ) {
-          return NO_INTERSECTION<T>;
-        }
-      }
-      return t1;
-    }
-
-    template<typename T>
-    inline T plane(const Ray<T>& ray, const T h = ZERO<T>)
-    {
-      if( ray.direction().z == ZERO<T> ) {
-        return NO_INTERSECTION<T>;
-      }
-      const T t0 = (h - ray.origin().z)/ray.direction().z;
-      return t0 >= ZERO<T>
-          ? t0
-          : NO_INTERSECTION<T>;
-    }
-
-    template<typename T>
-    inline T sphere(const Ray<T>& ray, const T r)
-    {
-      const T a =        cs::dot(ray.direction(), ray.direction());
-      const T b = TWO<T>*cs::dot(ray.direction(), to_normal<T>(ray.origin()));
-      const T c =        cs::dot(ray.origin(),    ray.origin()) - r*r;
-      T t1, t2;
-      if( !math::quadratic(a, b, c, t1, t2) ) {
-        return NO_INTERSECTION<T>;
-      }
-      if( t1 < ZERO<T> ) { // ray is at least inside sphere
-        t1 = t2;
-        if( t1 < ZERO<T> ) { // sphere is behind ray
-          return NO_INTERSECTION<T>;
-        }
-      }
-      return t1; // return nearest hit from the ray's origin
+      return std::isfinite(t)  &&  t >= math::ZERO<T>;
     }
 
   } // namespace intersect
 
 } // namespace geom
 
-#endif // INTERSECT_H
+#endif // HIT_H

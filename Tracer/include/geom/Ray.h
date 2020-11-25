@@ -33,6 +33,7 @@
 #define RAY_H
 
 #include "geom/Geom.h"
+#include "geom/Hit.h"
 
 namespace geom {
 

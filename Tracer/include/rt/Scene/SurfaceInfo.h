@@ -32,7 +32,7 @@
 #ifndef SURFACEINFO_H
 #define SURFACEINFO_H
 
-#include "geom/Intersect.h"
+#include "geom/Hit.h"
 #include "rt/Types.h"
 
 namespace rt {

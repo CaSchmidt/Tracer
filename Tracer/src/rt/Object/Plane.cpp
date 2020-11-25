@@ -31,6 +31,7 @@
 
 #include "rt/Object/Plane.h"
 
+#include "geom/Intersect.h"
 #include "rt/Scene/SurfaceInfo.h"
 
 namespace rt {
