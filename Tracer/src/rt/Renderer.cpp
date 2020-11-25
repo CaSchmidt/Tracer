@@ -41,16 +41,6 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  void Renderer::addLight(LightSourcePtr& light)
-  {
-    _lights.push_back(std::move(light));
-  }
-
-  void Renderer::addObject(ObjectPtr& object)
-  {
-    _scene.push_back(std::move(object));
-  }
-
   Color3f Renderer::castCameraRay(const Rayf& ray) const
   {
     return castRay(_view*ray);
@@ -61,7 +51,6 @@ namespace rt {
     _options = RenderOptions();
     _view    = Transformf();
     _scene.clear();
-    _lights.clear();
   }
 
   bool Renderer::initialize(const RenderOptions& options)
@@ -91,9 +80,9 @@ namespace rt {
     return _options;
   }
 
-  void Renderer::setScene(Objects& objects)
+  void Renderer::setScene(Scene& scene)
   {
-    _scene = std::move(objects);
+    _scene = std::move(scene);
   }
 
   ////// private /////////////////////////////////////////////////////////////
@@ -105,7 +94,7 @@ namespace rt {
     }
 
     SurfaceInfo sinfo;
-    if( !trace(sinfo, ray, NO_SHADOW_RAY) ) {
+    if( !_scene.trace(sinfo, ray) ) {
       return _options.backgroundColor;
     }
 
@@ -162,11 +151,10 @@ namespace rt {
 
     const OpaqueMaterial *opaque = sinfo->material()->opaque();
 
-    for(const LightSourcePtr& light : _lights) {
+    for(const LightSourcePtr& light : _scene.lights()) {
       const LightInfo linfo = light->info(sinfo.P);
 
-      SurfaceInfo dummy;
-      if( trace(dummy, {sinfo.P + to_vertex(TRACE_BIAS*sinfo.N), linfo.l, linfo.r}, SHADOW_RAY) ) {
+      if( _scene.trace({sinfo.P + to_vertex(TRACE_BIAS*sinfo.N), linfo.l, linfo.r}) ) {
         continue; // Light is obscured by an object!
       }
 
@@ -190,24 +178,6 @@ namespace rt {
     }
 
     return result;
-  }
-
-  bool Renderer::trace(SurfaceInfo& result, const Rayf& ray, const bool isShadowRay) const
-  {
-    result = SurfaceInfo();
-    for(const ObjectPtr& object : _scene) {
-      if( isShadowRay  &&  !object->material()->isShadowCaster() ) {
-        continue;
-      }
-      SurfaceInfo hit;
-      if( !object->intersect(&hit, ray) ) {
-        continue;
-      }
-      if( !result.isHit()  ||  hit.t < result.t ) {
-        result = hit;
-      }
-    }
-    return result.isHit();
   }
 
 } // namespace rt

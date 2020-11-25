@@ -90,6 +90,7 @@ namespace rt {
       return false;
     }
 
+    Scene scene;
     const tinyxml2::XMLElement *node = xml_Scene->FirstChildElement();
     while( node != nullptr ) {
       if(        priv::compare(node->Name(), "Light") ) {
@@ -98,14 +99,14 @@ namespace rt {
           fprintf(stderr, "Unable to add light of type \"%s\"!\n", node->Attribute("type"));
           return false;
         }
-        renderer.addLight(light);
+        scene.add(light);
       } else if( priv::compare(node->Name(), "Object") ) {
         ObjectPtr object = priv::parseObject(node);
         if( !object ) {
           fprintf(stderr, "Unable to add object of type \"%s\"!\n", node->Attribute("type"));
           return false;
         }
-        renderer.addObject(object);
+        scene.add(object);
       } else if( priv::compare(node->Name(), "Text") ) {
         Objects objects = priv::parseText(node);
         if( objects.empty() ) {
@@ -113,12 +114,13 @@ namespace rt {
           return false;
         }
         for(ObjectPtr& object : objects) {
-          renderer.addObject(object);
+          scene.add(object);
         }
       }
 
       node = node->NextSiblingElement();
     }
+    renderer.setScene(scene);
 
     return true;
   }

@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,39 +29,64 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef RENDERER_H
-#define RENDERER_H
-
-#include "rt/RenderOptions.h"
 #include "rt/Scene/Scene.h"
+
+#include "rt/Scene/SurfaceInfo.h"
 
 namespace rt {
 
-  class Renderer {
-  public:
-    Renderer() = default;
-    ~Renderer() noexcept = default;
+  Scene::Scene() = default;
 
-    Color3f castCameraRay(const Rayf& ray) const;
+  Scene::~Scene() = default;
 
-    void clear();
+  Scene::Scene(Scene&&) = default;
 
-    bool initialize(const RenderOptions& options);
+  Scene& Scene::operator=(Scene&&) = default;
 
-    const RenderOptions& options() const;
+  void Scene::clear()
+  {
+    _lights.clear();
+    _objects.clear();
+  }
 
-    void setScene(Scene& scene);
+  void Scene::add(LightSourcePtr& light)
+  {
+    _lights.push_back(std::move(light));
+  }
 
-  private:
-    // NOTE: All arguments passed to/returned from these methods are in WORLD coordinates!
-    Color3f castRay(const Rayf& ray, const unsigned int depth = 0) const;
-    Color3f shade(const SurfaceInfo& sinfo, const Normal3f& v) const;
+  void Scene::add(ObjectPtr& object)
+  {
+    _objects.push_back(std::move(object));
+  }
 
-    RenderOptions _options{};
-    Scene         _scene{};
-    Transformf    _view{};
-  };
+  bool Scene::trace(SurfaceInfo& info, const Rayf& ray) const
+  {
+    info = SurfaceInfo();
+    for(const ObjectPtr& object : _objects) {
+      SurfaceInfo hit;
+      if( !object->intersect(&hit, ray) ) {
+        continue;
+      }
+      if( !info.isHit()  ||  hit.t < info.t ) {
+        info = hit;
+      }
+    }
+    return info.isHit();
+  }
+
+  bool Scene::trace(const Rayf& ray) const
+  {
+    for(const ObjectPtr& object : _objects) {
+      if( object->material()->isShadowCaster()  &&  object->intersect(nullptr, ray) ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const LightSources& Scene::lights() const
+  {
+    return _lights;
+  }
 
 } // namespace rt
-
-#endif // RENDERER_H

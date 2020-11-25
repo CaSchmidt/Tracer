@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,39 +29,40 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef SCENE_H
+#define SCENE_H
 
-#include "rt/RenderOptions.h"
-#include "rt/Scene/Scene.h"
+#include "rt/Light/ILightSource.h"
+#include "rt/Object/IObject.h"
 
 namespace rt {
 
-  class Renderer {
+  class Scene {
   public:
-    Renderer() = default;
-    ~Renderer() noexcept = default;
+    Scene();
+    ~Scene();
 
-    Color3f castCameraRay(const Rayf& ray) const;
+    Scene(Scene&&);
+    Scene& operator=(Scene&&);
 
     void clear();
 
-    bool initialize(const RenderOptions& options);
+    void add(LightSourcePtr& light);
+    void add(ObjectPtr& object);
 
-    const RenderOptions& options() const;
+    bool trace(SurfaceInfo& info, const Rayf& ray) const;
+    bool trace(const Rayf& ray) const;
 
-    void setScene(Scene& scene);
+    const LightSources& lights() const;
 
   private:
-    // NOTE: All arguments passed to/returned from these methods are in WORLD coordinates!
-    Color3f castRay(const Rayf& ray, const unsigned int depth = 0) const;
-    Color3f shade(const SurfaceInfo& sinfo, const Normal3f& v) const;
+    Scene(const Scene&) = delete;
+    Scene& operator=(const Scene&) = delete;
 
-    RenderOptions _options{};
-    Scene         _scene{};
-    Transformf    _view{};
+    LightSources _lights;
+    Objects _objects;
   };
 
 } // namespace rt
 
-#endif // RENDERER_H
+#endif // SCENE_H

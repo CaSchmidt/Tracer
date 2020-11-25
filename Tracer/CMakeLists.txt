@@ -26,6 +26,7 @@ set(Tracer_HEADERS
   include/Image.h
   include/Worker.h
   include/geom/Geom.h
+  include/geom/Hit.h
   include/geom/Intersect.h
   include/geom/Optics.h
   include/geom/Ray.h
@@ -37,7 +38,6 @@ set(Tracer_HEADERS
   include/rt/Refraction.h
   include/rt/Renderer.h
   include/rt/RenderOptions.h
-  include/rt/SurfaceInfo.h
   include/rt/Types.h
   include/rt/Camera/FrustumCamera.h
   include/rt/Camera/ICamera.h
@@ -57,6 +57,8 @@ set(Tracer_HEADERS
   include/rt/Object/IObject.h
   include/rt/Object/Plane.h
   include/rt/Object/Sphere.h
+  include/rt/Scene/Scene.h
+  include/rt/Scene/SurfaceInfo.h
   include/rt/Texture/CheckedTexture.h
   include/rt/Texture/FlatTexture.h
   include/rt/Texture/ITexture.h
@@ -90,6 +92,7 @@ set(Tracer_SOURCES
   src/rt/Object/IObject.cpp
   src/rt/Object/Plane.cpp
   src/rt/Object/Sphere.cpp
+  src/rt/Scene/Scene.cpp
   src/rt/Texture/CheckedTexture.cpp
   src/rt/Texture/FlatTexture.cpp
   src/rt/Texture/ITexture.cpp
