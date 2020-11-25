@@ -43,9 +43,7 @@ namespace rt {
       if( !geom::intersect::isHit(src.t) ) {
         return; // Nothing to do!
       }
-      if( !geom::intersect::isHit(dest.t) ) {
-        dest = src;
-      } else if( src.t < dest.t ) {
+      if( !geom::intersect::isHit(dest.t)  ||  src.t < dest.t ) {
         dest = src;
       }
     }
