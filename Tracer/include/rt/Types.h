@@ -55,12 +55,12 @@ namespace rt {
 
   ////// Special Values //////////////////////////////////////////////////////
 
-  inline constexpr real_T INF_REAL_T = std::numeric_limits<real_T>::infinity();
+  inline constexpr real_T INF_REAL_T = math::Inf<real_T>;
 
-  inline constexpr real_T MAX_REAL_T = std::numeric_limits<real_T>::max();
-  inline constexpr real_T MIN_REAL_T = std::numeric_limits<real_T>::lowest();
+  inline constexpr real_T MAX_REAL_T = math::Max<real_T>;
+  inline constexpr real_T MIN_REAL_T = math::Min<real_T>;
 
-  inline constexpr real_T NAN_REAL_T = std::numeric_limits<real_T>::quiet_NaN();
+  inline constexpr real_T NAN_REAL_T = math::qNaN<real_T>;
 
   ////// Constants ///////////////////////////////////////////////////////////
 

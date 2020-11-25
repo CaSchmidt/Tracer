@@ -37,6 +37,8 @@
 namespace math {
 
   template<typename T> inline constexpr T  Inf = std::numeric_limits<T>::infinity();
+  template<typename T> inline constexpr T  Max = std::numeric_limits<T>::max();
+  template<typename T> inline constexpr T  Min = std::numeric_limits<T>::lowest();
   template<typename T> inline constexpr T qNaN = std::numeric_limits<T>::quiet_NaN();
 
   template<typename T> inline constexpr T  ZERO = static_cast<T>(0);
