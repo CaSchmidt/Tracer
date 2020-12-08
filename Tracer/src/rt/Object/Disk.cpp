@@ -43,8 +43,6 @@ namespace rt {
     : IObject(objectToWorld, material)
     , _radius{radius}
   {
-    printf("%s\n", __FUNCSIG__);
-    printf("%.3f\n", _radius);
   }
 
   Disk::~Disk() noexcept
