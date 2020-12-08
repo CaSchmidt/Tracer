@@ -54,6 +54,7 @@ set(Tracer_HEADERS
   include/rt/Material/OpaqueMaterial.h
   include/rt/Material/TransparentMaterial.h
   include/rt/Object/Cylinder.h
+  include/rt/Object/Disk.h
   include/rt/Object/IObject.h
   include/rt/Object/Plane.h
   include/rt/Object/Sphere.h
@@ -89,6 +90,7 @@ set(Tracer_SOURCES
   src/rt/Material/OpaqueMaterial.cpp
   src/rt/Material/TransparentMaterial.cpp
   src/rt/Object/Cylinder.cpp
+  src/rt/Object/Disk.cpp
   src/rt/Object/IObject.cpp
   src/rt/Object/Plane.cpp
   src/rt/Object/Sphere.cpp

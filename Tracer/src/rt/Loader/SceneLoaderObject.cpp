@@ -31,6 +31,7 @@
 
 #include "rt/Loader/SceneLoaderBase.h"
 #include "rt/Object/Cylinder.h"
+#include "rt/Object/Disk.h"
 #include "rt/Object/Plane.h"
 #include "rt/Object/Sphere.h"
 
@@ -69,6 +70,28 @@ namespace rt {
       }
 
       return Cylinder::create(transform, material, height, radius);
+    }
+
+    ObjectPtr parseDisk(const tinyxml2::XMLElement *node)
+    {
+      bool myOk = false;
+
+      MaterialPtr material = parseMaterial(node->FirstChildElement("Material"));
+      if( !material ) {
+        return ObjectPtr();
+      }
+
+      const real_T radius = parseReal(node->FirstChildElement("Radius"), &myOk);
+      if( !myOk  ||  radius <= 0 ) {
+        return ObjectPtr();
+      }
+
+      Transformf transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
+      if( !myOk ) {
+        return ObjectPtr();
+      }
+
+      return Disk::create(transform, material, radius);
     }
 
     ObjectPtr parsePlane(const tinyxml2::XMLElement *node)
@@ -130,6 +153,8 @@ namespace rt {
 
       if(        node->Attribute("type", "Cylinder") != nullptr ) {
         return parseCylinder(node);
+      } else if( node->Attribute("type", "Disk") != nullptr ) {
+        return parseDisk(node);
       } else if( node->Attribute("type", "Plane") != nullptr ) {
         return parsePlane(node);
       } else if( node->Attribute("type", "Sphere") != nullptr ) {
