@@ -44,6 +44,7 @@
 #define FILE_2        BASE_PATH "scene_2.xml"
 #define FILE_3        BASE_PATH "scene_3.xml"
 #define FILE_4        BASE_PATH "scene_4.xml"
+#define FILE_OBJECTS  BASE_PATH "scene_objects.xml"
 #define FILE_SPHERES  BASE_PATH "scene_spheres.xml"
 #define FILE_TEXT     BASE_PATH "scene_text.xml"
 
