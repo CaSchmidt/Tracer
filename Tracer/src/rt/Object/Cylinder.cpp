@@ -143,13 +143,14 @@ namespace rt {
     }
 
     const Vertex3f Pobj = rayObj(t);
-    const real_T      u = math::phase<real_T>(Pobj.x, sign*Pobj.y)/TWO_PI;
     const real_T      v = math::abs<real_T>(Pobj.x, Pobj.y)/_radius;
     if( v > ONE ) {
       return false;
     }
 
     if( info != nullptr ) {
+      const real_T u = math::phase<real_T>(Pobj.x, sign*Pobj.y)/TWO_PI;
+
       *info = SurfaceInfo();
 
       info->t = t;
