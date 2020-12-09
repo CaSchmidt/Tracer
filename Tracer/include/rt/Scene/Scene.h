@@ -45,10 +45,10 @@ namespace rt {
     Scene(Scene&&);
     Scene& operator=(Scene&&);
 
-    void clear();
-
     void add(LightSourcePtr& light);
     void add(ObjectPtr& object);
+
+    void clear();
 
     bool trace(SurfaceInfo& info, const Rayf& ray) const;
     bool trace(const Rayf& ray) const;

@@ -43,20 +43,24 @@ namespace rt {
 
   Scene& Scene::operator=(Scene&&) = default;
 
-  void Scene::clear()
-  {
-    _lights.clear();
-    _objects.clear();
-  }
-
   void Scene::add(LightSourcePtr& light)
   {
-    _lights.push_back(std::move(light));
+    if( light ) {
+      _lights.push_back(std::move(light));
+    }
   }
 
   void Scene::add(ObjectPtr& object)
   {
-    _objects.push_back(std::move(object));
+    if( object ) {
+      _objects.push_back(std::move(object));
+    }
+  }
+
+  void Scene::clear()
+  {
+    _lights.clear();
+    _objects.clear();
   }
 
   bool Scene::trace(SurfaceInfo& info, const Rayf& ray) const
