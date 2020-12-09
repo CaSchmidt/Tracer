@@ -40,6 +40,13 @@ namespace rt {
     _xfrmOW = _xfrmWO.inverse();
   }
 
+  IObject::IObject(const Transformf& objectToWorld) noexcept
+    : _xfrmWO(objectToWorld)
+    , _material{}
+  {
+    _xfrmOW = _xfrmWO.inverse();
+  }
+
   IObject::~IObject() noexcept
   {
   }

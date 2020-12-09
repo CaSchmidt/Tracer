@@ -45,6 +45,7 @@ namespace rt {
   class IObject {
   public:
     IObject(const Transformf& objectToWorld, MaterialPtr& material) noexcept;
+    IObject(const Transformf& objectToWorld) noexcept;
     virtual ~IObject() noexcept;
 
     // NOTE: All arguments passed to/returned from this method are in WORLD coordinates!
