@@ -74,43 +74,43 @@ namespace geom {
   template<typename T>
   inline auto identity()
   {
-    return cs::identity<Matrix<T>::traits_type>();
+    return cs::identity<typename Matrix<T>::traits_type>();
   }
 
   template<typename T>
   inline auto rotateX(const T& angle)
   {
-    return cs::rotateX<Matrix<T>::traits_type>(angle);
+    return cs::rotateX<typename Matrix<T>::traits_type>(angle);
   }
 
   template<typename T>
   inline auto rotateY(const T& angle)
   {
-    return cs::rotateY<Matrix<T>::traits_type>(angle);
+    return cs::rotateY<typename Matrix<T>::traits_type>(angle);
   }
 
   template<typename T>
   inline auto rotateZ(const T& angle)
   {
-    return cs::rotateZ<Matrix<T>::traits_type>(angle);
+    return cs::rotateZ<typename Matrix<T>::traits_type>(angle);
   }
 
   template<typename T>
   inline auto scale(const T& sx, const T& sy, const T& sz)
   {
-    return cs::scale<Matrix<T>::traits_type>(sx, sy, sz);
+    return cs::scale<typename Matrix<T>::traits_type>(sx, sy, sz);
   }
 
   template<typename T, typename EXPR>
   inline auto to_normal(const EXPR& expr)
   {
-    return cs::array_cast<Normal<T>::traits_type>(expr);
+    return cs::array_cast<typename Normal<T>::traits_type>(expr);
   }
 
   template<typename T, typename EXPR>
   inline auto to_vertex(const EXPR& expr)
   {
-    return cs::array_cast<Vertex<T>::traits_type>(expr);
+    return cs::array_cast<typename Vertex<T>::traits_type>(expr);
   }
 
   // Operators ///////////////////////////////////////////////////////////////
