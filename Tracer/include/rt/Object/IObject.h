@@ -61,6 +61,8 @@ namespace rt {
 
   private:
     IObject() noexcept = delete;
+
+    void setup();
   };
 
   using ObjectPtr = std::unique_ptr<IObject>;

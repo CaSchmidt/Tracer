@@ -33,18 +33,20 @@
 
 namespace rt {
 
+  ////// public //////////////////////////////////////////////////////////////
+
   IObject::IObject(const Transformf& objectToWorld, MaterialPtr& material) noexcept
     : _xfrmWO{objectToWorld}
     , _material{std::move(material)}
   {
-    _xfrmOW = _xfrmWO.inverse();
+    setup();
   }
 
   IObject::IObject(const Transformf& objectToWorld) noexcept
     : _xfrmWO(objectToWorld)
     , _material{}
   {
-    _xfrmOW = _xfrmWO.inverse();
+    setup();
   }
 
   IObject::~IObject() noexcept
@@ -59,6 +61,13 @@ namespace rt {
   const IMaterial *IObject::material() const
   {
     return _material.get();
+  }
+
+  ////// private /////////////////////////////////////////////////////////////
+
+  void IObject::setup()
+  {
+    _xfrmOW = _xfrmWO.inverse();
   }
 
 } // namespace rt
