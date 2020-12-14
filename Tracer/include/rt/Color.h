@@ -52,64 +52,6 @@ namespace rt {
   template<typename T>
   using Color = cs::Array<cs::Color3Manip<cs::RowMajorPolicy<ColorTraits<T,3,1>>>>;
 
-  template<typename T>
-  struct Colors {
-    static inline auto black()
-    {
-      return Color<T>{0, 0, 0};
-    }
-
-    static inline auto white()
-    {
-      return Color<T>{1, 1, 1};
-    }
-
-    static inline auto red()
-    {
-      return Color<T>{1, 0, 0};
-    }
-
-    static inline auto green()
-    {
-      return Color<T>{0, 1, 0};
-    }
-
-    static inline auto blue()
-    {
-      return Color<T>{0, 0, 1};
-    }
-
-    static inline auto cyan()
-    {
-      return Color<T>{0, 1, 1};
-    }
-
-    static inline auto magenta()
-    {
-      return Color<T>{1, 0, 1};
-    }
-
-    static inline auto yellow()
-    {
-      return Color<T>{1, 1, 0};
-    }
-
-    static inline auto orange()
-    {
-      return Color<T>{1,  0.5, 0};
-    }
-
-    static inline auto indigo()
-    {
-      return Color<T>{0.25, 0, 1};
-    }
-
-    static inline auto violet()
-    {
-      return Color<T>{0.5,  0, 1};
-    }
-  };
-
 } // namespace rt
 
 #endif // COLOR_H
