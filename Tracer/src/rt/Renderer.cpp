@@ -90,7 +90,7 @@ namespace rt {
   Color3f Renderer::castRay(const Rayf& ray, const unsigned int depth) const
   {
     if( depth >= _options.maxDepth ) {
-      return _options.backgroundColor;
+      return Color3f{0, 0, 0};
     }
 
     SurfaceInfo sinfo;
