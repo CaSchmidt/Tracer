@@ -36,20 +36,6 @@
 
 namespace rt {
 
-  namespace priv {
-
-    void assign(SurfaceInfo& dest, const SurfaceInfo& src)
-    {
-      if( !geom::intersect::isHit(src.t) ) {
-        return; // Nothing to do!
-      }
-      if( !geom::intersect::isHit(dest.t)  ||  src.t < dest.t ) {
-        dest = src;
-      }
-    }
-
-  } // namespace priv
-
   ////// public //////////////////////////////////////////////////////////////
 
   Cylinder::Cylinder(const Transformf& objectToWorld, MaterialPtr& material,
@@ -66,46 +52,8 @@ namespace rt {
 
   bool Cylinder::intersect(SurfaceInfo *info, const Rayf& ray) const
   {
-    constexpr bool BOTTOM = true;
-    constexpr bool    TOP = false;
-
     const Rayf rayObj = _xfrmOW*ray;
 
-    if( info != nullptr ) {
-      *info = SurfaceInfo();
-
-      SurfaceInfo localInfo;
-      if( intersectCylinder(&localInfo, rayObj) ) {
-        priv::assign(*info, localInfo);
-      }
-      if( intersectDisc(&localInfo, rayObj, TOP) ) {
-        priv::assign(*info, localInfo);
-      }
-      if( intersectDisc(&localInfo, rayObj, BOTTOM) ) {
-        priv::assign(*info, localInfo);
-      }
-
-      info->object = this;
-
-      return info->isHit();
-    }
-
-    return
-        intersectCylinder(nullptr, rayObj)       ||
-        intersectDisc(nullptr, rayObj, TOP)      ||
-        intersectDisc(nullptr, rayObj, BOTTOM);
-  }
-
-  ObjectPtr Cylinder::create(const Transformf& objectToWorld, MaterialPtr& material,
-                             const real_T height, const real_T radius)
-  {
-    return std::make_unique<Cylinder>(objectToWorld, material, height, radius);
-  }
-
-  ////// private /////////////////////////////////////////////////////////////
-
-  bool Cylinder::intersectCylinder(SurfaceInfo *info, const Rayf& rayObj) const
-  {
     const real_T t = geom::intersect::cylinder(rayObj, _radius);
     if( !rayObj.isValid(t) ) {
       return false;
@@ -123,44 +71,21 @@ namespace rt {
 
       *info = SurfaceInfo();
 
-      info->t = t;
-      info->N = _xfrmWO*Nobj;
-      info->P = _xfrmWO*Pobj;
-      info->u = u;
-      info->v = v;
+      info->object = this;
+      info->t      = t;
+      info->N      = _xfrmWO*Nobj;
+      info->P      = _xfrmWO*Pobj;
+      info->u      = u;
+      info->v      = v;
     }
 
     return true;
   }
 
-  bool Cylinder::intersectDisc(SurfaceInfo *info, const Rayf& rayObj, const bool bottom) const
+  ObjectPtr Cylinder::create(const Transformf& objectToWorld, MaterialPtr& material,
+                             const real_T height, const real_T radius)
   {
-    const real_T sign = bottom  ?  -ONE : ONE;
-
-    const real_T t = geom::intersect::plane(rayObj, sign*_height/2);
-    if( !rayObj.isValid(t) ) {
-      return false;
-    }
-
-    const Vertex3f Pobj = rayObj(t);
-    const real_T      v = math::abs<real_T>(Pobj.x, Pobj.y)/_radius;
-    if( v > ONE ) {
-      return false;
-    }
-
-    if( info != nullptr ) {
-      const real_T u = math::phase<real_T>(Pobj.x, sign*Pobj.y)/TWO_PI;
-
-      *info = SurfaceInfo();
-
-      info->t = t;
-      info->N = sign*(_xfrmWO*Normal3f{0, 0, 1});
-      info->P = _xfrmWO*Pobj;
-      info->u = u;
-      info->v = v;
-    }
-
-    return true;
+    return std::make_unique<Cylinder>(objectToWorld, material, height, radius);
   }
 
 } // namespace rt

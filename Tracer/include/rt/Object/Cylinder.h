@@ -48,9 +48,6 @@ namespace rt {
                             const real_T height, const real_T radius);
 
   private:
-    bool intersectCylinder(SurfaceInfo *info, const Rayf& rayObj) const;
-    bool intersectDisc(SurfaceInfo *info, const Rayf& rayObj, const bool bottom) const;
-
     real_T _height{};
     real_T _radius{};
   };
