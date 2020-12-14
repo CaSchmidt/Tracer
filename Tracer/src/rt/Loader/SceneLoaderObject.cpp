@@ -32,6 +32,7 @@
 #include "rt/Loader/SceneLoaderBase.h"
 #include "rt/Object/Cylinder.h"
 #include "rt/Object/Disk.h"
+#include "rt/Object/Group.h"
 #include "rt/Object/Plane.h"
 #include "rt/Object/Sphere.h"
 
@@ -92,6 +93,56 @@ namespace rt {
       }
 
       return Disk::create(transform, material, radius);
+    }
+
+    ObjectPtr parsePillar(const tinyxml2::XMLElement *node)
+    {
+      bool myOk = false;
+
+      const real_T height = parseReal(node->FirstChildElement("Height"), &myOk);
+      if( !myOk  ||  height <= 0 ) {
+        return ObjectPtr();
+      }
+
+      MaterialPtr material = parseMaterial(node->FirstChildElement("Material"));
+      if( !material ) {
+        return ObjectPtr();
+      }
+      MaterialPtr materialBottom = material->copy();
+      MaterialPtr materialTop    = material->copy();
+
+      const real_T radius = parseReal(node->FirstChildElement("Radius"), &myOk);
+      if( !myOk  ||  radius <= 0 ) {
+        return ObjectPtr();
+      }
+
+      Transformf transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
+      if( !myOk ) {
+        return ObjectPtr();
+      }
+
+      ObjectPtr groupPtr = Group::create(transform);
+      Group       *group = dynamic_cast<Group*>(groupPtr.get());
+
+      // (1) Body ////////////////////////////////////////////////////////////
+
+      ObjectPtr body = Cylinder::create(Transformf(), material, height, radius);
+      group->add(body);
+
+      // (2) Top /////////////////////////////////////////////////////////////
+
+      ObjectPtr top = Disk::create(Transformf::translate({0, 0, height/2}), materialTop, radius);
+      group->add(top);
+
+      // (3) Bottom //////////////////////////////////////////////////////////
+
+      const Transformf xfrmBottom =
+          Transformf::translate({0, 0, -height/2})*
+          Transformf(Matrix3f{1, 0, 0, 0, -1, 0, 0, 0, -1}); // rotateX(180)
+      ObjectPtr bottom = Disk::create(xfrmBottom, materialBottom, radius);
+      group->add(bottom);
+
+      return groupPtr;
     }
 
     ObjectPtr parsePlane(const tinyxml2::XMLElement *node)
@@ -155,6 +206,8 @@ namespace rt {
         return parseCylinder(node);
       } else if( node->Attribute("type", "Disk") != nullptr ) {
         return parseDisk(node);
+      } else if( node->Attribute("type", "Pillar") != nullptr ) {
+        return parsePillar(node);
       } else if( node->Attribute("type", "Plane") != nullptr ) {
         return parsePlane(node);
       } else if( node->Attribute("type", "Sphere") != nullptr ) {
