@@ -62,7 +62,7 @@
       <Transform/>
     </Object>
     <!-- cup of water -->
-    <Object type="Cylinder">
+    <Object type="Pillar">
       <Height>2</Height>
       <Material type="Transparent">
         <Refraction>1.333</Refraction>
@@ -77,7 +77,7 @@
       </Transform>
     </Object>
     <!-- pencil -->
-    <Object type="Cylinder">
+    <Object type="Pillar">
       <Height>3</Height>
       <Material type="Opaque">
         <Diffuse type="Checked">

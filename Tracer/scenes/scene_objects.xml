@@ -49,6 +49,7 @@
       <Transform/>
     </Object>
     <!-- green disk -->
+    <!--
     <Object type="Disk">
       <Material type="Opaque">
         <Diffuse type="Checked">
@@ -70,6 +71,40 @@
       <Transform>
         <Rotate>
           <rx>90</rx>
+          <ry>0</ry>
+          <rz>0</rz>
+        </Rotate>
+        <Translate>
+          <x>0</x>
+          <y>0</y>
+          <z>1</z>
+        </Translate>
+      </Transform>
+    </Object>
+    -->
+    <!-- green cylinder -->
+    <Object type="Pillar">
+      <Height>2</Height>
+      <Material type="Opaque">
+        <Diffuse type="Checked">
+          <ColorA>
+            <r>0</r>
+            <g>1</g>
+            <b>0</b>
+          </ColorA>
+          <ColorB>
+            <r>0</r>
+            <g>0.8</g>
+            <b>0</b>
+          </ColorB>
+          <ScaleS>4</ScaleS>
+          <ScaleT>2</ScaleT>
+        </Diffuse>
+      </Material>
+      <Radius>1</Radius>
+      <Transform>
+        <Rotate>
+          <rx>-90</rx>
           <ry>0</ry>
           <rz>0</rz>
         </Rotate>
