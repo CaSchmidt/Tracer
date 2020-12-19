@@ -84,15 +84,33 @@ namespace geom {
   }
 
   template<typename T>
+  inline auto rotateXbyPI2(const signed int i)
+  {
+    return cs::rotateXbyPI2<typename Matrix<T>::traits_type>(i);
+  }
+
+  template<typename T>
   inline auto rotateY(const T& angle)
   {
     return cs::rotateY<typename Matrix<T>::traits_type>(angle);
   }
 
   template<typename T>
+  inline auto rotateYbyPI2(const signed int i)
+  {
+    return cs::rotateYbyPI2<typename Matrix<T>::traits_type>(i);
+  }
+
+  template<typename T>
   inline auto rotateZ(const T& angle)
   {
     return cs::rotateZ<typename Matrix<T>::traits_type>(angle);
+  }
+
+  template<typename T>
+  inline auto rotateZbyPI2(const signed int i)
+  {
+    return cs::rotateZbyPI2<typename Matrix<T>::traits_type>(i);
   }
 
   template<typename T>

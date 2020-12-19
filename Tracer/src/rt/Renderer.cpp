@@ -57,7 +57,7 @@ namespace rt {
   {
     _options = options;
 
-    const Transformf xfrmCW{Transformf::rotateX(-PI_HALF)};
+    const Transformf xfrmCW{Transformf::rotateZYXbyPI2(0, 0, -1)};
 
     // Transform camera setup from world to camera coordinates...
     const Vertex3f      eyeC = xfrmCW*_options.eye;

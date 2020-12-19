@@ -102,22 +102,21 @@ namespace geom {
       return Transform<T>{{ x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z }, from};
     }
 
-    static inline Transform<T> rotateX(const T& angle)
+    static inline Transform<T> rotateZYX(const T rz, const T ry, const T rx)
     {
-      return Transform<T>{geom::rotateX<T>(angle)};
+      return Transform<T>{
+        geom::rotateZ<T>(rz)*geom::rotateY<T>(ry)*geom::rotateX<T>(rx)
+      };
     }
 
-    static inline Transform<T> rotateY(const T& angle)
+    static inline Transform<T> rotateZYXbyPI2(const signed int iz, const signed int iy, const signed int ix)
     {
-      return Transform<T>{geom::rotateY<T>(angle)};
+      return Transform<T>{
+        geom::rotateZbyPI2<T>(iz)*geom::rotateYbyPI2<T>(iy)*geom::rotateXbyPI2<T>(ix)
+      };
     }
 
-    static inline Transform<T> rotateZ(const T& angle)
-    {
-      return Transform<T>{geom::rotateZ<T>(angle)};
-    }
-
-    static inline Transform<T> scale(const T& sx, const T& sy, const T& sz)
+    static inline Transform<T> scale(const T sx, const T sy, const T sz)
     {
       return Transform<T>{geom::scale<T>(sx, sy, sz)};
     }

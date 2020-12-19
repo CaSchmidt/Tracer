@@ -138,7 +138,7 @@ namespace rt {
 
       const Transformf xfrmBottom =
           Transformf::translate({0, 0, -height/2})*
-          Transformf(Matrix3f{1, 0, 0, 0, -1, 0, 0, 0, -1}); // rotateX(180)
+          Transformf::rotateZYXbyPI2(0, 0, 2);
       ObjectPtr bottom = Disk::create(xfrmBottom, materialBottom, radius);
       group->add(bottom);
 
