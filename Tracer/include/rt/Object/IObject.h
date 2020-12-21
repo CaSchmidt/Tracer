@@ -48,6 +48,8 @@ namespace rt {
     IObject(const Transformf& objectToWorld) noexcept;
     virtual ~IObject() noexcept;
 
+    virtual bool castShadow(const Rayf& ray) const;
+
     // NOTE: All arguments passed to/returned from this method are in WORLD coordinates!
     virtual bool intersect(SurfaceInfo *info, const Rayf& ray) const = 0;
 

@@ -53,6 +53,11 @@ namespace rt {
   {
   }
 
+  bool IObject::castShadow(const Rayf& ray) const
+  {
+    return _material->isShadowCaster()  &&  intersect(nullptr, ray);
+  }
+
   IMaterial *IObject::material()
   {
     return _material.get();

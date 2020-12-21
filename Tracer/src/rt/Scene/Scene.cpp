@@ -66,9 +66,9 @@ namespace rt {
   bool Scene::trace(SurfaceInfo& info, const Rayf& ray) const
   {
     info = SurfaceInfo();
-    for(const ObjectPtr& object : _objects) {
+    for(const ObjectPtr& o : _objects) {
       SurfaceInfo hit;
-      if( !object->intersect(&hit, ray) ) {
+      if( !o->intersect(&hit, ray) ) {
         continue;
       }
       if( !info.isHit()  ||  hit.t < info.t ) {
@@ -80,9 +80,8 @@ namespace rt {
 
   bool Scene::trace(const Rayf& ray) const
   {
-    for(const ObjectPtr& object : _objects) {
-      SurfaceInfo hit; // TODO: Remove Explicit Testing for Shadow Casters!
-      if( object->intersect(&hit, ray)  &&  hit.object->material()->isShadowCaster() ) {
+    for(const ObjectPtr& o : _objects) {
+      if( o->castShadow(ray) ) {
         return true;
       }
     }

@@ -59,6 +59,17 @@ namespace rt {
     _objects.clear();
   }
 
+  bool Group::castShadow(const Rayf &ray) const
+  {
+    const Rayf rayObj = _xfrmOW*ray;
+    for(const ObjectPtr& o : _objects) {
+      if( o->castShadow(rayObj) ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   bool Group::intersect(SurfaceInfo *info, const Rayf& ray) const
   {
     const Rayf rayObj = _xfrmOW*ray;
