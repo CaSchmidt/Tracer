@@ -34,8 +34,6 @@ set(Tracer_HEADERS
   include/math/Constants.h
   include/math/Logical.h
   include/math/Solver.h
-  include/rt/Color.h
-  include/rt/Refraction.h
   include/rt/Renderer.h
   include/rt/RenderOptions.h
   include/rt/Types.h
@@ -70,7 +68,6 @@ set(Tracer_SOURCES
   src/Image.cpp
   src/main.cpp
   src/Worker.cpp
-  src/rt/Refraction.cpp
   src/rt/Renderer.cpp
   src/rt/Camera/FrustumCamera.cpp
   src/rt/Camera/ICamera.cpp
