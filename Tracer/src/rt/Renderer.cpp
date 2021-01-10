@@ -41,7 +41,7 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  Color3f Renderer::castCameraRay(const Rayf& ray) const
+  Color Renderer::castCameraRay(const Ray& ray) const
   {
     return castRay(_view*ray);
   }
@@ -49,7 +49,7 @@ namespace rt {
   void Renderer::clear()
   {
     _options = RenderOptions();
-    _view    = Transformf();
+    _view    = Transform();
     _scene.clear();
   }
 
@@ -57,12 +57,12 @@ namespace rt {
   {
     _options = options;
 
-    const Transformf xfrmCW{Transformf::rotateZYXbyPI2(0, 0, -1)};
+    const Transform xfrmCW{Transform::rotateZYXbyPI2(0, 0, -1)};
 
     // Transform camera setup from world to camera coordinates...
-    const Vertex3f      eyeC = xfrmCW*_options.eye;
-    const Vertex3f   lookAtC = xfrmCW*_options.lookAt;
-    const Normal3f cameraUpC = xfrmCW.scaledRotation()*_options.cameraUp;
+    const Vertex         eyeC = xfrmCW*_options.eye;
+    const Vertex      lookAtC = xfrmCW*_options.lookAt;
+    const Direction cameraUpC = xfrmCW*_options.cameraUp;
 
     /*
      * NOTE:
@@ -70,7 +70,7 @@ namespace rt {
      * 1. camera coordinates are aligned using a look-at transform in camera space
      * 2. camera space is transformed to world space
      */
-    _view = xfrmCW.inverse()*Transformf::lookAt(eyeC, lookAtC, cameraUpC);
+    _view = xfrmCW.inverse()*Transform::lookAt(eyeC, lookAtC, cameraUpC);
 
     return true;
   }
@@ -87,10 +87,10 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Color3f Renderer::castRay(const Rayf& ray, const unsigned int depth) const
+  Color Renderer::castRay(const Ray& ray, const unsigned int depth) const
   {
     if( depth >= _options.maxDepth ) {
-      return Color3f{0, 0, 0};
+      return Color();
     }
 
     SurfaceInfo sinfo;
@@ -98,46 +98,46 @@ namespace rt {
       return _options.backgroundColor;
     }
 
-    Color3f color;
+    Color color;
     if(        sinfo->material()->isOpaque() ) {
       color = shade(sinfo, -ray.direction());
 
     } else if( sinfo->material()->isMirror() ) {
-      const Normal3f     R = geom::reflect(ray.direction(), sinfo.N);
-      const Color3f rcolor = castRay({sinfo.P + to_vertex(TRACE_BIAS*sinfo.N), R}, depth + 1);
+      const Direction  R = geom::reflect(ray.direction(), sinfo.N);
+      const Color rcolor = castRay(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), R), depth + 1);
       color = sinfo->material()->mirror()->reflectance()*rcolor;
 
     } else if( sinfo->material()->isTransparent() ) {
       // (1) Set up Snell's law //////////////////////////////////////////////
 
-      const Normal3f I = ray.direction();
-      const bool entering = cs::dot(I, sinfo.N) < ZERO;
-      const Normal3f N = entering
-          ? Normal3f(sinfo.N)
-          : Normal3f(-sinfo.N);
-      const real_T etai = entering
+      const Direction I = ray.direction();
+      const bool entering = n4::dot(I, geom::to_direction(sinfo.N)) < ZERO;
+      const Normal N = entering
+          ? Normal(sinfo.N)
+          : Normal(-sinfo.N);
+      const real_t etai = entering
           ? _options.globalRefraction
           : sinfo->material()->transparent()->refraction();
-      const real_T etat = entering
+      const real_t etat = entering
           ? sinfo->material()->transparent()->refraction()
           : _options.globalRefraction;
-      const real_T eta = etai/etat;
+      const real_t eta = etai/etat;
 
       // (2) Fresnel Reflectance & Transmittance /////////////////////////////
 
-      const real_T kR = geom::fresnel(I, N, eta);
-      const real_T kT = ONE - kR;
+      const real_t kR = geom::fresnel(I, N, eta);
+      const real_t kT = ONE - kR;
 
       // (3) Reflectance /////////////////////////////////////////////////////
 
-      const Normal3f R = geom::reflect(I, N);
-      color = kR*castRay({sinfo.P + to_vertex(TRACE_BIAS*N), R}, depth + 1);
+      const Direction R = geom::reflect(I, N);
+      color = kR*castRay(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*N), R), depth + 1);
 
       // (4) Transmittance ///////////////////////////////////////////////////
 
       if( kT > ZERO ) {
-        const Normal3f T = geom::refract(I, N, eta);
-        color += kT*castRay({sinfo.P - to_vertex(TRACE_BIAS*N), T}, depth + 1);
+        const Direction T = geom::refract(I, N, eta);
+        color += kT*castRay(Ray(sinfo.P - geom::to_vertex(TRACE_BIAS*N), T), depth + 1);
       }
 
     }
@@ -145,36 +145,36 @@ namespace rt {
     return color;
   }
 
-  Color3f Renderer::shade(const SurfaceInfo& sinfo, const Normal3f& v) const
+  Color Renderer::shade(const SurfaceInfo& sinfo, const Direction& v) const
   {
-    Color3f result;
+    Color result;
 
     const OpaqueMaterial *opaque = sinfo->material()->opaque();
 
     for(const LightSourcePtr& light : _scene.lights()) {
       const LightInfo linfo = light->info(sinfo.P);
 
-      if( _scene.trace({sinfo.P + to_vertex(TRACE_BIAS*sinfo.N), linfo.l, linfo.r}) ) {
+      if( _scene.trace(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), linfo.l, linfo.r)) ) {
         continue; // Light is obscured by an object!
       }
 
-      const real_T cosTi = cs::dot1(sinfo.N, linfo.l);
+      const real_t cosTi = n4::dot1(sinfo.N, geom::to_normal(linfo.l));
       if( cosTi <= 0 ) {
         continue;
       }
 
       // Lambertian/Diffuse contribution
-      Color3f scolor = opaque->diffuse(sinfo.u, sinfo.v);
+      Color scolor = opaque->diffuse(sinfo.u, sinfo.v);
 
       // Specular contribution
       if( opaque->isSpecular() ) {
-        const Normal3f h = cs::normalize(linfo.l + v);
-        const real_T cosTh = cs::dot1(sinfo.N, h);
-        scolor += opaque->specular(sinfo.u, sinfo.v)*csPow(cosTh, opaque->shininess());
+        const Direction h = n4::normalize(linfo.l + v);
+        const real_t cosTh = n4::dot1(sinfo.N, geom::to_normal(h));
+        scolor += opaque->specular(sinfo.u, sinfo.v)*std::pow(cosTh, opaque->shininess());
       }
 
       // Account for light's irradiance
-      result += (scolor%linfo.EL)*cosTi;
+      result += (scolor*linfo.EL)*cosTi;
     }
 
     return result;

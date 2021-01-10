@@ -63,7 +63,7 @@ namespace rt {
     _objects.clear();
   }
 
-  bool Scene::trace(SurfaceInfo& info, const Rayf& ray) const
+  bool Scene::trace(SurfaceInfo& info, const Ray& ray) const
   {
     info = SurfaceInfo();
     for(const ObjectPtr& o : _objects) {
@@ -78,7 +78,7 @@ namespace rt {
     return info.isHit();
   }
 
-  bool Scene::trace(const Rayf& ray) const
+  bool Scene::trace(const Ray& ray) const
   {
     for(const ObjectPtr& o : _objects) {
       if( o->castShadow(ray) ) {

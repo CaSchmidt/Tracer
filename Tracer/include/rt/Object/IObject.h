@@ -44,21 +44,21 @@ namespace rt {
 
   class IObject {
   public:
-    IObject(const Transformf& objectToWorld, MaterialPtr& material) noexcept;
-    IObject(const Transformf& objectToWorld) noexcept;
+    IObject(const Transform& objectToWorld, MaterialPtr& material) noexcept;
+    IObject(const Transform& objectToWorld) noexcept;
     virtual ~IObject() noexcept;
 
-    virtual bool castShadow(const Rayf& ray) const;
+    virtual bool castShadow(const Ray& ray) const;
 
     // NOTE: All arguments passed to/returned from this method are in WORLD coordinates!
-    virtual bool intersect(SurfaceInfo *info, const Rayf& ray) const = 0;
+    virtual bool intersect(SurfaceInfo *info, const Ray& ray) const = 0;
 
     IMaterial *material();
     const IMaterial *material() const;
 
   protected:
-    Transformf  _xfrmWO{}; // Object -> World
-    Transformf  _xfrmOW{}; // World -> Object
+    Transform   _xfrmWO{}; // Object -> World
+    Transform   _xfrmOW{}; // World -> Object
     MaterialPtr _material{};
 
   private:

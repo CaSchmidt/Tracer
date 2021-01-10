@@ -44,7 +44,7 @@ namespace rt {
 
     virtual std::unique_ptr<ITexture> copy() const = 0;
 
-    virtual Color3f lookup(const real_T s, const real_T t) const = 0;
+    virtual Color lookup(const real_t s, const real_t t) const = 0;
   };
 
   using TexturePtr = std::unique_ptr<ITexture>;

@@ -38,16 +38,16 @@ namespace rt {
 
   class DirectionalLight : public ILightSource {
   public:
-    DirectionalLight(const Color3f& EL, const Normal3f& l) noexcept;
+    DirectionalLight(const Color& EL, const Direction& l) noexcept;
     ~DirectionalLight() noexcept;
 
-    LightInfo info(const Vertex3f& P) const;
+    LightInfo info(const Vertex& P) const;
 
-    static LightSourcePtr create(const Color3f& EL, const Normal3f& l);
+    static LightSourcePtr create(const Color& EL, const Direction& l);
 
   private:
-    Color3f  _EL{}; // irradiance
-    Normal3f _l{};
+    Color     _EL{}; // irradiance
+    Direction _l{};
   };
 
 } // namespace rt

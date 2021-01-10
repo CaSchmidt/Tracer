@@ -42,7 +42,7 @@ namespace rt {
     Renderer() = default;
     ~Renderer() noexcept = default;
 
-    Color3f castCameraRay(const Rayf& ray) const;
+    Color castCameraRay(const Ray& ray) const;
 
     void clear();
 
@@ -54,12 +54,12 @@ namespace rt {
 
   private:
     // NOTE: All arguments passed to/returned from these methods are in WORLD coordinates!
-    Color3f castRay(const Rayf& ray, const unsigned int depth = 0) const;
-    Color3f shade(const SurfaceInfo& sinfo, const Normal3f& v) const;
+    Color castRay(const Ray& ray, const unsigned int depth = 0) const;
+    Color shade(const SurfaceInfo& sinfo, const Direction& v) const;
 
     RenderOptions _options{};
     Scene         _scene{};
-    Transformf    _view{};
+    Transform     _view{};
   };
 
 } // namespace rt

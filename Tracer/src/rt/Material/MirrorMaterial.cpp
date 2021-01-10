@@ -54,12 +54,12 @@ namespace rt {
     return true;
   }
 
-  void MirrorMaterial::setReflectance(const real_T r)
+  void MirrorMaterial::setReflectance(const real_t r)
   {
-    _reflectance = csClamp(r, real_T{0}, real_T{1});
+    _reflectance = std::clamp<real_t>(r, 0, 1);
   }
 
-  real_T MirrorMaterial::reflectance() const
+  real_t MirrorMaterial::reflectance() const
   {
     return _reflectance;
   }

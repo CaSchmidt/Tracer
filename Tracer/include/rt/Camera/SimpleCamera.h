@@ -44,16 +44,16 @@ namespace rt {
     ~SimpleCamera();
 
     bool setup(const RenderOptions& options);
-    bool setup(const real_T fov_rad);
+    bool setup(const real_t fov_rad);
 
     Image render(const std::size_t width, const std::size_t height,
                  std::size_t y0, std::size_t y1,
                  const Renderer& renderer, const std::size_t samples = 0) const;
 
   private:
-    Matrix3f windowTransform(const std::size_t width, const std::size_t height) const;
+    Matrix windowTransform(const std::size_t width, const std::size_t height) const;
 
-    real_T _fov_rad{};
+    real_t _fov_rad{};
   };
 
 } // namespace rt

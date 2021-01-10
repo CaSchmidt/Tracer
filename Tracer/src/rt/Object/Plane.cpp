@@ -38,12 +38,12 @@ namespace rt {
 
   namespace priv {
 
-    constexpr bool isBounding(const real_T& value)
+    constexpr bool isBounding(const real_t& value)
     {
       return ZERO <= value  &&  value <= ONE;
     }
 
-    constexpr real_T normalized(const real_T& value, const real_T& lower, const real_T& scale)
+    constexpr real_t normalized(const real_t& value, const real_t& lower, const real_t& scale)
     {
       return (value - lower)/scale;
     }
@@ -52,8 +52,8 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  Plane::Plane(const Transformf& objectToWorld, MaterialPtr& material,
-               const real_T width, const real_T height) noexcept
+  Plane::Plane(const Transform& objectToWorld, MaterialPtr& material,
+               const real_t width, const real_t height) noexcept
     : IObject(objectToWorld, material)
     , _width{width}
     , _height{height}
@@ -64,18 +64,18 @@ namespace rt {
   {
   }
 
-  bool Plane::intersect(SurfaceInfo *info, const Rayf& ray) const
+  bool Plane::intersect(SurfaceInfo *info, const Ray& ray) const
   {
-    const Rayf rayObj = _xfrmOW*ray;
+    const Ray rayObj = _xfrmOW*ray;
 
-    const real_T t = geom::intersect::plane(rayObj);
+    const real_t t = geom::intersect::plane(rayObj);
     if( !rayObj.isValid(t) ) {
       return false;
     }
 
-    const Vertex3f Pobj = rayObj(t);
-    const real_T      u = priv::normalized(Pobj.x, -_width/2,  _width);
-    const real_T      v = priv::normalized(Pobj.y, -_height/2, _height);
+    const Vertex Pobj = rayObj(t);
+    const real_t    u = priv::normalized(Pobj.x, -_width/2,  _width);
+    const real_t    v = priv::normalized(Pobj.y, -_height/2, _height);
     if( !priv::isBounding(u)  ||  !priv::isBounding(v) ) {
       return false;
     }
@@ -85,7 +85,7 @@ namespace rt {
 
       info->object = this;
       info->t      = t;
-      info->N      = _xfrmWO*Normal3f{0, 0, 1};
+      info->N      = _xfrmWO*Normal{0, 0, 1};
       info->P      = _xfrmWO*Pobj;
       info->u      = u;
       info->v      = v;
@@ -94,8 +94,8 @@ namespace rt {
     return true;
   }
 
-  ObjectPtr Plane::create(const Transformf& objectToWorld, MaterialPtr& material,
-                          const real_T width, const real_T height)
+  ObjectPtr Plane::create(const Transform& objectToWorld, MaterialPtr& material,
+                          const real_t width, const real_t height)
   {
     return std::make_unique<Plane>(objectToWorld, material, width, height);
   }

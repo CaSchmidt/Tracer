@@ -41,60 +41,57 @@ namespace geom {
 
     // Constants /////////////////////////////////////////////////////////////
 
-    template<typename T> inline constexpr T ZERO = math::ZERO<T>;
-    template<typename T> inline constexpr T  TWO = math::TWO<T>;
+    inline constexpr real_t ZERO = math::ZERO<real_t>;
+    inline constexpr real_t  TWO = math::TWO<real_t>;
 
     // Intersection Tests ////////////////////////////////////////////////////
 
-    template<typename T>
-    inline T cylinder(const Ray<T>& ray, const T r)
+    inline real_t cylinder(const Ray& ray, const real_t r)
     {
-      const T ox = ray.origin().x;
-      const T oy = ray.origin().y;
-      const T dx = ray.direction().x;
-      const T dy = ray.direction().y;
-      const T  a =         dx*dx + dy*dy;
-      const T  b = TWO<T>*(dx*ox + dy*oy);
-      const T  c =         ox*ox + oy*oy - r*r;
-      T t1, t2;
-      if( !math::quadratic(a, b, c, t1, t2) ) {
-        return NO_INTERSECTION<T>;
+      const real_t ox = ray.origin().x;
+      const real_t oy = ray.origin().y;
+      const real_t dx = ray.direction().x;
+      const real_t dy = ray.direction().y;
+      const real_t  a =      dx*dx + dy*dy;
+      const real_t  b = TWO*(dx*ox + dy*oy);
+      const real_t  c =      ox*ox + oy*oy - r*r;
+      real_t t1, t2;
+      if( !math::quadratic<real_t>(a, b, c, t1, t2) ) {
+        return NO_INTERSECTION;
       }
-      if( t1 < ZERO<T> ) {
+      if( t1 < ZERO ) {
         t1 = t2;
-        if( t1 < ZERO<T> ) {
-          return NO_INTERSECTION<T>;
+        if( t1 < ZERO ) {
+          return NO_INTERSECTION;
         }
       }
       return t1;
     }
 
-    template<typename T>
-    inline T plane(const Ray<T>& ray, const T h = ZERO<T>)
+    inline real_t plane(const Ray& ray, const real_t h = ZERO)
     {
-      if( ray.direction().z == ZERO<T> ) {
-        return NO_INTERSECTION<T>;
+      if( ray.direction().z == ZERO ) {
+        return NO_INTERSECTION;
       }
-      const T t0 = (h - ray.origin().z)/ray.direction().z;
-      return t0 >= ZERO<T>
+      const real_t t0 = (h - ray.origin().z)/ray.direction().z;
+      return t0 >= ZERO
           ? t0
-          : NO_INTERSECTION<T>;
+          : NO_INTERSECTION;
     }
 
-    template<typename T>
-    inline T sphere(const Ray<T>& ray, const T r)
+    inline real_t sphere(const Ray& ray, const real_t r)
     {
-      const T a =        cs::dot(ray.direction(), ray.direction());
-      const T b = TWO<T>*cs::dot(ray.direction(), to_normal<T>(ray.origin()));
-      const T c =        cs::dot(ray.origin(),    ray.origin()) - r*r;
-      T t1, t2;
-      if( !math::quadratic(a, b, c, t1, t2) ) {
-        return NO_INTERSECTION<T>;
+      const real_t a =     n4::dot(ray.direction(), ray.direction());
+      const real_t b = TWO*n4::dot(ray.direction(), to_direction(ray.origin()));
+      const real_t c =     n4::dot(ray.origin(),    ray.origin()) - r*r;
+      real_t t1, t2;
+      if( !math::quadratic<real_t>(a, b, c, t1, t2) ) {
+        return NO_INTERSECTION;
       }
-      if( t1 < ZERO<T> ) { // ray is at least inside sphere
+      if( t1 < ZERO ) { // ray is at least inside sphere
         t1 = t2;
-        if( t1 < ZERO<T> ) { // sphere is behind ray
-          return NO_INTERSECTION<T>;
+        if( t1 < ZERO ) { // sphere is behind ray
+          return NO_INTERSECTION;
         }
       }
       return t1; // return nearest hit from the ray's origin

@@ -38,8 +38,8 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  Cylinder::Cylinder(const Transformf& objectToWorld, MaterialPtr& material,
-                     const real_T height, const real_T radius) noexcept
+  Cylinder::Cylinder(const Transform& objectToWorld, MaterialPtr& material,
+                     const real_t height, const real_t radius) noexcept
     : IObject(objectToWorld, material)
     , _height{height}
     , _radius{radius}
@@ -50,24 +50,24 @@ namespace rt {
   {
   }
 
-  bool Cylinder::intersect(SurfaceInfo *info, const Rayf& ray) const
+  bool Cylinder::intersect(SurfaceInfo *info, const Ray& ray) const
   {
-    const Rayf rayObj = _xfrmOW*ray;
+    const Ray rayObj = _xfrmOW*ray;
 
-    const real_T t = geom::intersect::cylinder(rayObj, _radius);
+    const real_t t = geom::intersect::cylinder(rayObj, _radius);
     if( !rayObj.isValid(t) ) {
       return false;
     }
 
-    const Vertex3f Pobj = rayObj(t);
-    if( csAbs(Pobj.z) > _height/TWO ) {
+    const Vertex Pobj = rayObj(t);
+    if( n4::abs(Pobj.z) > _height/TWO ) {
       return false;
     }
 
     if( info != nullptr ) {
-      const Normal3f Nobj = cs::normalize(Normal3f{Pobj.x, Pobj.y, 0});
-      const real_T      u = math::phase<real_T>(Pobj.x, Pobj.y)/TWO_PI;
-      const real_T      v = (Pobj.z + _height/2)/_height;
+      const Normal Nobj = n4::normalize(Normal{Pobj.x, Pobj.y, 0});
+      const real_t    u = math::phase<real_t>(Pobj.x, Pobj.y)/TWO_PI;
+      const real_t    v = (Pobj.z + _height/2)/_height;
 
       *info = SurfaceInfo();
 
@@ -82,8 +82,8 @@ namespace rt {
     return true;
   }
 
-  ObjectPtr Cylinder::create(const Transformf& objectToWorld, MaterialPtr& material,
-                             const real_T height, const real_T radius)
+  ObjectPtr Cylinder::create(const Transform& objectToWorld, MaterialPtr& material,
+                             const real_t height, const real_t radius)
   {
     return std::make_unique<Cylinder>(objectToWorld, material, height, radius);
   }

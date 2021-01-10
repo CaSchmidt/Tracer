@@ -36,52 +36,50 @@
 
 namespace geom {
 
-  template<typename T>
   class Transform {
   public:
     // Construction & Assignment /////////////////////////////////////////////
 
-    Transform(const Transform<T>&) noexcept = default;
-    Transform<T>& operator=(const Transform<T>&) noexcept = default;
+    Transform(const Transform&) noexcept = default;
+    Transform& operator=(const Transform&) = default;
 
-    Transform(Transform<T>&&) noexcept = default;
-    Transform<T>& operator=(Transform<T>&&) noexcept = default;
+    Transform(Transform&&) noexcept = default;
+    Transform& operator=(Transform&&) = default;
 
     ~Transform() noexcept = default;
 
-    Transform(const Matrix<T>& X = geom::identity<T>(), const Vertex<T>& t = Vertex<T>{}) noexcept
-      : _t{t}
-      , _X{X}
+    Transform(const Matrix& X = n4::identity()) noexcept
+      : _X{X}
     {
-      _haveInv = cs::determinant(X) != 0;
-      if( _haveInv ) {
-        _Xinv = cs::inverse(X);
-      } else {
-        _Xinv = 0;
-      }
-      _Xn = cs::transpose(_Xinv);
+      _Xinv = _X.inverse();
+      _Xn   = _Xinv.transpose();
     }
 
     // Operators /////////////////////////////////////////////////////////////
 
-    inline Normal<T> operator*(const Normal<T>& n) const
+    inline Direction operator*(const Direction& d) const
+    {
+      return _X*d;
+    }
+
+    inline Normal operator*(const Normal& n) const
     {
       return _Xn*n;
     }
 
-    inline Vertex<T> operator*(const Vertex<T>& v) const
+    inline Vertex operator*(const Vertex& v) const
     {
-      return _X*v + _t;
+      return _X*v;
     }
 
-    inline Transform<T> operator*(const Transform<T>& other) const
+    inline Transform operator*(const Transform& other) const
     {
-      return Transform<T>{_X*other._X, _t + _X*other._t};
+      return Transform(_X*other._X);
     }
 
-    inline Ray<T> operator*(const Ray<T>& ray) const
+    inline Ray operator*(const Ray& ray) const
     {
-      return Ray<T>{_X*ray.origin() + _t, _X*ray.direction()};
+      return Ray(operator*(ray.origin()), operator*(ray.direction()));
     }
 
     // Special Transforms ////////////////////////////////////////////////////
@@ -93,75 +91,50 @@ namespace geom {
      * - x points right
      * - y points up
      */
-    static inline Transform<T> lookAt(const Vertex<T>& from, const Vertex<T>& to,
-                                      const Normal<T>& up)
+    static inline Transform lookAt(const Vertex& from, const Vertex& to,
+                                   const Direction& up)
     {
-      const Normal<T> z = to_normal<T>(cs::direction(to, from)); // Looking along the NEGATIVE z axis!
-      const Normal<T> x = cs::normalize(cs::cross(up, z));
-      const Normal<T> y = cs::normalize(cs::cross(z, x));
-      return Transform<T>{{ x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z }, from};
+      const Direction z = to_direction(n4::direction(to, from)); // Looking along the NEGATIVE z axis!
+      const Direction x = n4::normalize(n4::cross(up, z));
+      const Direction y = n4::normalize(n4::cross(z, x));
+      return Transform(Matrix{
+                         x.x, y.x, z.x, from.x,
+                         x.y, y.y, z.y, from.y,
+                         x.z, y.z, z.z, from.z,
+                           0,   0,   0,      1
+                       });
     }
 
-    static inline Transform<T> rotateZYX(const T rz, const T ry, const T rx)
+    static inline Transform rotateZYX(const real_t rz, const real_t ry, const real_t rx)
     {
-      return Transform<T>{
-        geom::rotateZ<T>(rz)*geom::rotateY<T>(ry)*geom::rotateX<T>(rx)
-      };
+      return Transform(
+            n4::rotateZ(rz)*n4::rotateY(ry)*n4::rotateX(rx)
+            );
     }
 
-    static inline Transform<T> rotateZYXbyPI2(const signed int iz, const signed int iy, const signed int ix)
+    static inline Transform rotateZYXbyPI2(const signed int iz, const signed int iy, const signed int ix)
     {
-      return Transform<T>{
-        geom::rotateZbyPI2<T>(iz)*geom::rotateYbyPI2<T>(iy)*geom::rotateXbyPI2<T>(ix)
-      };
+      return Transform(
+            n4::rotateZbyPI2(iz)*n4::rotateYbyPI2(iy)*n4::rotateXbyPI2(ix)
+            );
     }
 
-    static inline Transform<T> scale(const T sx, const T sy, const T sz)
+    static inline Transform translate(const real_t tx, const real_t ty, const real_t tz)
     {
-      return Transform<T>{geom::scale<T>(sx, sy, sz)};
-    }
-
-    static inline Transform<T> translate(const Vertex<T>& t)
-    {
-      return Transform<T>{geom::identity<T>(), t};
+      return Transform(n4::translate(tx, ty, tz));
     }
 
     // Inverse ///////////////////////////////////////////////////////////////
 
-    inline Transform<T> inverse(bool *ok = nullptr) const
+    inline Transform inverse() const
     {
-      if( ok != nullptr ) {
-        *ok = _haveInv;
-      }
-      return Transform<T>{_Xinv, -_Xinv*_t};
-    }
-
-    // Normal Transform //////////////////////////////////////////////////////
-
-    inline const Matrix<T>& normalTransform(bool *ok = nullptr) const
-    {
-      if( ok != nullptr ) {
-        *ok = _haveInv;
-      }
-      return _Xn;
-    }
-
-    // Element Access ////////////////////////////////////////////////////////
-
-    inline const Matrix<T>& scaledRotation() const
-    {
-      return _X;
-    }
-
-    inline const Vertex<T>& translation() const
-    {
-      return _t;
+      return Transform(_Xinv);
     }
 
   private:
-    bool _haveInv{};
-    Vertex<T> _t{};
-    Matrix<T> _X{}, _Xinv{}, _Xn{};
+    Matrix _X{};
+    Matrix _Xinv{};
+    Matrix _Xn{};
   };
 
 } // namespace geom

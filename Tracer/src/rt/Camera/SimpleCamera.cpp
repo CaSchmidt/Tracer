@@ -52,7 +52,7 @@ namespace rt {
     return setup(options.fov_rad);
   }
 
-  bool SimpleCamera::setup(const real_T fov_rad)
+  bool SimpleCamera::setup(const real_t fov_rad)
   {
     if( !isValidFoV(fov_rad) ) {
       return false;
@@ -70,21 +70,21 @@ namespace rt {
       return Image();
     }
 
-    const Matrix3f W = windowTransform(width, height);
+    const Matrix W = windowTransform(width, height);
 
     if( samples > 1 ) {
-      render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color3f {
-        Color3f color;
+      render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color {
+        Color color;
         for(std::size_t s = 0; s < samples; s++) {
-          color += cs::clamp(renderer.castCameraRay(ray(W, x, y, true)), 0, 1);
+          color += n4::clamp(renderer.castCameraRay(ray(W, x, y, true)), 0, 1);
         }
-        color /= static_cast<real_T>(samples);
+        color /= static_cast<real_t>(samples);
         return color;
-                  });
+      });
     } else {
-      render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color3f {
-                    return renderer.castCameraRay(ray(W, x, y));
-                  });
+      render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color {
+        return renderer.castCameraRay(ray(W, x, y));
+      });
     }
 
     return image;
@@ -98,13 +98,13 @@ namespace rt {
    * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays/generating-camera-rays
    */
 
-  Matrix3f SimpleCamera::windowTransform(const std::size_t width, const std::size_t height) const
+  Matrix SimpleCamera::windowTransform(const std::size_t width, const std::size_t height) const
   {
-    const real_T w = static_cast<real_T>(width);
-    const real_T h = static_cast<real_T>(height);
-    const real_T a = w/h;
-    const real_T n = csTan(_fov_rad/TWO);
-    return Matrix3f{ TWO*a*n/w, 0, -a*n, 0, -TWO*n/h, n, 0, 0, -1 };
+    const real_t w = static_cast<real_t>(width);
+    const real_t h = static_cast<real_t>(height);
+    const real_t a = w/h;
+    const real_t n = std::tan(_fov_rad/TWO);
+    return n4::translate(-a*n, n, -1)*n4::scale(TWO*a*n/w, -TWO*n/h, 1);
   }
 
 } // namespace rt

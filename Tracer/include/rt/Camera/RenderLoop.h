@@ -44,10 +44,10 @@ namespace rt {
     for(std::size_t y = y0; y < y1; y++) {
       uint8_t *row = image.row(y - y0);
       for(std::size_t x = 0; x < image.width(); x++) {
-        const Color3f color = cs::clamp(radiance(x, y), 0, 1)*255;
-        *row++ = static_cast<uint8_t>(color.eval<0,0>());
-        *row++ = static_cast<uint8_t>(color.eval<1,0>());
-        *row++ = static_cast<uint8_t>(color.eval<2,0>());
+        const Color color = n4::clamp(radiance(x, y), 0, 1)*255;
+        *row++ = static_cast<uint8_t>(color.r);
+        *row++ = static_cast<uint8_t>(color.g);
+        *row++ = static_cast<uint8_t>(color.b);
         *row++ = 0xFF;
       }
     }

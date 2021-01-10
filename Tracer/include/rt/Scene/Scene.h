@@ -50,8 +50,8 @@ namespace rt {
 
     void clear();
 
-    bool trace(SurfaceInfo& info, const Rayf& ray) const;
-    bool trace(const Rayf& ray) const;
+    bool trace(SurfaceInfo& info, const Ray& ray) const;
+    bool trace(const Ray& ray) const;
 
     const LightSources& lights() const;
 

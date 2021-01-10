@@ -60,36 +60,36 @@ namespace rt {
     return Image(width, y1 - y0);
   }
 
-  bool ICamera::isValidFoV(const real_T fov_rad)
+  bool ICamera::isValidFoV(const real_t fov_rad)
   {
     return ZERO < fov_rad  &&  fov_rad < PI;
   }
 
-  real_T ICamera::rand() const
+  real_t ICamera::rand() const
   {
     return _randDis(*const_cast<std::mt19937*>(&_randGen));
   }
 
-  Rayf ICamera::ray(const Matrix3f& W, const std::size_t x, const std::size_t y,
-                    const bool random) const
+  Ray ICamera::ray(const Matrix& W, const std::size_t x, const std::size_t y,
+                   const bool random) const
   {
-    const real_T dx = random
+    const real_t dx = random
         ? rand()
         : ONE_HALF;
-    const real_T dy = random
+    const real_t dy = random
         ? rand()
         : ONE_HALF;
 
-    const Vertex3f org = W*Vertex3f{static_cast<real_T>(x) + dx, static_cast<real_T>(y) + dy, 1};
+    const Vertex org = W*Vertex{static_cast<real_t>(x) + dx, static_cast<real_t>(y) + dy};
 
-    return Rayf{org, to_normal(org)};
+    return Ray(org, geom::to_direction(org));
   }
 
   ////// private /////////////////////////////////////////////////////////////
 
   void ICamera::rand_init()
   {
-    _randDis = std::uniform_real_distribution<real_T>(ZERO, ONE);
+    _randDis = std::uniform_real_distribution<real_t>(ZERO, ONE);
 
     std::random_device randDev;
     _randGen.seed(randDev());

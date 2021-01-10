@@ -37,18 +37,17 @@
 
 namespace geom {
 
-  template<typename T>
   class Ray {
   public:
     Ray() noexcept = default;
 
     Ray(const Ray&) noexcept = default;
-    Ray& operator=(const Ray&) noexcept = default;
+    Ray& operator=(const Ray&) = default;
 
     Ray(Ray&&) noexcept = default;
-    Ray& operator=(Ray&&) noexcept = default;
+    Ray& operator=(Ray&&) = default;
 
-    Ray(const Vertex<T>& org, const Normal<T>& dir, const T& tMax = MAX_T) noexcept
+    Ray(const Vertex& org, const Direction& dir, const real_t tMax = MAX_T) noexcept
     {
       operator=(org);
       operator=(dir);
@@ -57,39 +56,39 @@ namespace geom {
 
     ~Ray() noexcept = default;
 
-    Ray<T>& operator=(const Vertex<T>& org)
+    Ray& operator=(const Vertex& org)
     {
       _org = org;
       return *this;
     }
 
-    Ray<T>& operator=(const Normal<T>& dir)
+    Ray& operator=(const Direction& dir)
     {
-      _dir = cs::normalize(dir);
+      _dir = n4::normalize(dir);
       return *this;
     }
 
-    inline Vertex<T> operator()(const T& t) const
+    inline Vertex operator()(const real_t t) const
     {
-      return _org + to_vertex<T>(t*_dir);
+      return _org + to_vertex(t*_dir);
     }
 
-    inline Vertex<T> origin() const
+    inline Vertex origin() const
     {
       return _org;
     }
 
-    inline Normal<T> direction() const
+    inline Direction direction() const
     {
       return _dir;
     }
 
-    inline T tMax() const
+    inline real_t tMax() const
     {
       return _tMax;
     }
 
-    void setTMax(const T& t)
+    void setTMax(const real_t t)
     {
       if( geom::intersect::isHit(t) ) {
         _tMax = t;
@@ -98,17 +97,17 @@ namespace geom {
       }
     }
 
-    inline bool isValid(const T& t) const
+    inline bool isValid(const real_t t) const
     {
       return geom::intersect::isHit(t)  &&  t < _tMax;
     }
 
   private:
-    static constexpr T MAX_T = math::Max<T>;
+    static constexpr real_t MAX_T = math::Max<real_t>;
 
-    Vertex<T> _org{};
-    Normal<T> _dir{};
-    T         _tMax{MAX_T};
+    Vertex    _org{};
+    Direction _dir{};
+    real_t    _tMax{MAX_T};
   };
 
 } // namespace geom

@@ -50,20 +50,20 @@ namespace rt {
 
     void setDiffuse(TexturePtr& tex);
     void setDiffuse(TexturePtr&& tex);
-    Color3f diffuse(const real_T s, const real_T t) const;
+    Color diffuse(const real_t s, const real_t t) const;
 
-    void setShininess(const real_T mSpec);
-    real_T shininess() const;
+    void setShininess(const real_t mSpec);
+    real_t shininess() const;
 
     void setSpecular(TexturePtr& tex);
     void setSpecular(TexturePtr&& tex);
-    Color3f specular(const real_T s, const real_T t) const;
+    Color specular(const real_t s, const real_t t) const;
 
     static MaterialPtr create();
 
   private:
     TexturePtr _diffTex{};
-    real_T     _shininess{};
+    real_t     _shininess{};
     TexturePtr _specTex{};
   };
 

@@ -75,19 +75,19 @@ namespace rt {
     _diffTex = std::move(tex);
   }
 
-  Color3f OpaqueMaterial::diffuse(const real_T s, const real_T t) const
+  Color OpaqueMaterial::diffuse(const real_t s, const real_t t) const
   {
     return _diffTex
         ? _diffTex->lookup(s, t)/PI
-        : Color3f{0, 0, 0};
+        : Color();
   }
 
-  void OpaqueMaterial::setShininess(const real_T mSpec)
+  void OpaqueMaterial::setShininess(const real_t mSpec)
   {
-    _shininess = csMax(mSpec, ZERO);
+    _shininess = std::max<real_t>(mSpec, ZERO);
   }
 
-  real_T OpaqueMaterial::shininess() const
+  real_t OpaqueMaterial::shininess() const
   {
     return _shininess;
   }
@@ -102,11 +102,11 @@ namespace rt {
     _specTex = std::move(tex);
   }
 
-  Color3f OpaqueMaterial::specular(const real_T s, const real_T t) const
+  Color OpaqueMaterial::specular(const real_t s, const real_t t) const
   {
     return isSpecular()
         ? _specTex->lookup(s, t)*(_shininess + EIGHT)/EIGHT/PI
-        : Color3f{0, 0, 0};
+        : Color();
   }
 
   MaterialPtr OpaqueMaterial::create()

@@ -35,8 +35,8 @@
 
 namespace rt {
 
-  CheckedTexture::CheckedTexture(const Color3f& colorA, const Color3f& colorB,
-                                 const real_T scaleS, const real_T scaleT) noexcept
+  CheckedTexture::CheckedTexture(const Color& colorA, const Color& colorB,
+                                 const real_t scaleS, const real_t scaleT) noexcept
     : _colorA{colorA}
     , _colorB{colorB}
     , _scaleS{scaleS}
@@ -53,17 +53,17 @@ namespace rt {
     return std::make_unique<CheckedTexture>(_colorA, _colorB, _scaleS, _scaleT);
   }
 
-  Color3f CheckedTexture::lookup(const real_T s, const real_T t) const
+  Color CheckedTexture::lookup(const real_t s, const real_t t) const
   {
-    const bool a = csRemndr(s*_scaleS, ONE) > ONE_HALF;
-    const bool b = csRemndr(t*_scaleT, ONE) > ONE_HALF;
+    const bool a = n4::remndr(s*_scaleS, ONE) > ONE_HALF;
+    const bool b = n4::remndr(t*_scaleT, ONE) > ONE_HALF;
     return math::XOR(a, b)
         ? _colorA
         : _colorB;
   }
 
-  TexturePtr CheckedTexture::create(const Color3f& colorA, const Color3f& colorB,
-                                    const real_T scaleS, const real_T scaleT)
+  TexturePtr CheckedTexture::create(const Color& colorA, const Color& colorB,
+                                    const real_t scaleS, const real_t scaleT)
   {
     return std::make_unique<CheckedTexture>(colorA, colorB, scaleS, scaleT);
   }

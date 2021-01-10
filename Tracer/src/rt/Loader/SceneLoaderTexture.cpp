@@ -43,22 +43,22 @@ namespace rt {
     {
       bool myOk = false;
 
-      const Color3f colorA = parseColor(node->FirstChildElement("ColorA"), &myOk);
+      const Color colorA = parseColor(node->FirstChildElement("ColorA"), &myOk);
       if( !myOk ) {
         return TexturePtr();
       }
 
-      const Color3f colorB = parseColor(node->FirstChildElement("ColorB"), &myOk);
+      const Color colorB = parseColor(node->FirstChildElement("ColorB"), &myOk);
       if( !myOk ) {
         return TexturePtr();
       }
 
-      const real_T scaleS = parseReal(node->FirstChildElement("ScaleS"), &myOk);
+      const real_t scaleS = parseReal(node->FirstChildElement("ScaleS"), &myOk);
       if( !myOk  ||  scaleS <= 0 ) {
         return TexturePtr();
       }
 
-      const real_T scaleT = parseReal(node->FirstChildElement("ScaleT"), &myOk);
+      const real_t scaleT = parseReal(node->FirstChildElement("ScaleT"), &myOk);
       if( !myOk  ||  scaleT <= 0 ) {
         return TexturePtr();
       }
@@ -70,7 +70,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      const Color3f color = parseColor(node->FirstChildElement("Color"), &myOk);
+      const Color color = parseColor(node->FirstChildElement("Color"), &myOk);
       if( !myOk ) {
         return TexturePtr();
       }

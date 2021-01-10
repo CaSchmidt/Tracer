@@ -53,42 +53,42 @@
 
 namespace geom {
 
-  template<typename T>
-  inline T fresnel(const Normal<T>& I, const Normal<T>& N, const T& eta)
+  inline real_t fresnel(const Direction& I, const Normal& N, const real_t eta)
   {
-    const T cosTi = -cs::dot(I, N);
-    const T sinTi = math::pythagoras(cosTi);
+    const real_t cosTi = std::clamp<real_t>(-n4::dot(I, to_direction(N)), -1, 1);
+    const real_t sinTi = math::pythagoras(cosTi);
 
-    const T sinTt = eta*sinTi; // Snell's law
-    if( sinTt >= math::ONE<T> ) { // total internal reflection
-      return math::ONE<T>;
+    const real_t sinTt = eta*sinTi; // Snell's law
+    if( sinTt >= math::ONE<real_t> ) { // total internal reflection
+      return math::ONE<real_t>;
     }
 
-    const T cosTt = math::pythagoras(sinTt);
+    const real_t cosTt = math::pythagoras(sinTt);
 
-    const T para = (cosTi - eta*cosTt)/(cosTi + eta*cosTt);
-    const T perp = (eta*cosTi - cosTt)/(eta*cosTi + cosTt);
+    const real_t para = (cosTi - eta*cosTt)/(cosTi + eta*cosTt);
+    const real_t perp = (eta*cosTi - cosTt)/(eta*cosTi + cosTt);
 
-    return (para*para + perp*perp)*math::ONE_HALF<T>;
+    return (para*para + perp*perp)*math::ONE_HALF<real_t>;
   }
 
-  template<typename T> // cf. GLSL v4.60, 8.5. Geometric Functions
-  inline Normal<T> reflect(const Normal<T>& I, const Normal<T>& N)
+  // cf. GLSL v4.60, 8.5. Geometric Functions
+  inline Direction reflect(const Direction& I, const Normal& N)
   {
-    return I - math::TWO<T>*cs::dot(I, N)*N;
+    const real_t DOT = n4::dot(I, to_direction(N));
+    return I - math::TWO<real_t>*DOT*to_direction(N);
   }
 
-  template<typename T> // cf. GLSL v4.60, 8.5. Geometric Functions
-  inline Normal<T> refract(const Normal<T>& I, const Normal<T>& N, const T& eta)
+  // cf. GLSL v4.60, 8.5. Geometric Functions
+  inline Direction refract(const Direction& I, const Normal& N, const real_t eta)
   {
-    const T DOT = cs::dot(I, N);
+    const real_t DOT = n4::dot(I, to_direction(N));
 
-    const T k = math::ONE<T> - eta*eta*(math::ONE<T> - DOT*DOT);
-    if( k < math::ZERO<T> ) {
-      return Normal<T>{};
+    const real_t k = math::ONE<real_t> - eta*eta*(math::ONE<real_t> - DOT*DOT);
+    if( k < math::ZERO<real_t> ) {
+      return Direction();
     }
 
-    return eta*I - (eta*DOT + csSqrt(k))*N;
+    return eta*I - (eta*DOT + std::sqrt(k))*to_direction(N);
   }
 
 } // namespace geom

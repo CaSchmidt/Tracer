@@ -44,23 +44,25 @@ namespace rt {
 
   namespace priv {
 
-    real_T parseAngle(const tinyxml2::XMLElement *node, bool *ok);
+    real_t parseAngle(const tinyxml2::XMLElement *node, bool *ok);
 
-    Color3f parseColor(const tinyxml2::XMLElement *node, bool *ok, const bool clamp = true);
+    Color parseColor(const tinyxml2::XMLElement *node, bool *ok, const bool clamp = true);
 
-    Normal3f parseNormal(const tinyxml2::XMLElement *node, bool *ok);
+    Direction parseDirection(const tinyxml2::XMLElement *node, bool *ok);
 
-    real_T parseReal(const tinyxml2::XMLElement *node, bool *ok);
+    Normal parseNormal(const tinyxml2::XMLElement *node, bool *ok);
 
-    Matrix3f parseRotation(const tinyxml2::XMLElement *node, bool *ok);
+    real_t parseReal(const tinyxml2::XMLElement *node, bool *ok);
+
+    Matrix parseRotation(const tinyxml2::XMLElement *node, bool *ok);
 
     std::size_t parseSize(const tinyxml2::XMLElement *node, bool *ok);
 
     std::string parseString(const tinyxml2::XMLElement *node, bool *ok);
 
-    Transformf parseTransform(const tinyxml2::XMLElement *node, bool *ok);
+    Transform parseTransform(const tinyxml2::XMLElement *node, bool *ok);
 
-    Vertex3f parseVertex(const tinyxml2::XMLElement *node, bool *ok);
+    Vertex parseVertex(const tinyxml2::XMLElement *node, bool *ok);
 
   } // namespace priv
 

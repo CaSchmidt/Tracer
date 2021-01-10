@@ -114,7 +114,7 @@ add_executable(Tracer
 
 format_output_name(Tracer "Tracer")
 
-add_dependencies(Tracer NumericArray)
+add_dependencies(Tracer N4)
 
 target_include_directories(Tracer PRIVATE
   ${Tracer_SOURCE_DIR}/3rdparty/font8x8/include

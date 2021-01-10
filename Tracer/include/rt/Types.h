@@ -38,71 +38,49 @@
 #include "geom/Ray.h"
 #include "geom/Transform.h"
 #include "math/Constants.h"
-#include "rt/Color.h"
 
 namespace rt {
 
-  ////// Floating-Point Type /////////////////////////////////////////////////
+  ////// Types ///////////////////////////////////////////////////////////////
 
-  template<typename T>
-  inline constexpr bool if_real_v = std::is_floating_point_v<T>;
+  using geom::real_t;
+  using geom::size_t;
 
-  template<typename T>
-  using if_real_t = std::enable_if_t<if_real_v<T>,T>;
+  using Color = n4::Color3f;
+  using geom::Direction;
+  using geom::Matrix;
+  using geom::Normal;
+  using geom::Vertex;
 
-  using real_T = if_real_t<float>; // Implementation
-
+  using geom::Ray;
+  using geom::Transform;
 
   ////// Special Values //////////////////////////////////////////////////////
 
-  inline constexpr real_T INF_REAL_T = math::Inf<real_T>;
+  inline constexpr real_t INF_REAL_T = math::Inf<real_t>;
 
-  inline constexpr real_T MAX_REAL_T = math::Max<real_T>;
-  inline constexpr real_T MIN_REAL_T = math::Min<real_T>;
+  inline constexpr real_t MAX_REAL_T = math::Max<real_t>;
+  inline constexpr real_t MIN_REAL_T = math::Min<real_t>;
 
-  inline constexpr real_T NAN_REAL_T = math::qNaN<real_T>;
+  inline constexpr real_t NAN_REAL_T = math::qNaN<real_t>;
 
   ////// Constants ///////////////////////////////////////////////////////////
 
-  inline constexpr real_T  ZERO = static_cast<real_T>(0);
-  inline constexpr real_T   ONE = static_cast<real_T>(1);
-  inline constexpr real_T   TWO = static_cast<real_T>(2);
-  inline constexpr real_T THREE = static_cast<real_T>(3);
-  inline constexpr real_T  FOUR = static_cast<real_T>(4);
-  inline constexpr real_T EIGHT = static_cast<real_T>(8);
-  inline constexpr real_T   TEN = static_cast<real_T>(10);
+  inline constexpr real_t  ZERO = static_cast<real_t>(0);
+  inline constexpr real_t   ONE = static_cast<real_t>(1);
+  inline constexpr real_t   TWO = static_cast<real_t>(2);
+  inline constexpr real_t THREE = static_cast<real_t>(3);
+  inline constexpr real_t  FOUR = static_cast<real_t>(4);
+  inline constexpr real_t EIGHT = static_cast<real_t>(8);
+  inline constexpr real_t   TEN = static_cast<real_t>(10);
 
-  inline constexpr real_T ONE_HALF = static_cast<real_T>(0.5);
+  inline constexpr real_t ONE_HALF = static_cast<real_t>(0.5);
 
-  inline constexpr real_T      PI      = math::PI<real_T>;
-  inline constexpr real_T      PI_HALF = math::PI_HALF<real_T>;
-  inline constexpr real_T  TWO_PI      = math::TWO_PI<real_T>;
+  inline constexpr real_t     PI      = math::PI<real_t>;
+  inline constexpr real_t     PI_HALF = math::PI_HALF<real_t>;
+  inline constexpr real_t TWO_PI      = math::TWO_PI<real_t>;
 
-  inline constexpr real_T TRACE_BIAS = static_cast<real_T>((1.0/1024.0)/10.0);
-
-  inline constexpr bool NO_SHADOW_RAY = false;
-  inline constexpr bool    SHADOW_RAY = true;
-
-  ////// Spatial Types ///////////////////////////////////////////////////////
-
-  using    Color3f = Color<real_T>;
-  using   Matrix3f = geom::Matrix<real_T>;
-  using   Normal3f = geom::Normal<real_T>;
-  using       Rayf = geom::Ray<real_T>;
-  using Transformf = geom::Transform<real_T>;
-  using   Vertex3f = geom::Vertex<real_T>;
-
-  template<typename EXPR>
-  inline auto to_normal(const EXPR& expr)
-  {
-    return cs::array_cast<Normal3f::traits_type>(expr);
-  }
-
-  template<typename EXPR>
-  inline auto to_vertex(const EXPR& expr)
-  {
-    return cs::array_cast<Vertex3f::traits_type>(expr);
-  }
+  inline constexpr real_t TRACE_BIAS = static_cast<real_t>((1.0/1024.0)/10.0);
 
 } // namespace rt
 

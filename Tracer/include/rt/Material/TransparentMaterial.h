@@ -46,13 +46,13 @@ namespace rt {
 
     bool isShadowCaster() const;
 
-    void setRefraction(const real_T eta);
-    real_T refraction() const;
+    void setRefraction(const real_t eta);
+    real_t refraction() const;
 
     static MaterialPtr create();
 
   private:
-    real_T _refraction{};
+    real_t _refraction{};
   };
 
 } // namespace rt

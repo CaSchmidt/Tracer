@@ -38,25 +38,19 @@ namespace rt {
 
   class Group : public IObject {
   public:
-    Group(const Transformf& objectToWorld) noexcept;
+    Group(const Transform& objectToWorld) noexcept;
     ~Group() noexcept;
 
     void add(ObjectPtr& object);
     void clear();
 
-    bool castShadow(const Rayf &ray) const;
+    bool castShadow(const Ray &ray) const;
 
-    bool intersect(SurfaceInfo *info, const Rayf& ray) const;
+    bool intersect(SurfaceInfo *info, const Ray& ray) const;
 
-    static ObjectPtr create(const Transformf& objectToWorld);
+    static ObjectPtr create(const Transform& objectToWorld);
 
   private:
-    template<typename T>
-    T objectToWorld(const T Xobj) const
-    {
-      return _xfrmWO*Xobj;
-    }
-
     Objects _objects{};
   };
 

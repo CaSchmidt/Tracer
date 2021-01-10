@@ -54,12 +54,12 @@ namespace rt {
     return false;
   }
 
-  void TransparentMaterial::setRefraction(const real_T eta)
+  void TransparentMaterial::setRefraction(const real_t eta)
   {
-    _refraction = csMax(eta, ONE);
+    _refraction = std::max<real_t>(eta, ONE);
   }
 
-  real_T TransparentMaterial::refraction() const
+  real_t TransparentMaterial::refraction() const
   {
     return _refraction;
   }

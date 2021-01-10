@@ -36,8 +36,6 @@
 
 #include <algorithm>
 
-#include <cs/Math.h>
-
 #include "math/Constants.h"
 
 namespace math {
@@ -45,7 +43,7 @@ namespace math {
   template<typename T>
   inline T abs(const T& x, const T& y)
   {
-    return csSqrt(x*x + y*y);
+    return std::sqrt(x*x + y*y);
   }
 
   template<typename T>
@@ -58,7 +56,7 @@ namespace math {
   inline T phase(const T& x, const T& y)
   {
     // atan2(y,x) -> phi := [-pi,pi]
-    T phi = csATan2(y, x);
+    T phi = std::atan2(y, x);
     if( phi < ZERO<T> ) {
       phi += TWO_PI<T>;
     }
@@ -69,7 +67,7 @@ namespace math {
   inline T pythagoras(const T& x)
   {
     // x^2 + y^2 = 1  =>  y = sqrt(1 - x^2)
-    return csSqrt(csMax(ZERO<T>, ONE<T> - x*x));
+    return std::sqrt(std::max<T>(ZERO<T>, ONE<T> - x*x));
   }
 
   template<typename T>
@@ -87,7 +85,7 @@ namespace math {
       return false;
     }
 
-    const double rootDiscrim = csSqrt(discrim);
+    const double rootDiscrim = std::sqrt(discrim);
     const double q = b < ZERO<double>
         ? -ONE_HALF<double>*(b - rootDiscrim)
         : -ONE_HALF<double>*(b + rootDiscrim);
@@ -96,7 +94,7 @@ namespace math {
     x2 = static_cast<T>(c/q);
 
     if( x1 > x2 ) {
-      std::swap(x1, x2);
+      std::swap<T>(x1, x2);
     }
 
     return true;

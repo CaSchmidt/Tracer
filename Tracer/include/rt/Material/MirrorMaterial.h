@@ -46,12 +46,12 @@ namespace rt {
 
     bool isShadowCaster() const;
 
-    void setReflectance(const real_T r);
-    real_T reflectance() const;
+    void setReflectance(const real_t r);
+    real_t reflectance() const;
 
     static MaterialPtr create();
   private:
-    real_T _reflectance{};
+    real_t _reflectance{};
   };
 
 } // namespace rt

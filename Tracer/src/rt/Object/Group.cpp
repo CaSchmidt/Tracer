@@ -37,7 +37,7 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  Group::Group(const Transformf& objectToWorld) noexcept
+  Group::Group(const Transform& objectToWorld) noexcept
     : IObject(objectToWorld)
     , _objects{}
   {
@@ -59,9 +59,9 @@ namespace rt {
     _objects.clear();
   }
 
-  bool Group::castShadow(const Rayf &ray) const
+  bool Group::castShadow(const Ray &ray) const
   {
-    const Rayf rayObj = _xfrmOW*ray;
+    const Ray rayObj = _xfrmOW*ray;
     for(const ObjectPtr& o : _objects) {
       if( o->castShadow(rayObj) ) {
         return true;
@@ -70,9 +70,9 @@ namespace rt {
     return false;
   }
 
-  bool Group::intersect(SurfaceInfo *info, const Rayf& ray) const
+  bool Group::intersect(SurfaceInfo *info, const Ray& ray) const
   {
-    const Rayf rayObj = _xfrmOW*ray;
+    const Ray rayObj = _xfrmOW*ray;
 
     if( info != nullptr ) {
       *info = SurfaceInfo();
@@ -85,8 +85,8 @@ namespace rt {
         }
       }
       if( info->isHit() ) {
-        info->N = objectToWorld(info->N);
-        info->P = objectToWorld(info->P);
+        info->N = _xfrmWO*info->N;
+        info->P = _xfrmWO*info->P;
         return true;
       }
 
@@ -101,7 +101,7 @@ namespace rt {
     return false;
   }
 
-  ObjectPtr Group::create(const Transformf& objectToWorld)
+  ObjectPtr Group::create(const Transform& objectToWorld)
   {
     return std::make_unique<Group>(objectToWorld);
   }

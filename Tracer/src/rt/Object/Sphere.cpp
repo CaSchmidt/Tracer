@@ -36,8 +36,8 @@
 
 namespace rt {
 
-  Sphere::Sphere(const Transformf& objectToWorld, MaterialPtr& material,
-                 const real_T radius) noexcept
+  Sphere::Sphere(const Transform& objectToWorld, MaterialPtr& material,
+                 const real_t radius) noexcept
     : IObject(objectToWorld, material)
     , _radius{radius}
   {
@@ -47,20 +47,20 @@ namespace rt {
   {
   }
 
-  bool Sphere::intersect(SurfaceInfo *info, const Rayf& ray) const
+  bool Sphere::intersect(SurfaceInfo *info, const Ray& ray) const
   {
-    const Rayf rayObj = _xfrmOW*ray;
+    const Ray rayObj = _xfrmOW*ray;
 
-    const real_T t = geom::intersect::sphere(rayObj, _radius);
+    const real_t t = geom::intersect::sphere(rayObj, _radius);
     if( !rayObj.isValid(t) ) {
       return false;
     }
 
     if( info != nullptr ) {
-      const Vertex3f Pobj = rayObj(t);
-      const Normal3f Nobj = to_normal(cs::normalize(Pobj));
-      const real_T      u = math::phase<real_T>(Nobj.x, Nobj.y)/TWO_PI;
-      const real_T      v = csACos(csClamp(Nobj.z, -ONE, ONE))/PI;
+      const Vertex Pobj = rayObj(t);
+      const Normal Nobj = geom::to_normal(n4::normalize(Pobj));
+      const real_t    u = math::phase<real_t>(Nobj.x, Nobj.y)/TWO_PI;
+      const real_t    v = n4::acos(std::clamp<real_t>(Nobj.z, -ONE, ONE))/PI;
 
       *info = SurfaceInfo();
 
@@ -75,8 +75,8 @@ namespace rt {
     return true;
   }
 
-  ObjectPtr Sphere::create(const Transformf& objectToWorld, MaterialPtr& material,
-                           const real_T radius)
+  ObjectPtr Sphere::create(const Transform& objectToWorld, MaterialPtr& material,
+                           const real_t radius)
   {
     return std::make_unique<Sphere>(objectToWorld, material, radius);
   }

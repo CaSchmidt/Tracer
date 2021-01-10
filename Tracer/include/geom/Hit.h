@@ -34,6 +34,7 @@
 
 #include <cmath>
 
+#include "geom/Geom.h"
 #include "math/Constants.h"
 
 namespace geom {
@@ -42,15 +43,13 @@ namespace geom {
 
     // Constants /////////////////////////////////////////////////////////////
 
-    template<typename T>
-    inline constexpr T NO_INTERSECTION = math::qNaN<T>;
+    inline constexpr real_t NO_INTERSECTION = math::qNaN<real_t>;
 
     // Functions /////////////////////////////////////////////////////////////
 
-    template<typename T>
-    inline bool isHit(const T& t)
+    inline bool isHit(const real_t& t)
     {
-      return std::isfinite(t)  &&  t >= math::ZERO<T>;
+      return std::isfinite(t)  &&  t >= math::ZERO<real_t>;
     }
 
   } // namespace intersect

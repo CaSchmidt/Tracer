@@ -38,17 +38,17 @@ namespace rt {
 
   class Sphere : public IObject {
   public:
-    Sphere(const Transformf& objectToWorld, MaterialPtr& material,
-           const real_T radius) noexcept;
+    Sphere(const Transform& objectToWorld, MaterialPtr& material,
+           const real_t radius) noexcept;
     ~Sphere() noexcept;
 
-    bool intersect(SurfaceInfo *info, const Rayf& ray) const final;
+    bool intersect(SurfaceInfo *info, const Ray& ray) const final;
 
-    static ObjectPtr create(const Transformf& objectToWorld, MaterialPtr& material,
-                            const real_T radius);
+    static ObjectPtr create(const Transform& objectToWorld, MaterialPtr& material,
+                            const real_t radius);
 
   private:
-    real_T _radius{};
+    real_t _radius{};
   };
 
 } // namespace rt

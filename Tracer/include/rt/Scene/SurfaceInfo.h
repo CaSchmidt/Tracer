@@ -53,10 +53,10 @@ namespace rt {
     }
 
     // NOTE: All members are in world coordinates!
-    real_T   t{geom::intersect::NO_INTERSECTION<real_T>};
-    Vertex3f P{};
-    Normal3f N{};
-    real_T   u{}, v{};
+    real_t t{geom::intersect::NO_INTERSECTION};
+    Vertex P{};
+    Normal N{};
+    real_t u{}, v{};
     const IObject *object{nullptr};
   };
 

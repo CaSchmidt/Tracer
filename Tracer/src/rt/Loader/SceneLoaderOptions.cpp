@@ -94,7 +94,7 @@ namespace rt {
         return RenderOptions();
       }
 
-      opts.cameraUp = parseNormal(node->FirstChildElement("CameraUp"), &myOk);
+      opts.cameraUp = parseDirection(node->FirstChildElement("CameraUp"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }

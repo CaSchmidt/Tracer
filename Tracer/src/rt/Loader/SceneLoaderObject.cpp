@@ -50,7 +50,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      const real_T height = parseReal(node->FirstChildElement("Height"), &myOk);
+      const real_t height = parseReal(node->FirstChildElement("Height"), &myOk);
       if( !myOk  ||  height <= 0 ) {
         return ObjectPtr();
       }
@@ -60,12 +60,12 @@ namespace rt {
         return ObjectPtr();
       }
 
-      const real_T radius = parseReal(node->FirstChildElement("Radius"), &myOk);
+      const real_t radius = parseReal(node->FirstChildElement("Radius"), &myOk);
       if( !myOk  ||  radius <= 0 ) {
         return ObjectPtr();
       }
 
-      Transformf transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
+      Transform transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
       if( !myOk ) {
         return ObjectPtr();
       }
@@ -82,12 +82,12 @@ namespace rt {
         return ObjectPtr();
       }
 
-      const real_T radius = parseReal(node->FirstChildElement("Radius"), &myOk);
+      const real_t radius = parseReal(node->FirstChildElement("Radius"), &myOk);
       if( !myOk  ||  radius <= 0 ) {
         return ObjectPtr();
       }
 
-      Transformf transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
+      Transform transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
       if( !myOk ) {
         return ObjectPtr();
       }
@@ -99,7 +99,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      const real_T height = parseReal(node->FirstChildElement("Height"), &myOk);
+      const real_t height = parseReal(node->FirstChildElement("Height"), &myOk);
       if( !myOk  ||  height <= 0 ) {
         return ObjectPtr();
       }
@@ -111,12 +111,12 @@ namespace rt {
       MaterialPtr materialBottom = material->copy();
       MaterialPtr materialTop    = material->copy();
 
-      const real_T radius = parseReal(node->FirstChildElement("Radius"), &myOk);
+      const real_t radius = parseReal(node->FirstChildElement("Radius"), &myOk);
       if( !myOk  ||  radius <= 0 ) {
         return ObjectPtr();
       }
 
-      Transformf transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
+      Transform transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
       if( !myOk ) {
         return ObjectPtr();
       }
@@ -126,19 +126,19 @@ namespace rt {
 
       // (1) Body ////////////////////////////////////////////////////////////
 
-      ObjectPtr body = Cylinder::create(Transformf(), material, height, radius);
+      ObjectPtr body = Cylinder::create(Transform(), material, height, radius);
       group->add(body);
 
       // (2) Top /////////////////////////////////////////////////////////////
 
-      ObjectPtr top = Disk::create(Transformf::translate({0, 0, height/2}), materialTop, radius);
+      ObjectPtr top = Disk::create(Transform::translate(0, 0, height/2), materialTop, radius);
       group->add(top);
 
       // (3) Bottom //////////////////////////////////////////////////////////
 
-      const Transformf xfrmBottom =
-          Transformf::translate({0, 0, -height/2})*
-          Transformf::rotateZYXbyPI2(0, 0, 2);
+      const Transform xfrmBottom =
+          Transform::translate(0, 0, -height/2)*
+          Transform::rotateZYXbyPI2(0, 0, 2);
       ObjectPtr bottom = Disk::create(xfrmBottom, materialBottom, radius);
       group->add(bottom);
 
@@ -149,7 +149,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      const real_T height = parseReal(node->FirstChildElement("Height"), &myOk);
+      const real_t height = parseReal(node->FirstChildElement("Height"), &myOk);
       if( !myOk  ||  height <= 0 ) {
         return ObjectPtr();
       }
@@ -159,12 +159,12 @@ namespace rt {
         return ObjectPtr();
       }
 
-      Transformf transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
+      Transform transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
       if( !myOk ) {
         return ObjectPtr();
       }
 
-      const real_T width = parseReal(node->FirstChildElement("Width"), &myOk);
+      const real_t width = parseReal(node->FirstChildElement("Width"), &myOk);
       if( !myOk  ||  width <= 0 ) {
         return ObjectPtr();
       }
@@ -181,12 +181,12 @@ namespace rt {
         return ObjectPtr();
       }
 
-      const real_T radius = parseReal(node->FirstChildElement("Radius"), &myOk);
+      const real_t radius = parseReal(node->FirstChildElement("Radius"), &myOk);
       if( !myOk  ||  radius <= 0 ) {
         return ObjectPtr();
       }
 
-      Transformf transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
+      Transform transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
       if( !myOk ) {
         return ObjectPtr();
       }

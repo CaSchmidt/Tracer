@@ -38,8 +38,8 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  Disk::Disk(const Transformf& objectToWorld, MaterialPtr& material,
-             const real_T radius) noexcept
+  Disk::Disk(const Transform& objectToWorld, MaterialPtr& material,
+             const real_t radius) noexcept
     : IObject(objectToWorld, material)
     , _radius{radius}
   {
@@ -49,29 +49,29 @@ namespace rt {
   {
   }
 
-  bool Disk::intersect(SurfaceInfo *info, const Rayf& ray) const
+  bool Disk::intersect(SurfaceInfo *info, const Ray& ray) const
   {
-    const Rayf rayObj = _xfrmOW*ray;
+    const Ray rayObj = _xfrmOW*ray;
 
-    const real_T t = geom::intersect::plane(rayObj);
+    const real_t t = geom::intersect::plane(rayObj);
     if( !rayObj.isValid(t) ) {
       return false;
     }
 
-    const Vertex3f Pobj = rayObj(t);
-    const real_T      v = math::abs<real_T>(Pobj.x, Pobj.y)/_radius;
+    const Vertex Pobj = rayObj(t);
+    const real_t    v = math::abs<real_t>(Pobj.x, Pobj.y)/_radius;
     if( v > ONE ) {
       return false;
     }
 
     if( info != nullptr ) {
-      const real_T u = math::phase<real_T>(Pobj.x, Pobj.y)/TWO_PI;
+      const real_t u = math::phase<real_t>(Pobj.x, Pobj.y)/TWO_PI;
 
       *info = SurfaceInfo();
 
       info->object = this;
       info->t      = t;
-      info->N      = _xfrmWO*Normal3f{0, 0, 1};
+      info->N      = _xfrmWO*Normal{0, 0, 1};
       info->P      = _xfrmWO*Pobj;
       info->u      = u;
       info->v      = v;
@@ -80,8 +80,8 @@ namespace rt {
     return true;
   }
 
-  ObjectPtr Disk::create(const Transformf& objectToWorld, MaterialPtr& material,
-                         const real_T radius)
+  ObjectPtr Disk::create(const Transform& objectToWorld, MaterialPtr& material,
+                         const real_t radius)
   {
     return std::make_unique<Disk>(objectToWorld, material, radius);
   }

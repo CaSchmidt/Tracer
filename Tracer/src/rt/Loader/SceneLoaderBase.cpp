@@ -127,19 +127,19 @@ namespace rt {
       T result;
 
       myOk = false;
-      result[0] = parseNodeAsFloat<value_type>(node->FirstChildElement(id0), &myOk);
+      result(0) = parseNodeAsFloat<value_type>(node->FirstChildElement(id0), &myOk);
       if( !myOk ) {
         return T();
       }
 
       myOk = false;
-      result[1] = parseNodeAsFloat<value_type>(node->FirstChildElement(id1), &myOk);
+      result(1) = parseNodeAsFloat<value_type>(node->FirstChildElement(id1), &myOk);
       if( !myOk ) {
         return T();
       }
 
       myOk = false;
-      result[2] = parseNodeAsFloat<value_type>(node->FirstChildElement(id2), &myOk);
+      result(2) = parseNodeAsFloat<value_type>(node->FirstChildElement(id2), &myOk);
       if( !myOk ) {
         return T();
       }
@@ -153,62 +153,67 @@ namespace rt {
 
     ////// Interface /////////////////////////////////////////////////////////
 
-    real_T parseAngle(const tinyxml2::XMLElement *node, bool *ok)
+    real_t parseAngle(const tinyxml2::XMLElement *node, bool *ok)
     {
-      return math::radian(parseNodeAsFloat<real_T>(node, ok));
+      return math::radian(parseNodeAsFloat<real_t>(node, ok));
     }
 
-    Color3f parseColor(const tinyxml2::XMLElement *node, bool *ok, const bool clamp)
+    Color parseColor(const tinyxml2::XMLElement *node, bool *ok, const bool clamp)
     {
-      const Color3f result = parseVector3D<Color3f>(node, "r", "g", "b", ok);
+      const Color result = parseVector3D<Color>(node, "r", "g", "b", ok);
       return clamp
-          ? Color3f(cs::clamp(result, 0, 1))
-          : Color3f(cs::max(result, 0));
+          ? Color(n4::clamp(result, 0, 1))
+          : Color(n4::max(result, 0));
     }
 
-    Normal3f parseNormal(const tinyxml2::XMLElement *node, bool *ok)
+    Direction parseDirection(const tinyxml2::XMLElement *node, bool *ok)
     {
-      return cs::normalize(parseVector3D<Normal3f>(node, "x", "y", "z", ok));
+      return n4::normalize(parseVector3D<Direction>(node, "x", "y", "z", ok));
     }
 
-    real_T parseReal(const tinyxml2::XMLElement *node, bool *ok)
+    Normal parseNormal(const tinyxml2::XMLElement *node, bool *ok)
     {
-      return parseNodeAsFloat<real_T>(node, ok);
+      return n4::normalize(parseVector3D<Normal>(node, "x", "y", "z", ok));
     }
 
-    Matrix3f parseRotation(const tinyxml2::XMLElement *node, bool *ok)
+    real_t parseReal(const tinyxml2::XMLElement *node, bool *ok)
+    {
+      return parseNodeAsFloat<real_t>(node, ok);
+    }
+
+    Matrix parseRotation(const tinyxml2::XMLElement *node, bool *ok)
     {
       if( ok != nullptr ) {
         *ok = false;
       }
 
       if( node == nullptr ) {
-        return Matrix3f();
+        return Matrix();
       }
 
       bool myOk = false;
 
-      real_T rx = 0;
+      real_t rx = 0;
       if( node->FirstChildElement("rx") != nullptr ) {
         rx = parseAngle(node->FirstChildElement("rx"), &myOk);
         if( !myOk ) {
-          return Matrix3f();
+          return Matrix();
         }
       }
 
-      real_T ry = 0;
+      real_t ry = 0;
       if( node->FirstChildElement("ry") != nullptr ) {
         ry = parseAngle(node->FirstChildElement("ry"), &myOk);
         if( !myOk ) {
-          return Matrix3f();
+          return Matrix();
         }
       }
 
-      real_T rz = 0;
+      real_t rz = 0;
       if( node->FirstChildElement("rz") != nullptr ) {
         rz = parseAngle(node->FirstChildElement("rz"), &myOk);
         if( !myOk ) {
-          return Matrix3f();
+          return Matrix();
         }
       }
 
@@ -216,7 +221,7 @@ namespace rt {
         *ok = true;
       }
 
-      return geom::rotateZ(rz)*geom::rotateY(ry)*geom::rotateX(rx);
+      return n4::rotateZ(rz)*n4::rotateY(ry)*n4::rotateX(rx);
     }
 
     std::size_t parseSize(const tinyxml2::XMLElement *node, bool *ok)
@@ -245,31 +250,31 @@ namespace rt {
       return std::string(node->GetText());
     }
 
-    Transformf parseTransform(const tinyxml2::XMLElement *node, bool *ok)
+    Transform parseTransform(const tinyxml2::XMLElement *node, bool *ok)
     {
       if( ok != nullptr ) {
         *ok = false;
       }
 
       if( node == nullptr ) {
-        return Transformf();
+        return Transform();
       }
 
       bool myOk = false;
 
-      Vertex3f t = 0;
+      Vertex t = 0;
       if( node->FirstChildElement("Translate") != nullptr ) {
         t = parseVertex(node->FirstChildElement("Translate"), &myOk);
         if( !myOk ) {
-          return Transformf();
+          return Transform();
         }
       }
 
-      Matrix3f R = geom::identity<real_T>();
+      Matrix R = n4::identity();
       if( node->FirstChildElement("Rotate") != nullptr ) {
         R = parseRotation(node->FirstChildElement("Rotate"), &myOk);
         if( !myOk ) {
-          return Transformf();
+          return Transform();
         }
       }
 
@@ -277,12 +282,12 @@ namespace rt {
         *ok = true;
       }
 
-      return Transformf(R, t);
+      return Transform(n4::translate(t.x, t.y, t.z)*R);
     }
 
-    Vertex3f parseVertex(const tinyxml2::XMLElement *node, bool *ok)
+    Vertex parseVertex(const tinyxml2::XMLElement *node, bool *ok)
     {
-      return parseVector3D<Vertex3f>(node, "x", "y", "z", ok);
+      return parseVector3D<Vertex>(node, "x", "y", "z", ok);
     }
 
   } // namespace priv

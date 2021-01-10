@@ -32,111 +32,43 @@
 #ifndef GEOM_H
 #define GEOM_H
 
-#include <cstdint>
-
-#include <cs/NumericArray.h>
+#include <N4/N4.h>
 
 namespace geom {
 
-  // Traits //////////////////////////////////////////////////////////////////
-
-  template<typename value_T, std::size_t ROWS, std::size_t COLS>
-  struct VertexTraits {
-    using value_type = value_T;
-
-    static constexpr std::size_t Columns = COLS;
-    static constexpr std::size_t    Rows = ROWS;
-    static constexpr std::size_t    Size = COLS*ROWS;
-  };
-
-  template<typename value_T, std::size_t ROWS, std::size_t COLS>
-  struct NormalTraits {
-    using value_type = value_T;
-
-    static constexpr std::size_t Columns = COLS;
-    static constexpr std::size_t    Rows = ROWS;
-    static constexpr std::size_t    Size = COLS*ROWS;
-  };
-
   // Types ///////////////////////////////////////////////////////////////////
 
-  template<typename T>
-  using Vertex = cs::Array<cs::Vector3Manip<cs::RowMajorPolicy<VertexTraits<T,3,1>>>>;
+  using n4::real_t;
 
-  template<typename T>
-  using Normal = cs::Array<cs::Vector3Manip<cs::RowMajorPolicy<NormalTraits<T,3,1>>>>;
+  using n4::size_t;
 
-  template<typename T>
-  using Matrix = cs::Array<cs::NoManipulator<cs::RowMajorPolicy<VertexTraits<T,3,3>>>>;
+  struct DirectionTraits {
+    static constexpr bool have_w = false;
+  };
+
+  using Direction = n4::Vector4f<DirectionTraits,n4::Normal3fManipulator>;
+  using    Matrix = n4::Matrix4f;
+  using    Normal = n4::Normal3f;
+  using    Vertex = n4::Vertex4f;
 
   // Helpers /////////////////////////////////////////////////////////////////
 
-  template<typename T>
-  inline auto identity()
+  template<typename traits_T, typename EXPR>
+  inline auto to_direction(const n4::ExprBase<traits_T,EXPR>& expr)
   {
-    return cs::identity<typename Matrix<T>::traits_type>();
+    return n4::expr_cast<Direction::traits_type,traits_T,EXPR>(expr);
   }
 
-  template<typename T>
-  inline auto rotateX(const T& angle)
+  template<typename traits_T, typename EXPR>
+  inline auto to_normal(const n4::ExprBase<traits_T,EXPR>& expr)
   {
-    return cs::rotateX<typename Matrix<T>::traits_type>(angle);
+    return n4::expr_cast<Normal::traits_type,traits_T,EXPR>(expr);
   }
 
-  template<typename T>
-  inline auto rotateXbyPI2(const signed int i)
+  template<typename traits_T, typename EXPR>
+  inline auto to_vertex(const n4::ExprBase<traits_T,EXPR>& expr)
   {
-    return cs::rotateXbyPI2<typename Matrix<T>::traits_type>(i);
-  }
-
-  template<typename T>
-  inline auto rotateY(const T& angle)
-  {
-    return cs::rotateY<typename Matrix<T>::traits_type>(angle);
-  }
-
-  template<typename T>
-  inline auto rotateYbyPI2(const signed int i)
-  {
-    return cs::rotateYbyPI2<typename Matrix<T>::traits_type>(i);
-  }
-
-  template<typename T>
-  inline auto rotateZ(const T& angle)
-  {
-    return cs::rotateZ<typename Matrix<T>::traits_type>(angle);
-  }
-
-  template<typename T>
-  inline auto rotateZbyPI2(const signed int i)
-  {
-    return cs::rotateZbyPI2<typename Matrix<T>::traits_type>(i);
-  }
-
-  template<typename T>
-  inline auto scale(const T& sx, const T& sy, const T& sz)
-  {
-    return cs::scale<typename Matrix<T>::traits_type>(sx, sy, sz);
-  }
-
-  template<typename T, typename EXPR>
-  inline auto to_normal(const EXPR& expr)
-  {
-    return cs::array_cast<typename Normal<T>::traits_type>(expr);
-  }
-
-  template<typename T, typename EXPR>
-  inline auto to_vertex(const EXPR& expr)
-  {
-    return cs::array_cast<typename Vertex<T>::traits_type>(expr);
-  }
-
-  // Operators ///////////////////////////////////////////////////////////////
-
-  template<typename T>
-  inline Normal<T> operator*(const Matrix<T>& M, const Normal<T>& n)
-  {
-    return to_normal<T>(M*to_vertex<T>(n));
+    return n4::expr_cast<Vertex::traits_type,traits_T,EXPR>(expr);
   }
 
 } // namespace geom

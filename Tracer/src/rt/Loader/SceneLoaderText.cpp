@@ -47,9 +47,9 @@ namespace rt {
 
     // Implementation ////////////////////////////////////////////////////////
 
-    Objects createSpheres(std::string text, const real_T radius,
-                          const real_T dx, const real_T dz,
-                          const MaterialPtr& material, const Transformf& transform)
+    Objects createSpheres(std::string text, const real_t radius,
+                          const real_t dx, const real_t dz,
+                          const MaterialPtr& material, const Transform& transform)
     {
       using size_type = std::string::size_type;
 
@@ -69,19 +69,19 @@ namespace rt {
 
       // Spheres /////////////////////////////////////////////////////////////////
 
-      const rt::real_T  width = dx*static_cast<rt::real_T>(text.size()*FW - 1);
-      const rt::real_T height = dz*static_cast<rt::real_T>(FH - 1);
-      const rt::real_T     x0 = -width/rt::TWO;
-      const rt::real_T     z0 = height/rt::TWO;
+      const rt::real_t  width = dx*static_cast<rt::real_t>(text.size()*FW - 1);
+      const rt::real_t height = dz*static_cast<rt::real_t>(FH - 1);
+      const rt::real_t     x0 = -width/rt::TWO;
+      const rt::real_t     z0 = height/rt::TWO;
 
       for(size_type i = 0; i < text.size(); i++) {
         const size_type index = static_cast<size_type>(text[i]);
 
         for(size_type row = 0; row < FH; row++) {
           const uint8_t  bits = static_cast<uint8_t>(font8x8_basic[index][row]);
-          const rt::real_T oz = z0 - dz*(row);
+          const rt::real_t oz = z0 - dz*(row);
 
-          rt::real_T ox = x0 + dx*(i*FW);
+          rt::real_t ox = x0 + dx*(i*FW);
           for(size_type col = 0; col < FW; col++, ox += dx) {
             if( (bits & (1 << col)) == 0 ) {
               continue;
@@ -89,7 +89,7 @@ namespace rt {
 
             MaterialPtr myMaterial = material->copy();
 
-            objs.push_back(rt::Sphere::create(transform*rt::Transformf::translate({ox, 0, oz}),
+            objs.push_back(rt::Sphere::create(transform*rt::Transform::translate(ox, 0, oz),
                                               myMaterial, radius));
           } // For Each Column
         } // For Each Row
@@ -108,12 +108,12 @@ namespace rt {
 
       bool myOk = false;
 
-      const real_T dx = parseReal(node->FirstChildElement("dx"), &myOk);
+      const real_t dx = parseReal(node->FirstChildElement("dx"), &myOk);
       if( !myOk  ||  dx <= 0 ) {
         return Objects();
       }
 
-      const real_T dz = parseReal(node->FirstChildElement("dz"), &myOk);
+      const real_t dz = parseReal(node->FirstChildElement("dz"), &myOk);
       if( !myOk  ||  dz <= 0 ) {
         return Objects();
       }
@@ -123,7 +123,7 @@ namespace rt {
         return Objects();
       }
 
-      const real_T radius = parseReal(node->FirstChildElement("Radius"), &myOk);
+      const real_t radius = parseReal(node->FirstChildElement("Radius"), &myOk);
       if( !myOk  ||  radius <= 0 ) {
         return Objects();
       }
@@ -133,7 +133,7 @@ namespace rt {
         return Objects();
       }
 
-      const Transformf transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
+      const Transform transform = parseTransform(node->FirstChildElement("Transform"), &myOk);
       if( !myOk ) {
         return Objects();
       }

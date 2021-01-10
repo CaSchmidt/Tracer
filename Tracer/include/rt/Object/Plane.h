@@ -38,18 +38,18 @@ namespace rt {
 
   class Plane : public IObject {
   public:
-    Plane(const Transformf& objectToWorld, MaterialPtr& material,
-          const real_T width, const real_T height) noexcept;
+    Plane(const Transform& objectToWorld, MaterialPtr& material,
+          const real_t width, const real_t height) noexcept;
     ~Plane() noexcept;
 
-    bool intersect(SurfaceInfo *info, const Rayf& ray) const final;
+    bool intersect(SurfaceInfo *info, const Ray& ray) const final;
 
-    static ObjectPtr create(const Transformf& objectToWorld, MaterialPtr& material,
-                            const real_T width, const real_T height);
+    static ObjectPtr create(const Transform& objectToWorld, MaterialPtr& material,
+                            const real_t width, const real_t height);
 
   private:
-    real_T _width{};
-    real_T _height{};
+    real_t _width{};
+    real_t _height{};
   };
 
 } // namespace rt

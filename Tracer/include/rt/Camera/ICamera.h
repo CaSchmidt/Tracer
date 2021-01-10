@@ -53,15 +53,15 @@ namespace rt {
   protected:
     Image create_image(const std::size_t width, const std::size_t height,
                        std::size_t& y0, std::size_t& y1) const;
-    static bool isValidFoV(const real_T fov_rad);
-    real_T rand() const;
-    Rayf ray(const Matrix3f& W, const std::size_t x, const std::size_t y,
-             const bool random = false) const;
+    static bool isValidFoV(const real_t fov_rad);
+    real_t rand() const;
+    Ray ray(const Matrix& W, const std::size_t x, const std::size_t y,
+            const bool random = false) const;
 
   private:
     void rand_init();
 
-    std::uniform_real_distribution<rt::real_T> _randDis{};
+    std::uniform_real_distribution<rt::real_t> _randDis{};
     std::mt19937                               _randGen{};
   };
 

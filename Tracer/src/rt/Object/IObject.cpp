@@ -35,14 +35,14 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  IObject::IObject(const Transformf& objectToWorld, MaterialPtr& material) noexcept
+  IObject::IObject(const Transform& objectToWorld, MaterialPtr& material) noexcept
     : _xfrmWO{objectToWorld}
     , _material{std::move(material)}
   {
     setup();
   }
 
-  IObject::IObject(const Transformf& objectToWorld) noexcept
+  IObject::IObject(const Transform& objectToWorld) noexcept
     : _xfrmWO(objectToWorld)
     , _material{}
   {
@@ -53,7 +53,7 @@ namespace rt {
   {
   }
 
-  bool IObject::castShadow(const Rayf& ray) const
+  bool IObject::castShadow(const Ray& ray) const
   {
     return _material->isShadowCaster()  &&  intersect(nullptr, ray);
   }

@@ -43,12 +43,12 @@ namespace rt {
     {
       bool myOk = false;
 
-      const Color3f EL = parseColor(node->FirstChildElement("Irradiance"), &myOk, false);
+      const Color EL = parseColor(node->FirstChildElement("Irradiance"), &myOk, false);
       if( !myOk ) {
         return LightSourcePtr();
       }
 
-      const Normal3f dir = parseNormal(node->FirstChildElement("Direction"), &myOk);
+      const Direction dir = parseDirection(node->FirstChildElement("Direction"), &myOk);
       if( !myOk ) {
         return LightSourcePtr();
       }
@@ -60,12 +60,12 @@ namespace rt {
     {
       bool myOk = false;
 
-      const Color3f IL = parseColor(node->FirstChildElement("Intensity"), &myOk, false);
+      const Color IL = parseColor(node->FirstChildElement("Intensity"), &myOk, false);
       if( !myOk ) {
         return LightSourcePtr();
       }
 
-      const Vertex3f pos = parseVertex(node->FirstChildElement("Position"), &myOk);
+      const Vertex pos = parseVertex(node->FirstChildElement("Position"), &myOk);
       if( !myOk ) {
         return LightSourcePtr();
       }

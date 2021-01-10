@@ -63,7 +63,7 @@ int main(int /*argc*/, char ** /*argv*/)
   {
     rt::RenderOptions opts = renderer.options();
     opts.aperture = 0.5;
-    opts.focus    = cs::distance(renderer.options().eye, renderer.options().lookAt);
+    opts.focus    = n4::distance(renderer.options().eye, renderer.options().lookAt);
     renderer.initialize(opts);
 
     printf("aperture = %.3f\n", opts.aperture);

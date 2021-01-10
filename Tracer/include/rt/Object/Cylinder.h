@@ -38,18 +38,18 @@ namespace rt {
 
   class Cylinder : public IObject {
   public:
-    Cylinder(const Transformf& objectToWorld, MaterialPtr& material,
-             const real_T height, const real_T radius) noexcept;
+    Cylinder(const Transform& objectToWorld, MaterialPtr& material,
+             const real_t height, const real_t radius) noexcept;
     ~Cylinder() noexcept;
 
-    bool intersect(SurfaceInfo *info, const Rayf& ray) const final;;
+    bool intersect(SurfaceInfo *info, const Ray& ray) const final;;
 
-    static ObjectPtr create(const Transformf& objectToWorld, MaterialPtr& material,
-                            const real_T height, const real_T radius);
+    static ObjectPtr create(const Transform& objectToWorld, MaterialPtr& material,
+                            const real_t height, const real_t radius);
 
   private:
-    real_T _height{};
-    real_T _radius{};
+    real_t _height{};
+    real_t _radius{};
   };
 
 } // namespace rt
