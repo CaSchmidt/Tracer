@@ -88,7 +88,7 @@ namespace geom {
       return Direction();
     }
 
-    return eta*I - (eta*DOT + std::sqrt(k))*to_direction(N);
+    return eta*I - (eta*DOT + n4::sqrt(k))*to_direction(N);
   }
 
 } // namespace geom

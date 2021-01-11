@@ -170,7 +170,7 @@ namespace rt {
       if( opaque->isSpecular() ) {
         const Direction h = n4::normalize(linfo.l + v);
         const real_t cosTh = geom::dot1(sinfo.N, geom::to_normal(h));
-        scolor += opaque->specular(sinfo.u, sinfo.v)*std::pow(cosTh, opaque->shininess());
+        scolor += opaque->specular(sinfo.u, sinfo.v)*n4::pow(cosTh, opaque->shininess());
       }
 
       // Account for light's irradiance

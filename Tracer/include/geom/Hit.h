@@ -32,8 +32,6 @@
 #ifndef HIT_H
 #define HIT_H
 
-#include <cmath>
-
 #include "geom/Geom.h"
 #include "math/Constants.h"
 
@@ -49,7 +47,7 @@ namespace geom {
 
     inline bool isHit(const real_t& t)
     {
-      return std::isfinite(t)  &&  t >= math::ZERO<real_t>;
+      return n4::isFinite(t)  &&  t >= math::ZERO<real_t>;
     }
 
   } // namespace intersect

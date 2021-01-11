@@ -172,7 +172,7 @@ namespace rt {
     const real_t r =  wwrl/TWO;
     const real_t b = -hwrl/TWO;
     const real_t t =  hwrl/TWO;
-    const real_t n = (r - l)/TWO/std::tan(fov_rad/TWO);
+    const real_t n = (r - l)/TWO/n4::tan(fov_rad/TWO);
 
     const Matrix frustumInv = // glFrustum()
         n4::translate((r + l)/TWO, (t + b)/TWO, -n)*
