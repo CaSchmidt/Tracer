@@ -32,9 +32,9 @@
 #ifndef SOLVER_H
 #define SOLVER_H
 
-#include <cmath>
-
 #include <algorithm>
+
+#include <N4/Math.h>
 
 #include "math/Constants.h"
 
@@ -43,7 +43,7 @@ namespace math {
   template<typename T>
   inline T abs(const T& x, const T& y)
   {
-    return std::sqrt(x*x + y*y);
+    return n4::sqrt(x*x + y*y);
   }
 
   template<typename T>
@@ -56,7 +56,7 @@ namespace math {
   inline T phase(const T& x, const T& y)
   {
     // atan2(y,x) -> phi := [-pi,pi]
-    T phi = std::atan2(y, x);
+    T phi = n4::atan2(y, x);
     if( phi < ZERO<T> ) {
       phi += TWO_PI<T>;
     }
@@ -67,7 +67,7 @@ namespace math {
   inline T pythagoras(const T& x)
   {
     // x^2 + y^2 = 1  =>  y = sqrt(1 - x^2)
-    return std::sqrt(std::max<T>(ZERO<T>, ONE<T> - x*x));
+    return n4::sqrt(std::max<T>(ZERO<T>, ONE<T> - x*x));
   }
 
   template<typename T>
@@ -85,7 +85,7 @@ namespace math {
       return false;
     }
 
-    const double rootDiscrim = std::sqrt(discrim);
+    const double rootDiscrim = n4::sqrt(discrim);
     const double q = b < ZERO<double>
         ? -ONE_HALF<double>*(b - rootDiscrim)
         : -ONE_HALF<double>*(b + rootDiscrim);

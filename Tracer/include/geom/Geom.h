@@ -51,6 +51,20 @@ namespace geom {
   using    Normal = n4::Normal3f;
   using    Vertex = n4::Vertex4f;
 
+  // Convenience Functions ///////////////////////////////////////////////////
+
+  template<typename traits_T, typename ARG1, typename ARG2>
+  real_t dot1(const n4::ExprBase<traits_T,ARG1>& arg1, const n4::ExprBase<traits_T,ARG2>& arg2)
+  {
+    return std::max<real_t>(0, n4::dot(arg1, arg2));
+  }
+
+  template<typename traits_T, typename ARG1, typename ARG2>
+  real_t dotC(const n4::ExprBase<traits_T,ARG1>& arg1, const n4::ExprBase<traits_T,ARG2>& arg2)
+  {
+    return std::clamp<real_t>(n4::dot(arg1, arg2), -1, 1);
+  }
+
   // Helpers /////////////////////////////////////////////////////////////////
 
   template<typename traits_T, typename EXPR>

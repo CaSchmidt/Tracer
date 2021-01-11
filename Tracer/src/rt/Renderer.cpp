@@ -158,7 +158,7 @@ namespace rt {
         continue; // Light is obscured by an object!
       }
 
-      const real_t cosTi = n4::dot1(sinfo.N, geom::to_normal(linfo.l));
+      const real_t cosTi = geom::dot1(sinfo.N, geom::to_normal(linfo.l));
       if( cosTi <= 0 ) {
         continue;
       }
@@ -169,7 +169,7 @@ namespace rt {
       // Specular contribution
       if( opaque->isSpecular() ) {
         const Direction h = n4::normalize(linfo.l + v);
-        const real_t cosTh = n4::dot1(sinfo.N, geom::to_normal(h));
+        const real_t cosTh = geom::dot1(sinfo.N, geom::to_normal(h));
         scolor += opaque->specular(sinfo.u, sinfo.v)*std::pow(cosTh, opaque->shininess());
       }
 

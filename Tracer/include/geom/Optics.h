@@ -55,7 +55,7 @@ namespace geom {
 
   inline real_t fresnel(const Direction& I, const Normal& N, const real_t eta)
   {
-    const real_t cosTi = std::clamp<real_t>(-n4::dot(I, to_direction(N)), -1, 1);
+    const real_t cosTi = -n4::dot(I, to_direction(N));
     const real_t sinTi = math::pythagoras(cosTi);
 
     const real_t sinTt = eta*sinTi; // Snell's law
