@@ -48,7 +48,7 @@ namespace rt {
     }
 
     template<typename CharT>
-    inline std::size_t length(const CharT *s)
+    inline size_t length(const CharT *s)
     {
       return s != nullptr
           ? std::char_traits<CharT>::length(s)
@@ -58,8 +58,8 @@ namespace rt {
     template<typename CharT>
     inline bool compare(const CharT *s1, const CharT *s2)
     {
-      const std::size_t l1 = length(s1);
-      const std::size_t l2 = length(s2);
+      const size_t l1 = length(s1);
+      const size_t l2 = length(s2);
       return l1 > 0  &&  l1 == l2
           ? std::char_traits<CharT>::compare(s1, s2, l1) == 0
           : false;

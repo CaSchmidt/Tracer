@@ -46,14 +46,14 @@ namespace rt {
 
   ////// protected ///////////////////////////////////////////////////////////
 
-  Image ICamera::create_image(const std::size_t width, const std::size_t height,
-                              std::size_t& y0, std::size_t& y1) const
+  Image ICamera::create_image(const size_t width, const size_t height,
+                              size_t& y0, size_t& y1) const
   {
     if( width < 1  ||  height < 1 ) {
       return Image();
     }
-    y0 = std::clamp<std::size_t>(y0, 0, height);
-    y1 = std::clamp<std::size_t>(y1, 0, height);
+    y0 = std::clamp<size_t>(y0, 0, height);
+    y1 = std::clamp<size_t>(y1, 0, height);
     if( y0 == y1  ||  y0 >= height ) {
       return Image();
     }
@@ -70,7 +70,7 @@ namespace rt {
     return _randDis(*const_cast<std::mt19937*>(&_randGen));
   }
 
-  Ray ICamera::ray(const Matrix& W, const std::size_t x, const std::size_t y,
+  Ray ICamera::ray(const Matrix& W, const size_t x, const size_t y,
                    const bool random) const
   {
     const real_t dx = random

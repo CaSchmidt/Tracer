@@ -56,7 +56,7 @@ namespace rt {
 
     Matrix parseRotation(const tinyxml2::XMLElement *node, bool *ok);
 
-    std::size_t parseSize(const tinyxml2::XMLElement *node, bool *ok);
+    size_t parseSize(const tinyxml2::XMLElement *node, bool *ok);
 
     std::string parseString(const tinyxml2::XMLElement *node, bool *ok);
 

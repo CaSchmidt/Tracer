@@ -46,16 +46,16 @@ namespace rt {
     ICamera();
     virtual ~ICamera();
 
-    virtual Image render(const std::size_t width, const std::size_t height,
-                         std::size_t y0, std::size_t y1,
-                         const Renderer& renderer, const std::size_t samples = 0) const = 0;
+    virtual Image render(const size_t width, const size_t height,
+                         size_t y0, size_t y1,
+                         const Renderer& renderer, const size_t samples = 0) const = 0;
 
   protected:
-    Image create_image(const std::size_t width, const std::size_t height,
-                       std::size_t& y0, std::size_t& y1) const;
+    Image create_image(const size_t width, const size_t height,
+                       size_t& y0, size_t& y1) const;
     static bool isValidFoV(const real_t fov_rad);
     real_t rand() const;
-    Ray ray(const Matrix& W, const std::size_t x, const std::size_t y,
+    Ray ray(const Matrix& W, const size_t x, const size_t y,
             const bool random = false) const;
 
   private:

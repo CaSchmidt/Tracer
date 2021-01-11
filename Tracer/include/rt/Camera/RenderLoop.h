@@ -38,12 +38,12 @@
 namespace rt {
 
   template<typename RadianceFunc>
-  void render_loop(Image& image, const std::size_t y0, const RadianceFunc& radiance)
+  void render_loop(Image& image, const size_t y0, const RadianceFunc& radiance)
   {
-    const std::size_t y1 = y0 + image.height();
-    for(std::size_t y = y0; y < y1; y++) {
+    const size_t y1 = y0 + image.height();
+    for(size_t y = y0; y < y1; y++) {
       uint8_t *row = image.row(y - y0);
-      for(std::size_t x = 0; x < image.width(); x++) {
+      for(size_t x = 0; x < image.width(); x++) {
         const Color color = n4::clamp(radiance(x, y), 0, 1)*255;
         *row++ = static_cast<uint8_t>(color.r);
         *row++ = static_cast<uint8_t>(color.g);

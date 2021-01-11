@@ -75,9 +75,9 @@ namespace rt {
     return true;
   }
 
-  Image FrustumCamera::render(const std::size_t width, const std::size_t height,
-                              std::size_t y0, std::size_t y1,
-                              const Renderer& renderer, const std::size_t samples) const
+  Image FrustumCamera::render(const size_t width, const size_t height,
+                              size_t y0, size_t y1,
+                              const Renderer& renderer, const size_t samples) const
   {
     Image image = create_image(width, height, y0, y1);
     if( image.isEmpty() ) {
@@ -89,9 +89,9 @@ namespace rt {
     if( samples > 1 ) {
       if( _rLens > ZERO  &&  _zFocus < ZERO ) {
         const real_t _zNear = W(2, 3);
-        render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color {
+        render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
           Color color;
-          for(std::size_t s = 0; s < samples; s++) {
+          for(size_t s = 0; s < samples; s++) {
             // (1) Sample Disc ///////////////////////////////////////////////
 
             const Vertex pl = _rLens*sampleDisc();
@@ -122,9 +122,9 @@ namespace rt {
           return color;
         });
       } else {
-        render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color {
+        render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
           Color color;
-          for(std::size_t s = 0; s < samples; s++) {
+          for(size_t s = 0; s < samples; s++) {
             color += n4::clamp(renderer.castCameraRay(ray(W, x, y, true)), 0, 1);
           }
           color /= static_cast<real_t>(samples);
@@ -132,7 +132,7 @@ namespace rt {
         });
       }
     } else {
-      render_loop(image, y0, [&](const std::size_t x, const std::size_t y) -> Color {
+      render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
         return renderer.castCameraRay(ray(W, x, y));
       });
     }
@@ -151,7 +151,7 @@ namespace rt {
     return v;
   }
 
-  Matrix FrustumCamera::windowTransform(const std::size_t width, const std::size_t height,
+  Matrix FrustumCamera::windowTransform(const size_t width, const size_t height,
                                         const real_t fov_rad, const real_t worldToScreen)
   {
     // Screen

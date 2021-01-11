@@ -224,9 +224,9 @@ namespace rt {
       return n4::rotateZ(rz)*n4::rotateY(ry)*n4::rotateX(rx);
     }
 
-    std::size_t parseSize(const tinyxml2::XMLElement *node, bool *ok)
+    size_t parseSize(const tinyxml2::XMLElement *node, bool *ok)
     {
-      return parseNodeAsInt<std::size_t>(node, ok);
+      return parseNodeAsInt<size_t>(node, ok);
     }
 
     std::string parseString(const tinyxml2::XMLElement *node, bool *ok)

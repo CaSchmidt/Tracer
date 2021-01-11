@@ -47,13 +47,13 @@ namespace rt {
     bool setup(const real_t fov_rad, const real_t worldToScreen,
                const real_t aperture = 0, const real_t focus = 0);
 
-    Image render(const std::size_t width, const std::size_t height,
-                 std::size_t y0, std::size_t y1,
-                 const Renderer& renderer, const std::size_t samples = 0) const;
+    Image render(const size_t width, const size_t height,
+                 size_t y0, size_t y1,
+                 const Renderer& renderer, const size_t samples = 0) const;
 
   private:
     Vertex sampleDisc() const;
-    static Matrix windowTransform(const std::size_t width, const std::size_t height,
+    static Matrix windowTransform(const size_t width, const size_t height,
                                   const real_t fov_rad, const real_t worldToScreen);
 
     real_t _fov_rad{};

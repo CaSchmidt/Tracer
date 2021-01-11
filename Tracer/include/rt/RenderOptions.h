@@ -43,8 +43,8 @@ namespace rt {
     Vertex       eye{};
     Vertex       lookAt{};
     Direction    cameraUp{};
-    std::size_t  width{};
-    std::size_t  height{};
+    size_t       width{};
+    size_t       height{};
     real_t       fov_rad{};
     real_t       worldToScreen{};
     real_t       aperture{};
