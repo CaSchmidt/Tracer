@@ -66,13 +66,13 @@ namespace rt {
 
   ////// Constants ///////////////////////////////////////////////////////////
 
-  inline constexpr real_t  ZERO = static_cast<real_t>(0);
-  inline constexpr real_t   ONE = static_cast<real_t>(1);
-  inline constexpr real_t   TWO = static_cast<real_t>(2);
-  inline constexpr real_t THREE = static_cast<real_t>(3);
-  inline constexpr real_t  FOUR = static_cast<real_t>(4);
-  inline constexpr real_t EIGHT = static_cast<real_t>(8);
-  inline constexpr real_t   TEN = static_cast<real_t>(10);
+  inline constexpr real_t  ZERO =  0;
+  inline constexpr real_t   ONE =  1;
+  inline constexpr real_t   TWO =  2;
+  inline constexpr real_t THREE =  3;
+  inline constexpr real_t  FOUR =  4;
+  inline constexpr real_t EIGHT =  8;
+  inline constexpr real_t   TEN = 10;
 
   inline constexpr real_t ONE_HALF = static_cast<real_t>(0.5);
 

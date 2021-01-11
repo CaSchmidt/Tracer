@@ -41,8 +41,7 @@ namespace geom {
 
     // Constants /////////////////////////////////////////////////////////////
 
-    inline constexpr real_t ZERO = math::ZERO<real_t>;
-    inline constexpr real_t  TWO = math::TWO<real_t>;
+    inline constexpr real_t TWO = 2;
 
     // Intersection Tests ////////////////////////////////////////////////////
 

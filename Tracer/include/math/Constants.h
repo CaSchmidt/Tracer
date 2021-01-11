@@ -41,14 +41,11 @@ namespace math {
   template<typename T> inline constexpr T  Min = std::numeric_limits<T>::lowest();
   template<typename T> inline constexpr T qNaN = std::numeric_limits<T>::quiet_NaN();
 
-  template<typename T> inline constexpr T  ZERO = static_cast<T>(0);
-  template<typename T> inline constexpr T   ONE = static_cast<T>(1);
-  template<typename T> inline constexpr T   TWO = static_cast<T>(2);
-  template<typename T> inline constexpr T THREE = static_cast<T>(3);
-  template<typename T> inline constexpr T  FOUR = static_cast<T>(4);
+  template<typename T> inline constexpr T ZERO = static_cast<T>(0);
+  template<typename T> inline constexpr T  ONE = static_cast<T>(1);
+  template<typename T> inline constexpr T FOUR = static_cast<T>(4);
 
-  template<typename T> inline constexpr T ONE_HALF    = static_cast<T>(0.5);
-  template<typename T> inline constexpr T ONE_QUARTER = static_cast<T>(0.25);
+  template<typename T> inline constexpr T ONE_HALF = static_cast<T>(0.5);
 
   // cf. https://www.exploringbinary.com/pi-and-e-in-binary/
   inline constexpr double PI_double = 0x1.921fb54442d18p+1;

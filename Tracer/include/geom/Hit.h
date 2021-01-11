@@ -41,13 +41,14 @@ namespace geom {
 
     // Constants /////////////////////////////////////////////////////////////
 
+    inline constexpr real_t            ZERO = 0;
     inline constexpr real_t NO_INTERSECTION = math::qNaN<real_t>;
 
     // Functions /////////////////////////////////////////////////////////////
 
     inline bool isHit(const real_t& t)
     {
-      return n4::isFinite(t)  &&  t >= math::ZERO<real_t>;
+      return n4::isFinite(t)  &&  t >= ZERO;
     }
 
   } // namespace intersect
