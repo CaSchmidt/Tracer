@@ -103,7 +103,7 @@ namespace rt {
       color = shade(sinfo, -ray.direction());
 
     } else if( sinfo->material()->isMirror() ) {
-      const Direction  R = geom::reflect(ray.direction(), sinfo.N);
+      const Direction  R = geom::optics::reflect(ray.direction(), sinfo.N);
       const Color rcolor = castRay(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), R), depth + 1);
       color = sinfo->material()->mirror()->reflectance()*rcolor;
 
@@ -125,18 +125,18 @@ namespace rt {
 
       // (2) Fresnel Reflectance & Transmittance /////////////////////////////
 
-      const real_t kR = geom::fresnel(I, N, eta);
+      const real_t kR = geom::optics::dielectric(I, N, eta);
       const real_t kT = ONE - kR;
 
       // (3) Reflectance /////////////////////////////////////////////////////
 
-      const Direction R = geom::reflect(I, N);
+      const Direction R = geom::optics::reflect(I, N);
       color = kR*castRay(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*N), R), depth + 1);
 
       // (4) Transmittance ///////////////////////////////////////////////////
 
       if( kT > ZERO ) {
-        const Direction T = geom::refract(I, N, eta);
+        const Direction T = geom::optics::refract(I, N, eta);
         color += kT*castRay(Ray(sinfo.P - geom::to_vertex(TRACE_BIAS*N), T), depth + 1);
       }
 

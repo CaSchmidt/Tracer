@@ -53,43 +53,50 @@
 
 namespace geom {
 
-  inline real_t fresnel(const Direction& I, const Normal& N, const real_t eta)
-  {
-    const real_t cosTi = -n4::dot(I, to_direction(N));
-    const real_t sinTi = math::pythagoras(cosTi);
+  namespace optics {
 
-    const real_t sinTt = eta*sinTi; // Snell's law
-    if( sinTt >= math::ONE<real_t> ) { // total internal reflection
-      return math::ONE<real_t>;
+    inline constexpr real_t ZERO = 0;
+    inline constexpr real_t  ONE = 1;
+    inline constexpr real_t  TWO = 2;
+
+    inline constexpr real_t ONE_HALF = 0.5;
+
+    inline real_t dielectric(const Direction& I, const Normal& N, const real_t eta)
+    {
+      const real_t cosTi = -n4::dot(I, to_direction(N));
+      const real_t sinTi = math::pythagoras(cosTi);
+
+      const real_t sinTt = eta*sinTi; // Snell's law
+      if( sinTt >= ONE ) { // total internal reflection
+        return ONE;
+      }
+
+      const real_t cosTt = math::pythagoras(sinTt);
+
+      const real_t para = (cosTi - eta*cosTt)/(cosTi + eta*cosTt);
+      const real_t perp = (eta*cosTi - cosTt)/(eta*cosTi + cosTt);
+
+      return (para*para + perp*perp)*ONE_HALF;
     }
 
-    const real_t cosTt = math::pythagoras(sinTt);
-
-    const real_t para = (cosTi - eta*cosTt)/(cosTi + eta*cosTt);
-    const real_t perp = (eta*cosTi - cosTt)/(eta*cosTi + cosTt);
-
-    return (para*para + perp*perp)*math::ONE_HALF<real_t>;
-  }
-
-  // cf. GLSL v4.60, 8.5. Geometric Functions
-  inline Direction reflect(const Direction& I, const Normal& N)
-  {
-    const real_t DOT = n4::dot(I, to_direction(N));
-    return I - math::TWO<real_t>*DOT*to_direction(N);
-  }
-
-  // cf. GLSL v4.60, 8.5. Geometric Functions
-  inline Direction refract(const Direction& I, const Normal& N, const real_t eta)
-  {
-    const real_t DOT = n4::dot(I, to_direction(N));
-
-    const real_t k = math::ONE<real_t> - eta*eta*(math::ONE<real_t> - DOT*DOT);
-    if( k < math::ZERO<real_t> ) {
-      return Direction();
+    // cf. GLSL v4.60, 8.5. Geometric Functions
+    inline Direction reflect(const Direction& I, const Normal& N)
+    {
+      const real_t DOT = n4::dot(I, to_direction(N));
+      return I - TWO*DOT*to_direction(N);
     }
 
-    return eta*I - (eta*DOT + n4::sqrt(k))*to_direction(N);
-  }
+    // cf. GLSL v4.60, 8.5. Geometric Functions
+    inline Direction refract(const Direction& I, const Normal& N, const real_t eta)
+    {
+      const real_t DOT = n4::dot(I, to_direction(N));
+      const real_t k = ONE - eta*eta*std::max<real_t>(0, ONE - DOT*DOT);
+      return k >= ZERO
+          ? eta*I - (eta*DOT + n4::sqrt(k))*to_direction(N)
+          : Direction();
+    }
+
+  } // namespace optics
 
 } // namespace geom
 
