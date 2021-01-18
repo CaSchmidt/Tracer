@@ -58,7 +58,6 @@ set(Tracer_HEADERS
   include/rt/Object/Plane.h
   include/rt/Object/Sphere.h
   include/rt/Scene/Scene.h
-  include/rt/Scene/SurfaceInfo.h
   include/rt/Texture/CheckedTexture.h
   include/rt/Texture/FlatTexture.h
   include/rt/Texture/ITexture.h

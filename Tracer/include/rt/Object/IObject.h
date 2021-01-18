@@ -40,7 +40,28 @@
 
 namespace rt {
 
-  struct SurfaceInfo;
+  class IObject;
+
+  struct SurfaceInfo {
+    SurfaceInfo() noexcept = default;
+
+    inline bool isHit() const
+    {
+      return geom::intersect::isHit(t)  &&  object != nullptr;
+    }
+
+    inline const IObject *operator->() const
+    {
+      return object;
+    }
+
+    // NOTE: All members are in world coordinates!
+    real_t t{geom::intersect::NO_INTERSECTION};
+    Vertex P{};
+    Normal N{};
+    real_t u{}, v{};
+    const IObject *object{nullptr};
+  };
 
   class IObject {
   public:

@@ -35,7 +35,6 @@
 #include "rt/Material/MirrorMaterial.h"
 #include "rt/Material/OpaqueMaterial.h"
 #include "rt/Material/TransparentMaterial.h"
-#include "rt/Scene/SurfaceInfo.h"
 
 namespace rt {
 
