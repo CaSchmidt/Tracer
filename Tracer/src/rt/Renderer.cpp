@@ -29,6 +29,8 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
+#include <N4/Optics.h>
+
 #include "rt/Renderer.h"
 
 #include "geom/Optics.h"
@@ -102,7 +104,7 @@ namespace rt {
       color = shade(sinfo, -ray.direction());
 
     } else if( sinfo->material()->isMirror() ) {
-      const Direction  R = geom::optics::reflect(ray.direction(), sinfo.N);
+      const Direction  R = n4::optics::reflect(ray.direction(), sinfo.N);
       const Color rcolor = castRay(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), R), depth + 1);
       color = sinfo->material()->mirror()->reflectance()*rcolor;
 
@@ -110,7 +112,7 @@ namespace rt {
       // (1) Set up Snell's law //////////////////////////////////////////////
 
       const Direction I = ray.direction();
-      const bool entering = n4::dot(I, geom::to_direction(sinfo.N)) < ZERO;
+      const bool entering = !geom::isSameHemisphere(I, sinfo.N);
       const Normal N = entering
           ? Normal(sinfo.N)
           : Normal(-sinfo.N);
@@ -124,18 +126,19 @@ namespace rt {
 
       // (2) Fresnel Reflectance & Transmittance /////////////////////////////
 
-      const real_t kR = geom::optics::dielectric(I, N, eta);
-      const real_t kT = ONE - kR;
+      const real_t cosTi = -n4::dot(I, geom::to_direction(N));
+      const real_t    kR = geom::optics::dielectric(cosTi, eta);
+      const real_t    kT = ONE - kR;
 
       // (3) Reflectance /////////////////////////////////////////////////////
 
-      const Direction R = geom::optics::reflect(I, N);
+      const Direction R = n4::optics::reflect(I, N);
       color = kR*castRay(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*N), R), depth + 1);
 
       // (4) Transmittance ///////////////////////////////////////////////////
 
       if( kT > ZERO ) {
-        const Direction T = geom::optics::refract(I, N, eta);
+        const Direction T = n4::optics::refract(I, N, eta);
         color += kT*castRay(Ray(sinfo.P - geom::to_vertex(TRACE_BIAS*N), T), depth + 1);
       }
 
