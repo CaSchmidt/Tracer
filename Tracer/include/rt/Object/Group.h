@@ -54,6 +54,11 @@ namespace rt {
     Objects _objects{};
   };
 
+  inline Group *GROUP(const ObjectPtr& p)
+  {
+    return dynamic_cast<Group*>(p.get());
+  }
+
 } // namespace rt
 
 #endif // GROUP_H

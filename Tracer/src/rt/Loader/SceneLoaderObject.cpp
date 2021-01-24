@@ -122,7 +122,7 @@ namespace rt {
       }
 
       ObjectPtr groupPtr = Group::create(transform);
-      Group       *group = dynamic_cast<Group*>(groupPtr.get());
+      Group       *group = GROUP(groupPtr);
 
       // (1) Body ////////////////////////////////////////////////////////////
 
