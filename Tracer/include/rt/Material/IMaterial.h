@@ -34,11 +34,17 @@
 
 #include <memory>
 
+#include "rt/BxDF/IBxDF.h"
+
 namespace rt {
 
+  class IBxDF;
+
+#if 0
   class MirrorMaterial;
   class OpaqueMaterial;
   class TransparentMaterial;
+#endif
 
   class IMaterial {
   public:
@@ -46,8 +52,15 @@ namespace rt {
 
     virtual std::unique_ptr<IMaterial> copy() const = 0;
 
-    virtual bool isShadowCaster() const = 0;
+    virtual const IBxDF * const *getBxDFs() const = 0;
+    virtual size_t numBxDFs() const = 0;
 
+    bool isShadowCaster() const;
+
+    bool haveBxDFs() const;
+    bool haveBxDF(const size_t i) const;
+
+#if 0
     bool isMirror() const;
     MirrorMaterial *mirror();
     const MirrorMaterial *mirror() const;
@@ -59,6 +72,7 @@ namespace rt {
     bool isTransparent() const;
     TransparentMaterial *transparent();
     const TransparentMaterial *transparent() const;
+#endif
   };
 
   using MaterialPtr = std::unique_ptr<IMaterial>;

@@ -34,9 +34,11 @@
 #include "rt/Renderer.h"
 
 #include "geom/Optics.h"
+#if 0
 #include "rt/Material/MirrorMaterial.h"
 #include "rt/Material/OpaqueMaterial.h"
 #include "rt/Material/TransparentMaterial.h"
+#endif
 
 namespace rt {
 
@@ -88,6 +90,47 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
+#if 1
+  Color Renderer::castRay(const Ray &ray, const unsigned int depth) const
+  {
+    SurfaceInfo sinfo;
+    if( !_scene.trace(sinfo, ray) ) {
+      return _options.backgroundColor;
+    }
+
+    const size_t      numBxDFs = sinfo->material()->numBxDFs();
+    const IBxDF * const *bxdfs = sinfo->material()->getBxDFs();
+    const BxDFdata        data(ray, sinfo, _options.globalRefraction);
+
+    Color color;
+    for(const LightSourcePtr& light : _scene.lights()) {
+      const LightInfo linfo = light->info(sinfo.P);
+
+      if( _scene.trace(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), linfo.l, linfo.r)) ) {
+        continue;
+      }
+
+      const Direction wi = data.xfrmSW*linfo.l;
+      const real_t cosTi = wi.z;
+      if( cosTi <= ZERO ) {
+        continue;
+      }
+
+      Color fR;
+      for(size_t i = 0; i < numBxDFs; i++) {
+        fR += bxdfs[i]->eval(data.wo, wi);
+      }
+
+      color += fR * linfo.EL * cosTi;
+    }
+
+    if( depth + 1 < _options.maxDepth ) {
+      // TODO...
+    }
+
+    return color;
+  }
+#else
   Color Renderer::castRay(const Ray& ray, const unsigned int depth) const
   {
     if( depth >= _options.maxDepth ) {
@@ -146,7 +189,9 @@ namespace rt {
 
     return color;
   }
+#endif
 
+#if 0
   Color Renderer::shade(const SurfaceInfo& sinfo, const Direction& v) const
   {
     Color result;
@@ -181,5 +226,6 @@ namespace rt {
 
     return result;
   }
+#endif
 
 } // namespace rt

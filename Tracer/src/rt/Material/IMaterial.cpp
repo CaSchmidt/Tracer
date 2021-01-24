@@ -31,9 +31,11 @@
 
 #include "rt/Material/IMaterial.h"
 
+#if 0
 #include "rt/Material/MirrorMaterial.h"
 #include "rt/Material/OpaqueMaterial.h"
 #include "rt/Material/TransparentMaterial.h"
+#endif
 
 namespace rt {
 
@@ -41,6 +43,28 @@ namespace rt {
   {
   }
 
+  bool IMaterial::haveBxDFs() const
+  {
+    return numBxDFs() > 0  &&  getBxDFs() != nullptr;
+  }
+
+  bool IMaterial::haveBxDF(const size_t i) const
+  {
+    return i >= 0  &&  i < numBxDFs()  &&  getBxDFs()[i] != nullptr;
+  }
+
+  bool IMaterial::isShadowCaster() const
+  {
+    const IBxDF * const *bxdfs = getBxDFs();
+    for(size_t i = 0; i < numBxDFs(); i++) {
+      if( bxdfs[i] != nullptr  &&  bxdfs[i]->isShadowCaster() ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+#if 0
   bool IMaterial::isMirror() const
   {
     return dynamic_cast<const MirrorMaterial*>(this) != nullptr;
@@ -85,5 +109,6 @@ namespace rt {
   {
     return dynamic_cast<const TransparentMaterial*>(this);
   }
+#endif
 
 } // namespace rt

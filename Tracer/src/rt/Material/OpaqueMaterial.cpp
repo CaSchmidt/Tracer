@@ -31,11 +31,16 @@
 
 #include "rt/Material/OpaqueMaterial.h"
 
+#include "rt/BxDF/LambertianBRDF.h"
+
 namespace rt {
 
   OpaqueMaterial::OpaqueMaterial() noexcept
     : IMaterial()
   {
+    _lambertian = LambertianBRDF::create({1, 1, 1});
+    _bxdfs[0] = _lambertian.get();
+    _bxdfs[1] = nullptr;
   }
 
   OpaqueMaterial::~OpaqueMaterial() noexcept
@@ -45,20 +50,38 @@ namespace rt {
   MaterialPtr OpaqueMaterial::copy() const
   {
     MaterialPtr result = create();
+    OpaqueMaterial *opaque = OPAQUE(result);
     if( _diffTex ) {
-      result->opaque()->setDiffuse(_diffTex->copy());
+      opaque->setDiffuse(_diffTex->copy());
     }
-    result->opaque()->setShininess(_shininess);
+    opaque->setShininess(_shininess);
     if( _specTex ) {
-      result->opaque()->setSpecular(_specTex->copy());
+      opaque->setSpecular(_specTex->copy());
     }
     return result;
   }
 
+  const IBxDF * const *OpaqueMaterial::getBxDFs() const
+  {
+    return _bxdfs.data();
+  }
+
+  size_t OpaqueMaterial::numBxDFs() const
+  {
+    if( _bxdfs[1] != nullptr  &&  _bxdfs[0] != nullptr ) {
+      return 2;
+    } else if( _bxdfs[0] != nullptr ) {
+      return 1;
+    }
+    return 0;
+  }
+
+#if 0
   bool OpaqueMaterial::isShadowCaster() const
   {
     return true;
   }
+#endif
 
   bool OpaqueMaterial::isSpecular() const
   {

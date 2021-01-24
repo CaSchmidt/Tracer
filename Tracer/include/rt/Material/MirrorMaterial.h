@@ -44,15 +44,26 @@ namespace rt {
 
     MaterialPtr copy() const;
 
+    size_t numBxDFs() const;
+    const IBxDF * const *getBxDFs() const;
+
+#if 0
     bool isShadowCaster() const;
+#endif
 
     void setReflectance(const real_t r);
     real_t reflectance() const;
 
     static MaterialPtr create();
+
   private:
     real_t _reflectance{};
   };
+
+  inline MirrorMaterial *MIRROR(const MaterialPtr& p)
+  {
+    return dynamic_cast<MirrorMaterial*>(p.get());
+  }
 
 } // namespace rt
 

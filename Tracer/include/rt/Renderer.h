@@ -55,7 +55,9 @@ namespace rt {
   private:
     // NOTE: All arguments passed to/returned from these methods are in WORLD coordinates!
     Color castRay(const Ray& ray, const unsigned int depth = 0) const;
+#if 0
     Color shade(const SurfaceInfo& sinfo, const Direction& v) const;
+#endif
 
     RenderOptions _options{};
     Scene         _scene{};

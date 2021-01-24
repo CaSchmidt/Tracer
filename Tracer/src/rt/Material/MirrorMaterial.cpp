@@ -45,14 +45,27 @@ namespace rt {
   MaterialPtr MirrorMaterial::copy() const
   {
     MaterialPtr result = create();
-    result->mirror()->setReflectance(_reflectance);
+    MirrorMaterial *mirror = MIRROR(result);
+    mirror->setReflectance(_reflectance);
     return result;
   }
 
+  size_t MirrorMaterial::numBxDFs() const
+  {
+    return 0;
+  }
+
+  const IBxDF * const *MirrorMaterial::getBxDFs() const
+  {
+    return nullptr;
+  }
+
+#if 0
   bool MirrorMaterial::isShadowCaster() const
   {
     return true;
   }
+#endif
 
   void MirrorMaterial::setReflectance(const real_t r)
   {

@@ -44,7 +44,13 @@ namespace rt {
 
     MaterialPtr copy() const;
 
+    size_t numBxDFs() const;
+
+    const IBxDF *const *getBxDFs() const;
+
+#if 0
     bool isShadowCaster() const;
+#endif
 
     void setRefraction(const real_t eta);
     real_t refraction() const;
@@ -54,6 +60,11 @@ namespace rt {
   private:
     real_t _refraction{};
   };
+
+  inline TransparentMaterial *TRANSPARENT(const MaterialPtr& p)
+  {
+    return dynamic_cast<TransparentMaterial*>(p.get());
+  }
 
 } // namespace rt
 

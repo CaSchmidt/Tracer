@@ -44,7 +44,12 @@ namespace rt {
 
     MaterialPtr copy() const;
 
+    const IBxDF * const *getBxDFs() const;
+    size_t numBxDFs() const;
+
+#if 0
     bool isShadowCaster() const;
+#endif
 
     bool isSpecular() const;
 
@@ -62,10 +67,17 @@ namespace rt {
     static MaterialPtr create();
 
   private:
+    BxDFs<2>   _bxdfs;
     TexturePtr _diffTex{};
+    BxDFptr    _lambertian{};
     real_t     _shininess{};
     TexturePtr _specTex{};
   };
+
+  inline OpaqueMaterial *OPAQUE(const MaterialPtr& p)
+  {
+    return dynamic_cast<OpaqueMaterial*>(p.get());
+  }
 
 } // namespace rt
 

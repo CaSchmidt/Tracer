@@ -45,14 +45,27 @@ namespace rt {
   MaterialPtr TransparentMaterial::copy() const
   {
     MaterialPtr result = create();
-    result->transparent()->setRefraction(_refraction);
+    TransparentMaterial *transparent = TRANSPARENT(result);
+    transparent->setRefraction(_refraction);
     return result;
   }
 
+  size_t TransparentMaterial::numBxDFs() const
+  {
+    return 0;
+  }
+
+  const IBxDF *const *TransparentMaterial::getBxDFs() const
+  {
+    return nullptr;
+  }
+
+#if 0
   bool TransparentMaterial::isShadowCaster() const
   {
     return false;
   }
+#endif
 
   void TransparentMaterial::setRefraction(const real_t eta)
   {

@@ -55,7 +55,8 @@ namespace rt {
       }
 
       MaterialPtr result = MirrorMaterial::create();
-      result->mirror()->setReflectance(reflectance);
+      MirrorMaterial *mirror = MIRROR(result);
+      mirror->setReflectance(reflectance);
 
       return result;
     }
@@ -86,9 +87,10 @@ namespace rt {
       }
 
       MaterialPtr result = OpaqueMaterial::create();
-      result->opaque()->setDiffuse(diffuse);
-      result->opaque()->setShininess(shininess);
-      result->opaque()->setSpecular(specular);
+      OpaqueMaterial *opaque = OPAQUE(result);
+      opaque->setDiffuse(diffuse);
+      opaque->setShininess(shininess);
+      opaque->setSpecular(specular);
 
       return result;
     }
@@ -103,7 +105,8 @@ namespace rt {
       }
 
       MaterialPtr result = TransparentMaterial::create();
-      result->transparent()->setRefraction(refraction);
+      TransparentMaterial *transparent = TRANSPARENT(result);
+      transparent->setRefraction(refraction);
 
       return result;
     }
