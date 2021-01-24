@@ -32,6 +32,8 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
+#include <N4/Util.h>
+
 #include "geom/Ray.h"
 
 namespace geom {
@@ -84,25 +86,10 @@ namespace geom {
 
     // Special Transforms ////////////////////////////////////////////////////
 
-    /*
-     * NOTE:
-     * lookAt() uses OpenGL's camera conventions (AKA is right-handed):
-     * - the viewer looks along the negative z axis
-     * - x points right
-     * - y points up
-     */
     static inline Transform lookAt(const Vertex& from, const Vertex& to,
                                    const Direction& up)
     {
-      const Direction z = to_direction(n4::direction(to, from)); // Looking along the NEGATIVE z axis!
-      const Direction x = n4::normalize(n4::cross(up, z));
-      const Direction y = n4::normalize(n4::cross(z, x));
-      return Transform(Matrix{
-                         x.x, y.x, z.x, from.x,
-                         x.y, y.y, z.y, from.y,
-                         x.z, y.z, z.z, from.z,
-                           0,   0,   0,      1
-                       });
+      return Transform(n4::util::lookAt(from, to, up));
     }
 
     static inline Transform rotateZYX(const real_t rz, const real_t ry, const real_t rx)
