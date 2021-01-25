@@ -33,7 +33,6 @@
 #define IBXDF_H
 
 #include <array>
-#include <memory>
 
 #include "rt/Types.h"
 
@@ -68,8 +67,6 @@ namespace rt {
     Type type() const;
     bool isType(const Type t) const;
 
-    virtual std::unique_ptr<IBxDF> copy() const = 0;
-
     virtual bool isShadowCaster() const = 0;
 
     virtual Color eval(const Direction& wo, const Direction& wi) const = 0;
@@ -78,8 +75,6 @@ namespace rt {
   private:
     Type _type;
   };
-
-  using BxDFptr = std::unique_ptr<IBxDF>;
 
   using BxDFpack = std::array<const IBxDF*,2>;
 

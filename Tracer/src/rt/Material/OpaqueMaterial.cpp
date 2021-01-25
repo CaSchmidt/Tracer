@@ -35,12 +35,13 @@
 
 namespace rt {
 
+  ////// public //////////////////////////////////////////////////////////////
+
   OpaqueMaterial::OpaqueMaterial() noexcept
     : IMaterial()
   {
-    _lambertian = LambertianBRDF::create({1, 1, 1});
-    _bxdfs[0] = _lambertian.get();
-    _bxdfs[1] = nullptr;
+    _lambertian = std::make_unique<LambertianBRDF>();
+    setupPacks();
   }
 
   OpaqueMaterial::~OpaqueMaterial() noexcept
@@ -81,11 +82,13 @@ namespace rt {
   void OpaqueMaterial::setDiffuse(TexturePtr& tex)
   {
     _diffTex = std::move(tex);
+    setupPacks();
   }
 
   void OpaqueMaterial::setDiffuse(TexturePtr&& tex)
   {
     _diffTex = std::move(tex);
+    setupPacks();
   }
 
   Color OpaqueMaterial::diffuse(const real_t s, const real_t t) const
@@ -108,11 +111,13 @@ namespace rt {
   void OpaqueMaterial::setSpecular(TexturePtr& tex)
   {
     _specTex = std::move(tex);
+    setupPacks();
   }
 
   void OpaqueMaterial::setSpecular(TexturePtr&& tex)
   {
     _specTex = std::move(tex);
+    setupPacks();
   }
 
   Color OpaqueMaterial::specular(const real_t s, const real_t t) const
@@ -125,6 +130,14 @@ namespace rt {
   MaterialPtr OpaqueMaterial::create()
   {
     return std::make_unique<OpaqueMaterial>();
+  }
+
+  ////// private /////////////////////////////////////////////////////////////
+
+  void OpaqueMaterial::setupPacks()
+  {
+    _bxdfs.fill(nullptr);
+    _bxdfs[0] = _lambertian.get();
   }
 
 } // namespace rt

@@ -33,19 +33,24 @@
 
 namespace rt {
 
-  LambertianBRDF::LambertianBRDF(const Color& color) noexcept
+  LambertianBRDF::LambertianBRDF() noexcept
     : IBxDF(IBxDF::Type(IBxDF::Diffuse | IBxDF::Reflection))
-    , _color(color)
   {
+    setColor({1, 1, 1});
   }
 
   LambertianBRDF::~LambertianBRDF()
   {
   }
 
-  std::unique_ptr<IBxDF> LambertianBRDF::copy() const
+  Color LambertianBRDF::color() const
   {
-    return create(_color);
+    return _color;
+  }
+
+  void LambertianBRDF::setColor(const Color& color)
+  {
+    _color = n4::clamp(color, 0, 1);
   }
 
   bool LambertianBRDF::isShadowCaster() const
@@ -56,11 +61,6 @@ namespace rt {
   Color LambertianBRDF::eval(const Direction& /*wo*/, const Direction& /*wi*/) const
   {
     return _color/PI;
-  }
-
-  BxDFptr LambertianBRDF::create(const Color& color)
-  {
-    return std::make_unique<LambertianBRDF>(color);
   }
 
 } // namespace rt

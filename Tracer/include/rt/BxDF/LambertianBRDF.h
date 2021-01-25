@@ -38,16 +38,15 @@ namespace rt {
 
   class LambertianBRDF : public IBxDF {
   public:
-    LambertianBRDF(const Color& color) noexcept;
+    LambertianBRDF() noexcept;
     ~LambertianBRDF();
 
-    std::unique_ptr<IBxDF> copy() const;
+    Color color() const;
+    void setColor(const Color& color);
 
     bool isShadowCaster() const;
 
     Color eval(const Direction& wo, const Direction& wi) const;
-
-    static BxDFptr create(const Color& color);
 
   private:
     Color _color{};
