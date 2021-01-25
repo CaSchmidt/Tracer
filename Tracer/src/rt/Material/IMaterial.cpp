@@ -43,21 +43,11 @@ namespace rt {
   {
   }
 
-  bool IMaterial::haveBxDFs() const
-  {
-    return numBxDFs() > 0  &&  getBxDFs() != nullptr;
-  }
-
-  bool IMaterial::haveBxDF(const size_t i) const
-  {
-    return i >= 0  &&  i < numBxDFs()  &&  getBxDFs()[i] != nullptr;
-  }
-
   bool IMaterial::isShadowCaster() const
   {
-    const IBxDF * const *bxdfs = getBxDFs();
-    for(size_t i = 0; i < numBxDFs(); i++) {
-      if( bxdfs[i] != nullptr  &&  bxdfs[i]->isShadowCaster() ) {
+    const BxDFpack bxdfs = getBxDFs();
+    for(const IBxDF *bxdf : bxdfs) {
+      if( bxdf != nullptr  &&  bxdf->isShadowCaster() ) {
         return true;
       }
     }

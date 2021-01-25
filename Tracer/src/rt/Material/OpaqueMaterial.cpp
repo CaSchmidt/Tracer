@@ -61,19 +61,9 @@ namespace rt {
     return result;
   }
 
-  const IBxDF * const *OpaqueMaterial::getBxDFs() const
+  BxDFpack OpaqueMaterial::getBxDFs() const
   {
-    return _bxdfs.data();
-  }
-
-  size_t OpaqueMaterial::numBxDFs() const
-  {
-    if( _bxdfs[1] != nullptr  &&  _bxdfs[0] != nullptr ) {
-      return 2;
-    } else if( _bxdfs[0] != nullptr ) {
-      return 1;
-    }
-    return 0;
+    return _bxdfs;
   }
 
 #if 0

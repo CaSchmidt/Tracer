@@ -81,8 +81,7 @@ namespace rt {
 
   using BxDFptr = std::unique_ptr<IBxDF>;
 
-  template<std::size_t N>
-  using BxDFs = std::array<IBxDF*,N>;
+  using BxDFpack = std::array<const IBxDF*,2>;
 
 } // namespace rt
 

@@ -52,13 +52,9 @@ namespace rt {
 
     virtual std::unique_ptr<IMaterial> copy() const = 0;
 
-    virtual const IBxDF * const *getBxDFs() const = 0;
-    virtual size_t numBxDFs() const = 0;
+    virtual BxDFpack getBxDFs() const = 0;
 
     bool isShadowCaster() const;
-
-    bool haveBxDFs() const;
-    bool haveBxDF(const size_t i) const;
 
 #if 0
     bool isMirror() const;

@@ -50,14 +50,11 @@ namespace rt {
     return result;
   }
 
-  size_t TransparentMaterial::numBxDFs() const
+  BxDFpack TransparentMaterial::getBxDFs() const
   {
-    return 0;
-  }
-
-  const IBxDF *const *TransparentMaterial::getBxDFs() const
-  {
-    return nullptr;
+    BxDFpack bxdfs;
+    bxdfs.fill(nullptr);
+    return bxdfs;
   }
 
 #if 0

@@ -44,8 +44,7 @@ namespace rt {
 
     MaterialPtr copy() const;
 
-    size_t numBxDFs() const;
-    const IBxDF * const *getBxDFs() const;
+    BxDFpack getBxDFs() const;
 
 #if 0
     bool isShadowCaster() const;

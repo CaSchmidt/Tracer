@@ -50,14 +50,11 @@ namespace rt {
     return result;
   }
 
-  size_t MirrorMaterial::numBxDFs() const
+  BxDFpack MirrorMaterial::getBxDFs() const
   {
-    return 0;
-  }
-
-  const IBxDF * const *MirrorMaterial::getBxDFs() const
-  {
-    return nullptr;
+    BxDFpack bxdfs;
+    bxdfs.fill(nullptr);
+    return bxdfs;
   }
 
 #if 0

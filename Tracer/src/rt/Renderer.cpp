@@ -98,9 +98,8 @@ namespace rt {
       return _options.backgroundColor;
     }
 
-    const size_t      numBxDFs = sinfo->material()->numBxDFs();
-    const IBxDF * const *bxdfs = sinfo->material()->getBxDFs();
-    const BxDFdata        data(ray, sinfo, _options.globalRefraction);
+    const BxDFpack bxdfs = sinfo->material()->getBxDFs();
+    const BxDFdata  data(ray, sinfo, _options.globalRefraction);
 
     Color color;
     for(const LightSourcePtr& light : _scene.lights()) {
@@ -117,7 +116,10 @@ namespace rt {
       }
 
       Color fR;
-      for(size_t i = 0; i < numBxDFs; i++) {
+      for(size_t i = 0; i < bxdfs.size(); i++) {
+        if( bxdfs[i] == nullptr ) {
+          continue;
+        }
         fR += bxdfs[i]->eval(data.wo, wi);
       }
 

@@ -44,8 +44,7 @@ namespace rt {
 
     MaterialPtr copy() const;
 
-    const IBxDF * const *getBxDFs() const;
-    size_t numBxDFs() const;
+    BxDFpack getBxDFs() const;
 
 #if 0
     bool isShadowCaster() const;
@@ -67,7 +66,7 @@ namespace rt {
     static MaterialPtr create();
 
   private:
-    BxDFs<2>   _bxdfs;
+    BxDFpack   _bxdfs;
     TexturePtr _diffTex{};
     BxDFptr    _lambertian{};
     real_t     _shininess{};
