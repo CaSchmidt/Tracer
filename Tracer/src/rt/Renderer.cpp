@@ -120,7 +120,9 @@ namespace rt {
         if( bxdfs[i] == nullptr ) {
           continue;
         }
-        fR += bxdfs[i]->eval(data.wo, wi);
+        fR += sinfo->material()->haveTexture(i)
+            ? bxdfs[i]->eval(data.wo, wi)*sinfo->material()->textureLookup(i, sinfo.u, sinfo.v)
+            : bxdfs[i]->eval(data.wo, wi);
       }
 
       color += fR * linfo.EL * cosTi;

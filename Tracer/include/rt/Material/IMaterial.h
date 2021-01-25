@@ -54,6 +54,10 @@ namespace rt {
 
     virtual BxDFpack getBxDFs() const = 0;
 
+    virtual bool haveTexture(const size_t i) const;
+
+    virtual Color textureLookup(const size_t i, const real_t s, const real_t t) const;
+
     bool isShadowCaster() const;
 
 #if 0

@@ -67,6 +67,21 @@ namespace rt {
     return _bxdfs;
   }
 
+  bool OpaqueMaterial::haveTexture(const size_t i) const
+  {
+    return (i == 0  &&  _diffTex)  ||  (i == 1  &&  _specTex);
+  }
+
+  Color OpaqueMaterial::textureLookup(const size_t i, const real_t s, const real_t t) const
+  {
+    if(        i == 0 ) {
+      return _diffTex->lookup(s, t);
+    } else if( i == 1 ) {
+      return _specTex->lookup(s, t);
+    }
+    return Color{1, 1, 1};
+  }
+
 #if 0
   bool OpaqueMaterial::isShadowCaster() const
   {

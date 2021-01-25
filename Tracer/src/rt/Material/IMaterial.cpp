@@ -43,6 +43,16 @@ namespace rt {
   {
   }
 
+  bool IMaterial::haveTexture(const size_t /*i*/) const
+  {
+    return false;
+  }
+
+  Color IMaterial::textureLookup(const size_t /*i*/, const real_t /*s*/, const real_t /*t*/) const
+  {
+    return Color{1, 1, 1};
+  }
+
   bool IMaterial::isShadowCaster() const
   {
     const BxDFpack bxdfs = getBxDFs();
