@@ -39,6 +39,8 @@ set(Tracer_HEADERS
   include/rt/Types.h
   include/rt/BxDF/IBxDF.h
   include/rt/BxDF/LambertianBRDF.h
+  include/rt/BxDF/MirrorBRDF.h
+  include/rt/BxDF/Shading.h
   include/rt/Camera/FrustumCamera.h
   include/rt/Camera/ICamera.h
   include/rt/Camera/RenderLoop.h
@@ -72,6 +74,7 @@ set(Tracer_SOURCES
   src/rt/Renderer.cpp
   src/rt/BxDF/IBxDF.cpp
   src/rt/BxDF/LambertianBRDF.cpp
+  src/rt/BxDF/MirrorBRDF.cpp
   src/rt/Camera/FrustumCamera.cpp
   src/rt/Camera/ICamera.cpp
   src/rt/Camera/SimpleCamera.cpp

@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,62 +29,34 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Material/MirrorMaterial.h"
+#ifndef MIRRORBRDF_H
+#define MIRRORBRDF_H
+
+#include "rt/BxDF/IBxDF.h"
 
 namespace rt {
 
-  MirrorMaterial::MirrorMaterial() noexcept
-    : IMaterial()
-  {
-    _mirror = std::make_unique<MirrorBRDF>();
-    setupPacks();
-  }
+  class MirrorBRDF : public IBxDF {
+  public:
+    MirrorBRDF();
+    ~MirrorBRDF();
 
-  MirrorMaterial::~MirrorMaterial() noexcept
-  {
-  }
+    Color color() const;
+    void setColor(const Color& c);
 
-  MaterialPtr MirrorMaterial::copy() const
-  {
-    MaterialPtr result = create();
-    MirrorMaterial *mirror = MIRROR(result);
-    mirror->setReflectance(reflectance());
-    return result;
-  }
+    real_t reflectance() const;
+    void setReflectance(const real_t r);
 
-  BxDFpack MirrorMaterial::getBxDFs() const
-  {
-    return _bxdfs;
-  }
+    bool isShadowCaster() const;
 
-#if 0
-  bool MirrorMaterial::isShadowCaster() const
-  {
-    return true;
-  }
-#endif
+    Color eval(const Direction& wo, const Direction& wi) const;
+    Color sample(const BxDFdata& input, Direction& wi) const;
 
-  void MirrorMaterial::setReflectance(const real_t r)
-  {
-    _mirror->setReflectance(r);
-  }
-
-  real_t MirrorMaterial::reflectance() const
-  {
-    return _mirror->reflectance();
-  }
-
-  MaterialPtr MirrorMaterial::create()
-  {
-    return std::make_unique<MirrorMaterial>();
-  }
-
-  ////// private /////////////////////////////////////////////////////////////
-
-  void MirrorMaterial::setupPacks()
-  {
-    _bxdfs.fill(nullptr);
-    _bxdfs[0] = _mirror.get();
-  }
+  private:
+    Color  _color{};
+    real_t _reflectance{};
+  };
 
 } // namespace rt
+
+#endif // MIRRORBRDF_H

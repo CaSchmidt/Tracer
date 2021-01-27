@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,62 +29,57 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Material/MirrorMaterial.h"
+#include "rt/BxDF/MirrorBRDF.h"
+
+#include "rt/BxDF/Shading.h"
 
 namespace rt {
 
-  MirrorMaterial::MirrorMaterial() noexcept
-    : IMaterial()
+  MirrorBRDF::MirrorBRDF()
+    : IBxDF(IBxDF::Type(IBxDF::Specular | IBxDF::Reflection))
   {
-    _mirror = std::make_unique<MirrorBRDF>();
-    setupPacks();
+    setColor({1, 1, 1});
+    setReflectance(1);
   }
 
-  MirrorMaterial::~MirrorMaterial() noexcept
+  MirrorBRDF::~MirrorBRDF()
   {
   }
 
-  MaterialPtr MirrorMaterial::copy() const
+  Color MirrorBRDF::color() const
   {
-    MaterialPtr result = create();
-    MirrorMaterial *mirror = MIRROR(result);
-    mirror->setReflectance(reflectance());
-    return result;
+    return _color;
   }
 
-  BxDFpack MirrorMaterial::getBxDFs() const
+  void MirrorBRDF::setColor(const Color& c)
   {
-    return _bxdfs;
+    _color = n4::clamp(c, 0, 1);
   }
 
-#if 0
-  bool MirrorMaterial::isShadowCaster() const
+  real_t MirrorBRDF::reflectance() const
+  {
+    return _reflectance;
+  }
+
+  void MirrorBRDF::setReflectance(const real_t r)
+  {
+    _reflectance = std::clamp<real_t>(r, 0, 1);
+  }
+
+  bool MirrorBRDF::isShadowCaster() const
   {
     return true;
   }
-#endif
 
-  void MirrorMaterial::setReflectance(const real_t r)
+  Color MirrorBRDF::eval(const Direction& /*wo*/, const Direction& /*wi*/) const
   {
-    _mirror->setReflectance(r);
+    return Color();
   }
 
-  real_t MirrorMaterial::reflectance() const
+  Color MirrorBRDF::sample(const BxDFdata& input, Direction& wi) const
   {
-    return _mirror->reflectance();
-  }
-
-  MaterialPtr MirrorMaterial::create()
-  {
-    return std::make_unique<MirrorMaterial>();
-  }
-
-  ////// private /////////////////////////////////////////////////////////////
-
-  void MirrorMaterial::setupPacks()
-  {
-    _bxdfs.fill(nullptr);
-    _bxdfs[0] = _mirror.get();
+    wi = shading::reflect(input.wo);
+    return _reflectance*_color/shading::cosTheta(wi);
   }
 
 } // namespace rt

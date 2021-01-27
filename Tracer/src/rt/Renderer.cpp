@@ -126,11 +126,28 @@ namespace rt {
             : bxdfs[i]->eval(data.wo, wi);
       }
 
-      color += fR * linfo.EL * cosTi;
+      color += fR*linfo.EL*cosTi;
     }
 
     if( depth + 1 < _options.maxDepth ) {
-      // TODO...
+      constexpr IBxDF::Type reflection = IBxDF::Type(IBxDF::Specular | IBxDF::Reflection);
+      for(const IBxDF *bxdf : bxdfs) {
+        if( bxdf == nullptr  ||  !bxdf->isType(reflection) ) {
+          continue;
+        }
+
+        Direction wi;
+        const Color fR = bxdf->sample(data, wi);
+        if( wi.isZero()  ||  fR.isNaN() ) {
+          continue;
+        }
+
+        const Direction  R = data.toWorld(wi);
+        const Color     Li = castRay({sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), R}, depth + 1);
+        const real_t cosTi = shading::cosTheta(wi);
+
+        color += fR*Li*cosTi;
+      }
     }
 
     return color;
