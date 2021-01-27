@@ -39,9 +39,21 @@ namespace rt {
   namespace shading {
 
     template<typename VecT>
-    inline real_t cosTheta(const VecT& w)
+    inline real_t cosTheta(const VecT& v)
     {
-      return w.z;
+      return v.z;
+    }
+
+    template<typename VecT>
+    inline real_t absCosTheta(const VecT& v)
+    {
+      return n4::abs(cosTheta(v));
+    }
+
+    template<typename VecT>
+    inline bool isSameHemisphere(const VecT& v)
+    {
+      return v.z >= ZERO;
     }
 
     inline Direction reflect(const Direction& wo)

@@ -59,6 +59,9 @@ namespace rt {
     Color shade(const SurfaceInfo& sinfo, const Direction& v) const;
 #endif
 
+    Color specularReflectAndRefract(const BxDFpack& bxdfs, const BxDFdata& data,
+                                    const SurfaceInfo& sinfo, const unsigned int depth) const;
+
     RenderOptions _options{};
     Scene         _scene{};
     Transform     _view{};

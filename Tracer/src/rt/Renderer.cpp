@@ -130,24 +130,7 @@ namespace rt {
     }
 
     if( depth + 1 < _options.maxDepth ) {
-      constexpr IBxDF::Type reflection = IBxDF::Type(IBxDF::Specular | IBxDF::Reflection);
-      for(const IBxDF *bxdf : bxdfs) {
-        if( bxdf == nullptr  ||  !bxdf->isType(reflection) ) {
-          continue;
-        }
-
-        Direction wi;
-        const Color fR = bxdf->sample(data, wi);
-        if( wi.isZero()  ||  fR.isNaN() ) {
-          continue;
-        }
-
-        const Direction  R = data.toWorld(wi);
-        const Color     Li = castRay({sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), R}, depth + 1);
-        const real_t cosTi = shading::cosTheta(wi);
-
-        color += fR*Li*cosTi;
-      }
+      color += specularReflectAndRefract(bxdfs, data, sinfo, depth);
     }
 
     return color;
@@ -212,6 +195,35 @@ namespace rt {
     return color;
   }
 #endif
+
+  Color Renderer::specularReflectAndRefract(const BxDFpack& bxdfs, const BxDFdata& data,
+                                            const SurfaceInfo& sinfo, const unsigned int depth) const
+  {
+    Color color;
+    for(const IBxDF *bxdf : bxdfs) {
+      constexpr IBxDF::Type reflection = IBxDF::Type(IBxDF::Specular | IBxDF::Reflection);
+      if( bxdf == nullptr  ||  !bxdf->isType(reflection) ) {
+        continue;
+      }
+
+      Direction wiS;
+      const Color fR = bxdf->sample(data, wiS);
+      if( fR.isZero()  ||  n4::isZero(shading::cosTheta(wiS)) ) {
+        continue;
+      }
+
+      const real_t bias = shading::isSameHemisphere(wiS)
+          ? TRACE_BIAS
+          : -TRACE_BIAS;
+
+      const Direction wiW = data.toWorld(wiS);
+      const Color      Li = castRay({sinfo.P + geom::to_vertex(bias*sinfo.N), wiW}, depth + 1);
+      const real_t  cosTi = shading::cosTheta(wiS);
+
+      color += fR*Li*cosTi;
+    }
+    return color;
+  }
 
 #if 0
   Color Renderer::shade(const SurfaceInfo& sinfo, const Direction& v) const
