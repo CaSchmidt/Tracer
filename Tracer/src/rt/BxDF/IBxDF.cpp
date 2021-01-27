@@ -45,7 +45,7 @@ namespace rt {
     xfrmWS = n4::util::frameFromZ(sinfo.N);
     xfrmSW = xfrmWS.transpose();
 
-    wo = -(xfrmSW*ray.direction());
+    wo = -toShading(ray.direction());
   }
 
   ////// IBxDF ///////////////////////////////////////////////////////////////
