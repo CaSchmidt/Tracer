@@ -79,7 +79,7 @@ namespace rt {
     } else if( i == 1 ) {
       return _specTex->lookup(s, t);
     }
-    return Color{1, 1, 1};
+    return Color(0);
   }
 
 #if 0
@@ -97,13 +97,11 @@ namespace rt {
   void OpaqueMaterial::setDiffuse(TexturePtr& tex)
   {
     _diffTex = std::move(tex);
-    setupPacks();
   }
 
   void OpaqueMaterial::setDiffuse(TexturePtr&& tex)
   {
     _diffTex = std::move(tex);
-    setupPacks();
   }
 
   Color OpaqueMaterial::diffuse(const real_t s, const real_t t) const
@@ -126,13 +124,11 @@ namespace rt {
   void OpaqueMaterial::setSpecular(TexturePtr& tex)
   {
     _specTex = std::move(tex);
-    setupPacks();
   }
 
   void OpaqueMaterial::setSpecular(TexturePtr&& tex)
   {
     _specTex = std::move(tex);
-    setupPacks();
   }
 
   Color OpaqueMaterial::specular(const real_t s, const real_t t) const
