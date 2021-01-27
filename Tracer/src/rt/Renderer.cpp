@@ -34,6 +34,7 @@
 #include "rt/Renderer.h"
 
 #include "geom/Optics.h"
+#include "rt/BxDF/Shading.h"
 #if 0
 #include "rt/Material/MirrorMaterial.h"
 #include "rt/Material/OpaqueMaterial.h"
@@ -105,12 +106,12 @@ namespace rt {
     for(const LightSourcePtr& light : _scene.lights()) {
       const LightInfo linfo = light->info(sinfo.P);
 
-      if( _scene.trace(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), linfo.l, linfo.r)) ) {
+      if( _scene.trace({sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), linfo.l, linfo.r}) ) {
         continue;
       }
 
-      const Direction wi = data.xfrmSW*linfo.l;
-      const real_t cosTi = wi.z;
+      const Direction wi = data.toShading(linfo.l);
+      const real_t cosTi = shading::cosTheta(wi);
       if( cosTi <= ZERO ) {
         continue;
       }
