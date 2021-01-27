@@ -48,9 +48,9 @@ namespace rt {
     return _color;
   }
 
-  void LambertianBRDF::setColor(const Color& color)
+  void LambertianBRDF::setColor(const Color& c)
   {
-    _color = n4::clamp(color, 0, 1);
+    _color = n4::clamp(c, 0, 1);
   }
 
   bool LambertianBRDF::isShadowCaster() const

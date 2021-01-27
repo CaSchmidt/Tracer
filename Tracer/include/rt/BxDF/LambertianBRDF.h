@@ -42,7 +42,7 @@ namespace rt {
     ~LambertianBRDF();
 
     Color color() const;
-    void setColor(const Color& color);
+    void setColor(const Color& c);
 
     bool isShadowCaster() const;
 
