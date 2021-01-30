@@ -35,11 +35,6 @@
 
 #include "geom/Optics.h"
 #include "rt/BxDF/Shading.h"
-#if 0
-#include "rt/Material/MirrorMaterial.h"
-#include "rt/Material/OpaqueMaterial.h"
-#include "rt/Material/TransparentMaterial.h"
-#endif
 
 namespace rt {
 
@@ -91,7 +86,6 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-#if 1
   Color Renderer::castRay(const Ray &ray, const unsigned int depth) const
   {
     SurfaceInfo sinfo;
@@ -135,66 +129,6 @@ namespace rt {
 
     return color;
   }
-#else
-  Color Renderer::castRay(const Ray& ray, const unsigned int depth) const
-  {
-    if( depth >= _options.maxDepth ) {
-      return Color();
-    }
-
-    SurfaceInfo sinfo;
-    if( !_scene.trace(sinfo, ray) ) {
-      return _options.backgroundColor;
-    }
-
-    Color color;
-    if(        sinfo->material()->isOpaque() ) {
-      color = shade(sinfo, -ray.direction());
-
-    } else if( sinfo->material()->isMirror() ) {
-      const Direction  R = n4::optics::reflect(ray.direction(), sinfo.N);
-      const Color rcolor = castRay(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), R), depth + 1);
-      color = sinfo->material()->mirror()->reflectance()*rcolor;
-
-    } else if( sinfo->material()->isTransparent() ) {
-      // (1) Set up Snell's law //////////////////////////////////////////////
-
-      const Direction I = ray.direction();
-      const bool entering = !geom::isSameHemisphere(I, sinfo.N);
-      const Normal N = entering
-          ? Normal(sinfo.N)
-          : Normal(-sinfo.N);
-      const real_t etai = entering
-          ? _options.globalRefraction
-          : sinfo->material()->transparent()->refraction();
-      const real_t etat = entering
-          ? sinfo->material()->transparent()->refraction()
-          : _options.globalRefraction;
-      const real_t eta = etai/etat;
-
-      // (2) Fresnel Reflectance & Transmittance /////////////////////////////
-
-      const real_t cosTi = -n4::dot(I, geom::to_direction(N));
-      const real_t    kR = geom::optics::dielectric(cosTi, eta);
-      const real_t    kT = ONE - kR;
-
-      // (3) Reflectance /////////////////////////////////////////////////////
-
-      const Direction R = n4::optics::reflect(I, N);
-      color = kR*castRay(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*N), R), depth + 1);
-
-      // (4) Transmittance ///////////////////////////////////////////////////
-
-      if( kT > ZERO ) {
-        const Direction T = n4::optics::refract(I, N, eta);
-        color += kT*castRay(Ray(sinfo.P - geom::to_vertex(TRACE_BIAS*N), T), depth + 1);
-      }
-
-    }
-
-    return color;
-  }
-#endif
 
   Color Renderer::specularReflectAndRefract(const BxDFpack& bxdfs, const BxDFdata& data,
                                             const SurfaceInfo& sinfo, const unsigned int depth) const
@@ -225,42 +159,5 @@ namespace rt {
     }
     return color;
   }
-
-#if 0
-  Color Renderer::shade(const SurfaceInfo& sinfo, const Direction& v) const
-  {
-    Color result;
-
-    const OpaqueMaterial *opaque = sinfo->material()->opaque();
-
-    for(const LightSourcePtr& light : _scene.lights()) {
-      const LightInfo linfo = light->info(sinfo.P);
-
-      if( _scene.trace(Ray(sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), linfo.l, linfo.r)) ) {
-        continue; // Light is obscured by an object!
-      }
-
-      const real_t cosTi = geom::dot1(sinfo.N, geom::to_normal(linfo.l));
-      if( cosTi <= 0 ) {
-        continue;
-      }
-
-      // Lambertian/Diffuse contribution
-      Color scolor = opaque->diffuse(sinfo.u, sinfo.v);
-
-      // Specular contribution
-      if( opaque->isSpecular() ) {
-        const Direction h = n4::normalize(linfo.l + v);
-        const real_t cosTh = geom::dot1(sinfo.N, geom::to_normal(h));
-        scolor += opaque->specular(sinfo.u, sinfo.v)*n4::pow(cosTh, opaque->shininess());
-      }
-
-      // Account for light's irradiance
-      result += (scolor*linfo.EL)*cosTi;
-    }
-
-    return result;
-  }
-#endif
 
 } // namespace rt

@@ -59,13 +59,6 @@ namespace rt {
     return _bxdfs;
   }
 
-#if 0
-  bool MirrorMaterial::isShadowCaster() const
-  {
-    return true;
-  }
-#endif
-
   void MirrorMaterial::setReflectance(const real_t r)
   {
     _mirror->setReflectance(r);

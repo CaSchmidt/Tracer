@@ -40,12 +40,6 @@ namespace rt {
 
   class IBxDF;
 
-#if 0
-  class MirrorMaterial;
-  class OpaqueMaterial;
-  class TransparentMaterial;
-#endif
-
   class IMaterial {
   public:
     virtual ~IMaterial() noexcept;
@@ -59,20 +53,6 @@ namespace rt {
     virtual Color textureLookup(const size_t i, const real_t s, const real_t t) const;
 
     bool isShadowCaster() const;
-
-#if 0
-    bool isMirror() const;
-    MirrorMaterial *mirror();
-    const MirrorMaterial *mirror() const;
-
-    bool isOpaque() const;
-    OpaqueMaterial *opaque();
-    const OpaqueMaterial *opaque() const;
-
-    bool isTransparent() const;
-    TransparentMaterial *transparent();
-    const TransparentMaterial *transparent() const;
-#endif
   };
 
   using MaterialPtr = std::unique_ptr<IMaterial>;

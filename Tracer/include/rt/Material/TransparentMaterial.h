@@ -47,10 +47,6 @@ namespace rt {
 
     BxDFpack getBxDFs() const;
 
-#if 0
-    bool isShadowCaster() const;
-#endif
-
     void setRefraction(const real_t eta);
     real_t refraction() const;
 

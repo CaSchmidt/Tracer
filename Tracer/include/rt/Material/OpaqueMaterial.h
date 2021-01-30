@@ -51,10 +51,6 @@ namespace rt {
 
     Color textureLookup(const size_t i, const real_t s, const real_t t) const;
 
-#if 0
-    bool isShadowCaster() const;
-#endif
-
     bool isSpecular() const;
 
     void setDiffuse(TexturePtr& tex);

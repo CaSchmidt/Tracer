@@ -60,13 +60,6 @@ namespace rt {
     return _bxdf;
   }
 
-#if 0
-  bool TransparentMaterial::isShadowCaster() const
-  {
-    return false;
-  }
-#endif
-
   void TransparentMaterial::setRefraction(const real_t eta)
   {
     _reflect->setRefraction(eta);

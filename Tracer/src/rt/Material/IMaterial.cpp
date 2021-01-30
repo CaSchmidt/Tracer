@@ -31,12 +31,6 @@
 
 #include "rt/Material/IMaterial.h"
 
-#if 0
-#include "rt/Material/MirrorMaterial.h"
-#include "rt/Material/OpaqueMaterial.h"
-#include "rt/Material/TransparentMaterial.h"
-#endif
-
 namespace rt {
 
   IMaterial::~IMaterial() noexcept
@@ -63,52 +57,5 @@ namespace rt {
     }
     return false;
   }
-
-#if 0
-  bool IMaterial::isMirror() const
-  {
-    return dynamic_cast<const MirrorMaterial*>(this) != nullptr;
-  }
-
-  MirrorMaterial *IMaterial::mirror()
-  {
-    return dynamic_cast<MirrorMaterial*>(this);
-  }
-
-  const MirrorMaterial *IMaterial::mirror() const
-  {
-    return dynamic_cast<const MirrorMaterial*>(this);
-  }
-
-  bool IMaterial::isOpaque() const
-  {
-    return dynamic_cast<const OpaqueMaterial*>(this) != nullptr;
-  }
-
-  OpaqueMaterial *IMaterial::opaque()
-  {
-    return dynamic_cast<OpaqueMaterial*>(this);
-  }
-
-  const OpaqueMaterial *IMaterial::opaque() const
-  {
-    return dynamic_cast<const OpaqueMaterial*>(this);
-  }
-
-  bool IMaterial::isTransparent() const
-  {
-    return dynamic_cast<const TransparentMaterial*>(this) != nullptr;
-  }
-
-  TransparentMaterial *IMaterial::transparent()
-  {
-    return dynamic_cast<TransparentMaterial*>(this);
-  }
-
-  const TransparentMaterial *IMaterial::transparent() const
-  {
-    return dynamic_cast<const TransparentMaterial*>(this);
-  }
-#endif
 
 } // namespace rt
