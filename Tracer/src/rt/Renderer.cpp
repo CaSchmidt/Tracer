@@ -201,8 +201,8 @@ namespace rt {
   {
     Color color;
     for(const IBxDF *bxdf : bxdfs) {
-      constexpr IBxDF::Type reflection = IBxDF::Type(IBxDF::Specular | IBxDF::Reflection);
-      if( bxdf == nullptr  ||  !bxdf->isType(reflection) ) {
+      constexpr IBxDF::Type type = IBxDF::Type(IBxDF::Specular | IBxDF::Reflection | IBxDF::Transmission);
+      if( bxdf == nullptr  ||  !bxdf->isType(type) ) {
         continue;
       }
 

@@ -33,9 +33,14 @@
 
 namespace rt {
 
+  ////// public //////////////////////////////////////////////////////////////
+
   TransparentMaterial::TransparentMaterial() noexcept
     : IMaterial()
   {
+    _reflect  = std::make_unique<SpecularReflectionBRDF>();
+    _transmit = std::make_unique<SpecularTransmissionBTDF>();
+    setupPacks();
   }
 
   TransparentMaterial::~TransparentMaterial() noexcept
@@ -46,15 +51,13 @@ namespace rt {
   {
     MaterialPtr result = create();
     TransparentMaterial *transparent = TRANSPARENT(result);
-    transparent->setRefraction(_refraction);
+    transparent->setRefraction(refraction());
     return result;
   }
 
   BxDFpack TransparentMaterial::getBxDFs() const
   {
-    BxDFpack bxdfs;
-    bxdfs.fill(nullptr);
-    return bxdfs;
+    return _bxdf;
   }
 
 #if 0
@@ -66,17 +69,27 @@ namespace rt {
 
   void TransparentMaterial::setRefraction(const real_t eta)
   {
-    _refraction = std::max<real_t>(eta, ONE);
+    _reflect->setRefraction(eta);
+    _transmit->setRefraction(eta);
   }
 
   real_t TransparentMaterial::refraction() const
   {
-    return _refraction;
+    return _reflect->refraction();
   }
 
   MaterialPtr TransparentMaterial::create()
   {
     return std::make_unique<TransparentMaterial>();
+  }
+
+  ////// private /////////////////////////////////////////////////////////////
+
+  void TransparentMaterial::setupPacks()
+  {
+    _bxdf.fill(nullptr);
+    _bxdf[0] = _reflect.get();
+    _bxdf[1] = _transmit.get();
   }
 
 } // namespace rt
