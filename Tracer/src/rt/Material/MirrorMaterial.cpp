@@ -33,6 +33,8 @@
 
 namespace rt {
 
+  ////// public //////////////////////////////////////////////////////////////
+
   MirrorMaterial::MirrorMaterial() noexcept
     : IMaterial()
   {

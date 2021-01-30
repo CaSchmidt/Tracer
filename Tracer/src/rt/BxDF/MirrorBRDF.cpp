@@ -35,8 +35,8 @@
 
 namespace rt {
 
-  MirrorBRDF::MirrorBRDF()
-    : IBxDF(IBxDF::Type(IBxDF::Specular | IBxDF::Reflection))
+  MirrorBRDF::MirrorBRDF() noexcept
+    : IBxDF(Type(Specular | Reflection))
   {
     setColor({1, 1, 1});
     setReflectance(1);

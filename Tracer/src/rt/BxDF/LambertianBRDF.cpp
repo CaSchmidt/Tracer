@@ -34,7 +34,7 @@
 namespace rt {
 
   LambertianBRDF::LambertianBRDF() noexcept
-    : IBxDF(IBxDF::Type(IBxDF::Diffuse | IBxDF::Reflection))
+    : IBxDF(Type(Diffuse | Reflection))
   {
     setColor({1, 1, 1});
   }

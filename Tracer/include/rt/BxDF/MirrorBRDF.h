@@ -38,7 +38,7 @@ namespace rt {
 
   class MirrorBRDF : public IBxDF {
   public:
-    MirrorBRDF();
+    MirrorBRDF() noexcept;
     ~MirrorBRDF();
 
     Color color() const;

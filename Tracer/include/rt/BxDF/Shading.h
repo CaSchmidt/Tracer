@@ -51,6 +51,12 @@ namespace rt {
     }
 
     template<typename VecT>
+    inline real_t cos2Theta(const VecT& v)
+    {
+      return cosTheta(v)*cosTheta(v);
+    }
+
+    template<typename VecT>
     inline bool isSameHemisphere(const VecT& v)
     {
       return v.z >= ZERO;
