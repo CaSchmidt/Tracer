@@ -79,7 +79,7 @@ namespace rt {
   Color MirrorBRDF::sample(const BxDFdata& input, Direction& wi) const
   {
     wi = shading::reflect(input.wo);
-    return _reflectance*_color/shading::cosTheta(wi);
+    return _reflectance*_color/shading::absCosTheta(wi);
   }
 
 } // namespace rt

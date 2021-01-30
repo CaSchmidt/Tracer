@@ -67,6 +67,29 @@ namespace rt {
       return {-wo.x, -wo.y, wo.z};
     }
 
+    inline Direction refract(const Direction& wo, const real_t nz, const real_t eta)
+    {
+      const real_t  cosTi = std::clamp<real_t>(wo.z*nz, -1, 1);
+      const real_t sin2Ti = std::max<real_t>(0, ONE - cosTi*cosTi);
+      const real_t sin2Tt = eta*eta*sin2Ti; // Snell's Law
+      const real_t cos2Tt = ONE - sin2Tt;
+      return cos2Tt >= ZERO // Handle Internal Reflection: sin2Tt > 1
+          ? Direction{-eta*wo.x, -eta*wo.y, -eta*wo.z + (eta*cosTi - n4::sqrt(cos2Tt))*nz}
+          : Direction();
+    }
+
+    template<typename VecT>
+    inline real_t sin2Theta(const VecT& v)
+    {
+      return std::max<real_t>(0, ONE - cos2Theta(v));
+    }
+
+    template<typename VecT>
+    inline real_t sinTheta(const VecT& v)
+    {
+      return n4::sqrt(sin2Theta(v));
+    }
+
   } // namespace shading
 
 } // namespace rt

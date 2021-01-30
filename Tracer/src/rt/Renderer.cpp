@@ -212,15 +212,16 @@ namespace rt {
         continue;
       }
 
-      const real_t bias = shading::isSameHemisphere(wiS)
-          ? TRACE_BIAS
+      const bool is_same = shading::isSameHemisphere(wiS);
+      const real_t  bias = is_same
+          ? +TRACE_BIAS
           : -TRACE_BIAS;
 
-      const Direction wiW = data.toWorld(wiS);
-      const Color      Li = castRay({sinfo.P + geom::to_vertex(bias*sinfo.N), wiW}, depth + 1);
-      const real_t  cosTi = shading::cosTheta(wiS);
+      const Direction   wiW = data.toWorld(wiS);
+      const Color        Li = castRay({sinfo.P + geom::to_vertex(bias*sinfo.N), wiW}, depth + 1);
+      const real_t absCosTi = shading::absCosTheta(wiS);
 
-      color += fR*Li*cosTi;
+      color += fR*Li*absCosTi;
     }
     return color;
   }

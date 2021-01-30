@@ -29,8 +29,6 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <N4/Optics.h>
-
 #include "rt/BxDF/SpecularTransmissionBTDF.h"
 
 #include "geom/Optics.h"
@@ -82,22 +80,20 @@ namespace rt {
   Color SpecularTransmissionBTDF::sample(const BxDFdata& input, Direction& wi) const
   {
     const bool entering = shading::isSameHemisphere(input.wo);
-    const Direction I = -input.wo;
-    const Normal N = entering
-        ? Normal{0, 0, 1}
-        : Normal{0, 0, -1};
+    const real_t nz = entering
+        ? +ONE
+        : -ONE;
     const real_t eta = entering
         ? input.etai/_etat
         : _etat/input.etai;
-    const real_t cosTi = -n4::dot(I, geom::to_direction(N));
-    const real_t kR = geom::optics::dielectric(cosTi, eta);
+    const real_t kR = geom::optics::dielectric(shading::absCosTheta(input.wo), eta);
     const real_t kT = ONE - kR;
     if( kT <= ZERO ) {
       wi = Direction();
       return Color(0);
     }
-    wi = n4::optics::refract(I, N, eta);
-    return kT*_color/shading::cosTheta(wi);
+    wi = shading::refract(input.wo, nz, eta);
+    return kT*_color/shading::absCosTheta(wi);
   }
 
 } // namespace rt
