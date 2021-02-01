@@ -221,7 +221,17 @@ namespace rt {
         *ok = true;
       }
 
-      return n4::rotateZ(rz)*n4::rotateY(ry)*n4::rotateX(rx);
+      const Matrix Rz = n4::abs(rz) == ZERO
+          ? n4::rotateZbyPI2(0)
+          : n4::rotateZ(rz);
+      const Matrix Ry = n4::abs(ry) == ZERO
+          ? n4::rotateYbyPI2(0)
+          : n4::rotateY(ry);
+      const Matrix Rx = n4::abs(rx) == ZERO
+          ? n4::rotateXbyPI2(0)
+          : n4::rotateX(rx);
+
+      return Rz*Ry*Rx;
     }
 
     size_t parseSize(const tinyxml2::XMLElement *node, bool *ok)
