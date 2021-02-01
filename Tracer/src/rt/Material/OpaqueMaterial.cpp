@@ -41,6 +41,7 @@ namespace rt {
     : IMaterial()
   {
     _lambertian = std::make_unique<LambertianBRDF>();
+    _phong      = std::make_unique<PhongBRDF>();
     setupPacks();
   }
 
@@ -55,7 +56,7 @@ namespace rt {
     if( _diffTex ) {
       opaque->setDiffuse(_diffTex->copy());
     }
-    opaque->setShininess(_shininess);
+    opaque->setShininess(shininess());
     if( _specTex ) {
       opaque->setSpecular(_specTex->copy());
     }
@@ -84,7 +85,7 @@ namespace rt {
 
   bool OpaqueMaterial::isSpecular() const
   {
-    return _shininess >= 1  &&  _specTex;
+    return _phong->specular() >= 1  &&  _specTex;
   }
 
   void OpaqueMaterial::setDiffuse(TexturePtr& tex)
@@ -97,21 +98,14 @@ namespace rt {
     _diffTex = std::move(tex);
   }
 
-  Color OpaqueMaterial::diffuse(const real_t s, const real_t t) const
+  void OpaqueMaterial::setShininess(const real_t spec)
   {
-    return _diffTex
-        ? _diffTex->lookup(s, t)/PI
-        : Color();
-  }
-
-  void OpaqueMaterial::setShininess(const real_t mSpec)
-  {
-    _shininess = std::max<real_t>(mSpec, ZERO);
+    _phong->setSpecular(spec);
   }
 
   real_t OpaqueMaterial::shininess() const
   {
-    return _shininess;
+    return _phong->specular();
   }
 
   void OpaqueMaterial::setSpecular(TexturePtr& tex)
@@ -122,13 +116,6 @@ namespace rt {
   void OpaqueMaterial::setSpecular(TexturePtr&& tex)
   {
     _specTex = std::move(tex);
-  }
-
-  Color OpaqueMaterial::specular(const real_t s, const real_t t) const
-  {
-    return isSpecular()
-        ? _specTex->lookup(s, t)*(_shininess + EIGHT)/EIGHT/PI
-        : Color();
   }
 
   MaterialPtr OpaqueMaterial::create()
@@ -142,6 +129,7 @@ namespace rt {
   {
     _bxdfs.fill(nullptr);
     _bxdfs[0] = _lambertian.get();
+    _bxdfs[1] = _phong.get();
   }
 
 } // namespace rt

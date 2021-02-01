@@ -92,7 +92,7 @@
           <ScaleS>4</ScaleS>
           <ScaleT>2</ScaleT>
         </Diffuse>
-        <Shininess>64</Shininess>
+        <Shininess>16</Shininess>
         <Specular type="Flat">
           <Color>
             <r>1</r>

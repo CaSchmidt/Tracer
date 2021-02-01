@@ -40,6 +40,7 @@ set(Tracer_HEADERS
   include/rt/BxDF/IBxDF.h
   include/rt/BxDF/LambertianBRDF.h
   include/rt/BxDF/MirrorBRDF.h
+  include/rt/BxDF/PhongBRDF.h
   include/rt/BxDF/Shading.h
   include/rt/BxDF/SpecularReflectionBRDF.h
   include/rt/BxDF/SpecularTransmissionBTDF.h
@@ -77,6 +78,7 @@ set(Tracer_SOURCES
   src/rt/BxDF/IBxDF.cpp
   src/rt/BxDF/LambertianBRDF.cpp
   src/rt/BxDF/MirrorBRDF.cpp
+  src/rt/BxDF/PhongBRDF.cpp
   src/rt/BxDF/SpecularReflectionBRDF.cpp
   src/rt/BxDF/SpecularTransmissionBTDF.cpp
   src/rt/Camera/FrustumCamera.cpp

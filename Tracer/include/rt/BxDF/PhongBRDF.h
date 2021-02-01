@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,60 +29,36 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef OPAQUEMATERIAL_H
-#define OPAQUEMATERIAL_H
+#ifndef PHONGBRDF_H
+#define PHONGBRDF_H
 
-#include "rt/BxDF/LambertianBRDF.h"
-#include "rt/BxDF/PhongBRDF.h"
-#include "rt/Material/IMaterial.h"
-#include "rt/Texture/ITexture.h"
+#include "rt/BxDF/IBxDF.h"
 
 namespace rt {
 
-  class OpaqueMaterial : public IMaterial {
+  class PhongBRDF : public IBxDF {
   public:
-    OpaqueMaterial() noexcept;
-    ~OpaqueMaterial() noexcept;
+    PhongBRDF() noexcept;
+    ~PhongBRDF();
 
-    MaterialPtr copy() const;
+    Color color() const;
+    void setColor(const Color& c);
 
-    BxDFpack getBxDFs() const;
+    real_t specular() const;
+    void setSpecular(const real_t spec);
 
-    bool haveTexture(const size_t i) const;
+    bool isShadowCaster() const;
 
-    Color textureLookup(const size_t i, const real_t s, const real_t t) const;
+    Color eval(const Direction& wo, const Direction& wi) const;
 
-    bool isSpecular() const;
-
-    void setDiffuse(TexturePtr& tex);
-    void setDiffuse(TexturePtr&& tex);
-
-    void setShininess(const real_t spec);
-    real_t shininess() const;
-
-    void setSpecular(TexturePtr& tex);
-    void setSpecular(TexturePtr&& tex);
-
-    static MaterialPtr create();
+    Color sample(const BxDFdata& input, Direction& wi) const;
 
   private:
-    using LambertianBRDFptr = std::unique_ptr<LambertianBRDF>;
-    using PhongBRDFptr      = std::unique_ptr<PhongBRDF>;
-
-    void setupPacks();
-
-    BxDFpack          _bxdfs;
-    TexturePtr        _diffTex{};
-    LambertianBRDFptr _lambertian{};
-    PhongBRDFptr      _phong{};
-    TexturePtr        _specTex{};
+    Color  _color{};
+    real_t _norm{};
+    real_t _spec{};
   };
-
-  inline OpaqueMaterial *OPAQUE(const MaterialPtr& p)
-  {
-    return dynamic_cast<OpaqueMaterial*>(p.get());
-  }
 
 } // namespace rt
 
-#endif // OPAQUEMATERIAL_H
+#endif // PHONGBRDF_H

@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,60 +29,63 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef OPAQUEMATERIAL_H
-#define OPAQUEMATERIAL_H
-
-#include "rt/BxDF/LambertianBRDF.h"
 #include "rt/BxDF/PhongBRDF.h"
-#include "rt/Material/IMaterial.h"
-#include "rt/Texture/ITexture.h"
+
+#include "rt/BxDF/Shading.h"
 
 namespace rt {
 
-  class OpaqueMaterial : public IMaterial {
-  public:
-    OpaqueMaterial() noexcept;
-    ~OpaqueMaterial() noexcept;
-
-    MaterialPtr copy() const;
-
-    BxDFpack getBxDFs() const;
-
-    bool haveTexture(const size_t i) const;
-
-    Color textureLookup(const size_t i, const real_t s, const real_t t) const;
-
-    bool isSpecular() const;
-
-    void setDiffuse(TexturePtr& tex);
-    void setDiffuse(TexturePtr&& tex);
-
-    void setShininess(const real_t spec);
-    real_t shininess() const;
-
-    void setSpecular(TexturePtr& tex);
-    void setSpecular(TexturePtr&& tex);
-
-    static MaterialPtr create();
-
-  private:
-    using LambertianBRDFptr = std::unique_ptr<LambertianBRDF>;
-    using PhongBRDFptr      = std::unique_ptr<PhongBRDF>;
-
-    void setupPacks();
-
-    BxDFpack          _bxdfs;
-    TexturePtr        _diffTex{};
-    LambertianBRDFptr _lambertian{};
-    PhongBRDFptr      _phong{};
-    TexturePtr        _specTex{};
-  };
-
-  inline OpaqueMaterial *OPAQUE(const MaterialPtr& p)
+  PhongBRDF::PhongBRDF() noexcept
+    : IBxDF(Type(Specular | Reflection))
   {
-    return dynamic_cast<OpaqueMaterial*>(p.get());
+    setColor({1, 1, 1});
+    setSpecular(0);
+  }
+
+  PhongBRDF::~PhongBRDF()
+  {
+  }
+
+  Color PhongBRDF::color() const
+  {
+    return _color;
+  }
+
+  void PhongBRDF::setColor(const Color& c)
+  {
+    _color = n4::clamp(c, 0, 1);
+  }
+
+  real_t PhongBRDF::specular() const
+  {
+    return _spec;
+  }
+
+  void PhongBRDF::setSpecular(const real_t spec)
+  {
+    _spec = std::max<real_t>(0, spec);
+    _norm = (_spec + TWO)/TWO/PI;
+  }
+
+  bool PhongBRDF::isShadowCaster() const
+  {
+    return true;
+  }
+
+  Color PhongBRDF::eval(const Direction& wo, const Direction& wi) const
+  {
+    const Direction     R = shading::reflect(wi);
+    const real_t cosAlpha = n4::dot(R, wo);
+    if( cosAlpha < ZERO  ||  _spec < ONE ) {
+      return Color(0);
+    }
+    return _color*_norm*n4::pow(cosAlpha, _spec);
+  }
+
+  Color PhongBRDF::sample(const BxDFdata& /*input*/, Direction& wi) const
+  {
+    wi = Direction();
+    return Color();
   }
 
 } // namespace rt
-
-#endif // OPAQUEMATERIAL_H
