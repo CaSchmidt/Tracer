@@ -72,7 +72,7 @@ namespace rt {
 
   Color IBxDF::sample(const BxDFdata& /*input*/, Direction& /*wi*/) const
   {
-    return Color(0); // TODO
+    return Color(); // TODO
   }
 
 } // namespace rt

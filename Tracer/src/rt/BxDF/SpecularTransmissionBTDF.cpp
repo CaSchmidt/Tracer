@@ -74,7 +74,7 @@ namespace rt {
 
   Color SpecularTransmissionBTDF::eval(const Direction& /*wo*/, const Direction& /*wi*/) const
   {
-    return Color(0);
+    return Color();
   }
 
   Color SpecularTransmissionBTDF::sample(const BxDFdata& input, Direction& wi) const
@@ -90,7 +90,7 @@ namespace rt {
     const real_t kT = ONE - kR;
     if( kT <= ZERO ) {
       wi = Direction();
-      return Color(0);
+      return Color();
     }
     wi = shading::refract(input.wo, nz, eta);
     return kT*_color/shading::absCosTheta(wi);

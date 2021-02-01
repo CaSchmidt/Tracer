@@ -64,7 +64,7 @@ namespace geom {
   inline bool isSameHemisphere(const n4::ExprBase<traits1_T,ARG1>& arg1,
                                const n4::ExprBase<traits2_T,ARG2>& arg2)
   {
-    return n4::dot(arg1, n4::expr_cast<traits1_T,traits2_T,ARG2>(arg2)) >= real_t(0);
+    return n4::dot(arg1, n4::expr_cast<traits1_T,traits2_T,ARG2>(arg2)) >= real_t{0};
   }
 
   // Helpers /////////////////////////////////////////////////////////////////

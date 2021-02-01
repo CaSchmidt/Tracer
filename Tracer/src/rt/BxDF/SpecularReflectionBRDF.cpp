@@ -74,7 +74,7 @@ namespace rt {
 
   Color SpecularReflectionBRDF::eval(const Direction& /*wo*/, const Direction& /*wi*/) const
   {
-    return Color(0);
+    return Color();
   }
 
   Color SpecularReflectionBRDF::sample(const BxDFdata& input, Direction& wi) const

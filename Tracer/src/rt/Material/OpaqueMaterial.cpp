@@ -80,7 +80,7 @@ namespace rt {
     } else if( i == 1 ) {
       return _specTex->lookup(s, t);
     }
-    return Color(0);
+    return Color();
   }
 
   bool OpaqueMaterial::isSpecular() const

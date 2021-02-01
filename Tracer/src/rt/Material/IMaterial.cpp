@@ -44,7 +44,7 @@ namespace rt {
 
   Color IMaterial::textureLookup(const size_t /*i*/, const real_t /*s*/, const real_t /*t*/) const
   {
-    return Color(0);
+    return Color();
   }
 
   bool IMaterial::isShadowCaster() const

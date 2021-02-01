@@ -77,7 +77,7 @@ namespace rt {
     const Direction     R = shading::reflect(wi);
     const real_t cosAlpha = n4::dot(R, wo);
     if( cosAlpha < ZERO  ||  _spec < ONE ) {
-      return Color(0);
+      return Color();
     }
     return _color*_norm*n4::pow(cosAlpha, _spec);
   }
