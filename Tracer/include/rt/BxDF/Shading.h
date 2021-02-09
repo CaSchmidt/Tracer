@@ -39,27 +39,27 @@ namespace rt {
   namespace shading {
 
     template<typename VecT>
-    inline real_t cosTheta(const VecT& v)
+    inline real_t cosTheta(const VecT& w)
     {
-      return v.z;
+      return std::clamp<real_t>(w.z, -1, 1);
     }
 
     template<typename VecT>
-    inline real_t absCosTheta(const VecT& v)
+    inline real_t absCosTheta(const VecT& w)
     {
-      return n4::abs(cosTheta(v));
+      return n4::abs(cosTheta(w));
     }
 
     template<typename VecT>
-    inline real_t cos2Theta(const VecT& v)
+    inline real_t cos2Theta(const VecT& w)
     {
-      return cosTheta(v)*cosTheta(v);
+      return cosTheta(w)*cosTheta(w);
     }
 
     template<typename VecT>
-    inline bool isSameHemisphere(const VecT& v)
+    inline bool isSameHemisphere(const VecT& w)
     {
-      return v.z >= ZERO;
+      return w.z >= ZERO;
     }
 
     inline Direction reflect(const Direction& wo)
@@ -79,15 +79,15 @@ namespace rt {
     }
 
     template<typename VecT>
-    inline real_t sin2Theta(const VecT& v)
+    inline real_t sin2Theta(const VecT& w)
     {
-      return std::max<real_t>(0, ONE - cos2Theta(v));
+      return std::max<real_t>(0, ONE - cos2Theta(w));
     }
 
     template<typename VecT>
-    inline real_t sinTheta(const VecT& v)
+    inline real_t sinTheta(const VecT& w)
     {
-      return n4::sqrt(sin2Theta(v));
+      return n4::sqrt(sin2Theta(w));
     }
 
   } // namespace shading
