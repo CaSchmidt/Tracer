@@ -67,8 +67,15 @@ namespace rt {
       return {-wo.x, -wo.y, wo.z};
     }
 
-    inline Direction refract(const Direction& wo, const real_t nz, const real_t eta)
+    inline Direction refract(const Direction& wo, const real_t etai, const real_t etat)
     {
+      const bool entering = isSameHemisphere(wo);
+      const real_t eta = entering
+          ? etai/etat
+          : etat/etai;
+      const real_t nz = entering
+          ? +ONE
+          : -ONE;
       const real_t  cosTi = std::clamp<real_t>(wo.z*nz, -1, 1);
       const real_t sin2Ti = std::max<real_t>(0, ONE - cosTi*cosTi);
       const real_t sin2Tt = eta*eta*sin2Ti; // Snell's Law

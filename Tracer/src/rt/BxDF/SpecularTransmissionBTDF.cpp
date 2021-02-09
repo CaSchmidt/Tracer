@@ -79,20 +79,13 @@ namespace rt {
 
   Color SpecularTransmissionBTDF::sample(const BxDFdata& input, Direction& wi) const
   {
-    const bool entering = shading::isSameHemisphere(input.wo);
-    const real_t nz = entering
-        ? +ONE
-        : -ONE;
-    const real_t eta = entering
-        ? input.etai/_etat
-        : _etat/input.etai;
-    const real_t kR = geom::optics::dielectric(shading::absCosTheta(input.wo), eta);
+    const real_t kR = geom::optics::dielectric(input.wo, input.etai, _etat);
     const real_t kT = ONE - kR;
     if( kT <= ZERO ) {
       wi = Direction();
       return Color();
     }
-    wi = shading::refract(input.wo, nz, eta);
+    wi = shading::refract(input.wo, input.etai, _etat);
     return kT*_color/shading::absCosTheta(wi);
   }
 

@@ -79,11 +79,7 @@ namespace rt {
 
   Color SpecularReflectionBRDF::sample(const BxDFdata& input, Direction& wi) const
   {
-    const bool entering = shading::isSameHemisphere(input.wo);
-    const real_t eta = entering
-        ? input.etai/_etat
-        : _etat/input.etai;
-    const real_t kR = geom::optics::dielectric(shading::absCosTheta(input.wo), eta);
+    const real_t kR = geom::optics::dielectric(input.wo, input.etai, _etat);
     wi = shading::reflect(input.wo);
     return kR*_color/shading::absCosTheta(wi);
   }
