@@ -32,11 +32,14 @@
 #ifndef SHADING_H
 #define SHADING_H
 
-#include "rt/Types.h"
+#include "geom/Geom.h"
 
-namespace rt {
+namespace geom {
 
   namespace shading {
+
+    inline constexpr real_t ZERO = 0;
+    inline constexpr real_t  ONE = 1;
 
     template<typename VecT>
     inline real_t cosTheta(const VecT& w)
@@ -99,6 +102,6 @@ namespace rt {
 
   } // namespace shading
 
-} // namespace rt
+} // namespace geom
 
 #endif // SHADING_H

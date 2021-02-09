@@ -31,7 +31,7 @@
 
 #include "rt/BxDF/PhongBRDF.h"
 
-#include "rt/BxDF/Shading.h"
+#include "geom/Shading.h"
 
 namespace rt {
 
@@ -74,7 +74,7 @@ namespace rt {
 
   Color PhongBRDF::eval(const Direction& wo, const Direction& wi) const
   {
-    const Direction     R = shading::reflect(wi);
+    const Direction     R = geom::shading::reflect(wi);
     const real_t cosAlpha = n4::dot(R, wo);
     if( cosAlpha < ZERO  ||  _spec < ONE ) {
       return Color();

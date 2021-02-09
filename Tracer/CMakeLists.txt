@@ -30,6 +30,7 @@ set(Tracer_HEADERS
   include/geom/Intersect.h
   include/geom/Optics.h
   include/geom/Ray.h
+  include/geom/Shading.h
   include/geom/Transform.h
   include/math/Constants.h
   include/math/Logical.h
@@ -41,7 +42,6 @@ set(Tracer_HEADERS
   include/rt/BxDF/LambertianBRDF.h
   include/rt/BxDF/MirrorBRDF.h
   include/rt/BxDF/PhongBRDF.h
-  include/rt/BxDF/Shading.h
   include/rt/BxDF/SpecularReflectionBRDF.h
   include/rt/BxDF/SpecularTransmissionBTDF.h
   include/rt/Camera/FrustumCamera.h

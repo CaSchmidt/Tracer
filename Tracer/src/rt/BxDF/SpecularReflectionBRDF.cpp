@@ -32,7 +32,7 @@
 #include "rt/BxDF/SpecularReflectionBRDF.h"
 
 #include "geom/Optics.h"
-#include "rt/BxDF/Shading.h"
+#include "geom/Shading.h"
 
 namespace rt {
 
@@ -80,8 +80,8 @@ namespace rt {
   Color SpecularReflectionBRDF::sample(const BxDFdata& input, Direction& wi) const
   {
     const real_t kR = geom::optics::dielectric(input.wo, input.etai, _etat);
-    wi = shading::reflect(input.wo);
-    return kR*_color/shading::absCosTheta(wi);
+    wi = geom::shading::reflect(input.wo);
+    return kR*_color/geom::shading::absCosTheta(wi);
   }
 
 } // namespace rt

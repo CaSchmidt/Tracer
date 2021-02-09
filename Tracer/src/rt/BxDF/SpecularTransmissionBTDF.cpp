@@ -32,7 +32,7 @@
 #include "rt/BxDF/SpecularTransmissionBTDF.h"
 
 #include "geom/Optics.h"
-#include "rt/BxDF/Shading.h"
+#include "geom/Shading.h"
 
 namespace rt {
 
@@ -85,8 +85,8 @@ namespace rt {
       wi = Direction();
       return Color();
     }
-    wi = shading::refract(input.wo, input.etai, _etat);
-    return kT*_color/shading::absCosTheta(wi);
+    wi = geom::shading::refract(input.wo, input.etai, _etat);
+    return kT*_color/geom::shading::absCosTheta(wi);
   }
 
 } // namespace rt

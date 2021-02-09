@@ -34,7 +34,7 @@
 #include "rt/Renderer.h"
 
 #include "geom/Optics.h"
-#include "rt/BxDF/Shading.h"
+#include "geom/Shading.h"
 
 namespace rt {
 
@@ -105,7 +105,7 @@ namespace rt {
       }
 
       const Direction wi = data.toShading(linfo.l);
-      const real_t cosTi = shading::cosTheta(wi);
+      const real_t cosTi = geom::shading::cosTheta(wi);
       if( cosTi <= ZERO ) {
         continue;
       }
@@ -142,18 +142,18 @@ namespace rt {
 
       Direction wiS;
       const Color fR = bxdf->sample(data, wiS);
-      if( fR.isZero()  ||  n4::isZero(shading::cosTheta(wiS)) ) {
+      if( fR.isZero()  ||  n4::isZero(geom::shading::cosTheta(wiS)) ) {
         continue;
       }
 
-      const bool is_same = shading::isSameHemisphere(wiS);
+      const bool is_same = geom::shading::isSameHemisphere(wiS);
       const real_t  bias = is_same
           ? +TRACE_BIAS
           : -TRACE_BIAS;
 
       const Direction   wiW = data.toWorld(wiS);
       const Color        Li = castRay({sinfo.P + geom::to_vertex(bias*sinfo.N), wiW}, depth + 1);
-      const real_t absCosTi = shading::absCosTheta(wiS);
+      const real_t absCosTi = geom::shading::absCosTheta(wiS);
 
       color += fR*Li*absCosTi;
     }

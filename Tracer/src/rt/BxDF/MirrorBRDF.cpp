@@ -31,7 +31,7 @@
 
 #include "rt/BxDF/MirrorBRDF.h"
 
-#include "rt/BxDF/Shading.h"
+#include "geom/Shading.h"
 
 namespace rt {
 
@@ -78,8 +78,8 @@ namespace rt {
 
   Color MirrorBRDF::sample(const BxDFdata& input, Direction& wi) const
   {
-    wi = shading::reflect(input.wo);
-    return _reflectance*_color/shading::absCosTheta(wi);
+    wi = geom::shading::reflect(input.wo);
+    return _reflectance*_color/geom::shading::absCosTheta(wi);
   }
 
 } // namespace rt

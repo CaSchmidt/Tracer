@@ -32,9 +32,8 @@
 #ifndef OPTICS_H
 #define OPTICS_H
 
-#include "geom/Geom.h"
+#include "geom/Shading.h"
 #include "math/Solver.h"
-#include "rt/BxDF/Shading.h"
 
 /*
  * Optics API:
@@ -61,12 +60,12 @@ namespace geom {
 
     inline real_t dielectric(const Direction& wo, const real_t etai, const real_t etat)
     {
-      const bool entering = rt::shading::isSameHemisphere(wo);
+      const bool entering = shading::isSameHemisphere(wo);
       const real_t    eta = entering
           ? etai/etat
           : etat/etai;
 
-      const real_t cosTi = rt::shading::absCosTheta(wo);
+      const real_t cosTi = shading::absCosTheta(wo);
       const real_t sinTi = math::pythagoras(cosTi);
 
       const real_t sinTt = eta*sinTi; // Snell's law
