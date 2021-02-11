@@ -48,7 +48,7 @@ namespace rt {
     LightInfo i;
     i.EL = _EL;
     i.l  = _l;
-    i.r  = MAX_REAL_T;
+    i.r  = Ray::MAX_T;
     return i;
   }
 

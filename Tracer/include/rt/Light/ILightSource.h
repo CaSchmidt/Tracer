@@ -45,7 +45,7 @@ namespace rt {
     // NOTE: All members are in world coordinates!
     Color    EL{};
     Direction l{};
-    real_t    r{MAX_REAL_T};
+    real_t    r{Ray::MAX_T};
   };
 
   class ILightSource {

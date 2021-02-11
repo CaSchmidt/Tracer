@@ -39,6 +39,8 @@ namespace geom {
 
   class Ray {
   public:
+    static constexpr real_t MAX_T = math::Max<real_t>;
+
     Ray() noexcept = default;
 
     Ray(const Ray&) noexcept = default;
@@ -103,8 +105,6 @@ namespace geom {
     }
 
   private:
-    static constexpr real_t MAX_T = math::Max<real_t>;
-
     Vertex    _org{};
     Direction _dir{};
     real_t    _tMax{MAX_T};
