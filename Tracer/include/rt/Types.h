@@ -69,10 +69,6 @@ namespace rt {
   inline constexpr real_t  ZERO =  0;
   inline constexpr real_t   ONE =  1;
   inline constexpr real_t   TWO =  2;
-  inline constexpr real_t THREE =  3;
-  inline constexpr real_t  FOUR =  4;
-  inline constexpr real_t EIGHT =  8;
-  inline constexpr real_t   TEN = 10;
 
   inline constexpr real_t ONE_HALF = static_cast<real_t>(0.5);
 
