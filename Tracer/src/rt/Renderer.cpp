@@ -100,7 +100,7 @@ namespace rt {
     for(const LightSourcePtr& light : _scene.lights()) {
       const LightInfo linfo = light->info(sinfo.P);
 
-      if( _scene.trace({sinfo.P + geom::to_vertex(TRACE_BIAS*sinfo.N), linfo.l, linfo.r}) ) {
+      if( _scene.trace(sinfo.ray(linfo.l, TRACE_BIAS, linfo.r)) ) {
         continue;
       }
 
@@ -152,7 +152,7 @@ namespace rt {
           : -TRACE_BIAS;
 
       const Direction   wiW = data.toWorld(wiS);
-      const Color        Li = castRay({sinfo.P + geom::to_vertex(bias*sinfo.N), wiW}, depth + 1);
+      const Color        Li = castRay(sinfo.ray(wiW, bias), depth + 1);
       const real_t absCosTi = geom::shading::absCosTheta(wiS);
 
       color += fR*Li*absCosTi;

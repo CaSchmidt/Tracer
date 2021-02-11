@@ -55,6 +55,12 @@ namespace rt {
       return object;
     }
 
+    inline Ray ray(const Direction& dir,
+                   const real_t bias = ZERO, const real_t tMax = Ray::MAX_T) const
+    {
+      return Ray{P + bias*geom::to_vertex(N), dir, tMax};
+    }
+
     // NOTE: All members are in world coordinates!
     real_t t{geom::intersect::NO_INTERSECTION};
     Vertex P{};
