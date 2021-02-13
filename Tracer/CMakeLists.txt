@@ -87,7 +87,7 @@ set(Tracer_SOURCES
   src/rt/Camera/ICamera.cpp
   src/rt/Camera/SimpleCamera.cpp
   src/rt/Light/DirectionalLight.cpp
-  src/rt/Light/ILightSoruce.cpp
+  src/rt/Light/ILightSource.cpp
   src/rt/Light/PointLight.cpp
   src/rt/Loader/SceneLoader.cpp
   src/rt/Loader/SceneLoaderBase.cpp
