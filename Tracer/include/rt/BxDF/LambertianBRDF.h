@@ -41,15 +41,9 @@ namespace rt {
     LambertianBRDF() noexcept;
     ~LambertianBRDF();
 
-    Color color() const;
-    void setColor(const Color& c);
-
     bool isShadowCaster() const;
 
     Color eval(const Direction& wo, const Direction& wi) const;
-
-  private:
-    Color _color{};
   };
 
 } // namespace rt

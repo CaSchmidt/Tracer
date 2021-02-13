@@ -39,22 +39,11 @@ namespace rt {
   SpecularTransmissionBTDF::SpecularTransmissionBTDF()
     : IBxDF(Type(Specular | Transmission))
   {
-    setColor({1, 1, 1});
     setRefraction(1);
   }
 
   SpecularTransmissionBTDF::~SpecularTransmissionBTDF()
   {
-  }
-
-  Color SpecularTransmissionBTDF::color() const
-  {
-    return _color;
-  }
-
-  void SpecularTransmissionBTDF::setColor(const Color& c)
-  {
-    _color = n4::clamp(c, 0, 1);
   }
 
   real_t SpecularTransmissionBTDF::refraction() const

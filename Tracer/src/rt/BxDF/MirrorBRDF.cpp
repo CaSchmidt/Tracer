@@ -38,22 +38,11 @@ namespace rt {
   MirrorBRDF::MirrorBRDF() noexcept
     : IBxDF(Type(Specular | Reflection))
   {
-    setColor({1, 1, 1});
     setReflectance(1);
   }
 
   MirrorBRDF::~MirrorBRDF()
   {
-  }
-
-  Color MirrorBRDF::color() const
-  {
-    return _color;
-  }
-
-  void MirrorBRDF::setColor(const Color& c)
-  {
-    _color = n4::clamp(c, 0, 1);
   }
 
   real_t MirrorBRDF::reflectance() const

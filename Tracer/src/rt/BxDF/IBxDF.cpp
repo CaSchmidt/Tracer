@@ -59,6 +59,16 @@ namespace rt {
   {
   }
 
+  Color IBxDF::color() const
+  {
+    return _color;
+  }
+
+  void IBxDF::setColor(const Color& c)
+  {
+    _color = n4::clamp(c, 0, 1);
+  }
+
   IBxDF::Type IBxDF::type() const
   {
     return _type;

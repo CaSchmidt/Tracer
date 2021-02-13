@@ -41,9 +41,6 @@ namespace rt {
     SpecularReflectionBRDF() noexcept;
     ~SpecularReflectionBRDF();
 
-    Color color() const;
-    void setColor(const Color& c);
-
     real_t refraction() const;
     void setRefraction(const real_t etat);
 
@@ -53,7 +50,6 @@ namespace rt {
     Color sample(const BxDFdata& input, Direction& wi) const;
 
   private:
-    Color _color{};
     real_t _etat{};
   };
 

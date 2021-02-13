@@ -38,22 +38,11 @@ namespace rt {
   PhongBRDF::PhongBRDF() noexcept
     : IBxDF(Type(Specular | Reflection))
   {
-    setColor({1, 1, 1});
     setSpecular(0);
   }
 
   PhongBRDF::~PhongBRDF()
   {
-  }
-
-  Color PhongBRDF::color() const
-  {
-    return _color;
-  }
-
-  void PhongBRDF::setColor(const Color& c)
-  {
-    _color = n4::clamp(c, 0, 1);
   }
 
   real_t PhongBRDF::specular() const

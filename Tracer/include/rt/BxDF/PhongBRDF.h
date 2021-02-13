@@ -41,9 +41,6 @@ namespace rt {
     PhongBRDF() noexcept;
     ~PhongBRDF();
 
-    Color color() const;
-    void setColor(const Color& c);
-
     real_t specular() const;
     void setSpecular(const real_t spec);
 
@@ -54,7 +51,6 @@ namespace rt {
     Color sample(const BxDFdata& input, Direction& wi) const;
 
   private:
-    Color  _color{};
     real_t _norm{};
     real_t _spec{};
   };

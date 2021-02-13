@@ -36,21 +36,10 @@ namespace rt {
   LambertianBRDF::LambertianBRDF() noexcept
     : IBxDF(Type(Diffuse | Reflection))
   {
-    setColor({1, 1, 1});
   }
 
   LambertianBRDF::~LambertianBRDF()
   {
-  }
-
-  Color LambertianBRDF::color() const
-  {
-    return _color;
-  }
-
-  void LambertianBRDF::setColor(const Color& c)
-  {
-    _color = n4::clamp(c, 0, 1);
   }
 
   bool LambertianBRDF::isShadowCaster() const

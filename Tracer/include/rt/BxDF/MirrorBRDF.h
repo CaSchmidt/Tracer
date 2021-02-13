@@ -41,9 +41,6 @@ namespace rt {
     MirrorBRDF() noexcept;
     ~MirrorBRDF();
 
-    Color color() const;
-    void setColor(const Color& c);
-
     real_t reflectance() const;
     void setReflectance(const real_t r);
 
@@ -53,7 +50,6 @@ namespace rt {
     Color sample(const BxDFdata& input, Direction& wi) const;
 
   private:
-    Color  _color{};
     real_t _reflectance{};
   };
 

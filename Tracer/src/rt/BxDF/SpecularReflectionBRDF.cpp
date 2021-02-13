@@ -39,22 +39,11 @@ namespace rt {
   SpecularReflectionBRDF::SpecularReflectionBRDF() noexcept
     : IBxDF(Type(Specular | Reflection))
   {
-    setColor({1, 1, 1});
     setRefraction(1);
   }
 
   SpecularReflectionBRDF::~SpecularReflectionBRDF()
   {
-  }
-
-  Color SpecularReflectionBRDF::color() const
-  {
-    return _color;
-  }
-
-  void SpecularReflectionBRDF::setColor(const Color& c)
-  {
-    _color = n4::clamp(c, 0, 1);
   }
 
   real_t SpecularReflectionBRDF::refraction() const

@@ -76,6 +76,9 @@ namespace rt {
     IBxDF(const Type type) noexcept;
     virtual ~IBxDF();
 
+    Color color() const;
+    void setColor(const Color& c);
+
     Type type() const;
     bool isType(const Type t) const;
 
@@ -84,8 +87,11 @@ namespace rt {
     virtual Color eval(const Direction& wo, const Direction& wi) const = 0;
     virtual Color sample(const BxDFdata& input, Direction& wi) const;
 
+  protected:
+    Color _color{1, 1, 1};
+
   private:
-    Type _type;
+    Type _type{Invalid};
   };
 
   using BxDFpack = std::array<const IBxDF*,2>;
