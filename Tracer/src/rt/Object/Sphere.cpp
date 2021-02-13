@@ -32,6 +32,7 @@
 #include "rt/Object/Sphere.h"
 
 #include "geom/Intersect.h"
+#include "rt/Object/SurfaceInfo.h"
 
 namespace rt {
 

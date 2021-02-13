@@ -33,7 +33,7 @@
 
 #include "rt/BxDF/IBxDF.h"
 
-#include "rt/Object/IObject.h"
+#include "rt/Object/SurfaceInfo.h"
 
 namespace rt {
 

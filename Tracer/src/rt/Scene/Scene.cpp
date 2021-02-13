@@ -31,6 +31,8 @@
 
 #include "rt/Scene/Scene.h"
 
+#include "rt/Object/SurfaceInfo.h"
+
 namespace rt {
 
   Scene::Scene() = default;

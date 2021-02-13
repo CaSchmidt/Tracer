@@ -32,6 +32,7 @@
 #include "rt/Object/Disk.h"
 
 #include "geom/Intersect.h"
+#include "rt/Object/SurfaceInfo.h"
 
 namespace rt {
 

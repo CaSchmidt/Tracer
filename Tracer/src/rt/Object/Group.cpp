@@ -31,6 +31,8 @@
 
 #include "rt/Object/Group.h"
 
+#include "rt/Object/SurfaceInfo.h"
+
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////

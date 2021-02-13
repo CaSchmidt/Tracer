@@ -36,44 +36,10 @@
 #include <memory>
 
 #include "rt/Material/IMaterial.h"
-#include "rt/Texture/TexCoord.h"
-#include "rt/Types.h"
 
 namespace rt {
 
-  class IObject;
-
-  struct SurfaceInfo {
-    SurfaceInfo() noexcept = default;
-
-    inline bool isHit() const
-    {
-      return geom::intersect::isHit(t)  &&  object != nullptr;
-    }
-
-    inline const IObject *operator->() const
-    {
-      return object;
-    }
-
-    inline Ray ray(const Direction& dir,
-                   const real_t bias = ZERO, const real_t tMax = Ray::MAX_T) const
-    {
-      return Ray{P + bias*geom::to_vertex(N), dir, tMax};
-    }
-
-    inline TexCoord2D texCoord2D() const
-    {
-      return TexCoord2D{u, v};
-    }
-
-    // NOTE: All members are in world coordinates!
-    real_t t{geom::intersect::NO_INTERSECTION};
-    Vertex P{};
-    Normal N{};
-    real_t u{}, v{};
-    const IObject *object{nullptr};
-  };
+  struct SurfaceInfo;
 
   class IObject {
   public:

@@ -35,6 +35,7 @@
 
 #include "geom/Optics.h"
 #include "geom/Shading.h"
+#include "rt/Object/SurfaceInfo.h"
 
 namespace rt {
 

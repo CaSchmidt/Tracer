@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,75 +29,48 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Object/Plane.h"
+#ifndef SURFACEINFO_H
+#define SURFACEINFO_H
 
-#include "geom/Intersect.h"
-#include "rt/Object/SurfaceInfo.h"
+#include "rt/Texture/TexCoord.h"
+#include "rt/Types.h"
 
 namespace rt {
 
-  namespace priv {
+  class IObject;
 
-    constexpr bool isBounding(const real_t& value)
+  struct SurfaceInfo {
+    SurfaceInfo() noexcept = default;
+
+    inline const IObject *operator->() const
     {
-      return ZERO <= value  &&  value <= ONE;
+      return object;
     }
 
-    constexpr real_t normalized(const real_t& value, const real_t& lower, const real_t& scale)
+    inline bool isHit() const
     {
-      return (value - lower)/scale;
+      return geom::intersect::isHit(t)  &&  object != nullptr;
     }
 
-  } // namespace priv
-
-  ////// public //////////////////////////////////////////////////////////////
-
-  Plane::Plane(const Transform& objectToWorld, MaterialPtr& material,
-               const real_t width, const real_t height) noexcept
-    : IObject(objectToWorld, material)
-    , _width{width}
-    , _height{height}
-  {
-  }
-
-  Plane::~Plane() noexcept
-  {
-  }
-
-  bool Plane::intersect(SurfaceInfo *info, const Ray& ray) const
-  {
-    const Ray rayObj = _xfrmOW*ray;
-
-    const real_t t = geom::intersect::plane(rayObj);
-    if( !rayObj.isValid(t) ) {
-      return false;
+    inline Ray ray(const Direction& dir,
+                   const real_t bias = ZERO, const real_t tMax = Ray::MAX_T) const
+    {
+      return Ray{P + bias*geom::to_vertex(N), dir, tMax};
     }
 
-    const Vertex Pobj = rayObj(t);
-    const real_t    u = priv::normalized(Pobj.x, -_width/2,  _width);
-    const real_t    v = priv::normalized(Pobj.y, -_height/2, _height);
-    if( !priv::isBounding(u)  ||  !priv::isBounding(v) ) {
-      return false;
+    inline TexCoord2D texCoord2D() const
+    {
+      return TexCoord2D{u, v};
     }
 
-    if( info != nullptr ) {
-      *info = SurfaceInfo();
-
-      info->object = this;
-      info->t      = t;
-      info->N      = _xfrmWO*Normal{0, 0, 1};
-      info->P      = _xfrmWO*Pobj;
-      info->u      = u;
-      info->v      = v;
-    }
-
-    return true;
-  }
-
-  ObjectPtr Plane::create(const Transform& objectToWorld, MaterialPtr& material,
-                          const real_t width, const real_t height)
-  {
-    return std::make_unique<Plane>(objectToWorld, material, width, height);
-  }
+    // NOTE: All members are in world coordinates!
+    real_t t{geom::intersect::NO_INTERSECTION};
+    Vertex P{};
+    Normal N{};
+    real_t u{}, v{};
+    const IObject *object{nullptr};
+  };
 
 } // namespace rt
+
+#endif // SURFACEINFO_H
