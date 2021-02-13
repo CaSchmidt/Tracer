@@ -34,6 +34,7 @@
 
 #include <memory>
 
+#include "rt/Texture/TexCoord.h"
 #include "rt/Types.h"
 
 namespace rt {
@@ -44,7 +45,7 @@ namespace rt {
 
     virtual std::unique_ptr<ITexture> copy() const = 0;
 
-    virtual Color lookup(const real_t s, const real_t t) const = 0;
+    virtual Color lookup(const TexCoord2D& tex) const = 0;
   };
 
   using TexturePtr = std::unique_ptr<ITexture>;

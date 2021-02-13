@@ -73,12 +73,12 @@ namespace rt {
     return (i == 0  &&  _diffTex)  ||  (i == 1  &&  _specTex);
   }
 
-  Color OpaqueMaterial::textureLookup(const size_t i, const real_t s, const real_t t) const
+  Color OpaqueMaterial::textureLookup(const size_t i, const TexCoord2D& tex) const
   {
     if(        i == 0 ) {
-      return _diffTex->lookup(s, t);
+      return _diffTex->lookup(tex);
     } else if( i == 1 ) {
-      return _specTex->lookup(s, t);
+      return _specTex->lookup(tex);
     }
     return Color();
   }

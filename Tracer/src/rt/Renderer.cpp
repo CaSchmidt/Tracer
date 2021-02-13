@@ -116,7 +116,7 @@ namespace rt {
           continue;
         }
         fR += sinfo->material()->haveTexture(i)
-            ? bxdfs[i]->eval(data.wo, wi)*sinfo->material()->textureLookup(i, sinfo.u, sinfo.v)
+            ? bxdfs[i]->eval(data.wo, wi)*sinfo->material()->textureLookup(i, sinfo.texCoord2D())
             : bxdfs[i]->eval(data.wo, wi);
       }
 

@@ -47,7 +47,7 @@ namespace rt {
     return std::make_unique<FlatTexture>(_color);
   }
 
-  Color FlatTexture::lookup(const real_t /*s*/, const real_t /*t*/) const
+  Color FlatTexture::lookup(const TexCoord2D& /*tex*/) const
   {
     return _color;
   }

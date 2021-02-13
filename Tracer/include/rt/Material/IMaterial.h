@@ -35,6 +35,7 @@
 #include <memory>
 
 #include "rt/BxDF/IBxDF.h"
+#include "rt/Texture/TexCoord.h"
 
 namespace rt {
 
@@ -50,7 +51,7 @@ namespace rt {
 
     virtual bool haveTexture(const size_t i) const;
 
-    virtual Color textureLookup(const size_t i, const real_t s, const real_t t) const;
+    virtual Color textureLookup(const size_t i, const TexCoord2D& tex) const;
 
     bool isShadowCaster() const;
   };

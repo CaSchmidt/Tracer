@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,33 +29,17 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Material/IMaterial.h"
+#ifndef TEXCOORD_H
+#define TEXCOORD_H
+
+#include <tuple>
+
+#include "rt/Types.h"
 
 namespace rt {
 
-  IMaterial::~IMaterial() noexcept
-  {
-  }
-
-  bool IMaterial::haveTexture(const size_t /*i*/) const
-  {
-    return false;
-  }
-
-  Color IMaterial::textureLookup(const size_t /*i*/, const TexCoord2D& /*tex*/) const
-  {
-    return Color();
-  }
-
-  bool IMaterial::isShadowCaster() const
-  {
-    const BxDFpack bxdfs = getBxDFs();
-    for(const IBxDF *bxdf : bxdfs) {
-      if( bxdf != nullptr  &&  bxdf->isShadowCaster() ) {
-        return true;
-      }
-    }
-    return false;
-  }
+  using TexCoord2D = std::tuple<real_t,real_t>;
 
 } // namespace rt
+
+#endif // TEXCOORD_H

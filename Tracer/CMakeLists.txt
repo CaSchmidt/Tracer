@@ -68,6 +68,7 @@ set(Tracer_HEADERS
   include/rt/Texture/CheckedTexture.h
   include/rt/Texture/FlatTexture.h
   include/rt/Texture/ITexture.h
+  include/rt/Texture/TexCoord.h
   )
 
 set(Tracer_SOURCES

@@ -36,6 +36,7 @@
 #include <memory>
 
 #include "rt/Material/IMaterial.h"
+#include "rt/Texture/TexCoord.h"
 #include "rt/Types.h"
 
 namespace rt {
@@ -59,6 +60,11 @@ namespace rt {
                    const real_t bias = ZERO, const real_t tMax = Ray::MAX_T) const
     {
       return Ray{P + bias*geom::to_vertex(N), dir, tMax};
+    }
+
+    inline TexCoord2D texCoord2D() const
+    {
+      return TexCoord2D{u, v};
     }
 
     // NOTE: All members are in world coordinates!

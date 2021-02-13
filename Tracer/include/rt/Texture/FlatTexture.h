@@ -43,7 +43,7 @@ namespace rt {
 
     TexturePtr copy() const;
 
-    Color lookup(const real_t s, const real_t t) const final;
+    Color lookup(const TexCoord2D& tex) const final;
 
     static TexturePtr create(const Color& color);
 

@@ -50,7 +50,7 @@ namespace rt {
 
     bool haveTexture(const size_t i) const;
 
-    Color textureLookup(const size_t i, const real_t s, const real_t t) const;
+    Color textureLookup(const size_t i, const TexCoord2D& tex) const;
 
     bool isSpecular() const;
 

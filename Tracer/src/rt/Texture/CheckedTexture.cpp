@@ -53,8 +53,9 @@ namespace rt {
     return std::make_unique<CheckedTexture>(_colorA, _colorB, _scaleS, _scaleT);
   }
 
-  Color CheckedTexture::lookup(const real_t s, const real_t t) const
+  Color CheckedTexture::lookup(const TexCoord2D& tex) const
   {
+    const auto [s, t] = tex;
     const bool a = n4::remndr(s*_scaleS, ONE) > ONE_HALF;
     const bool b = n4::remndr(t*_scaleT, ONE) > ONE_HALF;
     return math::XOR(a, b)
