@@ -33,8 +33,28 @@
 
 namespace rt {
 
+  ////// public //////////////////////////////////////////////////////////////
+
+  ILightSource::ILightSource(const Transform& lightToWorld) noexcept
+    : _xfrmWL{lightToWorld}
+  {
+    setup();
+  }
+
   ILightSource::~ILightSource() noexcept
   {
+  }
+
+  bool ILightSource::isDeltaLight() const
+  {
+    return false;
+  }
+
+  ////// private /////////////////////////////////////////////////////////////
+
+  void ILightSource::setup()
+  {
+    _xfrmLW = _xfrmWL.inverse();
   }
 
 } // namespace rt

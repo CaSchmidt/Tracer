@@ -31,32 +31,39 @@
 
 #include "rt/Light/PointLight.h"
 
+#include "rt/Object/SurfaceInfo.h"
+
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  PointLight::PointLight(const Color& IL, const Vertex& PL) noexcept
-    : _IL{IL}
-    , _PL{PL}
+  PointLight::PointLight(const Transform& lightToWorld, const Color& I) noexcept
+    : ILightSource(lightToWorld)
+    , _I{I}
   {
+    _pW = toWorld(Vertex{0, 0, 0});
   }
 
   PointLight::~PointLight() noexcept
   {
   }
 
-  LightInfo PointLight::info(const Vertex& P) const
+  bool PointLight::isDeltaLight() const
   {
-    LightInfo i;
-    i.l  = geom::to_direction(n4::direction(P, _PL));
-    i.r  = n4::distance(P, _PL);
-    i.EL = _IL*attenuation(i.r);
-    return i;
+    return true;
   }
 
-  LightSourcePtr PointLight::create(const Color& IL, const Vertex& PL)
+  Color PointLight::sampleLi(const SurfaceInfo& info, Direction& wi, Ray& vis) const
   {
-    return std::make_unique<PointLight>(IL, PL);
+    const real_t r = n4::distance(info.P, _pW);
+    wi  = geom::to_direction(n4::direction(info.P, _pW));
+    vis = info.ray(wi, TRACE_BIAS, r);
+    return _I*attenuation(r);
+  }
+
+  LightSourcePtr PointLight::create(const Transform& lightToWorld, const Color& I)
+  {
+    return std::make_unique<PointLight>(lightToWorld, I);
   }
 
   ////// private /////////////////////////////////////////////////////////////

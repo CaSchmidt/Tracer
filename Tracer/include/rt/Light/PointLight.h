@@ -38,18 +38,20 @@ namespace rt {
 
   class PointLight : public ILightSource {
   public:
-    PointLight(const Color& IL, const Vertex& PL) noexcept;
+    PointLight(const Transform& lightToWorld, const Color& I) noexcept;
     ~PointLight() noexcept;
 
-    LightInfo info(const Vertex& P) const;
+    bool isDeltaLight() const;
 
-    static LightSourcePtr create(const Color& IL, const Vertex& PL);
+    Color sampleLi(const SurfaceInfo& info, Direction& wi, Ray& vis) const;
+
+    static LightSourcePtr create(const Transform& lightToWorld, const Color& I);
 
   private:
     real_t attenuation(const real_t r) const;
 
-    Color  _IL{}; // radiant intensity
-    Vertex _PL{};
+    Color  _I{};
+    Vertex _pW{};
   };
 
 } // namespace rt

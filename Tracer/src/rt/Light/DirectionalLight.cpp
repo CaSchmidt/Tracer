@@ -31,30 +31,38 @@
 
 #include "rt/Light/DirectionalLight.h"
 
+#include "rt/Object/SurfaceInfo.h"
+
 namespace rt {
 
-  DirectionalLight::DirectionalLight(const Color& EL, const Direction& l) noexcept
-    : _EL{EL}
-    , _l{n4::normalize(l)}
+  DirectionalLight::DirectionalLight(const Transform& lightToWorld,
+                                     const Color& L, const Direction& wiL) noexcept
+    : ILightSource(lightToWorld)
+    , _L{L}
   {
+    _wiW = n4::normalize(toWorld(wiL));
   }
 
   DirectionalLight::~DirectionalLight() noexcept
   {
   }
 
-  LightInfo DirectionalLight::info(const Vertex& /*P*/) const
+  bool DirectionalLight::isDeltaLight() const
   {
-    LightInfo i;
-    i.EL = _EL;
-    i.l  = _l;
-    i.r  = Ray::MAX_T;
-    return i;
+    return true;
   }
 
-  LightSourcePtr DirectionalLight::create(const Color& EL, const Direction& l)
+  Color DirectionalLight::sampleLi(const SurfaceInfo& info, Direction& wi, Ray& vis) const
   {
-    return std::make_unique<DirectionalLight>(EL, l);
+    wi  = _wiW;
+    vis = info.ray(wi, TRACE_BIAS);
+    return _L;
+  }
+
+  LightSourcePtr DirectionalLight::create(const Transform& lightToWorld,
+                                          const Color& L, const Direction& wiL)
+  {
+    return std::make_unique<DirectionalLight>(lightToWorld, L, wiL);
   }
 
 } // namespace rt

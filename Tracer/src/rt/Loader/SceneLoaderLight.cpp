@@ -43,24 +43,24 @@ namespace rt {
     {
       bool myOk = false;
 
-      const Color EL = parseColor(node->FirstChildElement("Irradiance"), &myOk, false);
+      const Color L = parseColor(node->FirstChildElement("Radiance"), &myOk, false);
       if( !myOk ) {
         return LightSourcePtr();
       }
 
-      const Direction dir = parseDirection(node->FirstChildElement("Direction"), &myOk);
+      const Direction wi = parseDirection(node->FirstChildElement("Direction"), &myOk);
       if( !myOk ) {
         return LightSourcePtr();
       }
 
-      return DirectionalLight::create(EL, dir);
+      return DirectionalLight::create(n4::identity(), L, wi);
     }
 
     LightSourcePtr parsePointLight(const tinyxml2::XMLElement *node)
     {
       bool myOk = false;
 
-      const Color IL = parseColor(node->FirstChildElement("Intensity"), &myOk, false);
+      const Color I = parseColor(node->FirstChildElement("Intensity"), &myOk, false);
       if( !myOk ) {
         return LightSourcePtr();
       }
@@ -70,7 +70,9 @@ namespace rt {
         return LightSourcePtr();
       }
 
-      return PointLight::create(IL, pos);
+      const Matrix lightToWorld = n4::translate(pos.x, pos.y, pos.z);
+
+      return PointLight::create(lightToWorld, I);
     }
 
     // Export ////////////////////////////////////////////////////////////////

@@ -89,25 +89,27 @@ namespace rt {
 
   Color Renderer::castRay(const Ray &ray, const unsigned int depth) const
   {
-    SurfaceInfo sinfo;
-    if( !_scene.trace(sinfo, ray) ) {
+    SurfaceInfo info;
+    if( !_scene.trace(info, ray) ) {
       return _options.backgroundColor;
     }
 
-    const BxDFpack bxdfs = sinfo->material()->getBxDFs();
-    const BxDFdata  data(ray, sinfo, _options.globalRefraction);
+    const BxDFpack bxdfs = info->material()->getBxDFs();
+    const BxDFdata  data(ray, info, _options.globalRefraction);
 
     Color color;
     for(const LightSourcePtr& light : _scene.lights()) {
-      const LightInfo linfo = light->info(sinfo.P);
+      Ray       vis;
+      Direction wiW;
+      const Color Li = light->sampleLi(info, wiW, vis);
 
-      if( _scene.trace(sinfo.ray(linfo.l, TRACE_BIAS, linfo.r)) ) {
+      if( _scene.trace(vis) ) {
         continue;
       }
 
-      const Direction wi = data.toShading(linfo.l);
-      const real_t cosTi = geom::shading::cosTheta(wi);
-      if( cosTi <= ZERO ) {
+      const Direction   wiS = data.toShading(wiW);
+      const real_t absCosTi = geom::shading::absCosTheta(wiS);
+      if( absCosTi <= ZERO ) {
         continue;
       }
 
@@ -116,16 +118,16 @@ namespace rt {
         if( bxdfs[i] == nullptr ) {
           continue;
         }
-        fR += sinfo->material()->haveTexture(i)
-            ? bxdfs[i]->eval(data.wo, wi)*sinfo->material()->textureLookup(i, sinfo.texCoord2D())
-            : bxdfs[i]->eval(data.wo, wi);
+        fR += info->material()->haveTexture(i)
+            ? bxdfs[i]->eval(data.wo, wiS)*info->material()->textureLookup(i, info.texCoord2D())
+            : bxdfs[i]->eval(data.wo, wiS);
       }
 
-      color += fR*linfo.EL*cosTi;
+      color += fR*Li*absCosTi;
     }
 
     if( depth + 1 < _options.maxDepth ) {
-      color += specularReflectAndRefract(bxdfs, data, sinfo, depth);
+      color += specularReflectAndRefract(bxdfs, data, info, depth);
     }
 
     return color;
@@ -141,7 +143,7 @@ namespace rt {
         continue;
       }
 
-      Direction wiS;
+      Direction  wiS;
       const Color fR = bxdf->sample(data, wiS);
       if( fR.isZero()  ||  n4::isZero(geom::shading::cosTheta(wiS)) ) {
         continue;

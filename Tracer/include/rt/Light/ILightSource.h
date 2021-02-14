@@ -39,21 +39,36 @@
 
 namespace rt {
 
-  struct LightInfo {
-    LightInfo() noexcept = default;
-
-    // NOTE: All members are in world coordinates!
-    Color    EL{};
-    Direction l{};
-    real_t    r{Ray::MAX_T};
-  };
+  struct SurfaceInfo;
 
   class ILightSource {
   public:
+    ILightSource(const Transform& lightToWorld) noexcept;
     virtual ~ILightSource() noexcept;
 
-    // NOTE: P is in world coordinates!
-    virtual LightInfo info(const Vertex& P) const = 0;
+    virtual bool isDeltaLight() const;
+
+    virtual Color sampleLi(const SurfaceInfo& info, Direction& wi, Ray& vis) const = 0;
+
+    template<typename VecT>
+    inline VecT toLight(const VecT& v) const
+    {
+      return _xfrmLW*v;
+    }
+
+    template<typename VecT>
+    inline VecT toWorld(const VecT& v) const
+    {
+      return _xfrmWL*v;
+    }
+
+  private:
+    ILightSource() noexcept = delete;
+
+    void setup();
+
+    Transform _xfrmWL{}; // Light -> World
+    Transform _xfrmLW{}; // World -> Light
   };
 
   using LightSourcePtr = std::unique_ptr<ILightSource>;
