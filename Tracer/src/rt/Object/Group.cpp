@@ -61,7 +61,7 @@ namespace rt {
 
   bool Group::castShadow(const Ray &ray) const
   {
-    const Ray rayObj = _xfrmOW*ray;
+    const Ray rayObj = toObject(ray);
     for(const ObjectPtr& o : _objects) {
       if( o->castShadow(rayObj) ) {
         return true;
@@ -72,7 +72,7 @@ namespace rt {
 
   bool Group::intersect(SurfaceInfo *info, const Ray& ray) const
   {
-    const Ray rayObj = _xfrmOW*ray;
+    const Ray rayObj = toObject(ray);
 
     if( info != nullptr ) {
       *info = SurfaceInfo();
@@ -85,8 +85,8 @@ namespace rt {
         }
       }
       if( info->isHit() ) {
-        info->N = _xfrmWO*info->N;
-        info->P = _xfrmWO*info->P;
+        info->N = toWorld(info->N);
+        info->P = toWorld(info->P);
         return true;
       }
 

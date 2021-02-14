@@ -66,7 +66,7 @@ namespace rt {
 
   bool Plane::intersect(SurfaceInfo *info, const Ray& ray) const
   {
-    const Ray rayObj = _xfrmOW*ray;
+    const Ray rayObj = toObject(ray);
 
     const real_t t = geom::intersect::plane(rayObj);
     if( !rayObj.isValid(t) ) {
@@ -85,8 +85,8 @@ namespace rt {
 
       info->object = this;
       info->t      = t;
-      info->N      = _xfrmWO*Normal{0, 0, 1};
-      info->P      = _xfrmWO*Pobj;
+      info->N      = toWorld(Normal{0, 0, 1});
+      info->P      = toWorld(Pobj);
       info->u      = u;
       info->v      = v;
     }

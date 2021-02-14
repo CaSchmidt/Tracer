@@ -49,7 +49,7 @@ namespace rt {
 
   bool Sphere::intersect(SurfaceInfo *info, const Ray& ray) const
   {
-    const Ray rayObj = _xfrmOW*ray;
+    const Ray rayObj = toObject(ray);
 
     const real_t t = geom::intersect::sphere(rayObj, _radius);
     if( !rayObj.isValid(t) ) {
@@ -66,8 +66,8 @@ namespace rt {
 
       info->object = this;
       info->t      = t;
-      info->N      = _xfrmWO*Nobj;
-      info->P      = _xfrmWO*Pobj;
+      info->N      = toWorld(Nobj);
+      info->P      = toWorld(Pobj);
       info->u      = u;
       info->v      = v;
     }

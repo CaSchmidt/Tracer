@@ -55,15 +55,26 @@ namespace rt {
     IMaterial *material();
     const IMaterial *material() const;
 
-  protected:
-    Transform   _xfrmWO{}; // Object -> World
-    Transform   _xfrmOW{}; // World -> Object
-    MaterialPtr _material{};
+    template<typename T>
+    inline T toObject(const T& x) const
+    {
+      return _xfrmOW*x;
+    }
+
+    template<typename T>
+    inline T toWorld(const T& x) const
+    {
+      return _xfrmWO*x;
+    }
 
   private:
     IObject() noexcept = delete;
 
     void setup();
+
+    Transform   _xfrmWO{}; // Object -> World
+    Transform   _xfrmOW{}; // World -> Object
+    MaterialPtr _material{};
   };
 
   using ObjectPtr = std::unique_ptr<IObject>;
