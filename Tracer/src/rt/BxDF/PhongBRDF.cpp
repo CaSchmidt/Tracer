@@ -36,7 +36,7 @@
 namespace rt {
 
   PhongBRDF::PhongBRDF() noexcept
-    : IBxDF(Type(Specular | Reflection))
+    : IBxDF(Flags(Specular | Reflection))
   {
     setSpecular(0);
   }

@@ -138,8 +138,8 @@ namespace rt {
   {
     Color color;
     for(const IBxDF *bxdf : bxdfs) {
-      constexpr IBxDF::Type type = IBxDF::Type(IBxDF::Specular | IBxDF::Reflection | IBxDF::Transmission);
-      if( bxdf == nullptr  ||  !bxdf->isType(type) ) {
+      constexpr IBxDF::Flags flags = IBxDF::Flags(IBxDF::Specular | IBxDF::Reflection | IBxDF::Transmission);
+      if( bxdf == nullptr  ||  !bxdf->matchFlags(flags) ) {
         continue;
       }
 

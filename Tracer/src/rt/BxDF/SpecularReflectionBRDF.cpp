@@ -37,7 +37,7 @@
 namespace rt {
 
   SpecularReflectionBRDF::SpecularReflectionBRDF() noexcept
-    : IBxDF(Type(Specular | Reflection))
+    : IBxDF(Flags(Specular | Reflection))
   {
     setRefraction(1);
   }

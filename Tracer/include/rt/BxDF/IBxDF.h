@@ -57,13 +57,13 @@ namespace rt {
 
     real_t   etai{1};
     Direction  wo{}; // in Shading Coordinates
-    Matrix xfrmSW{}; // World-to-Shading
-    Matrix xfrmWS{}; // Shading-to-World
+    Matrix xfrmSW{}; // World -> Shading
+    Matrix xfrmWS{}; // Shading -> World
   };
 
   class IBxDF {
   public:
-    enum Type : unsigned int {
+    enum Flags : unsigned int {
       Invalid      = 0,
       Reflection   = 1 << 0,
       Transmission = 1 << 1,
@@ -73,14 +73,14 @@ namespace rt {
       All          = 0x1F
     };
 
-    IBxDF(const Type type) noexcept;
+    IBxDF(const Flags flags) noexcept;
     virtual ~IBxDF();
 
     Color color() const;
     void setColor(const Color& c);
 
-    Type type() const;
-    bool isType(const Type t) const;
+    Flags flags() const;
+    bool matchFlags(const Flags f) const;
 
     virtual bool isShadowCaster() const = 0;
 
@@ -91,7 +91,7 @@ namespace rt {
     Color _color{1, 1, 1};
 
   private:
-    Type _type{Invalid};
+    Flags _flags{Invalid};
   };
 
   using BxDFpack = std::array<const IBxDF*,2>;

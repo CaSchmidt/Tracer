@@ -37,7 +37,7 @@
 namespace rt {
 
   SpecularTransmissionBTDF::SpecularTransmissionBTDF()
-    : IBxDF(Type(Specular | Transmission))
+    : IBxDF(Flags(Specular | Transmission))
   {
     setRefraction(1);
   }

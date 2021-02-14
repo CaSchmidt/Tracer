@@ -50,8 +50,8 @@ namespace rt {
 
   ////// IBxDF ///////////////////////////////////////////////////////////////
 
-  IBxDF::IBxDF(const Type type) noexcept
-    : _type(type)
+  IBxDF::IBxDF(const Flags flags) noexcept
+    : _flags{flags}
   {
   }
 
@@ -69,15 +69,15 @@ namespace rt {
     _color = n4::clamp(c, 0, 1);
   }
 
-  IBxDF::Type IBxDF::type() const
+  IBxDF::Flags IBxDF::flags() const
   {
-    return _type;
+    return _flags;
   }
 
-  bool IBxDF::isType(const Type t) const
+  bool IBxDF::matchFlags(const Flags f) const
   {
-    // NOTE: 't' can be a superset of '_type'!
-    return (_type & t) == _type;
+    // NOTE: 'f' can be a superset of '_flags'!
+    return (_flags & f) == _flags;
   }
 
   Color IBxDF::sample(const BxDFdata& /*input*/, Direction& /*wi*/) const

@@ -34,7 +34,7 @@
 namespace rt {
 
   LambertianBRDF::LambertianBRDF() noexcept
-    : IBxDF(Type(Diffuse | Reflection))
+    : IBxDF(Flags(Diffuse | Reflection))
   {
   }
 
