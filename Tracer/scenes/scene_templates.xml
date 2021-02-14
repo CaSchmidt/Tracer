@@ -30,11 +30,11 @@
   <Scene>
     <!-- SPACE -->
     <Light type="Directional">
-      <Irradiance>
+      <Radiance>
         <r>real</r>
         <g>real</g>
         <b>real</b>
-      </Irradiance>
+      </Radiance>
       <Direction>
         <x>real</x>
         <y>real</y>

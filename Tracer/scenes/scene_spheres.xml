@@ -131,11 +131,11 @@
     </Object>
     <!-- SPACE -->
     <Light type="Directional">
-      <Irradiance>
+      <Radiance>
         <r>3</r>
         <g>3</g>
         <b>3</b>
-      </Irradiance>
+      </Radiance>
       <Direction>
         <x>1</x>
         <y>-1</y>
