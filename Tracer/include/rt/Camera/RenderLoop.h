@@ -44,7 +44,8 @@ namespace rt {
     for(size_t y = y0; y < y1; y++) {
       uint8_t *row = image.row(y - y0);
       for(size_t x = 0; x < image.width(); x++) {
-        const Color color = n4::clamp(radiance(x, y), 0, 1)*255;
+        constexpr real_t MAX_RGB = 256.0 - 0x1p-7;
+        const Color color = n4::clamp(radiance(x, y), 0, 1)*MAX_RGB;
         *row++ = static_cast<uint8_t>(color.r);
         *row++ = static_cast<uint8_t>(color.g);
         *row++ = static_cast<uint8_t>(color.b);
