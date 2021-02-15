@@ -35,7 +35,7 @@
 #include "rt/Camera/FrustumCamera.h"
 #include "rt/Camera/SimpleCamera.h"
 #include "rt/Loader/SceneLoader.h"
-#include "rt/Renderer.h"
+#include "rt/Renderer/WhittedRenderer.h"
 
 #include "Worker.h"
 
@@ -54,8 +54,8 @@ int main(int /*argc*/, char ** /*argv*/)
 {
   const char *filename = FILE_1;
 
-  rt::Renderer renderer;
-  if( !rt::loadScene(renderer, filename) ) {
+  rt::WhittedRenderer renderer;
+  if( !rt::loadScene(&renderer, filename) ) {
     return EXIT_FAILURE;
   }
 
@@ -84,7 +84,7 @@ int main(int /*argc*/, char ** /*argv*/)
   }
 
   Worker worker;
-  const Image image = worker.execute(&cam, renderer, numSamples);
+  const Image image = worker.execute(&cam, &renderer, numSamples);
   image.saveAsPNG("output.png");
 
   return EXIT_SUCCESS;

@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,15 +29,38 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SCENELOADER_H
-#define SCENELOADER_H
+#ifndef IRENDERER_H
+#define IRENDERER_H
+
+#include "rt/Renderer/RenderOptions.h"
+#include "rt/Scene/Scene.h"
 
 namespace rt {
 
-  class IRenderer;
+  class IRenderer {
+  public:
+    IRenderer() noexcept;
+    virtual ~IRenderer() noexcept;
 
-  bool loadScene(IRenderer *renderer, const char *filename);
+    Color castCameraRay(const Ray& ray) const;
+
+    void clear();
+
+    bool initialize(const RenderOptions& options);
+
+    const RenderOptions& options() const;
+
+    const Scene& scene() const;
+    void setScene(Scene& scene);
+
+  private:
+    virtual Color radiance(const Ray& ray, const unsigned int depth = 0) const = 0;
+
+    RenderOptions _options{};
+    Scene         _scene{};
+    Transform     _view{};
+  };
 
 } // namespace rt
 
-#endif // SCENELOADER_H
+#endif // IRENDERER_H

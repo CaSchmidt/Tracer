@@ -33,14 +33,14 @@
 #include <execution>
 #include <mutex>
 
-#include "rt/Renderer.h"
+#include "rt/Renderer/IRenderer.h"
 
 #include "Worker.h"
 
-Image Worker::execute(const rt::ICamera *cam, const rt::Renderer& renderer,
+Image Worker::execute(const rt::ICamera *cam, const rt::IRenderer *renderer,
                       const std::size_t numSamples, const std::size_t blockSize) const
 {
-  Image image(renderer.options().width, renderer.options().height);
+  Image image(renderer->options().width, renderer->options().height);
   if( image.isEmpty() ) {
     return Image();
   }

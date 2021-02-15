@@ -32,7 +32,7 @@
 #include "rt/Camera/FrustumCamera.h"
 
 #include "rt/Camera/RenderLoop.h"
-#include "rt/Renderer.h"
+#include "rt/Renderer/IRenderer.h"
 
 namespace rt {
 
@@ -77,7 +77,7 @@ namespace rt {
 
   Image FrustumCamera::render(const size_t width, const size_t height,
                               size_t y0, size_t y1,
-                              const Renderer& renderer, const size_t samples) const
+                              const IRenderer *renderer, const size_t samples) const
   {
     Image image = create_image(width, height, y0, y1);
     if( image.isEmpty() ) {
@@ -116,7 +116,7 @@ namespace rt {
 
             // (6) Cast Ray //////////////////////////////////////////////////
 
-            color += n4::clamp(renderer.castCameraRay(rayi), 0, 1);
+            color += n4::clamp(renderer->castCameraRay(rayi), 0, 1);
           }
           color /= static_cast<real_t>(samples);
           return color;
@@ -125,7 +125,7 @@ namespace rt {
         render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
           Color color;
           for(size_t s = 0; s < samples; s++) {
-            color += n4::clamp(renderer.castCameraRay(ray(W, x, y, true)), 0, 1);
+            color += n4::clamp(renderer->castCameraRay(ray(W, x, y, true)), 0, 1);
           }
           color /= static_cast<real_t>(samples);
           return color;
@@ -133,7 +133,7 @@ namespace rt {
       }
     } else {
       render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
-        return renderer.castCameraRay(ray(W, x, y));
+        return renderer->castCameraRay(ray(W, x, y));
       });
     }
 

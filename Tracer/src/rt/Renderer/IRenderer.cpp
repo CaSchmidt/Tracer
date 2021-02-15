@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,15 +29,65 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SCENELOADER_H
-#define SCENELOADER_H
+#include "rt/Renderer/IRenderer.h"
 
 namespace rt {
 
-  class IRenderer;
+  IRenderer::IRenderer() noexcept
+  {
+  }
 
-  bool loadScene(IRenderer *renderer, const char *filename);
+  IRenderer::~IRenderer() noexcept
+  {
+  }
+
+  Color IRenderer::castCameraRay(const Ray& ray) const
+  {
+    return radiance(_view*ray);
+  }
+
+  void IRenderer::clear()
+  {
+    _options = RenderOptions();
+    _view    = Transform();
+    _scene.clear();
+  }
+
+  bool IRenderer::initialize(const RenderOptions& options)
+  {
+    _options = options;
+
+    const Transform xfrmCW{Transform::rotateZYXbyPI2(0, 0, -1)};
+
+    // Transform camera setup from world to camera coordinates...
+    const Vertex         eyeC = xfrmCW*_options.eye;
+    const Vertex      lookAtC = xfrmCW*_options.lookAt;
+    const Direction cameraUpC = xfrmCW*_options.cameraUp;
+
+    /*
+     * NOTE:
+     * The view transform is comprised of two transforms:
+     * 1. camera coordinates are aligned using a look-at transform in camera space
+     * 2. camera space is transformed to world space
+     */
+    _view = xfrmCW.inverse()*Transform::lookAt(eyeC, lookAtC, cameraUpC);
+
+    return true;
+  }
+
+  const RenderOptions& IRenderer::options() const
+  {
+    return _options;
+  }
+
+  const Scene& IRenderer::scene() const
+  {
+    return _scene;
+  }
+
+  void IRenderer::setScene(Scene& scene)
+  {
+    _scene = std::move(scene);
+  }
 
 } // namespace rt
-
-#endif // SCENELOADER_H

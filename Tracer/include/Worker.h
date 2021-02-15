@@ -45,7 +45,7 @@ public:
   Worker() = default;
   ~Worker() = default;
 
-  Image execute(const rt::ICamera *cam, const rt::Renderer& renderer,
+  Image execute(const rt::ICamera *cam, const rt::IRenderer *renderer,
                 const std::size_t numSamples = 64, const std::size_t blockSize = 32) const;
 
 private:

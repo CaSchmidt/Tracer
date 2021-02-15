@@ -48,7 +48,7 @@ namespace rt {
 
     Image render(const size_t width, const size_t height,
                  size_t y0, size_t y1,
-                 const Renderer& renderer, const size_t samples = 0) const;
+                 const IRenderer *renderer, const size_t samples = 0) const;
 
   private:
     Matrix windowTransform(const size_t width, const size_t height) const;

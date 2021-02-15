@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,11 +29,8 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <N4/Optics.h>
+#include "rt/Renderer/WhittedRenderer.h"
 
-#include "rt/Renderer.h"
-
-#include "geom/Optics.h"
 #include "geom/Shading.h"
 #include "rt/Object/SurfaceInfo.h"
 
@@ -41,69 +38,35 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  Color Renderer::castCameraRay(const Ray& ray) const
+  WhittedRenderer::WhittedRenderer() noexcept
   {
-    return castRay(_view*ray);
   }
 
-  void Renderer::clear()
+  WhittedRenderer::~WhittedRenderer() noexcept
   {
-    _options = RenderOptions();
-    _view    = Transform();
-    _scene.clear();
-  }
-
-  bool Renderer::initialize(const RenderOptions& options)
-  {
-    _options = options;
-
-    const Transform xfrmCW{Transform::rotateZYXbyPI2(0, 0, -1)};
-
-    // Transform camera setup from world to camera coordinates...
-    const Vertex         eyeC = xfrmCW*_options.eye;
-    const Vertex      lookAtC = xfrmCW*_options.lookAt;
-    const Direction cameraUpC = xfrmCW*_options.cameraUp;
-
-    /*
-     * NOTE:
-     * The view transform is comprised of two transforms:
-     * 1. camera coordinates are aligned using a look-at transform in camera space
-     * 2. camera space is transformed to world space
-     */
-    _view = xfrmCW.inverse()*Transform::lookAt(eyeC, lookAtC, cameraUpC);
-
-    return true;
-  }
-
-  const RenderOptions& Renderer::options() const
-  {
-    return _options;
-  }
-
-  void Renderer::setScene(Scene& scene)
-  {
-    _scene = std::move(scene);
   }
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Color Renderer::castRay(const Ray &ray, const unsigned int depth) const
+  Color WhittedRenderer::radiance(const Ray &ray, const unsigned int depth) const
   {
+    const Scene& scene = WhittedRenderer::scene();
+
     SurfaceInfo info;
-    if( !_scene.trace(info, ray) ) {
-      return _options.backgroundColor;
+    if( !scene.trace(info, ray) ) {
+      return options().backgroundColor;
     }
 
     const BxDFpack bxdfs = info->material()->getBxDFs();
-    const BxDFdata  data(ray, info, _options.globalRefraction);
+    const BxDFdata  data(ray, info, options().globalRefraction);
 
     Color color;
-    for(const LightSourcePtr& light : _scene.lights()) {
+    for(const LightSourcePtr& light : scene.lights()) {
       Ray       vis;
       Direction wiW;
       const Color Li = light->sampleLi(info, wiW, vis);
 
-      if( _scene.trace(vis) ) {
+      if( scene.trace(vis) ) {
         continue;
       }
 
@@ -126,15 +89,15 @@ namespace rt {
       color += fR*Li*absCosTi;
     }
 
-    if( depth + 1 < _options.maxDepth ) {
+    if( depth + 1 < options().maxDepth ) {
       color += specularReflectAndRefract(bxdfs, data, info, depth);
     }
 
     return color;
   }
 
-  Color Renderer::specularReflectAndRefract(const BxDFpack& bxdfs, const BxDFdata& data,
-                                            const SurfaceInfo& sinfo, const unsigned int depth) const
+  Color WhittedRenderer::specularReflectAndRefract(const BxDFpack& bxdfs, const BxDFdata& data,
+                                                   const SurfaceInfo& info, const unsigned int depth) const
   {
     Color color;
     for(const IBxDF *bxdf : bxdfs) {
@@ -155,7 +118,7 @@ namespace rt {
           : -TRACE_BIAS;
 
       const Direction   wiW = data.toWorld(wiS);
-      const Color        Li = castRay(sinfo.ray(wiW, bias), depth + 1);
+      const Color        Li = radiance(info.ray(wiW, bias), depth + 1);
       const real_t absCosTi = geom::shading::absCosTheta(wiS);
 
       color += fR*Li*absCosTi;

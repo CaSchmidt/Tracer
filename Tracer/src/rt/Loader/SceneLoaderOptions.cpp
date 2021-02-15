@@ -30,7 +30,7 @@
 *****************************************************************************/
 
 #include "rt/Loader/SceneLoaderBase.h"
-#include "rt/RenderOptions.h"
+#include "rt/Renderer/RenderOptions.h"
 
 namespace rt {
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,41 +29,25 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef WHITTEDRENDERER_H
+#define WHITTEDRENDERER_H
 
-#include "rt/RenderOptions.h"
-#include "rt/Scene/Scene.h"
+#include "rt/Renderer/IRenderer.h"
 
 namespace rt {
 
-  class Renderer {
+  class WhittedRenderer : public IRenderer {
   public:
-    Renderer() = default;
-    ~Renderer() noexcept = default;
-
-    Color castCameraRay(const Ray& ray) const;
-
-    void clear();
-
-    bool initialize(const RenderOptions& options);
-
-    const RenderOptions& options() const;
-
-    void setScene(Scene& scene);
+    WhittedRenderer() noexcept;
+    ~WhittedRenderer() noexcept;
 
   private:
-    // NOTE: All arguments passed to/returned from these methods are in WORLD coordinates!
-    Color castRay(const Ray& ray, const unsigned int depth = 0) const;
+    Color radiance(const Ray& ray, const unsigned int depth = 0) const;
 
     Color specularReflectAndRefract(const BxDFpack& bxdfs, const BxDFdata& data,
-                                    const SurfaceInfo& sinfo, const unsigned int depth) const;
-
-    RenderOptions _options{};
-    Scene         _scene{};
-    Transform     _view{};
+                                    const SurfaceInfo& info, const unsigned int depth) const;
   };
 
 } // namespace rt
 
-#endif // RENDERER_H
+#endif // WHITTEDRENDERER_H

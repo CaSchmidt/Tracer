@@ -41,7 +41,7 @@
 #include "rt/Loader/SceneLoader.h"
 
 #include "rt/Loader/SceneLoaderStringUtil.h"
-#include "rt/Renderer.h"
+#include "rt/Renderer/IRenderer.h"
 
 namespace rt {
 
@@ -59,9 +59,9 @@ namespace rt {
 
   } // namespace priv
 
-  bool loadScene(Renderer& renderer, const char *filename)
+  bool loadScene(IRenderer *renderer, const char *filename)
   {
-    renderer.clear();
+    renderer->clear();
 
     tinyxml2::XMLDocument doc;
     if( doc.LoadFile(filename) != tinyxml2::XML_SUCCESS ) {
@@ -79,7 +79,7 @@ namespace rt {
 
     const tinyxml2::XMLElement *xml_Options = xml_Tracer->FirstChildElement("Options");
     const RenderOptions opts = priv::parseOptions(xml_Options, &ok);
-    if( !ok  ||  !renderer.initialize(opts) ) {
+    if( !ok  ||  !renderer->initialize(opts) ) {
       fprintf(stderr, "Unable to initialize renderer!\n");
       return false;
     }
@@ -120,7 +120,7 @@ namespace rt {
 
       node = node->NextSiblingElement();
     }
-    renderer.setScene(scene);
+    renderer->setScene(scene);
 
     return true;
   }

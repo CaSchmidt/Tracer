@@ -39,7 +39,7 @@
 
 namespace rt {
 
-  class Renderer;
+  class IRenderer;
 
   class ICamera {
   public:
@@ -48,7 +48,7 @@ namespace rt {
 
     virtual Image render(const size_t width, const size_t height,
                          size_t y0, size_t y1,
-                         const Renderer& renderer, const size_t samples = 0) const = 0;
+                         const IRenderer *renderer, const size_t samples = 0) const = 0;
 
   protected:
     Image create_image(const size_t width, const size_t height,

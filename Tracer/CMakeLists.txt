@@ -35,8 +35,6 @@ set(Tracer_HEADERS
   include/math/Constants.h
   include/math/Logical.h
   include/math/Solver.h
-  include/rt/Renderer.h
-  include/rt/RenderOptions.h
   include/rt/Types.h
   include/rt/BxDF/IBxDF.h
   include/rt/BxDF/LambertianBRDF.h
@@ -65,6 +63,9 @@ set(Tracer_HEADERS
   include/rt/Object/Plane.h
   include/rt/Object/Sphere.h
   include/rt/Object/SurfaceInfo.h
+  include/rt/Renderer/IRenderer.h
+  include/rt/Renderer/RenderOptions.h
+  include/rt/Renderer/WhittedRenderer.h
   include/rt/Scene/Scene.h
   include/rt/Texture/CheckedTexture.h
   include/rt/Texture/FlatTexture.h
@@ -76,7 +77,6 @@ set(Tracer_SOURCES
   src/Image.cpp
   src/main.cpp
   src/Worker.cpp
-  src/rt/Renderer.cpp
   src/rt/BxDF/IBxDF.cpp
   src/rt/BxDF/LambertianBRDF.cpp
   src/rt/BxDF/MirrorBRDF.cpp
@@ -107,6 +107,8 @@ set(Tracer_SOURCES
   src/rt/Object/IObject.cpp
   src/rt/Object/Plane.cpp
   src/rt/Object/Sphere.cpp
+  src/rt/Renderer/IRenderer.cpp
+  src/rt/Renderer/WhittedRenderer.cpp
   src/rt/Scene/Scene.cpp
   src/rt/Texture/CheckedTexture.cpp
   src/rt/Texture/FlatTexture.cpp
