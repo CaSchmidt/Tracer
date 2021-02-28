@@ -36,6 +36,8 @@
 
 #include "rt/Types.h"
 
+#define TEXCOORDS_2D(tex)  const auto [s, t] = tex;
+
 namespace rt {
 
   using TexCoord2D = std::tuple<real_t,real_t>;
