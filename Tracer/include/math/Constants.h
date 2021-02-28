@@ -50,9 +50,11 @@ namespace math {
   // cf. https://www.exploringbinary.com/pi-and-e-in-binary/
   inline constexpr double PI_double = 0x1.921fb54442d18p+1;
 
-  template<typename T> inline constexpr T     PI      = static_cast<T>(PI_double);
-  template<typename T> inline constexpr T     PI_HALF = static_cast<T>(PI_double/2.0);
-  template<typename T> inline constexpr T TWO_PI      = static_cast<T>(2.0*PI_double);
+  template<typename T> inline constexpr T      PI         = static_cast<T>(PI_double);
+  template<typename T> inline constexpr T      PI_HALF    = static_cast<T>(PI_double/2.0);
+  template<typename T> inline constexpr T      PI_QUARTER = static_cast<T>(PI_double/4.0);
+  template<typename T> inline constexpr T  TWO_PI         = static_cast<T>(2.0*PI_double);
+  template<typename T> inline constexpr T FOUR_PI         = static_cast<T>(4.0*PI_double);
 
 } // namespace math
 

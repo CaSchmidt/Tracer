@@ -66,15 +66,17 @@ namespace rt {
 
   ////// Constants ///////////////////////////////////////////////////////////
 
-  inline constexpr real_t  ZERO =  0;
-  inline constexpr real_t   ONE =  1;
-  inline constexpr real_t   TWO =  2;
+  inline constexpr real_t ZERO = 0;
+  inline constexpr real_t  ONE = 1;
+  inline constexpr real_t  TWO = 2;
 
   inline constexpr real_t ONE_HALF = static_cast<real_t>(0.5);
 
-  inline constexpr real_t     PI      = math::PI<real_t>;
-  inline constexpr real_t     PI_HALF = math::PI_HALF<real_t>;
-  inline constexpr real_t TWO_PI      = math::TWO_PI<real_t>;
+  inline constexpr real_t      PI         = math::PI<real_t>;
+  inline constexpr real_t      PI_HALF    = math::PI_HALF<real_t>;
+  inline constexpr real_t      PI_QUARTER = math::PI_QUARTER<real_t>;
+  inline constexpr real_t  TWO_PI         = math::TWO_PI<real_t>;
+  inline constexpr real_t FOUR_PI         = math::FOUR_PI<real_t>;
 
   inline constexpr real_t TRACE_BIAS = 0x1p-13;
 
