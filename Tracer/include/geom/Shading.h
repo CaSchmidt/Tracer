@@ -65,6 +65,12 @@ namespace geom {
       return w.z >= ZERO;
     }
 
+    template<typename VecT>
+    inline bool isSameHemisphere(const VecT& w1, const VecT& w2)
+    {
+      return w1.z*w2.z >= ZERO;
+    }
+
     inline Direction reflect(const Direction& wo)
     {
       return {-wo.x, -wo.y, wo.z};
