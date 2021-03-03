@@ -34,7 +34,7 @@
 
 #include <array>
 
-#include "rt/Types.h"
+#include "rt/Sampler/Sample.h"
 
 namespace rt {
 
@@ -59,6 +59,7 @@ namespace rt {
     Direction  wo{}; // in Shading Coordinates
     Matrix xfrmSW{}; // World -> Shading
     Matrix xfrmWS{}; // Shading -> World
+    Sample2D   xi{};
   };
 
   class IBxDF {
@@ -85,7 +86,8 @@ namespace rt {
     virtual bool isShadowCaster() const = 0;
 
     virtual Color eval(const Direction& wo, const Direction& wi) const = 0;
-    virtual Color sample(const BxDFdata& input, Direction& wi) const;
+    virtual real_t pdf(const Direction& wo, const Direction& wi) const;
+    virtual Color sample(const BxDFdata& input, Direction& wi, real_t& pdf) const;
 
   protected:
     Color _color{1, 1, 1};

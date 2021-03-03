@@ -48,8 +48,6 @@ namespace rt {
 
     Color eval(const Direction& wo, const Direction& wi) const;
 
-    Color sample(const BxDFdata& input, Direction& wi) const;
-
   private:
     real_t _norm{};
     real_t _spec{};

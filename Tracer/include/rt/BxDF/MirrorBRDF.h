@@ -47,7 +47,8 @@ namespace rt {
     bool isShadowCaster() const;
 
     Color eval(const Direction& wo, const Direction& wi) const;
-    Color sample(const BxDFdata& input, Direction& wi) const;
+    real_t pdf(const Direction& wo, const Direction& wi) const;
+    Color sample(const BxDFdata& input, Direction& wi, real_t& pdf) const;
 
   private:
     real_t _reflectance{};

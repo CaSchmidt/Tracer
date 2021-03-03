@@ -65,9 +65,15 @@ namespace rt {
     return Color();
   }
 
-  Color MirrorBRDF::sample(const BxDFdata& input, Direction& wi) const
+  real_t MirrorBRDF::pdf(const Direction& /*wo*/, const Direction& /*wi*/) const
+  {
+    return 1;
+  }
+
+  Color MirrorBRDF::sample(const BxDFdata& input, Direction& wi, real_t& pdf) const
   {
     wi = geom::shading::reflect(input.wo);
+    pdf = MirrorBRDF::pdf(input.wo, wi);
     return _reflectance*_color/geom::shading::absCosTheta(wi);
   }
 

@@ -71,10 +71,4 @@ namespace rt {
     return _color*_norm*n4::pow(cosAlpha, _spec);
   }
 
-  Color PhongBRDF::sample(const BxDFdata& /*input*/, Direction& wi) const
-  {
-    wi = Direction();
-    return Color();
-  }
-
 } // namespace rt

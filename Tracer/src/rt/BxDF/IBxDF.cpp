@@ -33,7 +33,9 @@
 
 #include "rt/BxDF/IBxDF.h"
 
+#include "geom/Shading.h"
 #include "rt/Object/SurfaceInfo.h"
+#include "rt/Sampler/Sampling.h"
 
 namespace rt {
 
@@ -80,9 +82,21 @@ namespace rt {
     return (_flags & f) == _flags;
   }
 
-  Color IBxDF::sample(const BxDFdata& /*input*/, Direction& /*wi*/) const
+  real_t IBxDF::pdf(const Direction& wo, const Direction& wi) const
   {
-    return Color(); // TODO
+    return geom::shading::isSameHemisphere(wo, wi)
+        ? CosineHemisphere::pdf(geom::shading::absCosTheta(wi))
+        : 0;
+  }
+
+  Color IBxDF::sample(const BxDFdata& input, Direction& wi, real_t& pdf) const
+  {
+    wi = CosineHemisphere::sample(input.xi);
+    if( input.wo.z < ZERO ) {
+      wi.z *= -ONE;
+    }
+    pdf = IBxDF::pdf(input.wo, wi);
+    return eval(input.wo, wi);
   }
 
 } // namespace rt
