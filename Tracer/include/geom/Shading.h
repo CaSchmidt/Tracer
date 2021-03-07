@@ -71,26 +71,26 @@ namespace geom {
       return w1.z*w2.z >= ZERO;
     }
 
-    inline Direction reflect(const Direction& wo)
+    inline Direction reflect(const Direction& wi)
     {
-      return {-wo.x, -wo.y, wo.z};
+      return {-wi.x, -wi.y, wi.z};
     }
 
-    inline Direction refract(const Direction& wo, const real_t etai, const real_t etat)
+    inline Direction refract(const Direction& wi, const real_t etai, const real_t etat)
     {
-      const bool entering = isSameHemisphere(wo);
+      const bool entering = isSameHemisphere(wi);
       const real_t eta = entering
           ? etai/etat
           : etat/etai;
       const real_t nz = entering
           ? +ONE
           : -ONE;
-      const real_t  cosTi = std::clamp<real_t>(wo.z*nz, -1, 1);
+      const real_t  cosTi = std::clamp<real_t>(wi.z*nz, -1, 1);
       const real_t sin2Ti = std::max<real_t>(0, ONE - cosTi*cosTi);
       const real_t sin2Tt = eta*eta*sin2Ti; // Snell's Law
       const real_t cos2Tt = ONE - sin2Tt;
       return cos2Tt >= ZERO // Handle Internal Reflection: sin2Tt > 1
-          ? Direction{-eta*wo.x, -eta*wo.y, -eta*wo.z + (eta*cosTi - n4::sqrt(cos2Tt))*nz}
+          ? Direction{-eta*wi.x, -eta*wi.y, -eta*wi.z + (eta*cosTi - n4::sqrt(cos2Tt))*nz}
           : Direction();
     }
 

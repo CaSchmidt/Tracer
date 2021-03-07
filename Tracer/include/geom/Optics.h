@@ -58,22 +58,22 @@ namespace geom {
     inline constexpr real_t ONE      = 1;
     inline constexpr real_t ONE_HALF = 0.5;
 
-    inline real_t dielectric(const Direction& wo, const real_t etai, const real_t etat)
+    inline real_t dielectric(const Direction& wi, const real_t etai, const real_t etat)
     {
-      const bool entering = shading::isSameHemisphere(wo);
+      const bool entering = shading::isSameHemisphere(wi);
       const real_t    eta = entering
           ? etai/etat
           : etat/etai;
 
-      const real_t cosTi = shading::absCosTheta(wo);
-      const real_t sinTi = math::pythagoras(cosTi);
+      const real_t cosTi = shading::absCosTheta(wi);
+      const real_t sinTi = math::pythagoras<real_t>(cosTi);
 
       const real_t sinTt = eta*sinTi; // Snell's law
       if( sinTt >= ONE ) { // total internal reflection
         return ONE;
       }
 
-      const real_t cosTt = math::pythagoras(sinTt);
+      const real_t cosTt = math::pythagoras<real_t>(sinTt);
 
       const real_t para = (cosTi - eta*cosTt)/(cosTi + eta*cosTt);
       const real_t perp = (eta*cosTi - cosTt)/(eta*cosTi + cosTt);
