@@ -41,7 +41,7 @@ namespace rt {
   struct SurfaceInfo;
 
   struct BxDFdata {
-    BxDFdata(const Ray& ray, const SurfaceInfo& info, const real_t etaI) noexcept;
+    BxDFdata(const Ray& ray, const SurfaceInfo& info, const real_t etaA) noexcept;
 
     template<typename VecT>
     inline VecT toShading(const VecT& v) const
@@ -55,7 +55,7 @@ namespace rt {
       return xfrmWS*v;
     }
 
-    real_t   etai{1};
+    real_t   etaA{1};
     Direction  wo{}; // in Shading Coordinates
     Matrix xfrmSW{}; // World -> Shading
     Matrix xfrmWS{}; // Shading -> World

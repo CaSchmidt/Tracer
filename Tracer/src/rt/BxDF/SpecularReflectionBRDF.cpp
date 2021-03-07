@@ -48,12 +48,12 @@ namespace rt {
 
   real_t SpecularReflectionBRDF::refraction() const
   {
-    return _etat;
+    return _etaB;
   }
 
-  void SpecularReflectionBRDF::setRefraction(const real_t etat)
+  void SpecularReflectionBRDF::setRefraction(const real_t etaB)
   {
-    _etat = std::max<real_t>(1, etat);
+    _etaB = std::max<real_t>(1, etaB);
   }
 
   bool SpecularReflectionBRDF::isShadowCaster() const
@@ -73,7 +73,7 @@ namespace rt {
 
   Color SpecularReflectionBRDF::sample(const BxDFdata& input, Direction& wi, real_t& pdf) const
   {
-    const real_t kR = geom::optics::dielectric(input.wo, input.etai, _etat);
+    const real_t kR = geom::optics::dielectric(input.wo, input.etaA, _etaB);
     wi = geom::shading::reflect(input.wo);
     pdf = 1;
     return kR*_color/geom::shading::absCosTheta(wi);

@@ -48,12 +48,12 @@ namespace rt {
 
   real_t SpecularTransmissionBTDF::refraction() const
   {
-    return _etat;
+    return _etaB;
   }
 
-  void SpecularTransmissionBTDF::setRefraction(const real_t etat)
+  void SpecularTransmissionBTDF::setRefraction(const real_t etaB)
   {
-    _etat = std::max<real_t>(1, etat);
+    _etaB = std::max<real_t>(1, etaB);
   }
 
   bool SpecularTransmissionBTDF::isShadowCaster() const
@@ -73,13 +73,13 @@ namespace rt {
 
   Color SpecularTransmissionBTDF::sample(const BxDFdata& input, Direction& wi, real_t& pdf) const
   {
-    wi = geom::shading::refract(input.wo, input.etai, _etat);
+    wi = geom::shading::refract(input.wo, input.etaA, _etaB);
     if( wi.isZero() ) {
       wi = Direction();
       pdf = 0;
       return Color();
     }
-    const real_t kR = geom::optics::dielectric(wi, input.etai, _etat);
+    const real_t kR = geom::optics::dielectric(wi, input.etaA, _etaB);
     const real_t kT = ONE - kR;
     if( kT <= ZERO ) {
       wi = Direction();

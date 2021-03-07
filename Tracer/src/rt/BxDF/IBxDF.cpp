@@ -41,8 +41,8 @@ namespace rt {
 
   ////// BxDFinputs //////////////////////////////////////////////////////////
 
-  BxDFdata::BxDFdata(const Ray& ray, const SurfaceInfo& sinfo, const real_t etaI) noexcept
-    : etai{etaI}
+  BxDFdata::BxDFdata(const Ray& ray, const SurfaceInfo& sinfo, const real_t etaA) noexcept
+    : etaA{etaA}
   {
     xfrmWS = n4::util::frameFromZ(sinfo.N);
     xfrmSW = xfrmWS.transpose();
