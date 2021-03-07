@@ -155,7 +155,7 @@ namespace rt {
 
     real_t parseAngle(const tinyxml2::XMLElement *node, bool *ok)
     {
-      return math::radian(parseNodeAsFloat<real_t>(node, ok));
+      return math::radian<real_t>(parseNodeAsFloat<real_t>(node, ok));
     }
 
     Color parseColor(const tinyxml2::XMLElement *node, bool *ok, const bool clamp)
