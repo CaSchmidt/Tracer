@@ -93,7 +93,7 @@ namespace rt {
   {
     wi = CosineHemisphere::sample(input.xi);
     if( input.wo.z < ZERO ) {
-      wi.z *= -ONE;
+      wi.z *= -1;
     }
     pdf = IBxDF::pdf(input.wo, wi);
     return eval(input.wo, wi);

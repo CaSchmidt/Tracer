@@ -68,14 +68,14 @@ namespace rt {
 
   real_t SpecularReflectionBRDF::pdf(const Direction& /*wo*/, const Direction& /*wi*/) const
   {
-    return 1;
+    return 0;
   }
 
   Color SpecularReflectionBRDF::sample(const BxDFdata& input, Direction& wi, real_t& pdf) const
   {
     const real_t kR = geom::optics::dielectric(input.wo, input.etai, _etat);
     wi = geom::shading::reflect(input.wo);
-    pdf = SpecularReflectionBRDF::pdf(input.wo, wi);
+    pdf = 1;
     return kR*_color/geom::shading::absCosTheta(wi);
   }
 
