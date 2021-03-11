@@ -41,9 +41,7 @@ namespace rt {
     PointLight(const Transform& lightToWorld, const Color& I) noexcept;
     ~PointLight() noexcept;
 
-    bool isDeltaLight() const;
-
-    Color sampleLi(const SurfaceInfo& info, Direction& wi, Ray& vis) const;
+    Color sampleLi(const SurfaceInfo& info, Direction& wi, real_t& pdf, Ray& vis) const;
 
     static LightSourcePtr create(const Transform& lightToWorld, const Color& I);
 

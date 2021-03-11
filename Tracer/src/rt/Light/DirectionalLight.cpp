@@ -37,7 +37,7 @@ namespace rt {
 
   DirectionalLight::DirectionalLight(const Transform& lightToWorld,
                                      const Color& L, const Direction& wiL) noexcept
-    : ILightSource(lightToWorld)
+    : ILightSource(DeltaDirection, lightToWorld)
     , _L{L}
   {
     _wiW = n4::normalize(toWorld(wiL));
@@ -47,13 +47,9 @@ namespace rt {
   {
   }
 
-  bool DirectionalLight::isDeltaLight() const
+  Color DirectionalLight::sampleLi(const SurfaceInfo& info, Direction& wi, real_t& pdf, Ray& vis) const
   {
-    return true;
-  }
-
-  Color DirectionalLight::sampleLi(const SurfaceInfo& info, Direction& wi, Ray& vis) const
-  {
+    pdf = 1;
     wi  = _wiW;
     vis = info.ray(wi, TRACE_BIAS);
     return _L;

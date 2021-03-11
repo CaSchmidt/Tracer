@@ -35,8 +35,9 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  ILightSource::ILightSource(const Transform& lightToWorld) noexcept
-    : _xfrmWL{lightToWorld}
+  ILightSource::ILightSource(const Type type, const Transform& lightToWorld) noexcept
+    : _type{type}
+    , _xfrmWL{lightToWorld}
   {
     setup();
   }
@@ -47,7 +48,12 @@ namespace rt {
 
   bool ILightSource::isDeltaLight() const
   {
-    return false;
+    return _type == DeltaDirection  ||  _type == DeltaPosition;
+  }
+
+  ILightSource::Type ILightSource::type() const
+  {
+    return _type;
   }
 
   ////// private /////////////////////////////////////////////////////////////

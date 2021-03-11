@@ -38,7 +38,7 @@ namespace rt {
   ////// public //////////////////////////////////////////////////////////////
 
   PointLight::PointLight(const Transform& lightToWorld, const Color& I) noexcept
-    : ILightSource(lightToWorld)
+    : ILightSource(DeltaPosition, lightToWorld)
     , _I{I}
   {
     _pW = toWorld(Vertex{0, 0, 0});
@@ -48,13 +48,9 @@ namespace rt {
   {
   }
 
-  bool PointLight::isDeltaLight() const
+  Color PointLight::sampleLi(const SurfaceInfo& info, Direction& wi, real_t& pdf, Ray& vis) const
   {
-    return true;
-  }
-
-  Color PointLight::sampleLi(const SurfaceInfo& info, Direction& wi, Ray& vis) const
-  {
+    pdf = 1;
     const real_t r = n4::distance(info.P, _pW);
     wi  = geom::to_direction(n4::direction(info.P, _pW));
     vis = info.ray(wi, TRACE_BIAS, r);

@@ -43,12 +43,19 @@ namespace rt {
 
   class ILightSource {
   public:
-    ILightSource(const Transform& lightToWorld) noexcept;
+    enum Type : unsigned int {
+      Invalid        = 0,
+      Area           = 1,
+      DeltaDirection = 2,
+      DeltaPosition  = 3
+    };
+
+    ILightSource(const Type type, const Transform& lightToWorld) noexcept;
     virtual ~ILightSource() noexcept;
 
-    virtual bool isDeltaLight() const;
+    bool isDeltaLight() const;
 
-    virtual Color sampleLi(const SurfaceInfo& info, Direction& wi, Ray& vis) const = 0;
+    virtual Color sampleLi(const SurfaceInfo& info, Direction& wi, real_t& pdf, Ray& vis) const = 0;
 
     template<typename VecT>
     inline VecT toLight(const VecT& v) const
@@ -62,11 +69,14 @@ namespace rt {
       return _xfrmWL*v;
     }
 
+    Type type() const;
+
   private:
     ILightSource() noexcept = delete;
 
     void setup();
 
+    Type      _type{Invalid};
     Transform _xfrmWL{}; // Light -> World
     Transform _xfrmLW{}; // World -> Light
   };

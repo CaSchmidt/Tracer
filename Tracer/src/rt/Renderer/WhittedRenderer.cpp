@@ -62,9 +62,10 @@ namespace rt {
 
     Color color;
     for(const LightSourcePtr& light : scene.lights()) {
+      real_t    pdf;
       Ray       vis;
       Direction wiW;
-      const Color Li = light->sampleLi(info, wiW, vis);
+      const Color Li = light->sampleLi(info, wiW, pdf, vis);
 
       if( scene.trace(vis) ) {
         continue;
