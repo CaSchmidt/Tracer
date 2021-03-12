@@ -66,8 +66,10 @@ set(Tracer_HEADERS
   include/rt/Renderer/IRenderer.h
   include/rt/Renderer/RenderOptions.h
   include/rt/Renderer/WhittedRenderer.h
+  include/rt/Sampler/ISampler.h
   include/rt/Sampler/Sample.h
   include/rt/Sampler/Sampling.h
+  include/rt/Sampler/SimpleSampler.h
   include/rt/Scene/Scene.h
   include/rt/Texture/CheckedTexture.h
   include/rt/Texture/FlatTexture.h
@@ -111,7 +113,9 @@ set(Tracer_SOURCES
   src/rt/Object/Sphere.cpp
   src/rt/Renderer/IRenderer.cpp
   src/rt/Renderer/WhittedRenderer.cpp
+  src/rt/Sampler/ISampler.cpp
   src/rt/Sampler/Sampling.cpp
+  src/rt/Sampler/SimpleSampler.cpp
   src/rt/Scene/Scene.cpp
   src/rt/Texture/CheckedTexture.cpp
   src/rt/Texture/FlatTexture.cpp
