@@ -32,10 +32,8 @@
 #ifndef ICAMERA_H
 #define ICAMERA_H
 
-#include <random>
-
 #include "Image.h"
-#include "rt/Types.h"
+#include "rt/Sampler/ISampler.h"
 
 namespace rt {
 
@@ -54,15 +52,11 @@ namespace rt {
     Image create_image(const size_t width, const size_t height,
                        size_t& y0, size_t& y1) const;
     static bool isValidFoV(const real_t fov_rad);
-    real_t rand() const;
     Ray ray(const Matrix& W, const size_t x, const size_t y,
             const bool random = false) const;
 
-  private:
-    void rand_init();
-
-    std::uniform_real_distribution<rt::real_t> _randDis{};
-    std::mt19937                               _randGen{};
+  protected:
+    SamplerPtr _sampler{};
   };
 
 } // namespace rt

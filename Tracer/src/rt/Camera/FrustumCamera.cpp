@@ -33,6 +33,7 @@
 
 #include "rt/Camera/RenderLoop.h"
 #include "rt/Renderer/IRenderer.h"
+#include "rt/Sampler/Sampling.h"
 
 namespace rt {
 
@@ -144,11 +145,7 @@ namespace rt {
 
   Vertex FrustumCamera::sampleDisc() const
   {
-    Vertex v;
-    do {
-      v = TWO*Vertex{rand(), rand(), 0} - Vertex{1, 1, 0};
-    } while( n4::dot(v, v) >= ONE );
-    return v;
+    return ConcentricDisk::sample(_sampler->sample2D());
   }
 
   Matrix FrustumCamera::windowTransform(const size_t width, const size_t height,

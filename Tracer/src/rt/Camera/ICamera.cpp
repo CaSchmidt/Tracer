@@ -31,13 +31,15 @@
 
 #include "rt/Camera/ICamera.h"
 
+#include "rt/Sampler/SimpleSampler.h"
+
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
   ICamera::ICamera()
   {
-    rand_init();
+    _sampler = SimpleSampler::create();
   }
 
   ICamera::~ICamera()
@@ -65,34 +67,19 @@ namespace rt {
     return ZERO < fov_rad  &&  fov_rad < PI;
   }
 
-  real_t ICamera::rand() const
-  {
-    return _randDis(*const_cast<std::mt19937*>(&_randGen));
-  }
-
   Ray ICamera::ray(const Matrix& W, const size_t x, const size_t y,
                    const bool random) const
   {
     const real_t dx = random
-        ? rand()
+        ? _sampler->sample()
         : ONE_HALF;
     const real_t dy = random
-        ? rand()
+        ? _sampler->sample()
         : ONE_HALF;
 
     const Vertex org = W*Vertex{static_cast<real_t>(x) + dx, static_cast<real_t>(y) + dy};
 
     return Ray(org, geom::to_direction(org));
-  }
-
-  ////// private /////////////////////////////////////////////////////////////
-
-  void ICamera::rand_init()
-  {
-    _randDis = std::uniform_real_distribution<real_t>(ZERO, ONE);
-
-    std::random_device randDev;
-    _randGen.seed(randDev());
   }
 
 } // namespace rt
