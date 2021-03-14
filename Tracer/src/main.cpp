@@ -36,6 +36,7 @@
 #include "rt/Camera/SimpleCamera.h"
 #include "rt/Loader/SceneLoader.h"
 #include "rt/Renderer/WhittedRenderer.h"
+#include "rt/Sampler/SimpleSampler.h"
 
 #include "Worker.h"
 
@@ -64,7 +65,7 @@ int main(int /*argc*/, char ** /*argv*/)
     rt::RenderOptions opts = renderer.options();
     opts.aperture = 0.5;
     opts.focus    = n4::distance(renderer.options().eye, renderer.options().lookAt);
-    renderer.initialize(opts);
+    renderer.setOptions(opts);
 
     printf("aperture = %.3f\n", opts.aperture);
     printf("   focus = %.3f\n", opts.focus);
@@ -73,18 +74,16 @@ int main(int /*argc*/, char ** /*argv*/)
 #endif
 
 #if 1
-  rt::FrustumCamera cam;
+  rt::CameraPtr cam = rt::FrustumCamera::create(renderer.options());
 #else
-  rt::SimpleCamera cam;
+  rt::CameraPtr cam = rt::SimpleCamera::create(renderer.options());
 #endif
+  renderer.setCamera(cam);
 
-  if( !cam.setup(renderer.options()) ) {
-    fprintf(stderr, "Unable to setup camera!\n");
-    return EXIT_FAILURE;
-  }
+  rt::SamplerPtr sampler = rt::SimpleSampler::create();
 
   Worker worker;
-  const Image image = worker.execute(&cam, &renderer, numSamples);
+  const Image image = worker.execute(&renderer, sampler, numSamples);
   image.saveAsPNG("output.png");
 
   return EXIT_SUCCESS;

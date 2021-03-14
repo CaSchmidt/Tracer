@@ -31,79 +31,55 @@
 
 #include "rt/Camera/SimpleCamera.h"
 
-#include "rt/Camera/RenderLoop.h"
-#include "rt/Renderer/IRenderer.h"
-
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  SimpleCamera::SimpleCamera()
-    : ICamera()
+  SimpleCamera::SimpleCamera(const RenderOptions& options)
+    : ICamera(options.width, options.height)
+    , _options(options)
   {
+    setup();
   }
 
   SimpleCamera::~SimpleCamera()
   {
   }
 
-  bool SimpleCamera::setup(const RenderOptions& options)
+  Ray SimpleCamera::ray(const size_t x, const size_t y, const SamplerPtr& sampler) const
   {
-    return setup(options.fov_rad);
+    return makeRay(_windowTransform, x, y, sampler);
   }
 
-  bool SimpleCamera::setup(const real_t fov_rad)
+  CameraPtr SimpleCamera::create(const RenderOptions& options)
   {
-    if( !isValidFoV(fov_rad) ) {
-      return false;
-    }
-    _fov_rad = fov_rad;
-    return true;
-  }
-
-  Image SimpleCamera::render(const size_t width, const size_t height,
-                             size_t y0, size_t y1,
-                             const IRenderer *renderer, const size_t samples) const
-  {
-    Image image = create_image(width, height, y0, y1);
-    if( image.isEmpty() ) {
-      return Image();
-    }
-
-    const Matrix W = windowTransform(width, height);
-
-    if( samples > 1 ) {
-      render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
-        Color color;
-        for(size_t s = 0; s < samples; s++) {
-          color += n4::clamp(renderer->castCameraRay(ray(W, x, y, true)), 0, 1);
-        }
-        color /= static_cast<real_t>(samples);
-        return color;
-      });
-    } else {
-      render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
-        return renderer->castCameraRay(ray(W, x, y));
-      });
-    }
-
-    return image;
+    return std::make_unique<SimpleCamera>(options);
   }
 
   ////// private /////////////////////////////////////////////////////////////
+
+  bool SimpleCamera::setup()
+  {
+    if( !isValidFoV(_options.fov_rad) ) {
+      return false;
+    }
+
+    _windowTransform = windowTransform(width(), height(), _options.fov_rad);
+
+    return true;
+  }
 
   /*
    * NOTE:
    * Cf. to Scratchapixel v2.0 for the derivation of the window transform:
    * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays/generating-camera-rays
    */
-
-  Matrix SimpleCamera::windowTransform(const size_t width, const size_t height) const
+  Matrix SimpleCamera::windowTransform(const size_t width, const size_t height, const real_t fov_rad)
   {
     const real_t w = static_cast<real_t>(width);
     const real_t h = static_cast<real_t>(height);
     const real_t a = w/h;
-    const real_t n = n4::tan(_fov_rad/TWO);
+    const real_t n = n4::tan(fov_rad/TWO);
     return n4::translate(-a*n, n, -1)*n4::scale(TWO*a*n/w, -TWO*n/h, 1);
   }
 

@@ -33,11 +33,9 @@
 #include <execution>
 #include <mutex>
 
-#include "rt/Renderer/IRenderer.h"
-
 #include "Worker.h"
 
-Image Worker::execute(const rt::ICamera *cam, const rt::IRenderer *renderer,
+Image Worker::execute(const rt::IRenderer *renderer, const rt::SamplerPtr& sampler,
                       const std::size_t numSamples, const std::size_t blockSize) const
 {
   Image image(renderer->options().width, renderer->options().height);
@@ -54,8 +52,11 @@ Image Worker::execute(const rt::ICamera *cam, const rt::IRenderer *renderer,
   std::mutex mutex;
   std::for_each(std::execution::par_unseq,
                 blocks.begin(), blocks.end(), [&](const Block& block) -> void {
+    const rt::SamplerPtr mysampler = sampler
+        ? sampler->copy()
+        : rt::SamplerPtr();
     const auto [y0, y1] = block;
-    const Image slice = cam->render(image.width(), image.height(), y0, y1, renderer, numSamples);
+    const Image slice = renderer->render(y0, y1, mysampler, numSamples);
     {
       std::lock_guard<std::mutex> lock(mutex);
       image.copy(y0, slice);
@@ -91,5 +92,6 @@ Blocks Worker::makeBlocks(const std::size_t height, const std::size_t blockSize)
 void Worker::progress(const std::size_t y, const std::size_t height)
 {
   const std::size_t p = (y*100)/height;
-  printf("Progress: %3d%% (%6d/%6d)\n", int(p), int(y), int(height)); fflush(stdout);
+  printf("Progress: %3d%% (%6d/%6d)\n", int(p), int(y), int(height));
+  fflush(stdout);
 }

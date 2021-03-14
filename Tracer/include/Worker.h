@@ -35,7 +35,7 @@
 #include <list>
 #include <utility>
 
-#include "rt/Camera/ICamera.h"
+#include "rt/Renderer/IRenderer.h"
 
 using  Block = std::pair<std::size_t, std::size_t>;
 using Blocks = std::list<Block>;
@@ -45,7 +45,7 @@ public:
   Worker() = default;
   ~Worker() = default;
 
-  Image execute(const rt::ICamera *cam, const rt::IRenderer *renderer,
+  Image execute(const rt::IRenderer *renderer, const rt::SamplerPtr& sampler,
                 const std::size_t numSamples = 64, const std::size_t blockSize = 32) const;
 
 private:

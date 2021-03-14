@@ -79,7 +79,7 @@ namespace rt {
 
     const tinyxml2::XMLElement *xml_Options = xml_Tracer->FirstChildElement("Options");
     const RenderOptions opts = priv::parseOptions(xml_Options, &ok);
-    if( !ok  ||  !renderer->initialize(opts) ) {
+    if( !ok  ||  !renderer->setOptions(opts) ) {
       fprintf(stderr, "Unable to initialize renderer!\n");
       return false;
     }

@@ -32,31 +32,34 @@
 #ifndef ICAMERA_H
 #define ICAMERA_H
 
-#include "Image.h"
+#include <memory>
+
 #include "rt/Sampler/ISampler.h"
 
 namespace rt {
 
-  class IRenderer;
+  using CameraPtr = std::unique_ptr<class ICamera>;
 
   class ICamera {
   public:
-    ICamera();
+    ICamera(const size_t width, const size_t height);
     virtual ~ICamera();
 
-    virtual Image render(const size_t width, const size_t height,
-                         size_t y0, size_t y1,
-                         const IRenderer *renderer, const size_t samples = 0) const = 0;
+    size_t width() const;
+    size_t height() const;
+
+    virtual Ray ray(const size_t x, const size_t y, const SamplerPtr& sampler) const = 0;
 
   protected:
-    Image create_image(const size_t width, const size_t height,
-                       size_t& y0, size_t& y1) const;
     static bool isValidFoV(const real_t fov_rad);
-    Ray ray(const Matrix& W, const size_t x, const size_t y,
-            const bool random = false) const;
+    static Ray makeRay(const Matrix& W, const size_t x, const size_t y,
+                       const SamplerPtr& sampler);
 
-  protected:
-    SamplerPtr _sampler{};
+  private:
+    ICamera() noexcept = delete;
+
+    size_t _height{};
+    size_t _width{};
   };
 
 } // namespace rt

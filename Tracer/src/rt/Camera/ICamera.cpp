@@ -31,50 +31,45 @@
 
 #include "rt/Camera/ICamera.h"
 
-#include "rt/Sampler/SimpleSampler.h"
-
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  ICamera::ICamera()
+  ICamera::ICamera(const size_t width, const size_t height)
+    : _height(height)
+    , _width(width)
   {
-    _sampler = SimpleSampler::create();
   }
 
   ICamera::~ICamera()
   {
   }
 
-  ////// protected ///////////////////////////////////////////////////////////
-
-  Image ICamera::create_image(const size_t width, const size_t height,
-                              size_t& y0, size_t& y1) const
+  size_t ICamera::width() const
   {
-    if( width < 1  ||  height < 1 ) {
-      return Image();
-    }
-    y0 = std::clamp<size_t>(y0, 0, height);
-    y1 = std::clamp<size_t>(y1, 0, height);
-    if( y0 == y1  ||  y0 >= height ) {
-      return Image();
-    }
-    return Image(width, y1 - y0);
+    return _width;
   }
+
+  size_t ICamera::height() const
+  {
+    return _height;
+  }
+
+  ////// protected ///////////////////////////////////////////////////////////
 
   bool ICamera::isValidFoV(const real_t fov_rad)
   {
     return ZERO < fov_rad  &&  fov_rad < PI;
   }
 
-  Ray ICamera::ray(const Matrix& W, const size_t x, const size_t y,
-                   const bool random) const
+  Ray ICamera::makeRay(const Matrix& W, const size_t x, const size_t y,
+                       const SamplerPtr& sampler)
   {
-    const real_t dx = random
-        ? _sampler->sample()
+    const real_t dx = sampler
+        ? sampler->sample()
         : ONE_HALF;
-    const real_t dy = random
-        ? _sampler->sample()
+    const real_t dy = sampler
+        ? sampler->sample()
         : ONE_HALF;
 
     const Vertex org = W*Vertex{static_cast<real_t>(x) + dx, static_cast<real_t>(y) + dy};

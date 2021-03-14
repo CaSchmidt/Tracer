@@ -31,121 +31,80 @@
 
 #include "rt/Camera/FrustumCamera.h"
 
-#include "rt/Camera/RenderLoop.h"
-#include "rt/Renderer/IRenderer.h"
 #include "rt/Sampler/Sampling.h"
 
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  FrustumCamera::FrustumCamera()
-    : ICamera()
+  FrustumCamera::FrustumCamera(const RenderOptions& options)
+    : ICamera(options.width, options.height)
+    , _options(options)
   {
+    setup();
   }
 
   FrustumCamera::~FrustumCamera()
   {
   }
 
-  bool FrustumCamera::setup(const RenderOptions& options)
+  Ray FrustumCamera::ray(const size_t x, const size_t y, const SamplerPtr& sampler) const
   {
-    return setup(options.fov_rad, options.worldToScreen,
-                 options.aperture, options.focus);
+    if( sampler  &&  _rLens > ZERO  &&  _zFocus < ZERO ) {
+      // (1) Sample Disc /////////////////////////////////////////////////////
+
+      const Vertex pl = _rLens*ConcentricDisk::sample(sampler->sample2D());
+
+      // (2) Primary Ray to Screen ///////////////////////////////////////////
+
+      const Vertex ps = makeRay(_windowTransform, x, y, SamplerPtr()).origin();
+
+      // (3) Primary Ray's Focus /////////////////////////////////////////////
+
+      const Vertex pf{ ps.x*_zFocus/_zNear, ps.y*_zFocus/_zNear, _zFocus};
+
+      // (4) Image Ray's Direction ///////////////////////////////////////////
+
+      const Direction di = geom::to_direction(n4::direction(pl, pf));
+
+      // (5) Image Ray ///////////////////////////////////////////////////////
+
+      const real_t tNear = _zNear/di.z;
+      const Vertex    oi{ pl.x + tNear*di.x, pl.y + tNear*di.y, _zNear};
+      const Ray     rayi{ oi, di };
+
+      // Done! ///////////////////////////////////////////////////////////////
+
+      return rayi;
+    }
+    return makeRay(_windowTransform, x, y, sampler);
   }
 
-  bool FrustumCamera::setup(const real_t fov_rad, const real_t worldToScreen,
-                            const real_t aperture, const real_t focus)
+  CameraPtr FrustumCamera::create(const RenderOptions& options)
   {
-    _fov_rad = _worldToScreen = 0;
-
-    if( !isValidFoV(fov_rad)  ||  worldToScreen <= ZERO ) {
-      return false;
-    }
-
-    _fov_rad = fov_rad;
-    _worldToScreen = worldToScreen;
-
-    if( aperture >= ZERO  &&  focus >= ZERO ) {
-      _rLens  = aperture/TWO;
-      _zFocus = -focus;
-    } else {
-      _rLens = _zFocus = 0;
-    }
-
-    return true;
-  }
-
-  Image FrustumCamera::render(const size_t width, const size_t height,
-                              size_t y0, size_t y1,
-                              const IRenderer *renderer, const size_t samples) const
-  {
-    Image image = create_image(width, height, y0, y1);
-    if( image.isEmpty() ) {
-      return Image();
-    }
-
-    const Matrix W = windowTransform(width, height, _fov_rad, _worldToScreen);
-
-    if( samples > 1 ) {
-      if( _rLens > ZERO  &&  _zFocus < ZERO ) {
-        const real_t _zNear = W(2, 3);
-        render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
-          Color color;
-          for(size_t s = 0; s < samples; s++) {
-            // (1) Sample Disc ///////////////////////////////////////////////
-
-            const Vertex pl = _rLens*sampleDisc();
-
-            // (2) Primary Ray to Screen /////////////////////////////////////
-
-            const Vertex ps = ray(W, x, y).origin();
-
-            // (3) Primary Ray's Focus ///////////////////////////////////////
-
-            const Vertex pf{ ps.x*_zFocus/_zNear, ps.y*_zFocus/_zNear, _zFocus};
-
-            // (4) Image Ray's Direction /////////////////////////////////////
-
-            const Direction di = geom::to_direction(n4::direction(pl, pf));
-
-            // (5) Image Ray /////////////////////////////////////////////////
-
-            const real_t tNear = _zNear/di.z;
-            const Vertex    oi{ pl.x + tNear*di.x, pl.y + tNear*di.y, _zNear};
-            const Ray     rayi{ oi, di };
-
-            // (6) Cast Ray //////////////////////////////////////////////////
-
-            color += n4::clamp(renderer->castCameraRay(rayi), 0, 1);
-          }
-          color /= static_cast<real_t>(samples);
-          return color;
-        });
-      } else {
-        render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
-          Color color;
-          for(size_t s = 0; s < samples; s++) {
-            color += n4::clamp(renderer->castCameraRay(ray(W, x, y, true)), 0, 1);
-          }
-          color /= static_cast<real_t>(samples);
-          return color;
-        });
-      }
-    } else {
-      render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
-        return renderer->castCameraRay(ray(W, x, y));
-      });
-    }
-
-    return image;
+    return std::make_unique<FrustumCamera>(options);
   }
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Vertex FrustumCamera::sampleDisc() const
+  bool FrustumCamera::setup()
   {
-    return ConcentricDisk::sample(_sampler->sample2D());
+    if( !isValidFoV(_options.fov_rad)  ||  _options.worldToScreen <= ZERO ) {
+      return false;
+    }
+
+    if( _options.aperture > ZERO  &&  _options.focus > ZERO ) {
+      _rLens  = _options.aperture/TWO;
+      _zFocus = -_options.focus;
+    } else {
+      _rLens = _zFocus = 0;
+    }
+
+    _windowTransform = windowTransform(width(), height(),
+                                       _options.fov_rad, _options.worldToScreen);
+    _zNear = _windowTransform(2, 3);
+
+    return true;
   }
 
   Matrix FrustumCamera::windowTransform(const size_t width, const size_t height,

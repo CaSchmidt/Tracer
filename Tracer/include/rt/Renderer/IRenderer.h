@@ -32,30 +32,39 @@
 #ifndef IRENDERER_H
 #define IRENDERER_H
 
+#include "Image.h"
+#include "rt/Camera/ICamera.h"
 #include "rt/Renderer/RenderOptions.h"
+#include "rt/Sampler/ISampler.h"
 #include "rt/Scene/Scene.h"
 
 namespace rt {
+
+  using RendererPtr = std::unique_ptr<class IRenderer>;
 
   class IRenderer {
   public:
     IRenderer() noexcept;
     virtual ~IRenderer() noexcept;
 
-    Color castCameraRay(const Ray& ray) const;
-
     void clear();
 
-    bool initialize(const RenderOptions& options);
+    const ICamera *camera() const;
+    void setCamera(CameraPtr& camera);
 
     const RenderOptions& options() const;
+    bool setOptions(const RenderOptions& options);
 
     const Scene& scene() const;
     void setScene(Scene& scene);
 
+    Image render(size_t y0, size_t y1, const SamplerPtr& sampler, const size_t samples) const;
+
   private:
+    Image createImage(size_t& y0, size_t& y1) const;
     virtual Color radiance(const Ray& ray, const unsigned int depth = 0) const = 0;
 
+    CameraPtr     _camera;
     RenderOptions _options{};
     Scene         _scene{};
     Transform     _view{};
