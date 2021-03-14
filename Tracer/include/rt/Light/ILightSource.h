@@ -55,7 +55,7 @@ namespace rt {
 
     bool isDeltaLight() const;
 
-    virtual Color sampleLi(const SurfaceInfo& info, Direction& wi, real_t& pdf, Ray& vis) const = 0;
+    virtual Color sampleLi(const SurfaceInfo& info, Direction *wi, real_t *pdf, Ray *vis) const = 0;
 
     template<typename VecT>
     inline VecT toLight(const VecT& v) const

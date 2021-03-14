@@ -48,12 +48,16 @@ namespace rt {
   {
   }
 
-  Color PointLight::sampleLi(const SurfaceInfo& info, Direction& wi, real_t& pdf, Ray& vis) const
+  Color PointLight::sampleLi(const SurfaceInfo& info, Direction *wi, real_t *pdf, Ray *vis) const
   {
-    pdf = 1;
     const real_t r = n4::distance(info.P, _pW);
-    wi  = geom::to_direction(n4::direction(info.P, _pW));
-    vis = info.ray(wi, TRACE_BIAS, r);
+    *wi  = geom::to_direction(n4::direction(info.P, _pW));
+    if( pdf != nullptr ) {
+      *pdf = 1;
+    }
+    if( vis != nullptr ) {
+      *vis = info.ray(*wi, TRACE_BIAS, r);
+    }
     return _I*attenuation(r);
   }
 
