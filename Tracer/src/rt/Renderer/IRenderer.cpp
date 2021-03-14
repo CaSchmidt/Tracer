@@ -105,26 +105,26 @@ namespace rt {
     _scene = std::move(scene);
   }
 
-  Image IRenderer::render(size_t y0, size_t y1, const SamplerPtr& sampler, const size_t samples) const
+  Image IRenderer::render(size_t y0, size_t y1, const SamplerPtr& sampler) const
   {
     Image image = createImage(y0, y1);
     if( image.isEmpty() ) {
       return Image();
     }
 
-    if( sampler  &&  samples > 1 ) {
+    if( sampler->isRandom() ) {
       render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
         Color color;
-        for(size_t s = 0; s < samples; s++) {
+        for(size_t s = 0; s < sampler->numSamplesPerPixel(); s++) {
           const Color Li = radiance(_view*_camera->ray(x, y, sampler));
           color += n4::clamp(Li, 0, 1);
         }
-        color /= static_cast<real_t>(samples);
+        color /= static_cast<real_t>(sampler->numSamplesPerPixel());
         return color;
       });
     } else {
       render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
-        const Color Li = radiance(_view*_camera->ray(x, y, SamplerPtr()));
+        const Color Li = radiance(_view*_camera->ray(x, y, sampler));
         return Li;
       });
     }

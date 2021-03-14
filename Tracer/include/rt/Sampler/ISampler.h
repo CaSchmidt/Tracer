@@ -42,13 +42,22 @@ namespace rt {
 
   class ISampler {
   public:
+    ISampler(const size_t numSamplesPerPixel);
     virtual ~ISampler();
+
+    bool isRandom() const;
+    size_t numSamplesPerPixel() const;
 
     virtual SamplerPtr copy() const = 0;
 
     virtual real_t sample() const = 0;
 
     virtual Sample2D sample2D() const = 0;
+
+  private:
+    ISampler() noexcept = delete;
+
+    size_t _numSamplesPerPixel{};
   };
 
 } // namespace rt

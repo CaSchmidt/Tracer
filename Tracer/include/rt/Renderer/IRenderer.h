@@ -58,7 +58,7 @@ namespace rt {
     const Scene& scene() const;
     void setScene(Scene& scene);
 
-    Image render(size_t y0, size_t y1, const SamplerPtr& sampler, const size_t samples) const;
+    Image render(size_t y0, size_t y1, const SamplerPtr& sampler) const;
 
   private:
     Image createImage(size_t& y0, size_t& y1) const;

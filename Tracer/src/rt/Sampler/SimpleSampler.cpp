@@ -35,7 +35,8 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  SimpleSampler::SimpleSampler()
+  SimpleSampler::SimpleSampler(const size_t numSamplesPerPixel)
+    : ISampler(numSamplesPerPixel)
   {
     setup();
   }
@@ -46,7 +47,7 @@ namespace rt {
 
   SamplerPtr SimpleSampler::copy() const
   {
-    return create();
+    return create(numSamplesPerPixel());
   }
 
   real_t SimpleSampler::sample() const
@@ -59,9 +60,9 @@ namespace rt {
     return Sample2D{sample(), sample()};
   }
 
-  SamplerPtr SimpleSampler::create()
+  SamplerPtr SimpleSampler::create(const size_t numSamplesPerPixel)
   {
-    return std::make_unique<SimpleSampler>();
+    return std::make_unique<SimpleSampler>(numSamplesPerPixel);
   }
 
   ////// private /////////////////////////////////////////////////////////////

@@ -36,7 +36,7 @@
 #include "Worker.h"
 
 Image Worker::execute(const rt::IRenderer *renderer, const rt::SamplerPtr& sampler,
-                      const std::size_t numSamples, const std::size_t blockSize) const
+                      const std::size_t blockSize) const
 {
   Image image(renderer->options().width, renderer->options().height);
   if( image.isEmpty() ) {
@@ -52,11 +52,9 @@ Image Worker::execute(const rt::IRenderer *renderer, const rt::SamplerPtr& sampl
   std::mutex mutex;
   std::for_each(std::execution::par_unseq,
                 blocks.begin(), blocks.end(), [&](const Block& block) -> void {
-    const rt::SamplerPtr mysampler = sampler
-        ? sampler->copy()
-        : rt::SamplerPtr();
+    const rt::SamplerPtr mysampler = sampler->copy();
     const auto [y0, y1] = block;
-    const Image slice = renderer->render(y0, y1, mysampler, numSamples);
+    const Image slice = renderer->render(y0, y1, mysampler);
     {
       std::lock_guard<std::mutex> lock(mutex);
       image.copy(y0, slice);

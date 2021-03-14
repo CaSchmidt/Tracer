@@ -80,10 +80,10 @@ int main(int /*argc*/, char ** /*argv*/)
 #endif
   renderer.setCamera(cam);
 
-  rt::SamplerPtr sampler = rt::SimpleSampler::create();
+  rt::SamplerPtr sampler = rt::SimpleSampler::create(numSamples);
 
   Worker worker;
-  const Image image = worker.execute(&renderer, sampler, numSamples);
+  const Image image = worker.execute(&renderer, sampler);
   image.saveAsPNG("output.png");
 
   return EXIT_SUCCESS;

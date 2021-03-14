@@ -40,7 +40,7 @@ namespace rt {
 
   class SimpleSampler : public ISampler {
   public:
-    SimpleSampler();
+    SimpleSampler(const size_t numSamplesPerPixel);
     ~SimpleSampler();
 
     SamplerPtr copy() const;
@@ -49,7 +49,7 @@ namespace rt {
 
     Sample2D sample2D() const;
 
-    static SamplerPtr create();
+    static SamplerPtr create(const size_t numSamplesPerPixel);
 
   private:
     void setup();

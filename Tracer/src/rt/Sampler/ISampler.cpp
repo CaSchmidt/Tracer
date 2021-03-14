@@ -33,8 +33,23 @@
 
 namespace rt {
 
+  ISampler::ISampler(const size_t numSamplesPerPixel)
+    : _numSamplesPerPixel{numSamplesPerPixel}
+  {
+  }
+
   ISampler::~ISampler()
   {
+  }
+
+  bool ISampler::isRandom() const
+  {
+    return _numSamplesPerPixel > 1;
+  }
+
+  size_t ISampler::numSamplesPerPixel() const
+  {
+    return _numSamplesPerPixel;
   }
 
 } // namespace rt

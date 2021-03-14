@@ -50,18 +50,18 @@ namespace rt {
 
   Ray FrustumCamera::ray(const size_t x, const size_t y, const SamplerPtr& sampler) const
   {
-    if( sampler  &&  _rLens > ZERO  &&  _zFocus < ZERO ) {
-      // (1) Sample Disc /////////////////////////////////////////////////////
+    if( sampler->isRandom()  &&  _rLens > ZERO  &&  _zFocus < ZERO ) {
+      // (1) Primary Ray to Screen ///////////////////////////////////////////
 
-      const Vertex pl = _rLens*ConcentricDisk::sample(sampler->sample2D());
+      const Vertex ps = makeRay(_windowTransform, x, y, sampler).origin();
 
-      // (2) Primary Ray to Screen ///////////////////////////////////////////
-
-      const Vertex ps = makeRay(_windowTransform, x, y, SamplerPtr()).origin();
-
-      // (3) Primary Ray's Focus /////////////////////////////////////////////
+      // (2) Primary Ray's Focus /////////////////////////////////////////////
 
       const Vertex pf{ ps.x*_zFocus/_zNear, ps.y*_zFocus/_zNear, _zFocus};
+
+      // (3) Sample Disc /////////////////////////////////////////////////////
+
+      const Vertex pl = _rLens*ConcentricDisk::sample(sampler->sample2D());
 
       // (4) Image Ray's Direction ///////////////////////////////////////////
 

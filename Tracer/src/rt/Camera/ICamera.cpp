@@ -65,10 +65,10 @@ namespace rt {
   Ray ICamera::makeRay(const Matrix& W, const size_t x, const size_t y,
                        const SamplerPtr& sampler)
   {
-    const real_t dx = sampler
+    const real_t dx = sampler->isRandom()
         ? sampler->sample()
         : ONE_HALF;
-    const real_t dy = sampler
+    const real_t dy = sampler->isRandom()
         ? sampler->sample()
         : ONE_HALF;
 
