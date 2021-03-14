@@ -44,7 +44,6 @@ set(Tracer_HEADERS
   include/rt/BxDF/SpecularTransmissionBTDF.h
   include/rt/Camera/FrustumCamera.h
   include/rt/Camera/ICamera.h
-  include/rt/Camera/RenderLoop.h
   include/rt/Camera/SimpleCamera.h
   include/rt/Light/DirectionalLight.h
   include/rt/Light/ILightSource.h
@@ -64,6 +63,7 @@ set(Tracer_HEADERS
   include/rt/Object/Sphere.h
   include/rt/Object/SurfaceInfo.h
   include/rt/Renderer/IRenderer.h
+  include/rt/Renderer/RenderLoop.h
   include/rt/Renderer/RenderOptions.h
   include/rt/Renderer/WhittedRenderer.h
   include/rt/Sampler/ISampler.h
