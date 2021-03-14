@@ -87,7 +87,7 @@ namespace rt {
 
     virtual Color eval(const Direction& wo, const Direction& wi) const = 0;
     virtual real_t pdf(const Direction& wo, const Direction& wi) const;
-    virtual Color sample(const BxDFdata& input, Direction& wi, real_t& pdf) const;
+    virtual Color sample(const BxDFdata& input, Direction *wi, real_t *pdf) const;
 
   protected:
     Color _color{1, 1, 1};

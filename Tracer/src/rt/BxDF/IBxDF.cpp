@@ -89,14 +89,16 @@ namespace rt {
         : 0;
   }
 
-  Color IBxDF::sample(const BxDFdata& input, Direction& wi, real_t& pdf) const
+  Color IBxDF::sample(const BxDFdata& input, Direction *wi, real_t *pdf) const
   {
-    wi = CosineHemisphere::sample(input.xi);
+    *wi = CosineHemisphere::sample(input.xi);
     if( input.wo.z < ZERO ) {
-      wi.z *= -1;
+      wi->z *= -1;
     }
-    pdf = IBxDF::pdf(input.wo, wi);
-    return eval(input.wo, wi);
+    if( pdf != nullptr ) {
+      *pdf = IBxDF::pdf(input.wo, *wi);
+    }
+    return eval(input.wo, *wi);
   }
 
 } // namespace rt

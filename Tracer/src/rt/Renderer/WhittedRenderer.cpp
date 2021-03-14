@@ -107,8 +107,7 @@ namespace rt {
       }
 
       Direction  wiS;
-      real_t     pdf;
-      const Color fR = bxdf->sample(data, wiS, pdf);
+      const Color fR = bxdf->sample(data, &wiS, nullptr);
       if( fR.isZero()  ||  n4::isZero(geom::shading::cosTheta(wiS)) ) {
         continue;
       }
