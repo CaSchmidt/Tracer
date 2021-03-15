@@ -35,6 +35,7 @@
 #include <array>
 
 #include "rt/Sampler/Sample.h"
+#include "rt/Texture/TexCoord.h"
 
 namespace rt {
 
@@ -55,23 +56,24 @@ namespace rt {
       return xfrmWS*v;
     }
 
-    real_t   etaA{1};
-    Direction  wo{}; // in Shading Coordinates
-    Matrix xfrmSW{}; // World -> Shading
-    Matrix xfrmWS{}; // Shading -> World
-    Sample2D   xi{};
+    real_t    etaA{1};
+    TexCoord2D tex{};
+    Direction   wo{}; // in Shading Coordinates
+    Matrix  xfrmSW{}; // World -> Shading
+    Matrix  xfrmWS{}; // Shading -> World
+    Sample2D    xi{};
   };
 
   class IBxDF {
   public:
     enum Flags : unsigned int {
-      Invalid      = 0,
+      InvalidFlags = 0,
       Reflection   = 1 << 0,
       Transmission = 1 << 1,
       Diffuse      = 1 << 2,
       Glossy       = 1 << 3,
       Specular     = 1 << 4,
-      All          = 0x1F
+      AllFlags     = 0x1F
     };
 
     IBxDF(const Flags flags) noexcept;
@@ -93,7 +95,7 @@ namespace rt {
     Color _color{1, 1, 1};
 
   private:
-    Flags _flags{Invalid};
+    Flags _flags{InvalidFlags};
   };
 
   using BxDFpack = std::array<const IBxDF*,2>;

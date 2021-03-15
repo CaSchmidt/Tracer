@@ -44,6 +44,8 @@ namespace rt {
   BxDFdata::BxDFdata(const Ray& ray, const SurfaceInfo& sinfo, const real_t etaA) noexcept
     : etaA{etaA}
   {
+    tex = sinfo.texCoord2D();
+
     xfrmWS = n4::util::frameFromZ(sinfo.N);
     xfrmSW = xfrmWS.transpose();
 
