@@ -39,8 +39,6 @@
 
 namespace rt {
 
-  class IBxDF;
-
   class IMaterial {
   public:
     virtual ~IMaterial() noexcept;
