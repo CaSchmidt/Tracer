@@ -29,54 +29,42 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/BxDF/MirrorBRDF.h"
+#ifndef BSDFDATA_H
+#define BSDFDATA_H
 
-#include "geom/Shading.h"
+#include "rt/Sampler/Sample.h"
+#include "rt/Texture/TexCoord.h"
 
 namespace rt {
 
-  MirrorBRDF::MirrorBRDF() noexcept
-    : IBxDF(Flags(Specular | Reflection))
-  {
-    setReflectance(1);
-  }
+  struct SurfaceInfo;
 
-  MirrorBRDF::~MirrorBRDF()
-  {
-  }
+  struct BSDFdata {
+    BSDFdata(const Ray& ray, const SurfaceInfo& info, const real_t etaA) noexcept;
 
-  real_t MirrorBRDF::reflectance() const
-  {
-    return _reflectance;
-  }
-
-  void MirrorBRDF::setReflectance(const real_t r)
-  {
-    _reflectance = std::clamp<real_t>(r, 0, 1);
-  }
-
-  bool MirrorBRDF::isShadowCaster() const
-  {
-    return true;
-  }
-
-  Color MirrorBRDF::eval(const Direction& /*wo*/, const Direction& /*wi*/) const
-  {
-    return Color();
-  }
-
-  real_t MirrorBRDF::pdf(const Direction& /*wo*/, const Direction& /*wi*/) const
-  {
-    return 0;
-  }
-
-  Color MirrorBRDF::sample(const Direction& wo, Direction *wi, const Sample2D& /*xi*/, real_t *pdf) const
-  {
-    *wi = geom::shading::reflect(wo);
-    if( pdf != nullptr ) {
-      *pdf = 1;
+    template<typename VecT>
+    inline VecT toShading(const VecT& v) const
+    {
+      return xfrmSW*v;
     }
-    return _reflectance*_color/geom::shading::absCosTheta(*wi);
-  }
+
+    template<typename VecT>
+    inline VecT toWorld(const VecT& v) const
+    {
+      return xfrmWS*v;
+    }
+
+    real_t    etaA{1};
+    TexCoord2D tex{};
+    Direction   wo{}; // in Shading Coordinates
+    Matrix  xfrmSW{}; // World -> Shading
+    Matrix  xfrmWS{}; // Shading -> World
+    Sample2D    xi{};
+
+  private:
+    BSDFdata() noexcept = delete;
+  };
 
 } // namespace rt
+
+#endif // BSDFDATA_H

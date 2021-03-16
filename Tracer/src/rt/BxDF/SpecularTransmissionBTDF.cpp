@@ -71,9 +71,10 @@ namespace rt {
     return 0;
   }
 
-  Color SpecularTransmissionBTDF::sample(const BxDFdata& input, Direction *wi, real_t *pdf) const
+  Color SpecularTransmissionBTDF::sample(const Direction& wo, Direction *wi, const Sample2D& /*xi*/, real_t *pdf) const
   {
-    *wi = geom::shading::refract(input.wo, input.etaA, _etaB);
+    constexpr real_t TODO_etaA = 1;
+    *wi = geom::shading::refract(wo, TODO_etaA, _etaB);
     if( wi->isZero() ) {
       *wi = Direction();
       if( pdf != nullptr ) {
@@ -81,7 +82,7 @@ namespace rt {
       }
       return Color();
     }
-    const real_t kR = geom::optics::dielectric(*wi, input.etaA, _etaB);
+    const real_t kR = geom::optics::dielectric(*wi, TODO_etaA, _etaB);
     const real_t kT = ONE - kR;
     if( kT <= ZERO ) {
       *wi = Direction();

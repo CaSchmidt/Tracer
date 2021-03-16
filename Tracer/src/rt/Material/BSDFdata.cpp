@@ -29,54 +29,21 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/BxDF/MirrorBRDF.h"
+#include "rt/Material/BSDFdata.h"
 
-#include "geom/Shading.h"
+#include "rt/Object/SurfaceInfo.h"
 
 namespace rt {
 
-  MirrorBRDF::MirrorBRDF() noexcept
-    : IBxDF(Flags(Specular | Reflection))
+  BSDFdata::BSDFdata(const Ray& ray, const SurfaceInfo& sinfo, const real_t etaA) noexcept
+    : etaA{etaA}
   {
-    setReflectance(1);
-  }
+    tex = sinfo.texCoord2D();
 
-  MirrorBRDF::~MirrorBRDF()
-  {
-  }
+    xfrmWS = n4::util::frameFromZ(sinfo.N);
+    xfrmSW = xfrmWS.transpose();
 
-  real_t MirrorBRDF::reflectance() const
-  {
-    return _reflectance;
-  }
-
-  void MirrorBRDF::setReflectance(const real_t r)
-  {
-    _reflectance = std::clamp<real_t>(r, 0, 1);
-  }
-
-  bool MirrorBRDF::isShadowCaster() const
-  {
-    return true;
-  }
-
-  Color MirrorBRDF::eval(const Direction& /*wo*/, const Direction& /*wi*/) const
-  {
-    return Color();
-  }
-
-  real_t MirrorBRDF::pdf(const Direction& /*wo*/, const Direction& /*wi*/) const
-  {
-    return 0;
-  }
-
-  Color MirrorBRDF::sample(const Direction& wo, Direction *wi, const Sample2D& /*xi*/, real_t *pdf) const
-  {
-    *wi = geom::shading::reflect(wo);
-    if( pdf != nullptr ) {
-      *pdf = 1;
-    }
-    return _reflectance*_color/geom::shading::absCosTheta(*wi);
+    wo = -toShading(ray.direction());
   }
 
 } // namespace rt

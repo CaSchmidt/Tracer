@@ -35,34 +35,8 @@
 #include <array>
 
 #include "rt/Sampler/Sample.h"
-#include "rt/Texture/TexCoord.h"
 
 namespace rt {
-
-  struct SurfaceInfo;
-
-  struct BxDFdata {
-    BxDFdata(const Ray& ray, const SurfaceInfo& info, const real_t etaA) noexcept;
-
-    template<typename VecT>
-    inline VecT toShading(const VecT& v) const
-    {
-      return xfrmSW*v;
-    }
-
-    template<typename VecT>
-    inline VecT toWorld(const VecT& v) const
-    {
-      return xfrmWS*v;
-    }
-
-    real_t    etaA{1};
-    TexCoord2D tex{};
-    Direction   wo{}; // in Shading Coordinates
-    Matrix  xfrmSW{}; // World -> Shading
-    Matrix  xfrmWS{}; // Shading -> World
-    Sample2D    xi{};
-  };
 
   class IBxDF {
   public:
@@ -89,7 +63,7 @@ namespace rt {
 
     virtual Color eval(const Direction& wo, const Direction& wi) const = 0;
     virtual real_t pdf(const Direction& wo, const Direction& wi) const;
-    virtual Color sample(const BxDFdata& input, Direction *wi, real_t *pdf) const;
+    virtual Color sample(const Direction& wo, Direction *wi, const Sample2D& xi, real_t *pdf) const;
 
   protected:
     Color _color{1, 1, 1};

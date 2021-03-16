@@ -32,6 +32,7 @@
 #include "rt/Renderer/WhittedRenderer.h"
 
 #include "geom/Shading.h"
+#include "rt/Material/BSDFdata.h"
 #include "rt/Object/SurfaceInfo.h"
 
 namespace rt {
@@ -58,7 +59,7 @@ namespace rt {
     }
 
     const BxDFpack bxdfs = info->material()->getBxDFs();
-    const BxDFdata  data(ray, info, options().globalRefraction);
+    const BSDFdata  data(ray, info, options().globalRefraction);
 
     Color color;
     for(const LightSourcePtr& light : scene.lights()) {
@@ -82,7 +83,7 @@ namespace rt {
           continue;
         }
         fR += info->material()->haveTexture(i)
-            ? bxdfs[i]->eval(data.wo, wiS)*info->material()->textureLookup(i, info.texCoord2D())
+            ? bxdfs[i]->eval(data.wo, wiS)*info->material()->textureLookup(i, data.tex)
             : bxdfs[i]->eval(data.wo, wiS);
       }
 
@@ -96,7 +97,7 @@ namespace rt {
     return color;
   }
 
-  Color WhittedRenderer::specularReflectAndRefract(const BxDFpack& bxdfs, const BxDFdata& data,
+  Color WhittedRenderer::specularReflectAndRefract(const BxDFpack& bxdfs, const BSDFdata& data,
                                                    const SurfaceInfo& info, const unsigned int depth) const
   {
     Color color;
@@ -107,7 +108,7 @@ namespace rt {
       }
 
       Direction  wiS;
-      const Color fR = bxdf->sample(data, &wiS, nullptr);
+      const Color fR = bxdf->sample(data.wo, &wiS, data.xi, nullptr);
       if( fR.isZero()  ||  n4::isZero(geom::shading::cosTheta(wiS)) ) {
         continue;
       }

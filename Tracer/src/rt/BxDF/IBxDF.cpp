@@ -34,23 +34,9 @@
 #include "rt/BxDF/IBxDF.h"
 
 #include "geom/Shading.h"
-#include "rt/Object/SurfaceInfo.h"
 #include "rt/Sampler/Sampling.h"
 
 namespace rt {
-
-  ////// BxDFinputs //////////////////////////////////////////////////////////
-
-  BxDFdata::BxDFdata(const Ray& ray, const SurfaceInfo& sinfo, const real_t etaA) noexcept
-    : etaA{etaA}
-  {
-    tex = sinfo.texCoord2D();
-
-    xfrmWS = n4::util::frameFromZ(sinfo.N);
-    xfrmSW = xfrmWS.transpose();
-
-    wo = -toShading(ray.direction());
-  }
 
   ////// IBxDF ///////////////////////////////////////////////////////////////
 
@@ -91,16 +77,16 @@ namespace rt {
         : 0;
   }
 
-  Color IBxDF::sample(const BxDFdata& input, Direction *wi, real_t *pdf) const
+  Color IBxDF::sample(const Direction& wo, Direction *wi, const Sample2D& xi, real_t *pdf) const
   {
-    *wi = CosineHemisphere::sample(input.xi);
-    if( input.wo.z < ZERO ) {
+    *wi = CosineHemisphere::sample(xi);
+    if( wo.z < ZERO ) {
       wi->z *= -1;
     }
     if( pdf != nullptr ) {
-      *pdf = IBxDF::pdf(input.wo, *wi);
+      *pdf = IBxDF::pdf(wo, *wi);
     }
-    return eval(input.wo, *wi);
+    return eval(wo, *wi);
   }
 
 } // namespace rt

@@ -36,6 +36,8 @@
 
 namespace rt {
 
+  struct BSDFdata;
+
   class WhittedRenderer : public IRenderer {
   public:
     WhittedRenderer() noexcept;
@@ -44,7 +46,7 @@ namespace rt {
   private:
     Color radiance(const Ray& ray, const unsigned int depth = 0) const;
 
-    Color specularReflectAndRefract(const BxDFpack& bxdfs, const BxDFdata& data,
+    Color specularReflectAndRefract(const BxDFpack& bxdfs, const BSDFdata& data,
                                     const SurfaceInfo& info, const unsigned int depth) const;
   };
 
