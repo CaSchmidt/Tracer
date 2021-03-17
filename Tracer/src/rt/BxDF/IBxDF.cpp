@@ -70,6 +70,21 @@ namespace rt {
     return (_flags & f) == _flags;
   }
 
+  bool IBxDF::isReflection() const
+  {
+    return (_flags & Reflection) == Reflection;
+  }
+
+  bool IBxDF::isSpecular() const
+  {
+    return (_flags & Specular) == Specular;
+  }
+
+  bool IBxDF::isTransmission() const
+  {
+    return (_flags & Transmission) == Transmission;
+  }
+
   real_t IBxDF::pdf(const Direction& wo, const Direction& wi) const
   {
     return geom::shading::isSameHemisphere(wo, wi)

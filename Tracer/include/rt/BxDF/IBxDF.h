@@ -59,6 +59,10 @@ namespace rt {
     Flags flags() const;
     bool matchFlags(const Flags f) const;
 
+    bool isReflection() const;
+    bool isSpecular() const;
+    bool isTransmission() const;
+
     virtual bool isShadowCaster() const = 0;
 
     virtual Color eval(const Direction& wo, const Direction& wi) const = 0;
