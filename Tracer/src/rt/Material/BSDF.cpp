@@ -1,0 +1,206 @@
+/****************************************************************************
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
+**
+** Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions
+** are met:
+**
+** 1. Redistributions of source code must retain the above copyright
+**    notice, this list of conditions and the following disclaimer.
+**
+** 2. Redistributions in binary form must reproduce the above copyright
+**    notice, this list of conditions and the following disclaimer in the
+**    documentation and/or other materials provided with the distribution.
+**
+** 3. Neither the name of the copyright holder nor the names of its
+**    contributors may be used to endorse or promote products derived from
+**    this software without specific prior written permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+** HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*****************************************************************************/
+
+#include <algorithm>
+
+#include "rt/Material/BSDF.h"
+
+#include "geom/Shading.h"
+#include "rt/Material/BSDFdata.h"
+#include "rt/Material/IMaterial.h"
+
+namespace rt {
+
+  ////// public //////////////////////////////////////////////////////////////
+
+  BSDF::BSDF(IMaterial *material)
+    : _material{material}
+  {
+    _bxdfs.fill(nullptr);
+  }
+
+  BSDF::~BSDF()
+  {
+    for(size_t i = 0; i < size(); i++) {
+      delete _bxdfs[i];
+      _bxdfs[i] = nullptr;
+    }
+    _numBxDFs = 0;
+  }
+
+  bool BSDF::add(const IBxDF *bxdf)
+  {
+    if( bxdf == nullptr  ||  size() >= capacity() ) {
+      return false;
+    }
+    _bxdfs[_numBxDFs++] = bxdf;
+    return true;
+  }
+
+  size_t BSDF::capacity() const
+  {
+    return _bxdfs.size();
+  }
+
+  size_t BSDF::count(const IBxDF::Flags flags) const
+  {
+    return size_t(std::count_if(_bxdfs.begin(), _bxdfs.end(), [=](const IBxDF *bxdf) -> bool {
+      return bxdf != nullptr  &&  bxdf->matchFlags(flags);
+    }));
+  }
+
+  bool BSDF::isEmpty() const
+  {
+    return size() < 1;
+  }
+
+  size_t BSDF::size() const
+  {
+    return _numBxDFs;
+  }
+
+  const IBxDF *BSDF::operator[](const size_t i) const
+  {
+    return _bxdfs[i];
+  }
+
+  Color BSDF::eval(const BSDFdata& data, const Direction& wi,
+                   const IBxDF::Flags flags) const
+  {
+    const bool reflect = geom::shading::isSameHemisphere(data.wo, wi);
+    Color f;
+    for(size_t i = 0; i < size(); i++) {
+      const IBxDF *bxdf = _bxdfs[i];
+      if( bxdf->matchFlags(flags)  &&
+          ( ( reflect  &&  bxdf->isReflection()  )  ||
+            (!reflect  &&  bxdf->isTransmission()) ) ) {
+        f += haveTexture(i)
+            ? bxdf->eval(data.wo, wi)*_material->textureLookup(i, data.tex)
+            : bxdf->eval(data.wo, wi);
+      }
+    }
+    return f;
+  }
+
+  real_t BSDF::pdf(const Direction& wo, const Direction& wi,
+                   const IBxDF::Flags flags) const
+  {
+    if( isEmpty()  ||  geom::shading::cosTheta(wo) == ZERO ) {
+      return 0;
+    }
+    size_t matching = 0;
+    real_t      pdf = 0;
+    for(size_t i = 0; i < size(); i++) {
+      const IBxDF *bxdf = _bxdfs[i];
+      if( !bxdf->matchFlags(flags) ) {
+        continue;
+      }
+      matching++;
+      pdf += bxdf->pdf(wo, wi);
+    }
+    return matching > 0
+        ? pdf/static_cast<real_t>(matching)
+        : 0;
+  }
+
+  Color BSDF::sample(const BSDFdata& data, Direction *wi, real_t *pdf,
+                     const IBxDF::Flags flags) const
+  {
+    // (1) Choose Which BxDF to Sample ///////////////////////////////////////
+
+    const size_t matching = count(flags);
+    if( matching < 1 ) {
+      *wi = Direction();
+      if( pdf != nullptr ) {
+        *pdf = 0;
+      }
+      return Color();
+    }
+
+    const size_t choice = std::min<size_t>(n4::floor(std::get<0>(data.xi)*real_t(matching)),
+                                           matching - 1);
+
+    const IBxDF *bxdf = nullptr;
+    for(size_t i = 0, select = matching; i < size(); i++) {
+      if( _bxdfs[i]->matchFlags(flags)  &&  select-- == 0 ) {
+        bxdf = _bxdfs[i];
+        break;
+      }
+    }
+
+    // (2) Remap BxDF Sample xi to [0,1)^2 ///////////////////////////////////
+
+    const Sample2D xiRemapped{
+      std::get<0>(data.xi)*real_t(matching) - real_t(choice), std::get<1>(data.xi)
+    };
+
+    // (3) Sample Chosen BxDF ////////////////////////////////////////////////
+
+    if( pdf != nullptr ) {
+      *pdf = 0;
+    }
+    Color f = bxdf->sample(data.wo, wi, xiRemapped, pdf);
+    if( pdf != nullptr  &&  *pdf == ZERO ) {
+      return Color();
+    }
+
+    // (4) Compute Overall PDF With All Matching BxDFs ///////////////////////
+
+    if( pdf != nullptr ) {
+      if( !bxdf->isSpecular()  &&  matching > 1 ) {
+        for(size_t i = 0; i < size(); i++) {
+          if( _bxdfs[i] != bxdf  &&  _bxdfs[i]->matchFlags(flags) ) {
+            *pdf += _bxdfs[i]->pdf(data.wo, *wi);
+          }
+        }
+      }
+      if( matching > 1 ) {
+        *pdf /= real_t(matching);
+      }
+    }
+
+    // (5) Compute Value of BSDF for Sampled Direction ///////////////////////
+
+    if( !bxdf->isSpecular()  &&  matching > 1 ) {
+      f = eval(data, *wi, flags);
+    }
+
+    return f;
+  }
+
+  ////// private /////////////////////////////////////////////////////////////
+
+  bool BSDF::haveTexture(const size_t i) const
+  {
+    return _material != nullptr  &&  _material->haveTexture(i);
+  }
+
+} // namespace rt
