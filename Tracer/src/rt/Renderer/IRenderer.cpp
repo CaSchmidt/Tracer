@@ -143,19 +143,22 @@ namespace rt {
   {
     const BSDF         *bsdf = info->material()->bsdf();
     const IBxDF::Flags flags = is_transmit
-        ? IBxDF::Flags(IBxDF::Specular | IBxDF::Reflection)
-        : IBxDF::Flags(IBxDF::Specular | IBxDF::Transmission);
+        ? IBxDF::Flags(IBxDF::Specular | IBxDF::Transmission)
+        : IBxDF::Flags(IBxDF::Specular | IBxDF::Reflection);
 
+    real_t    pdf = 0;
     Direction wiS;
-    const Color            fR = bsdf->sample(data, &wiS, nullptr, flags); // TODO: pdf
+    const Color            fR = bsdf->sample(data, &wiS, &pdf, flags);
     const real_t absCosThetaI = geom::shading::absCosTheta(wiS);
-    if( !fR.isZero()  &&  absCosThetaI != ZERO ) { // TODO: pdf
+    if( pdf > ZERO  &&  !fR.isZero()  &&  absCosThetaI != ZERO ) {
       const bool is_same = geom::shading::isSameHemisphere(wiS);
       const real_t  bias = is_same
           ? +TRACE_BIAS
           : -TRACE_BIAS;
+
       const Direction wiW = data.toWorld(wiS);
-      return fR*radiance(info.ray(wiW, bias), sampler, depth + 1)*absCosThetaI; // TODO: pdf
+      const Color      Li = radiance(info.ray(wiW, bias), sampler, depth + 1);
+      return fR*Li*absCosThetaI/pdf;
     }
 
     return Color();
