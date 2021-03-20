@@ -35,10 +35,15 @@
 
 namespace rt {
 
-  BSDFdata::BSDFdata(const Ray& ray, const SurfaceInfo& sinfo, const real_t etaA) noexcept
+  BSDFdata::BSDFdata(const Ray& ray, const SurfaceInfo& sinfo, const real_t etaA,
+                     const SamplerPtr& sampler) noexcept
     : etaA{etaA}
   {
     tex = sinfo.texCoord2D();
+
+    if( sampler ) {
+      xi =sampler->sample2D();
+    }
 
     xfrmWS = n4::util::frameFromZ(sinfo.N);
     xfrmSW = xfrmWS.transpose();

@@ -43,8 +43,8 @@ namespace rt {
 
   class BSDF {
   public:
-    BSDF(IMaterial *material);
-    ~BSDF();
+    BSDF(IMaterial *material) noexcept;
+    ~BSDF() noexcept;
 
     bool add(const IBxDF *bxdf);
     size_t capacity() const;
@@ -68,6 +68,12 @@ namespace rt {
                const IBxDF::Flags flags = IBxDF::AllFlags) const;
     Color sample(const BSDFdata& data, Direction *wi, real_t *pdf,
                  const IBxDF::Flags flags = IBxDF::AllFlags) const;
+
+    template<typename T>
+    inline T *asBxDF(const size_t i)
+    {
+      return dynamic_cast<T*>(const_cast<IBxDF*>(_bxdfs[i]));
+    }
 
     template<typename T>
     inline const T *asBxDF(const size_t i) const

@@ -41,13 +41,13 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  BSDF::BSDF(IMaterial *material)
+  BSDF::BSDF(IMaterial *material) noexcept
     : _material{material}
   {
     _bxdfs.fill(nullptr);
   }
 
-  BSDF::~BSDF()
+  BSDF::~BSDF() noexcept
   {
     for(size_t i = 0; i < size(); i++) {
       delete _bxdfs[i];
@@ -127,7 +127,7 @@ namespace rt {
       pdf += bxdf->pdf(wo, wi);
     }
     return matching > 0
-        ? pdf/static_cast<real_t>(matching)
+        ? pdf/real_t(matching)
         : 0;
   }
 
@@ -149,8 +149,8 @@ namespace rt {
                                            matching - 1);
 
     const IBxDF *bxdf = nullptr;
-    for(size_t i = 0, select = matching; i < size(); i++) {
-      if( _bxdfs[i]->matchFlags(flags)  &&  select-- == 0 ) {
+    for(size_t i = 0, count = choice; i < size(); i++) {
+      if( _bxdfs[i]->matchFlags(flags)  &&  count-- == 0 ) {
         bxdf = _bxdfs[i];
         break;
       }
@@ -176,21 +176,14 @@ namespace rt {
 
     if( pdf != nullptr ) {
       if( !bxdf->isSpecular()  &&  matching > 1 ) {
-        for(size_t i = 0; i < size(); i++) {
-          if( _bxdfs[i] != bxdf  &&  _bxdfs[i]->matchFlags(flags) ) {
-            *pdf += _bxdfs[i]->pdf(data.wo, *wi);
-          }
-        }
-      }
-      if( matching > 1 ) {
-        *pdf /= real_t(matching);
+        *pdf = BSDF::pdf(data.wo, *wi, flags);
       }
     }
 
     // (5) Compute Value of BSDF for Sampled Direction ///////////////////////
 
     if( !bxdf->isSpecular()  &&  matching > 1 ) {
-      f = eval(data, *wi, flags);
+      f = BSDF::eval(data, *wi, flags);
     }
 
     return f;

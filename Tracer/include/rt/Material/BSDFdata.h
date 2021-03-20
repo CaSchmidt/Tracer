@@ -32,7 +32,7 @@
 #ifndef BSDFDATA_H
 #define BSDFDATA_H
 
-#include "rt/Sampler/Sample.h"
+#include "rt/Sampler/ISampler.h"
 #include "rt/Texture/TexCoord.h"
 
 namespace rt {
@@ -40,7 +40,8 @@ namespace rt {
   struct SurfaceInfo;
 
   struct BSDFdata {
-    BSDFdata(const Ray& ray, const SurfaceInfo& info, const real_t etaA) noexcept;
+    BSDFdata(const Ray& ray, const SurfaceInfo& info, const real_t etaA,
+             const SamplerPtr& sampler = SamplerPtr()) noexcept;
 
     template<typename VecT>
     inline VecT toShading(const VecT& v) const
