@@ -41,8 +41,8 @@ namespace rt {
     PhongBRDF() noexcept;
     ~PhongBRDF();
 
-    real_t specular() const;
-    void setSpecular(const real_t spec);
+    real_t shininess() const;
+    void setShininess(const real_t spec);
 
     bool isShadowCaster() const;
 
@@ -50,7 +50,7 @@ namespace rt {
 
   private:
     real_t _norm{};
-    real_t _spec{};
+    real_t _shin{};
   };
 
 } // namespace rt

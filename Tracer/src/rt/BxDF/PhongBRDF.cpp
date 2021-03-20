@@ -36,24 +36,24 @@
 namespace rt {
 
   PhongBRDF::PhongBRDF() noexcept
-    : IBxDF(Flags(Specular | Reflection))
+    : IBxDF(Flags(Diffuse | Reflection))
   {
-    setSpecular(0);
+    setShininess(0);
   }
 
   PhongBRDF::~PhongBRDF()
   {
   }
 
-  real_t PhongBRDF::specular() const
+  real_t PhongBRDF::shininess() const
   {
-    return _spec;
+    return _shin;
   }
 
-  void PhongBRDF::setSpecular(const real_t spec)
+  void PhongBRDF::setShininess(const real_t spec)
   {
-    _spec = std::max<real_t>(0, spec);
-    _norm = (_spec + TWO)/TWO/PI;
+    _shin = std::max<real_t>(0, spec);
+    _norm = (_shin + TWO)/TWO/PI;
   }
 
   bool PhongBRDF::isShadowCaster() const
@@ -65,10 +65,10 @@ namespace rt {
   {
     const Direction     R = geom::shading::reflect(wi);
     const real_t cosAlpha = n4::dot(R, wo);
-    if( cosAlpha < ZERO  ||  _spec < ONE ) {
+    if( cosAlpha < ZERO  ||  _shin < ONE ) {
       return Color();
     }
-    return _color*_norm*n4::pow(cosAlpha, _spec);
+    return _color*_norm*n4::pow(cosAlpha, _shin);
   }
 
 } // namespace rt

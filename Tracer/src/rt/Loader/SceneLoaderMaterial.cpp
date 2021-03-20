@@ -89,7 +89,11 @@ namespace rt {
       MaterialPtr result = OpaqueMaterial::create();
       OpaqueMaterial *opaque = OPAQUE(result);
       opaque->setDiffuse(diffuse);
+#if 0 // TODO: Disable Phong lighting for Monte Carlo Integration...
       opaque->setShininess(shininess);
+#else
+      opaque->setShininess(0);
+#endif
       opaque->setSpecular(specular);
 
       return result;

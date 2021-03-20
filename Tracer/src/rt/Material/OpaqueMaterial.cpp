@@ -85,7 +85,7 @@ namespace rt {
 
   bool OpaqueMaterial::isSpecular() const
   {
-    return bsdf()->asBxDF<PhongBRDF>(SPEC)->specular() >= 1  &&  _specTex;
+    return bsdf()->asBxDF<PhongBRDF>(SPEC)->shininess() >= ONE  &&  _specTex;
   }
 
   void OpaqueMaterial::setDiffuse(TexturePtr& tex)
@@ -100,12 +100,12 @@ namespace rt {
 
   void OpaqueMaterial::setShininess(const real_t spec)
   {
-    bsdf()->asBxDF<PhongBRDF>(SPEC)->setSpecular(spec);
+    bsdf()->asBxDF<PhongBRDF>(SPEC)->setShininess(spec);
   }
 
   real_t OpaqueMaterial::shininess() const
   {
-    return bsdf()->asBxDF<PhongBRDF>(SPEC)->specular();
+    return bsdf()->asBxDF<PhongBRDF>(SPEC)->shininess();
   }
 
   void OpaqueMaterial::setSpecular(TexturePtr& tex)
