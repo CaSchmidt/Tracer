@@ -60,9 +60,15 @@ namespace rt {
 
     Image render(size_t y0, size_t y1, const SamplerPtr& sampler) const;
 
+  protected:
+    Color specularReflectOrTransmit(const BSDFdata& data, const SurfaceInfo& info,
+                                    const SamplerPtr& sampler, const unsigned int depth,
+                                    const bool is_transmit) const;
+
   private:
     Image createImage(size_t& y0, size_t& y1) const;
-    virtual Color radiance(const Ray& ray, const unsigned int depth = 0) const = 0;
+    virtual Color radiance(const Ray& ray, const SamplerPtr& sampler,
+                           const unsigned int depth = 0) const = 0;
 
     CameraPtr     _camera;
     RenderOptions _options{};

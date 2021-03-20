@@ -34,24 +34,29 @@
 
 #include <memory>
 
-#include "rt/BxDF/IBxDF.h"
+#include "rt/Material/BSDF.h"
 #include "rt/Texture/TexCoord.h"
 
 namespace rt {
 
   class IMaterial {
   public:
+    IMaterial() noexcept;
     virtual ~IMaterial() noexcept;
 
-    virtual std::unique_ptr<IMaterial> copy() const = 0;
+    BSDF *bsdf();
+    const BSDF *bsdf() const;
 
-    virtual BxDFpack getBxDFs() const = 0;
+    virtual std::unique_ptr<IMaterial> copy() const = 0;
 
     virtual bool haveTexture(const size_t i) const;
 
     virtual Color textureLookup(const size_t i, const TexCoord2D& tex) const;
 
     bool isShadowCaster() const;
+
+  private:
+    BSDF _bsdf;
   };
 
   using MaterialPtr = std::unique_ptr<IMaterial>;

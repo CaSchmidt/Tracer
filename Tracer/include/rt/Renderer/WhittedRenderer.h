@@ -44,10 +44,7 @@ namespace rt {
     ~WhittedRenderer() noexcept;
 
   private:
-    Color radiance(const Ray& ray, const unsigned int depth = 0) const;
-
-    Color specularReflectAndRefract(const BxDFpack& bxdfs, const BSDFdata& data,
-                                    const SurfaceInfo& info, const unsigned int depth) const;
+    Color radiance(const Ray& ray, const SamplerPtr& sampler, const unsigned int depth = 0) const;
   };
 
 } // namespace rt

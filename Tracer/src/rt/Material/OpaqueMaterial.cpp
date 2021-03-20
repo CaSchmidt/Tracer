@@ -32,17 +32,22 @@
 #include "rt/Material/OpaqueMaterial.h"
 
 #include "rt/BxDF/LambertianBRDF.h"
+#include "rt/BxDF/PhongBRDF.h"
 
 namespace rt {
+
+  ////// Constants ///////////////////////////////////////////////////////////
+
+  inline constexpr size_t DIFF = 0; // LambertianBRDF
+  inline constexpr size_t SPEC = 1; // PhongBRDF
 
   ////// public //////////////////////////////////////////////////////////////
 
   OpaqueMaterial::OpaqueMaterial() noexcept
     : IMaterial()
   {
-    _lambertian = std::make_unique<LambertianBRDF>();
-    _phong      = std::make_unique<PhongBRDF>();
-    setupPacks();
+    bsdf()->add(new LambertianBRDF()); // #0
+    bsdf()->add(new PhongBRDF());      // #1
   }
 
   OpaqueMaterial::~OpaqueMaterial() noexcept
@@ -63,21 +68,16 @@ namespace rt {
     return result;
   }
 
-  BxDFpack OpaqueMaterial::getBxDFs() const
-  {
-    return _bxdfs;
-  }
-
   bool OpaqueMaterial::haveTexture(const size_t i) const
   {
-    return (i == 0  &&  _diffTex)  ||  (i == 1  &&  _specTex);
+    return (i == DIFF  &&  _diffTex)  ||  (i == SPEC  &&  _specTex);
   }
 
   Color OpaqueMaterial::textureLookup(const size_t i, const TexCoord2D& tex) const
   {
-    if(        i == 0 ) {
+    if(        i == DIFF ) {
       return _diffTex->lookup(tex);
-    } else if( i == 1 ) {
+    } else if( i == SPEC ) {
       return _specTex->lookup(tex);
     }
     return Color();
@@ -85,7 +85,7 @@ namespace rt {
 
   bool OpaqueMaterial::isSpecular() const
   {
-    return _phong->specular() >= 1  &&  _specTex;
+    return bsdf()->asBxDF<PhongBRDF>(SPEC)->specular() >= 1  &&  _specTex;
   }
 
   void OpaqueMaterial::setDiffuse(TexturePtr& tex)
@@ -100,12 +100,12 @@ namespace rt {
 
   void OpaqueMaterial::setShininess(const real_t spec)
   {
-    _phong->setSpecular(spec);
+    bsdf()->asBxDF<PhongBRDF>(SPEC)->setSpecular(spec);
   }
 
   real_t OpaqueMaterial::shininess() const
   {
-    return _phong->specular();
+    return bsdf()->asBxDF<PhongBRDF>(SPEC)->specular();
   }
 
   void OpaqueMaterial::setSpecular(TexturePtr& tex)
@@ -121,15 +121,6 @@ namespace rt {
   MaterialPtr OpaqueMaterial::create()
   {
     return std::make_unique<OpaqueMaterial>();
-  }
-
-  ////// private /////////////////////////////////////////////////////////////
-
-  void OpaqueMaterial::setupPacks()
-  {
-    _bxdfs.fill(nullptr);
-    _bxdfs[0] = _lambertian.get();
-    _bxdfs[1] = _phong.get();
   }
 
 } // namespace rt

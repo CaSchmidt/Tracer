@@ -33,8 +33,23 @@
 
 namespace rt {
 
+  IMaterial::IMaterial() noexcept
+    : _bsdf(this)
+  {
+  }
+
   IMaterial::~IMaterial() noexcept
   {
+  }
+
+  BSDF *IMaterial::bsdf()
+  {
+    return &_bsdf;
+  }
+
+  const BSDF *IMaterial::bsdf() const
+  {
+    return &_bsdf;
   }
 
   bool IMaterial::haveTexture(const size_t /*i*/) const
@@ -49,9 +64,9 @@ namespace rt {
 
   bool IMaterial::isShadowCaster() const
   {
-    const BxDFpack bxdfs = getBxDFs();
-    for(const IBxDF *bxdf : bxdfs) {
-      if( bxdf != nullptr  &&  bxdf->isShadowCaster() ) {
+    for(size_t i = 0; i < _bsdf.size(); i++) {
+      const IBxDF *bxdf = _bsdf[i];
+      if( bxdf->isShadowCaster() ) {
         return true;
       }
     }

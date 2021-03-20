@@ -32,8 +32,6 @@
 #ifndef IBXDF_H
 #define IBXDF_H
 
-#include <array>
-
 #include "rt/Sampler/Sample.h"
 
 namespace rt {
@@ -75,8 +73,6 @@ namespace rt {
   private:
     Flags _flags{InvalidFlags};
   };
-
-  using BxDFpack = std::array<const IBxDF*,2>;
 
 } // namespace rt
 

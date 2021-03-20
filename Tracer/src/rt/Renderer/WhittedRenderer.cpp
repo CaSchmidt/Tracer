@@ -49,7 +49,8 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Color WhittedRenderer::radiance(const Ray &ray, const unsigned int depth) const
+  Color WhittedRenderer::radiance(const Ray& ray, const SamplerPtr& sampler,
+                                  const unsigned int depth) const
   {
     const Scene& scene = WhittedRenderer::scene();
 
@@ -58,8 +59,7 @@ namespace rt {
       return options().backgroundColor;
     }
 
-    const BxDFpack bxdfs = info->material()->getBxDFs();
-    const BSDFdata  data(ray, info, options().globalRefraction);
+    const BSDFdata data(ray, info, options().globalRefraction, sampler);
 
     Color color;
     for(const LightSourcePtr& light : scene.lights()) {
@@ -77,53 +77,19 @@ namespace rt {
         continue;
       }
 
-      Color fR;
-      for(size_t i = 0; i < bxdfs.size(); i++) {
-        if( bxdfs[i] == nullptr ) {
-          continue;
-        }
-        fR += info->material()->haveTexture(i)
-            ? bxdfs[i]->eval(data.wo, wiS)*info->material()->textureLookup(i, data.tex)
-            : bxdfs[i]->eval(data.wo, wiS);
+      const Color fR = info->material()->bsdf()->eval(data, wiS);
+      if( fR.isZero() ) {
+        continue;
       }
 
       color += fR*Li*absCosTi;
     }
 
     if( depth + 1 < options().maxDepth ) {
-      color += specularReflectAndRefract(bxdfs, data, info, depth);
+      color += specularReflectOrTransmit(data, info, sampler, depth, false);
+      color += specularReflectOrTransmit(data, info, sampler, depth, true);
     }
 
-    return color;
-  }
-
-  Color WhittedRenderer::specularReflectAndRefract(const BxDFpack& bxdfs, const BSDFdata& data,
-                                                   const SurfaceInfo& info, const unsigned int depth) const
-  {
-    Color color;
-    for(const IBxDF *bxdf : bxdfs) {
-      constexpr IBxDF::Flags flags = IBxDF::Flags(IBxDF::Specular | IBxDF::Reflection | IBxDF::Transmission);
-      if( bxdf == nullptr  ||  !bxdf->matchFlags(flags) ) {
-        continue;
-      }
-
-      Direction  wiS;
-      const Color fR = bxdf->sample(data.wo, &wiS, data.xi, nullptr);
-      if( fR.isZero()  ||  n4::isZero(geom::shading::cosTheta(wiS)) ) {
-        continue;
-      }
-
-      const bool is_same = geom::shading::isSameHemisphere(wiS);
-      const real_t  bias = is_same
-          ? +TRACE_BIAS
-          : -TRACE_BIAS;
-
-      const Direction   wiW = data.toWorld(wiS);
-      const Color        Li = radiance(info.ray(wiW, bias), depth + 1);
-      const real_t absCosTi = geom::shading::absCosTheta(wiS);
-
-      color += fR*Li*absCosTi;
-    }
     return color;
   }
 

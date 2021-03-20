@@ -31,7 +31,10 @@
 
 #include "rt/Renderer/IRenderer.h"
 
+#include "geom/Shading.h"
+#include "rt/Material/BSDFdata.h"
 #include "rt/Renderer/RenderLoop.h"
+#include "rt/Object/SurfaceInfo.h"
 
 namespace rt {
 
@@ -116,7 +119,7 @@ namespace rt {
       render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
         Color color;
         for(size_t s = 0; s < sampler->numSamplesPerPixel(); s++) {
-          const Color Li = radiance(_view*_camera->ray(x, y, sampler));
+          const Color Li = radiance(_view*_camera->ray(x, y, sampler), sampler);
           color += n4::clamp(Li, 0, 1);
         }
         color /= static_cast<real_t>(sampler->numSamplesPerPixel());
@@ -124,12 +127,38 @@ namespace rt {
       });
     } else {
       render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
-        const Color Li = radiance(_view*_camera->ray(x, y, sampler));
+        const Color Li = radiance(_view*_camera->ray(x, y, sampler), sampler);
         return Li;
       });
     }
 
     return image;
+  }
+
+  ////// protected ///////////////////////////////////////////////////////////
+
+  Color IRenderer::specularReflectOrTransmit(const BSDFdata& data, const SurfaceInfo& info,
+                                             const SamplerPtr& sampler, const unsigned int depth,
+                                             const bool is_transmit) const
+  {
+    const BSDF         *bsdf = info->material()->bsdf();
+    const IBxDF::Flags flags = is_transmit
+        ? IBxDF::Flags(IBxDF::Specular | IBxDF::Reflection)
+        : IBxDF::Flags(IBxDF::Specular | IBxDF::Transmission);
+
+    Direction wiS;
+    const Color            fR = bsdf->sample(data, &wiS, nullptr, flags); // TODO: pdf
+    const real_t absCosThetaI = geom::shading::absCosTheta(wiS);
+    if( !fR.isZero()  &&  absCosThetaI != ZERO ) { // TODO: pdf
+      const bool is_same = geom::shading::isSameHemisphere(wiS);
+      const real_t  bias = is_same
+          ? +TRACE_BIAS
+          : -TRACE_BIAS;
+      const Direction wiW = data.toWorld(wiS);
+      return fR*radiance(info.ray(wiW, bias), sampler, depth + 1)*absCosThetaI; // TODO: pdf
+    }
+
+    return Color();
   }
 
   ////// private /////////////////////////////////////////////////////////////

@@ -32,8 +32,6 @@
 #ifndef OPAQUEMATERIAL_H
 #define OPAQUEMATERIAL_H
 
-#include "rt/BxDF/LambertianBRDF.h"
-#include "rt/BxDF/PhongBRDF.h"
 #include "rt/Material/IMaterial.h"
 #include "rt/Texture/ITexture.h"
 
@@ -45,8 +43,6 @@ namespace rt {
     ~OpaqueMaterial() noexcept;
 
     MaterialPtr copy() const;
-
-    BxDFpack getBxDFs() const;
 
     bool haveTexture(const size_t i) const;
 
@@ -66,16 +62,8 @@ namespace rt {
     static MaterialPtr create();
 
   private:
-    using LambertianBRDFptr = std::unique_ptr<LambertianBRDF>;
-    using PhongBRDFptr      = std::unique_ptr<PhongBRDF>;
-
-    void setupPacks();
-
-    BxDFpack          _bxdfs;
-    TexturePtr        _diffTex{};
-    LambertianBRDFptr _lambertian{};
-    PhongBRDFptr      _phong{};
-    TexturePtr        _specTex{};
+    TexturePtr _diffTex{};
+    TexturePtr _specTex{};
   };
 
   inline OpaqueMaterial *OPAQUE(const MaterialPtr& p)

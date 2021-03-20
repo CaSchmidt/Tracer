@@ -32,8 +32,6 @@
 #ifndef TRANSPARENTMATERIAL_H
 #define TRANSPARENTMATERIAL_H
 
-#include "rt/BxDF/SpecularReflectionBRDF.h"
-#include "rt/BxDF/SpecularTransmissionBTDF.h"
 #include "rt/Material/IMaterial.h"
 
 namespace rt {
@@ -45,22 +43,10 @@ namespace rt {
 
     MaterialPtr copy() const;
 
-    BxDFpack getBxDFs() const;
-
     void setRefraction(const real_t eta);
     real_t refraction() const;
 
     static MaterialPtr create();
-
-  private:
-    using SpecularReflection   = std::unique_ptr<SpecularReflectionBRDF>;
-    using SpecularTransmission = std::unique_ptr<SpecularTransmissionBTDF>;
-
-    void setupPacks();
-
-    BxDFpack _bxdf;
-    SpecularReflection _reflect{};
-    SpecularTransmission _transmit{};
   };
 
   inline TransparentMaterial *TRANSPARENT(const MaterialPtr& p)

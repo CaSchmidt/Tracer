@@ -31,6 +31,8 @@
 
 #include "rt/Material/MirrorMaterial.h"
 
+#include "rt/BxDF/MirrorBRDF.h"
+
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
@@ -38,8 +40,7 @@ namespace rt {
   MirrorMaterial::MirrorMaterial() noexcept
     : IMaterial()
   {
-    _mirror = std::make_unique<MirrorBRDF>();
-    setupPacks();
+    bsdf()->add(new MirrorBRDF());
   }
 
   MirrorMaterial::~MirrorMaterial() noexcept
@@ -54,32 +55,19 @@ namespace rt {
     return result;
   }
 
-  BxDFpack MirrorMaterial::getBxDFs() const
-  {
-    return _bxdfs;
-  }
-
   void MirrorMaterial::setReflectance(const real_t r)
   {
-    _mirror->setReflectance(r);
+    bsdf()->asBxDF<MirrorBRDF>(0)->setReflectance(r);
   }
 
   real_t MirrorMaterial::reflectance() const
   {
-    return _mirror->reflectance();
+    return bsdf()->asBxDF<MirrorBRDF>(0)->reflectance();
   }
 
   MaterialPtr MirrorMaterial::create()
   {
     return std::make_unique<MirrorMaterial>();
-  }
-
-  ////// private /////////////////////////////////////////////////////////////
-
-  void MirrorMaterial::setupPacks()
-  {
-    _bxdfs.fill(nullptr);
-    _bxdfs[0] = _mirror.get();
   }
 
 } // namespace rt

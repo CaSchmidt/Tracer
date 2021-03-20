@@ -31,16 +31,23 @@
 
 #include "rt/Material/TransparentMaterial.h"
 
+#include "rt/BxDF/SpecularReflectionBRDF.h"
+#include "rt/BxDF/SpecularTransmissionBTDF.h"
+
 namespace rt {
+
+  ////// Constants ///////////////////////////////////////////////////////////
+
+  inline constexpr size_t BRDF = 0;
+  inline constexpr size_t BTDF = 1;
 
   ////// public //////////////////////////////////////////////////////////////
 
   TransparentMaterial::TransparentMaterial() noexcept
     : IMaterial()
   {
-    _reflect  = std::make_unique<SpecularReflectionBRDF>();
-    _transmit = std::make_unique<SpecularTransmissionBTDF>();
-    setupPacks();
+    bsdf()->add(new SpecularReflectionBRDF());   // #0
+    bsdf()->add(new SpecularTransmissionBTDF()); // #1
   }
 
   TransparentMaterial::~TransparentMaterial() noexcept
@@ -55,34 +62,20 @@ namespace rt {
     return result;
   }
 
-  BxDFpack TransparentMaterial::getBxDFs() const
-  {
-    return _bxdf;
-  }
-
   void TransparentMaterial::setRefraction(const real_t eta)
   {
-    _reflect->setRefraction(eta);
-    _transmit->setRefraction(eta);
+    bsdf()->asBxDF<SpecularReflectionBRDF>(BRDF)->setRefraction(eta);
+    bsdf()->asBxDF<SpecularTransmissionBTDF>(BTDF)->setRefraction(eta);
   }
 
   real_t TransparentMaterial::refraction() const
   {
-    return _reflect->refraction();
+    return bsdf()->asBxDF<SpecularReflectionBRDF>(BRDF)->refraction();
   }
 
   MaterialPtr TransparentMaterial::create()
   {
     return std::make_unique<TransparentMaterial>();
-  }
-
-  ////// private /////////////////////////////////////////////////////////////
-
-  void TransparentMaterial::setupPacks()
-  {
-    _bxdf.fill(nullptr);
-    _bxdf[0] = _reflect.get();
-    _bxdf[1] = _transmit.get();
   }
 
 } // namespace rt

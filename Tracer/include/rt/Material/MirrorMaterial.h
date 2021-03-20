@@ -32,9 +32,7 @@
 #ifndef MIRRORMATERIAL_H
 #define MIRRORMATERIAL_H
 
-#include "rt/BxDF/MirrorBRDF.h"
 #include "rt/Material/IMaterial.h"
-#include "rt/Types.h"
 
 namespace rt {
 
@@ -45,20 +43,10 @@ namespace rt {
 
     MaterialPtr copy() const;
 
-    BxDFpack getBxDFs() const;
-
     void setReflectance(const real_t r);
     real_t reflectance() const;
 
     static MaterialPtr create();
-
-  private:
-    using MirrorBRDFptr = std::unique_ptr<MirrorBRDF>;
-
-    void setupPacks();
-
-    BxDFpack      _bxdfs;
-    MirrorBRDFptr _mirror{};
   };
 
   inline MirrorMaterial *MIRROR(const MaterialPtr& p)
