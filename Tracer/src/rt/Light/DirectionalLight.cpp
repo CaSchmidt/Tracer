@@ -47,6 +47,11 @@ namespace rt {
   {
   }
 
+  real_t DirectionalLight::pdfLi(const SurfaceInfo& /*info*/, const Direction& /*wi*/) const
+  {
+    return 0;
+  }
+
   Color DirectionalLight::sampleLi(const SurfaceInfo& info, Direction *wi, real_t *pdf, Ray *vis) const
   {
     *wi  = _wiW;

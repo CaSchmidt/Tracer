@@ -41,6 +41,7 @@ namespace rt {
     PointLight(const Transform& lightToWorld, const Color& I) noexcept;
     ~PointLight() noexcept;
 
+    real_t pdfLi(const SurfaceInfo& info, const Direction& wi) const;
     Color sampleLi(const SurfaceInfo& info, Direction *wi, real_t *pdf, Ray *vis) const;
 
     static LightSourcePtr create(const Transform& lightToWorld, const Color& I);

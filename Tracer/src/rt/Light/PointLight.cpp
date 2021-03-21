@@ -48,6 +48,11 @@ namespace rt {
   {
   }
 
+  real_t PointLight::pdfLi(const SurfaceInfo& /*info*/, const Direction& /*wi*/) const
+  {
+    return 0;
+  }
+
   Color PointLight::sampleLi(const SurfaceInfo& info, Direction *wi, real_t *pdf, Ray *vis) const
   {
     const real_t r = n4::distance(info.P, _pW);
