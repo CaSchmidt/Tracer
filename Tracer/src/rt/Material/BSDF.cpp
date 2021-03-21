@@ -132,20 +132,26 @@ namespace rt {
   }
 
   Color BSDF::sample(const BSDFdata& data, Direction *wi, real_t *pdf,
-                     const IBxDF::Flags flags) const
+                     const IBxDF::Flags flags, IBxDF::Flags *sampledFlags) const
   {
+    if( pdf != nullptr ) {
+      *pdf = 0;
+    }
+    if( sampledFlags != nullptr ) {
+      *sampledFlags = IBxDF::InvalidFlags;
+    }
+
     // (1) Choose Which BxDF to Sample ///////////////////////////////////////
 
     const size_t matching = count(flags);
     if( matching < 1 ) {
       *wi = Direction();
-      if( pdf != nullptr ) {
-        *pdf = 0;
-      }
       return Color();
     }
 
-    const size_t choice = std::min<size_t>(n4::floor(std::get<0>(data.xi)*real_t(matching)),
+    SAMPLES_2D(data.xi);
+
+    const size_t choice = std::min<size_t>(size_t(n4::floor(xi1*real_t(matching))),
                                            matching - 1);
 
     const IBxDF *bxdf = nullptr;
@@ -158,18 +164,16 @@ namespace rt {
 
     // (2) Remap BxDF Sample xi to [0,1)^2 ///////////////////////////////////
 
-    const Sample2D xiRemapped{
-      std::get<0>(data.xi)*real_t(matching) - real_t(choice), std::get<1>(data.xi)
-    };
+    const Sample2D xiRemapped{xi1*real_t(matching) - real_t(choice), xi2};
 
     // (3) Sample Chosen BxDF ////////////////////////////////////////////////
 
-    if( pdf != nullptr ) {
-      *pdf = 0;
-    }
     Color f = bxdf->sample(data.wo, wi, xiRemapped, pdf);
-    if( pdf != nullptr  &&  *pdf == ZERO ) {
+    if( pdf != nullptr  &&  *pdf <= ZERO ) {
       return Color();
+    }
+    if( sampledFlags != nullptr ) {
+      *sampledFlags = bxdf->flags();
     }
 
     // (4) Compute Overall PDF With All Matching BxDFs ///////////////////////

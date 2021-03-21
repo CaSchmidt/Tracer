@@ -60,14 +60,15 @@ namespace rt {
      *
      * NOTE:
      * In contrast to PBR3, this implementation uses the shading coordinate system
-     * to perform the computations.
+     * to perform its computations.
      */
     Color eval(const BSDFdata& data, const Direction& wi,
                const IBxDF::Flags flags = IBxDF::AllFlags) const;
     real_t pdf(const Direction& wo, const Direction& wi,
                const IBxDF::Flags flags = IBxDF::AllFlags) const;
     Color sample(const BSDFdata& data, Direction *wi, real_t *pdf,
-                 const IBxDF::Flags flags = IBxDF::AllFlags) const;
+                 const IBxDF::Flags flags = IBxDF::AllFlags,
+                 IBxDF::Flags *sampledFlags = nullptr) const;
 
     template<typename T>
     inline T *asBxDF(const size_t i)
