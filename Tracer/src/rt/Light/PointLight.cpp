@@ -53,7 +53,8 @@ namespace rt {
     return 0;
   }
 
-  Color PointLight::sampleLi(const SurfaceInfo& info, Direction *wi, real_t *pdf, Ray *vis) const
+  Color PointLight::sampleLi(const SurfaceInfo& info, Direction *wi,
+                             const Sample2D& /*xi*/, real_t *pdf, Ray *vis) const
   {
     const real_t r = n4::distance(info.P, _pW);
     *wi  = geom::to_direction(n4::direction(info.P, _pW));

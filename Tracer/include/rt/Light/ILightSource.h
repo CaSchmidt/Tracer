@@ -35,7 +35,7 @@
 #include <list>
 #include <memory>
 
-#include "rt/Types.h"
+#include "rt/Sampler/Sample.h"
 
 namespace rt {
 
@@ -56,7 +56,8 @@ namespace rt {
     bool isDeltaLight() const;
 
     virtual real_t pdfLi(const SurfaceInfo& info, const Direction& wi) const = 0;
-    virtual Color sampleLi(const SurfaceInfo& info, Direction *wi, real_t *pdf, Ray *vis) const = 0;
+    virtual Color sampleLi(const SurfaceInfo& info, Direction *wi,
+                           const Sample2D& xi, real_t *pdf, Ray *vis) const = 0;
 
     template<typename VecT>
     inline VecT toLight(const VecT& v) const

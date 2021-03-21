@@ -52,7 +52,8 @@ namespace rt {
     return 0;
   }
 
-  Color DirectionalLight::sampleLi(const SurfaceInfo& info, Direction *wi, real_t *pdf, Ray *vis) const
+  Color DirectionalLight::sampleLi(const SurfaceInfo& info, Direction *wi,
+                                   const Sample2D& /*xi*/, real_t *pdf, Ray *vis) const
   {
     *wi  = _wiW;
     if( pdf != nullptr ) {
