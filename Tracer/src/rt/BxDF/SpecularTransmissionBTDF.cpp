@@ -74,23 +74,30 @@ namespace rt {
   Color SpecularTransmissionBTDF::sample(const Direction& wo, Direction *wi, const Sample2D& /*xi*/, real_t *pdf) const
   {
     constexpr real_t TODO_etaA = 1;
+
+    if( pdf != nullptr ) {
+      *pdf = 0;
+    }
+
+    // (1) Compute Perfect Specular Refraction ///////////////////////////////
+
     *wi = geom::shading::refract(wo, TODO_etaA, _etaB);
     if( wi->isZero() ) {
       *wi = Direction();
-      if( pdf != nullptr ) {
-        pdf = 0;
-      }
       return Color();
     }
+
+    // (2) Compute Transmitted Energy ////////////////////////////////////////
+
     const real_t kR = geom::optics::dielectric(*wi, TODO_etaA, _etaB);
     const real_t kT = ONE - kR;
     if( kT <= ZERO ) {
       *wi = Direction();
-      if( pdf != nullptr ) {
-        pdf = 0;
-      }
       return Color();
     }
+
+    // (3) Compute Outputs ///////////////////////////////////////////////////
+
     if( pdf != nullptr ) {
       *pdf = 1;
     }
