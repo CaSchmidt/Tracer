@@ -55,6 +55,10 @@ namespace rt {
 
     bool isDeltaLight() const;
 
+    virtual size_t numSamples() const;
+
+    Type type() const;
+
     virtual real_t pdfLi(const SurfaceInfo& info, const Direction& wi) const = 0;
     virtual Color sampleLi(const SurfaceInfo& info, Direction *wi,
                            const Sample2D& xi, real_t *pdf, Ray *vis) const = 0;
@@ -70,8 +74,6 @@ namespace rt {
     {
       return _xfrmWL*v;
     }
-
-    Type type() const;
 
   private:
     ILightSource() noexcept = delete;

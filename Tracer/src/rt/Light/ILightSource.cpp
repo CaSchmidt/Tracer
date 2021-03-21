@@ -51,6 +51,11 @@ namespace rt {
     return _type == DeltaDirection  ||  _type == DeltaPosition;
   }
 
+  size_t ILightSource::numSamples() const
+  {
+    return 1;
+  }
+
   ILightSource::Type ILightSource::type() const
   {
     return _type;
