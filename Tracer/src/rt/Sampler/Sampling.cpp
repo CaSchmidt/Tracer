@@ -35,6 +35,26 @@
 
 namespace rt {
 
+  ////// Public //////////////////////////////////////////////////////////////
+
+  namespace sampling {
+
+    size_t choose(const real_t xi, const size_t count)
+    {
+      const size_t index = size_t(n4::floor(xi*real_t(count)));
+      return std::min<size_t>(index, count - 1);
+    }
+
+    real_t powerHeuristic(const size_t nF, const real_t pdfF,
+                          const size_t nG, const real_t pdfG)
+    {
+      const real_t f = real_t(nF)*pdfF;
+      const real_t g = real_t(nG)*pdfG;
+      return (f*f)/(f*f + g*g);
+    }
+
+  } // namespace sampling
+
   ////// ConcentricDisk //////////////////////////////////////////////////////
 
   Vertex ConcentricDisk::sample(const Sample2D& xi)

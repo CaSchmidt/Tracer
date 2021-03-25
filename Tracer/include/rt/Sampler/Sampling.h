@@ -36,6 +36,15 @@
 
 namespace rt {
 
+  namespace sampling {
+
+    size_t choose(const real_t xi, const size_t count);
+
+    real_t powerHeuristic(const size_t nF, const real_t pdfF,
+                          const size_t nG, const real_t pdfG);
+
+  } // namespace sampling
+
   struct ConcentricDisk {
     static Vertex sample(const Sample2D& xi);
     static real_t pdf();

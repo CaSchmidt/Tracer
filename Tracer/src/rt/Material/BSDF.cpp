@@ -36,6 +36,7 @@
 #include "geom/Shading.h"
 #include "rt/Material/BSDFdata.h"
 #include "rt/Material/IMaterial.h"
+#include "rt/Sampler/Sampling.h"
 
 namespace rt {
 
@@ -151,8 +152,7 @@ namespace rt {
 
     SAMPLES_2D(data.xi);
 
-    const size_t choice = std::min<size_t>(size_t(n4::floor(xi1*real_t(matching))),
-                                           matching - 1);
+    const size_t choice = sampling::choose(xi1, matching);
 
     const IBxDF *bxdf = nullptr;
     for(size_t i = 0, count = choice; i < size(); i++) {
