@@ -73,6 +73,7 @@ namespace rt {
 
       info->object = this;
       info->t      = t;
+      info->wo     = -ray.direction();
       info->N      = toWorld(Nobj);
       info->P      = toWorld(Pobj);
       info->u      = u;

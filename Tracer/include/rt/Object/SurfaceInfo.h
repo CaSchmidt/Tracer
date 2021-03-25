@@ -52,6 +52,11 @@ namespace rt {
       return geom::intersect::isHit(t)  &&  object != nullptr;
     }
 
+    inline Ray ray(const real_t bias = ZERO, const real_t tMax = Ray::MAX_T) const
+    {
+      return ray(wo, bias, tMax);
+    }
+
     inline Ray ray(const Direction& dir,
                    const real_t bias = ZERO, const real_t tMax = Ray::MAX_T) const
     {
@@ -64,10 +69,11 @@ namespace rt {
     }
 
     // NOTE: All members are in world coordinates!
-    real_t t{geom::intersect::NO_INTERSECTION};
-    Vertex P{};
-    Normal N{};
-    real_t u{}, v{};
+    real_t     t{geom::intersect::NO_INTERSECTION};
+    Direction wo{};
+    Vertex     P{};
+    Normal     N{};
+    real_t     u{}, v{};
     const IObject *object{nullptr};
   };
 

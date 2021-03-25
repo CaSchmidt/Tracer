@@ -85,8 +85,9 @@ namespace rt {
         }
       }
       if( info->isHit() ) {
-        info->N = toWorld(info->N);
-        info->P = toWorld(info->P);
+        info->wo = toWorld(info->wo);
+        info->N  = toWorld(info->N);
+        info->P  = toWorld(info->P);
         return true;
       }
 
