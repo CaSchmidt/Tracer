@@ -74,6 +74,21 @@ namespace rt {
     Flags _flags{InvalidFlags};
   };
 
+  inline bool is_reflection(const IBxDF::Flags flags)
+  {
+    return (flags & IBxDF::Reflection) == IBxDF::Reflection;
+  }
+
+  inline bool is_specular(const IBxDF::Flags flags)
+  {
+    return (flags & IBxDF::Specular) == IBxDF::Specular;
+  }
+
+  inline bool is_transmission(const IBxDF::Flags flags)
+  {
+    return (flags & IBxDF::Transmission) == IBxDF::Transmission;
+  }
+
 } // namespace rt
 
 #endif // IBXDF_H
