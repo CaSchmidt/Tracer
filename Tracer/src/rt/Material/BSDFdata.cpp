@@ -35,7 +35,7 @@
 
 namespace rt {
 
-  BSDFdata::BSDFdata(const Ray& ray, const SurfaceInfo& sinfo, const real_t etaA,
+  BSDFdata::BSDFdata(const SurfaceInfo& sinfo, const real_t etaA,
                      const SamplerPtr& sampler) noexcept
     : etaA{etaA}
   {
@@ -48,7 +48,7 @@ namespace rt {
     xfrmWS = n4::util::frameFromZ(sinfo.N);
     xfrmSW = xfrmWS.transpose();
 
-    wo = -toShading(ray.direction());
+    wo = toShading(sinfo.wo);
   }
 
 } // namespace rt

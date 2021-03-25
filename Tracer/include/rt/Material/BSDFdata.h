@@ -40,7 +40,7 @@ namespace rt {
   struct SurfaceInfo;
 
   struct BSDFdata {
-    BSDFdata(const Ray& ray, const SurfaceInfo& info, const real_t etaA,
+    BSDFdata(const SurfaceInfo& info, const real_t etaA,
              const SamplerPtr& sampler = SamplerPtr()) noexcept;
 
     template<typename VecT>
