@@ -43,7 +43,7 @@ namespace rt {
 
   Scene& Scene::operator=(Scene&&) = default;
 
-  void Scene::add(LightSourcePtr& light)
+  void Scene::add(LightPtr& light)
   {
     if( light ) {
       _lights.push_back(std::move(light));
@@ -88,7 +88,7 @@ namespace rt {
     return false;
   }
 
-  const LightSources& Scene::lights() const
+  const Lights& Scene::lights() const
   {
     return _lights;
   }

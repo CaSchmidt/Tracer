@@ -39,35 +39,35 @@ namespace rt {
 
     // Implementation ////////////////////////////////////////////////////////
 
-    LightSourcePtr parseDirectionalLight(const tinyxml2::XMLElement *node)
+    LightPtr parseDirectionalLight(const tinyxml2::XMLElement *node)
     {
       bool myOk = false;
 
       const Color L = parseColor(node->FirstChildElement("Radiance"), &myOk, false);
       if( !myOk ) {
-        return LightSourcePtr();
+        return LightPtr();
       }
 
       const Direction wi = parseDirection(node->FirstChildElement("Direction"), &myOk);
       if( !myOk ) {
-        return LightSourcePtr();
+        return LightPtr();
       }
 
       return DirectionalLight::create(n4::identity(), L, wi);
     }
 
-    LightSourcePtr parsePointLight(const tinyxml2::XMLElement *node)
+    LightPtr parsePointLight(const tinyxml2::XMLElement *node)
     {
       bool myOk = false;
 
       const Color I = parseColor(node->FirstChildElement("Intensity"), &myOk, false);
       if( !myOk ) {
-        return LightSourcePtr();
+        return LightPtr();
       }
 
       const Vertex pos = parseVertex(node->FirstChildElement("Position"), &myOk);
       if( !myOk ) {
-        return LightSourcePtr();
+        return LightPtr();
       }
 
       const Matrix lightToWorld = n4::translate(pos.x, pos.y, pos.z);
@@ -77,10 +77,10 @@ namespace rt {
 
     // Export ////////////////////////////////////////////////////////////////
 
-    LightSourcePtr parseLight(const tinyxml2::XMLElement *node)
+    LightPtr parseLight(const tinyxml2::XMLElement *node)
     {
       if( node == nullptr ) {
-        return LightSourcePtr();
+        return LightPtr();
       }
 
       if(        node->Attribute("type", "Directional") != nullptr ) {
@@ -89,7 +89,7 @@ namespace rt {
         return parsePointLight(node);
       }
 
-      return LightSourcePtr();
+      return LightPtr();
     }
 
   } // namespace priv

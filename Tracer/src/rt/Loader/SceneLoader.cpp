@@ -49,7 +49,7 @@ namespace rt {
 
     // Imports ///////////////////////////////////////////////////////////////
 
-    LightSourcePtr parseLight(const tinyxml2::XMLElement *node);
+    LightPtr parseLight(const tinyxml2::XMLElement *node);
 
     ObjectPtr parseObject(const tinyxml2::XMLElement *node);
 
@@ -94,7 +94,7 @@ namespace rt {
     const tinyxml2::XMLElement *node = xml_Scene->FirstChildElement();
     while( node != nullptr ) {
       if(        priv::compare(node->Name(), "Light") ) {
-        LightSourcePtr light = priv::parseLight(node);
+        LightPtr light = priv::parseLight(node);
         if( !light ) {
           fprintf(stderr, "Unable to add light of type \"%s\"!\n", node->Attribute("type"));
           return false;

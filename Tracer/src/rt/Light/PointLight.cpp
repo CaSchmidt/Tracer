@@ -38,7 +38,7 @@ namespace rt {
   ////// public //////////////////////////////////////////////////////////////
 
   PointLight::PointLight(const Transform& lightToWorld, const Color& I) noexcept
-    : ILightSource(DeltaPosition, lightToWorld)
+    : ILight(DeltaPosition, lightToWorld)
     , _I{I}
   {
     _pW = toWorld(Vertex{0, 0, 0});
@@ -67,7 +67,7 @@ namespace rt {
     return _I*attenuation(r);
   }
 
-  LightSourcePtr PointLight::create(const Transform& lightToWorld, const Color& I)
+  LightPtr PointLight::create(const Transform& lightToWorld, const Color& I)
   {
     return std::make_unique<PointLight>(lightToWorld, I);
   }

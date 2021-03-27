@@ -46,7 +46,7 @@ set(Tracer_HEADERS
   include/rt/Camera/ICamera.h
   include/rt/Camera/SimpleCamera.h
   include/rt/Light/DirectionalLight.h
-  include/rt/Light/ILightSource.h
+  include/rt/Light/ILight.h
   include/rt/Light/PointLight.h
   include/rt/Loader/SceneLoader.h
   include/rt/Loader/SceneLoaderBase.h
@@ -93,7 +93,7 @@ set(Tracer_SOURCES
   src/rt/Camera/ICamera.cpp
   src/rt/Camera/SimpleCamera.cpp
   src/rt/Light/DirectionalLight.cpp
-  src/rt/Light/ILightSource.cpp
+  src/rt/Light/ILight.cpp
   src/rt/Light/PointLight.cpp
   src/rt/Loader/SceneLoader.cpp
   src/rt/Loader/SceneLoaderBase.cpp

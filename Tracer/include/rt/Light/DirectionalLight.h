@@ -32,11 +32,11 @@
 #ifndef DIRECTIONALLIGHT_H
 #define DIRECTIONALLIGHT_H
 
-#include "rt/Light/ILightSource.h"
+#include "rt/Light/ILight.h"
 
 namespace rt {
 
-  class DirectionalLight : public ILightSource {
+  class DirectionalLight : public ILight {
   public:
     DirectionalLight(const Transform& lightToWorld, const Color& L, const Direction& wiL) noexcept;
     ~DirectionalLight() noexcept;
@@ -45,7 +45,7 @@ namespace rt {
     Color sampleLi(const SurfaceInfo& info, Direction *wi,
                    const Sample2D& xi, real_t *pdf, Ray *vis) const;
 
-    static LightSourcePtr create(const Transform& lightToWorld, const Color& L, const Direction& wiL);
+    static LightPtr create(const Transform& lightToWorld, const Color& L, const Direction& wiL);
 
   private:
     Color     _L{};

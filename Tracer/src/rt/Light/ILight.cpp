@@ -29,41 +29,41 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Light/ILightSource.h"
+#include "rt/Light/ILight.h"
 
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  ILightSource::ILightSource(const Type type, const Transform& lightToWorld) noexcept
+  ILight::ILight(const Type type, const Transform& lightToWorld) noexcept
     : _type{type}
     , _xfrmWL{lightToWorld}
   {
     setup();
   }
 
-  ILightSource::~ILightSource() noexcept
+  ILight::~ILight() noexcept
   {
   }
 
-  bool ILightSource::isDeltaLight() const
+  bool ILight::isDeltaLight() const
   {
     return _type == DeltaDirection  ||  _type == DeltaPosition;
   }
 
-  size_t ILightSource::numSamples() const
+  size_t ILight::numSamples() const
   {
     return 1;
   }
 
-  ILightSource::Type ILightSource::type() const
+  ILight::Type ILight::type() const
   {
     return _type;
   }
 
   ////// private /////////////////////////////////////////////////////////////
 
-  void ILightSource::setup()
+  void ILight::setup()
   {
     _xfrmLW = _xfrmWL.inverse();
   }

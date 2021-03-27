@@ -32,7 +32,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "rt/Light/ILightSource.h"
+#include "rt/Light/ILight.h"
 #include "rt/Object/IObject.h"
 
 namespace rt {
@@ -45,7 +45,7 @@ namespace rt {
     Scene(Scene&&);
     Scene& operator=(Scene&&);
 
-    void add(LightSourcePtr& light);
+    void add(LightPtr& light);
     void add(ObjectPtr& object);
 
     void clear();
@@ -53,13 +53,13 @@ namespace rt {
     bool trace(SurfaceInfo& info, const Ray& ray) const;
     bool trace(const Ray& ray) const;
 
-    const LightSources& lights() const;
+    const Lights& lights() const;
 
   private:
     Scene(const Scene&) = delete;
     Scene& operator=(const Scene&) = delete;
 
-    LightSources _lights;
+    Lights _lights;
     Objects _objects;
   };
 

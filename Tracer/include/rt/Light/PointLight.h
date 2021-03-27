@@ -32,11 +32,11 @@
 #ifndef POINTLIGHT_H
 #define POINTLIGHT_H
 
-#include "rt/Light/ILightSource.h"
+#include "rt/Light/ILight.h"
 
 namespace rt {
 
-  class PointLight : public ILightSource {
+  class PointLight : public ILight {
   public:
     PointLight(const Transform& lightToWorld, const Color& I) noexcept;
     ~PointLight() noexcept;
@@ -45,7 +45,7 @@ namespace rt {
     Color sampleLi(const SurfaceInfo& info, Direction *wi,
                    const Sample2D& xi, real_t *pdf, Ray *vis) const;
 
-    static LightSourcePtr create(const Transform& lightToWorld, const Color& I);
+    static LightPtr create(const Transform& lightToWorld, const Color& I);
 
   private:
     real_t attenuation(const real_t r) const;

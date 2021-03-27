@@ -62,7 +62,7 @@ namespace rt {
     const BSDFdata data(info, options().globalRefraction, sampler);
 
     Color color;
-    for(const LightSourcePtr& light : scene.lights()) {
+    for(const LightPtr& light : scene.lights()) {
       Ray       vis;
       Direction wiW;
       const Color Li = light->sampleLi(info, &wiW, data.xi, nullptr, &vis);

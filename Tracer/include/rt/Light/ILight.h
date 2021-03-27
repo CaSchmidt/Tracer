@@ -29,8 +29,8 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef ILIGHTSOURCE_H
-#define ILIGHTSOURCE_H
+#ifndef ILIGHT_H
+#define ILIGHT_H
 
 #include <list>
 #include <memory>
@@ -41,7 +41,7 @@ namespace rt {
 
   struct SurfaceInfo;
 
-  class ILightSource {
+  class ILight {
   public:
     enum Type : unsigned int {
       Invalid        = 0,
@@ -50,8 +50,8 @@ namespace rt {
       DeltaPosition  = 3
     };
 
-    ILightSource(const Type type, const Transform& lightToWorld) noexcept;
-    virtual ~ILightSource() noexcept;
+    ILight(const Type type, const Transform& lightToWorld) noexcept;
+    virtual ~ILight() noexcept;
 
     bool isDeltaLight() const;
 
@@ -76,7 +76,7 @@ namespace rt {
     }
 
   private:
-    ILightSource() noexcept = delete;
+    ILight() noexcept = delete;
 
     void setup();
 
@@ -85,9 +85,9 @@ namespace rt {
     Transform _xfrmLW{}; // World -> Light
   };
 
-  using LightSourcePtr = std::unique_ptr<ILightSource>;
-  using   LightSources = std::list<LightSourcePtr>;
+  using LightPtr = std::unique_ptr<ILight>;
+  using   Lights = std::list<LightPtr>;
 
 } // namespace rt
 
-#endif // ILIGHTSOURCE_H
+#endif // ILIGHT_H

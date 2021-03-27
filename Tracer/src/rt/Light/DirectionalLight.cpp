@@ -37,7 +37,7 @@ namespace rt {
 
   DirectionalLight::DirectionalLight(const Transform& lightToWorld,
                                      const Color& L, const Direction& wiL) noexcept
-    : ILightSource(DeltaDirection, lightToWorld)
+    : ILight(DeltaDirection, lightToWorld)
     , _L{L}
   {
     _wiW = n4::normalize(toWorld(wiL));
@@ -65,7 +65,7 @@ namespace rt {
     return _L;
   }
 
-  LightSourcePtr DirectionalLight::create(const Transform& lightToWorld,
+  LightPtr DirectionalLight::create(const Transform& lightToWorld,
                                           const Color& L, const Direction& wiL)
   {
     return std::make_unique<DirectionalLight>(lightToWorld, L, wiL);
