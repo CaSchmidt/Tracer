@@ -55,7 +55,7 @@ namespace rt {
     const Scene& scene = WhittedRenderer::scene();
 
     SurfaceInfo info;
-    if( !scene.trace(info, ray) ) {
+    if( !scene.intersect(&info, ray) ) {
       return options().backgroundColor;
     }
 
@@ -67,7 +67,7 @@ namespace rt {
       Direction wiW;
       const Color Li = light->sampleLi(info, &wiW, data.xi, nullptr, &vis);
 
-      if( scene.trace(vis) ) {
+      if( scene.intersect(vis) ) {
         continue;
       }
 

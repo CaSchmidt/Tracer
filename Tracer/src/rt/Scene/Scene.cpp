@@ -63,22 +63,22 @@ namespace rt {
     _objects.clear();
   }
 
-  bool Scene::trace(SurfaceInfo& info, const Ray& ray) const
+  bool Scene::intersect(SurfaceInfo *info, const Ray& ray) const
   {
-    info = SurfaceInfo();
+    *info = SurfaceInfo();
     for(const ObjectPtr& o : _objects) {
       SurfaceInfo hit;
       if( !o->intersect(&hit, ray) ) {
         continue;
       }
-      if( !info.isHit()  ||  hit.t < info.t ) {
-        info = hit;
+      if( !info->isHit()  ||  hit.t < info->t ) {
+        *info = hit;
       }
     }
-    return info.isHit();
+    return info->isHit();
   }
 
-  bool Scene::trace(const Ray& ray) const
+  bool Scene::intersect(const Ray& ray) const
   {
     for(const ObjectPtr& o : _objects) {
       if( o->castShadow(ray) ) {
