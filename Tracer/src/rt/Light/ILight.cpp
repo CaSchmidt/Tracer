@@ -39,7 +39,7 @@ namespace rt {
     : _type{type}
     , _xfrmWL{lightToWorld}
   {
-    setup();
+    _xfrmLW = _xfrmWL.inverse();
   }
 
   ILight::~ILight() noexcept
@@ -59,13 +59,6 @@ namespace rt {
   ILight::Type ILight::type() const
   {
     return _type;
-  }
-
-  ////// private /////////////////////////////////////////////////////////////
-
-  void ILight::setup()
-  {
-    _xfrmLW = _xfrmWL.inverse();
   }
 
 } // namespace rt

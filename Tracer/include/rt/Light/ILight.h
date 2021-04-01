@@ -78,8 +78,6 @@ namespace rt {
   private:
     ILight() noexcept = delete;
 
-    void setup();
-
     Type      _type{Invalid};
     Transform _xfrmWL{}; // Light -> World
     Transform _xfrmLW{}; // World -> Light
