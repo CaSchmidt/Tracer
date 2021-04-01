@@ -72,17 +72,17 @@ namespace rt {
 
   bool IBxDF::isReflection() const
   {
-    return is_reflection(_flags);
+    return ::rt::isReflection(_flags);
   }
 
   bool IBxDF::isSpecular() const
   {
-    return is_specular(_flags);
+    return ::rt::isSpecular(_flags);
   }
 
   bool IBxDF::isTransmission() const
   {
-    return is_transmission(_flags);
+    return ::rt::isTransmission(_flags);
   }
 
   real_t IBxDF::pdf(const Direction& wo, const Direction& wi) const

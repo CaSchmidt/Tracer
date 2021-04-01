@@ -74,17 +74,17 @@ namespace rt {
     Flags _flags{InvalidFlags};
   };
 
-  inline bool is_reflection(const IBxDF::Flags flags)
+  inline bool isReflection(const IBxDF::Flags flags)
   {
     return (flags & IBxDF::Reflection) == IBxDF::Reflection;
   }
 
-  inline bool is_specular(const IBxDF::Flags flags)
+  inline bool isSpecular(const IBxDF::Flags flags)
   {
     return (flags & IBxDF::Specular) == IBxDF::Specular;
   }
 
-  inline bool is_transmission(const IBxDF::Flags flags)
+  inline bool isTransmission(const IBxDF::Flags flags)
   {
     return (flags & IBxDF::Transmission) == IBxDF::Transmission;
   }
