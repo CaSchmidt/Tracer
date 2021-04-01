@@ -35,8 +35,22 @@
 
 namespace rt {
 
-  BSDFdata::BSDFdata(const SurfaceInfo& sinfo, const real_t etaA,
-                     const SamplerPtr& sampler) noexcept
+  BSDFdata::BSDFdata(const SurfaceInfo& info) noexcept
+    : BSDFdata(info, ONE, SamplerPtr())
+  {
+  }
+
+  BSDFdata::BSDFdata(const SurfaceInfo& info, const real_t etaA) noexcept
+    : BSDFdata(info, etaA, SamplerPtr())
+  {
+  }
+
+  BSDFdata::BSDFdata(const SurfaceInfo& info, const SamplerPtr& sampler) noexcept
+    : BSDFdata(info, ONE, sampler)
+  {
+  }
+
+  BSDFdata::BSDFdata(const SurfaceInfo& sinfo, const real_t etaA, const SamplerPtr& sampler) noexcept
     : etaA{etaA}
   {
     tex = sinfo.texCoord2D();

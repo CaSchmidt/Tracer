@@ -40,8 +40,10 @@ namespace rt {
   struct SurfaceInfo;
 
   struct BSDFdata {
-    BSDFdata(const SurfaceInfo& info, const real_t etaA,
-             const SamplerPtr& sampler = SamplerPtr()) noexcept;
+    BSDFdata(const SurfaceInfo& info) noexcept;
+    BSDFdata(const SurfaceInfo& info, const real_t etaA) noexcept;
+    BSDFdata(const SurfaceInfo& info, const SamplerPtr& sampler) noexcept;
+    BSDFdata(const SurfaceInfo& info, const real_t etaA, const SamplerPtr& sampler) noexcept;
 
     template<typename VecT>
     inline VecT toShading(const VecT& v) const

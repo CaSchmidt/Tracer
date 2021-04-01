@@ -59,7 +59,7 @@ namespace rt {
       return options().backgroundColor;
     }
 
-    const BSDFdata data(info, options().globalRefraction, sampler);
+    const BSDFdata data(info, sampler);
 
     Color color;
     for(const LightPtr& light : scene.lights()) {
