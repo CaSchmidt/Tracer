@@ -53,11 +53,18 @@ namespace geom {
 
   // Convenience Functions ///////////////////////////////////////////////////
 
-  template<typename traits_T, typename ARG1, typename ARG2>
-  inline real_t dot1(const n4::ExprBase<traits_T,ARG1>& arg1,
-                     const n4::ExprBase<traits_T,ARG2>& arg2)
+  template<typename traits1_T, typename ARG1, typename traits2_T, typename ARG2>
+  inline real_t absDot(const n4::ExprBase<traits1_T,ARG1>& arg1,
+                       const n4::ExprBase<traits2_T,ARG2>& arg2)
   {
-    return std::max<real_t>(0, n4::dot(arg1, arg2));
+    return n4::abs(n4::dot(arg1, n4::expr_cast<traits1_T,traits2_T,ARG2>(arg2)));
+  }
+
+  template<typename traits1_T, typename ARG1, typename traits2_T, typename ARG2>
+  inline real_t dot1(const n4::ExprBase<traits1_T,ARG1>& arg1,
+                     const n4::ExprBase<traits2_T,ARG2>& arg2)
+  {
+    return std::max<real_t>(0, n4::dot(arg1, n4::expr_cast<traits1_T,traits2_T,ARG2>(arg2)));
   }
 
   template<typename traits1_T, typename ARG1, typename traits2_T, typename ARG2>
