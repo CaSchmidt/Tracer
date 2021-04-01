@@ -38,7 +38,10 @@ namespace rt {
   SimpleSampler::SimpleSampler(const size_t numSamplesPerPixel)
     : ISampler(numSamplesPerPixel)
   {
-    setup();
+    _dis = std::uniform_real_distribution<real_t>(ZERO, ONE);
+
+    std::random_device randDev;
+    _gen.seed(randDev());
   }
 
   SimpleSampler::~SimpleSampler()
@@ -63,16 +66,6 @@ namespace rt {
   SamplerPtr SimpleSampler::create(const size_t numSamplesPerPixel)
   {
     return std::make_unique<SimpleSampler>(numSamplesPerPixel);
-  }
-
-  ////// private /////////////////////////////////////////////////////////////
-
-  void SimpleSampler::setup()
-  {
-    _dis = std::uniform_real_distribution<real_t>(ZERO, ONE);
-
-    std::random_device randDev;
-    _gen.seed(randDev());
   }
 
 } // namespace rt

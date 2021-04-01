@@ -52,8 +52,6 @@ namespace rt {
     static SamplerPtr create(const size_t numSamplesPerPixel);
 
   private:
-    void setup();
-
     std::uniform_real_distribution<rt::real_t> _dis{};
     std::mt19937                               _gen{};
   };
