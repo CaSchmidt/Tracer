@@ -35,6 +35,7 @@
 #include <array>
 
 #include "rt/BxDF/IBxDF.h"
+#include "rt/Texture/TexCoord.h"
 
 namespace rt {
 
@@ -64,7 +65,7 @@ namespace rt {
      */
     Color eval(const BSDFdata& data, const Direction& wi,
                const IBxDF::Flags flags = IBxDF::AllFlags) const;
-    real_t pdf(const Direction& wo, const Direction& wi,
+    real_t pdf(const BSDFdata& data, const Direction& wi,
                const IBxDF::Flags flags = IBxDF::AllFlags) const;
     Color sample(const BSDFdata& data, Direction *wi, real_t *pdf,
                  const IBxDF::Flags flags = IBxDF::AllFlags,
@@ -84,6 +85,11 @@ namespace rt {
 
   private:
     BSDF() noexcept = delete;
+
+    Color evalS(const Direction& wo, const Direction& wi, const TexCoord2D& tex,
+                const IBxDF::Flags flags) const;
+    real_t pdfS(const Direction& wo, const Direction& wi,
+                const IBxDF::Flags flags) const;
 
     bool haveTexture(const size_t i) const;
 

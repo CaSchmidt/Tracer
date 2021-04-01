@@ -59,7 +59,7 @@ namespace rt {
 
     real_t    etaA{1};
     TexCoord2D tex{};
-    Direction   wo{}; // in Shading Coordinates
+    Direction   wo{}; // World Coordinates
     Matrix  xfrmSW{}; // World -> Shading
     Matrix  xfrmWS{}; // Shading -> World
     Sample2D    xi{};

@@ -64,20 +64,19 @@ namespace rt {
     Color color;
     for(const LightPtr& light : scene.lights()) {
       Ray       vis;
-      Direction wiW;
-      const Color Li = light->sampleLi(info, &wiW, data.xi, nullptr, &vis);
+      Direction wi;
+      const Color Li = light->sampleLi(info, &wi, data.xi, nullptr, &vis);
 
       if( scene.intersect(vis) ) {
         continue;
       }
 
-      const Direction   wiS = data.toShading(wiW);
-      const real_t absCosTi = geom::shading::absCosTheta(wiS);
+      const real_t absCosTi = geom::absDot(wi, info.N);
       if( absCosTi <= ZERO ) {
         continue;
       }
 
-      const Color fR = info->material()->bsdf()->eval(data, wiS);
+      const Color fR = info->material()->bsdf()->eval(data, wi);
       if( fR.isZero() ) {
         continue;
       }

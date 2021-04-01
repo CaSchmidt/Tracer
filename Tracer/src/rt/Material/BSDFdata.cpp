@@ -62,7 +62,7 @@ namespace rt {
     xfrmWS = n4::util::frameFromZ(sinfo.N);
     xfrmSW = xfrmWS.transpose();
 
-    wo = toShading(sinfo.wo);
+    wo = sinfo.wo;
   }
 
 } // namespace rt

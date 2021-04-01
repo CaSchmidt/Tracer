@@ -147,18 +147,17 @@ namespace rt {
         : IBxDF::Flags(IBxDF::Specular | IBxDF::Reflection);
 
     real_t    pdf = 0;
-    Direction wiS;
-    const Color            fR = bsdf->sample(data, &wiS, &pdf, flags);
-    const real_t absCosThetaI = geom::shading::absCosTheta(wiS);
-    if( pdf > ZERO  &&  !fR.isZero()  &&  absCosThetaI != ZERO ) {
-      const bool is_same = geom::shading::isSameHemisphere(wiS);
+    Direction wi;
+    const Color        fR = bsdf->sample(data, &wi, &pdf, flags);
+    const real_t absCosTi = geom::absDot(wi, info.N);
+    if( pdf > ZERO  &&  !fR.isZero()  &&  absCosTi != ZERO ) {
+      const bool is_same = geom::isSameHemisphere(wi, info.N);
       const real_t  bias = is_same
           ? +TRACE_BIAS
           : -TRACE_BIAS;
 
-      const Direction wiW = data.toWorld(wiS);
-      const Color      Li = radiance(info.ray(wiW, bias), sampler, depth + 1);
-      return fR*Li*absCosThetaI/pdf;
+      const Color Li = radiance(info.ray(wi, bias), sampler, depth + 1);
+      return fR*Li*absCosTi/pdf;
     }
 
     return Color();

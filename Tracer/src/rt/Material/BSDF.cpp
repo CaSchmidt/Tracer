@@ -96,40 +96,17 @@ namespace rt {
   Color BSDF::eval(const BSDFdata& data, const Direction& wi,
                    const IBxDF::Flags flags) const
   {
-    const bool reflect = geom::shading::isSameHemisphere(data.wo, wi);
-    Color f;
-    for(size_t i = 0; i < size(); i++) {
-      const IBxDF *bxdf = _bxdfs[i];
-      if( bxdf->matchFlags(flags)  &&
-          ( ( reflect  &&  bxdf->isReflection()  )  ||
-            (!reflect  &&  bxdf->isTransmission()) ) ) {
-        f += haveTexture(i)
-            ? bxdf->eval(data.wo, wi)*_material->textureLookup(i, data.tex)
-            : bxdf->eval(data.wo, wi);
-      }
-    }
-    return f;
+    const Direction woS = data.toShading(data.wo);
+    const Direction wiS = data.toShading(wi);
+    return evalS(woS, wiS, data.tex, flags);
   }
 
-  real_t BSDF::pdf(const Direction& wo, const Direction& wi,
+  real_t BSDF::pdf(const BSDFdata& data, const Direction& wi,
                    const IBxDF::Flags flags) const
   {
-    if( isEmpty()  ||  geom::shading::cosTheta(wo) == ZERO ) {
-      return 0;
-    }
-    size_t matching = 0;
-    real_t      pdf = 0;
-    for(size_t i = 0; i < size(); i++) {
-      const IBxDF *bxdf = _bxdfs[i];
-      if( !bxdf->matchFlags(flags) ) {
-        continue;
-      }
-      matching++;
-      pdf += bxdf->pdf(wo, wi);
-    }
-    return matching > 0
-        ? pdf/real_t(matching)
-        : 0;
+    const Direction woS = data.toShading(data.wo);
+    const Direction wiS = data.toShading(wi);
+    return pdfS(woS, wiS, flags);
   }
 
   Color BSDF::sample(const BSDFdata& data, Direction *wi, real_t *pdf,
@@ -168,7 +145,10 @@ namespace rt {
 
     // (3) Sample Chosen BxDF ////////////////////////////////////////////////
 
-    Color f = bxdf->sample(data.wo, wi, xiRemapped, pdf);
+    const Direction woS = data.toShading(data.wo);
+    Direction wiS;
+    Color f = bxdf->sample(woS, &wiS, xiRemapped, pdf);
+    *wi = data.toWorld(wiS);
     if( pdf != nullptr  &&  *pdf <= ZERO ) {
       return Color();
     }
@@ -180,20 +160,59 @@ namespace rt {
 
     if( pdf != nullptr ) {
       if( !bxdf->isSpecular()  &&  matching > 1 ) {
-        *pdf = BSDF::pdf(data.wo, *wi, flags);
+        *pdf = pdfS(woS, wiS, flags);
       }
     }
 
     // (5) Compute Value of BSDF for Sampled Direction ///////////////////////
 
     if( !bxdf->isSpecular()  &&  matching > 1 ) {
-      f = BSDF::eval(data, *wi, flags);
+      f = evalS(woS, wiS, data.tex, flags);
     }
 
     return f;
   }
 
   ////// private /////////////////////////////////////////////////////////////
+
+  Color BSDF::evalS(const Direction& wo, const Direction& wi, const TexCoord2D& tex,
+                    const IBxDF::Flags flags) const
+  {
+    const bool is_reflect = geom::shading::isSameHemisphere(wo, wi);
+    Color f;
+    for(size_t i = 0; i < size(); i++) {
+      const IBxDF *bxdf = _bxdfs[i];
+      if( bxdf->matchFlags(flags)  &&
+          ( ( is_reflect  &&  bxdf->isReflection()  )  ||
+            (!is_reflect  &&  bxdf->isTransmission()) ) ) {
+        f += haveTexture(i)
+            ? bxdf->eval(wo, wi)*_material->textureLookup(i, tex)
+            : bxdf->eval(wo, wi);
+      }
+    }
+    return f;
+  }
+
+  real_t BSDF::pdfS(const Direction& wo, const Direction& wi,
+                    const IBxDF::Flags flags) const
+  {
+    if( isEmpty()  ||  geom::shading::cosTheta(wo) == ZERO ) {
+      return 0;
+    }
+    size_t matching = 0;
+    real_t      pdf = 0;
+    for(size_t i = 0; i < size(); i++) {
+      const IBxDF *bxdf = _bxdfs[i];
+      if( !bxdf->matchFlags(flags) ) {
+        continue;
+      }
+      matching++;
+      pdf += bxdf->pdf(wo, wi);
+    }
+    return matching > 0
+        ? pdf/real_t(matching)
+        : 0;
+  }
 
   bool BSDF::haveTexture(const size_t i) const
   {
