@@ -33,25 +33,26 @@
 #define SIMPLECAMERA_H
 
 #include "rt/Camera/ICamera.h"
-#include "rt/Renderer/RenderOptions.h"
 
 namespace rt {
+
+  struct RenderOptions;
 
   class SimpleCamera : public ICamera {
   public:
     SimpleCamera(const RenderOptions& options);
     ~SimpleCamera();
 
+    bool isValid() const;
+
     Ray ray(const size_t x, const size_t y, const SamplerPtr& sampler) const;
 
     static CameraPtr create(const RenderOptions& options);
 
   private:
-    bool setup();
     static Matrix windowTransform(const size_t width, const size_t height, const real_t fov_rad);
 
-    RenderOptions _options;
-    Matrix        _windowTransform;
+    Matrix _windowTransform{};
   };
 
 } // namespace rt

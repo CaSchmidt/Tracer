@@ -31,19 +31,29 @@
 
 #include "rt/Camera/SimpleCamera.h"
 
+#include "rt/Renderer/RenderOptions.h"
+
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
   SimpleCamera::SimpleCamera(const RenderOptions& options)
     : ICamera(options.width, options.height)
-    , _options(options)
   {
-    setup();
+    if( !isValidFoV(options.fov_rad) ) {
+      return;
+    }
+
+    _windowTransform = windowTransform(width(), height(), options.fov_rad);
   }
 
   SimpleCamera::~SimpleCamera()
   {
+  }
+
+  bool SimpleCamera::isValid() const
+  {
+    return !_windowTransform.isZero();
   }
 
   Ray SimpleCamera::ray(const size_t x, const size_t y, const SamplerPtr& sampler) const
@@ -57,17 +67,6 @@ namespace rt {
   }
 
   ////// private /////////////////////////////////////////////////////////////
-
-  bool SimpleCamera::setup()
-  {
-    if( !isValidFoV(_options.fov_rad) ) {
-      return false;
-    }
-
-    _windowTransform = windowTransform(width(), height(), _options.fov_rad);
-
-    return true;
-  }
 
   /*
    * NOTE:

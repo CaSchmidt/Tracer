@@ -31,6 +31,7 @@
 
 #include "rt/Camera/FrustumCamera.h"
 
+#include "rt/Renderer/RenderOptions.h"
 #include "rt/Sampler/Sampling.h"
 
 namespace rt {
@@ -39,13 +40,30 @@ namespace rt {
 
   FrustumCamera::FrustumCamera(const RenderOptions& options)
     : ICamera(options.width, options.height)
-    , _options(options)
   {
-    setup();
+    if( !isValidFoV(options.fov_rad)  ||  options.worldToScreen <= ZERO ) {
+      return;
+    }
+
+    if( options.aperture > ZERO  &&  options.focus > ZERO ) {
+      _rLens  = options.aperture/TWO;
+      _zFocus = -options.focus;
+    } else {
+      _rLens = _zFocus = 0;
+    }
+
+    _windowTransform = windowTransform(width(), height(),
+                                       options.fov_rad, options.worldToScreen);
+    _zNear = _windowTransform(2, 3);
   }
 
   FrustumCamera::~FrustumCamera()
   {
+  }
+
+  bool FrustumCamera::isValid() const
+  {
+    return !_windowTransform.isZero();
   }
 
   Ray FrustumCamera::ray(const size_t x, const size_t y, const SamplerPtr& sampler) const
@@ -86,26 +104,6 @@ namespace rt {
   }
 
   ////// private /////////////////////////////////////////////////////////////
-
-  bool FrustumCamera::setup()
-  {
-    if( !isValidFoV(_options.fov_rad)  ||  _options.worldToScreen <= ZERO ) {
-      return false;
-    }
-
-    if( _options.aperture > ZERO  &&  _options.focus > ZERO ) {
-      _rLens  = _options.aperture/TWO;
-      _zFocus = -_options.focus;
-    } else {
-      _rLens = _zFocus = 0;
-    }
-
-    _windowTransform = windowTransform(width(), height(),
-                                       _options.fov_rad, _options.worldToScreen);
-    _zNear = _windowTransform(2, 3);
-
-    return true;
-  }
 
   Matrix FrustumCamera::windowTransform(const size_t width, const size_t height,
                                         const real_t fov_rad, const real_t worldToScreen)

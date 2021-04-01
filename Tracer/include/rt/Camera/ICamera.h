@@ -45,6 +45,8 @@ namespace rt {
     ICamera(const size_t width, const size_t height);
     virtual ~ICamera();
 
+    virtual bool isValid() const = 0;
+
     size_t width() const;
     size_t height() const;
 

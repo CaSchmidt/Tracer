@@ -33,29 +33,30 @@
 #define FRUSTUMCAMERA_H
 
 #include "rt/Camera/ICamera.h"
-#include "rt/Renderer/RenderOptions.h"
 
 namespace rt {
+
+  struct RenderOptions;
 
   class FrustumCamera : public ICamera {
   public:
     FrustumCamera(const RenderOptions& options);
     ~FrustumCamera();
 
+    bool isValid() const;
+
     Ray ray(const size_t x, const size_t y, const SamplerPtr& sampler) const;
 
     static CameraPtr create(const RenderOptions& options);
 
   private:
-    bool setup();
     static Matrix windowTransform(const size_t width, const size_t height,
                                   const real_t fov_rad, const real_t worldToScreen);
 
-    RenderOptions _options;
-    real_t        _rLens{};
-    Matrix        _windowTransform;
-    real_t        _zFocus{};
-    real_t        _zNear{};
+    real_t _rLens{};
+    Matrix _windowTransform{};
+    real_t _zFocus{};
+    real_t _zNear{};
   };
 
 } // namespace rt
