@@ -38,13 +38,13 @@ namespace rt {
 
   class Cylinder : public IObject {
   public:
-    Cylinder(const Transform& objectToWorld, MaterialPtr& material,
+    Cylinder(const Transform& objectToWorld,
              const real_t height, const real_t radius) noexcept;
     ~Cylinder() noexcept;
 
     bool intersect(SurfaceInfo *info, const Ray& ray) const final;;
 
-    static ObjectPtr create(const Transform& objectToWorld, MaterialPtr& material,
+    static ObjectPtr create(const Transform& objectToWorld,
                             const real_t height, const real_t radius);
 
   private:

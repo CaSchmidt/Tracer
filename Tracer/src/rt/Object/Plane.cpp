@@ -52,9 +52,9 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  Plane::Plane(const Transform& objectToWorld, MaterialPtr& material,
+  Plane::Plane(const Transform& objectToWorld,
                const real_t width, const real_t height) noexcept
-    : IObject(objectToWorld, material)
+    : IObject(objectToWorld)
     , _width{width}
     , _height{height}
   {
@@ -95,10 +95,10 @@ namespace rt {
     return true;
   }
 
-  ObjectPtr Plane::create(const Transform& objectToWorld, MaterialPtr& material,
+  ObjectPtr Plane::create(const Transform& objectToWorld,
                           const real_t width, const real_t height)
   {
-    return std::make_unique<Plane>(objectToWorld, material, width, height);
+    return std::make_unique<Plane>(objectToWorld, width, height);
   }
 
 } // namespace rt

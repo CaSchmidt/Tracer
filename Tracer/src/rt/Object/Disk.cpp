@@ -38,9 +38,9 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  Disk::Disk(const Transform& objectToWorld, MaterialPtr& material,
+  Disk::Disk(const Transform& objectToWorld,
              const real_t radius) noexcept
-    : IObject(objectToWorld, material)
+    : IObject(objectToWorld)
     , _radius{radius}
   {
   }
@@ -81,10 +81,10 @@ namespace rt {
     return true;
   }
 
-  ObjectPtr Disk::create(const Transform& objectToWorld, MaterialPtr& material,
+  ObjectPtr Disk::create(const Transform& objectToWorld,
                          const real_t radius)
   {
-    return std::make_unique<Disk>(objectToWorld, material, radius);
+    return std::make_unique<Disk>(objectToWorld, radius);
   }
 
 } // namespace rt

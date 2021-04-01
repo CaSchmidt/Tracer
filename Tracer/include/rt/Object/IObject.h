@@ -43,7 +43,6 @@ namespace rt {
 
   class IObject {
   public:
-    IObject(const Transform& objectToWorld, MaterialPtr& material) noexcept;
     IObject(const Transform& objectToWorld) noexcept;
     virtual ~IObject() noexcept;
 
@@ -54,6 +53,7 @@ namespace rt {
 
     IMaterial *material();
     const IMaterial *material() const;
+    void setMaterial(MaterialPtr& material);
 
     template<typename T>
     inline T toObject(const T& x) const
@@ -69,8 +69,6 @@ namespace rt {
 
   private:
     IObject() noexcept = delete;
-
-    void setup();
 
     Transform   _xfrmWO{}; // Object -> World
     Transform   _xfrmOW{}; // World -> Object

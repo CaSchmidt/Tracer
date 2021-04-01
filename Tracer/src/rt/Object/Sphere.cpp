@@ -36,9 +36,9 @@
 
 namespace rt {
 
-  Sphere::Sphere(const Transform& objectToWorld, MaterialPtr& material,
+  Sphere::Sphere(const Transform& objectToWorld,
                  const real_t radius) noexcept
-    : IObject(objectToWorld, material)
+    : IObject(objectToWorld)
     , _radius{radius}
   {
   }
@@ -76,10 +76,10 @@ namespace rt {
     return true;
   }
 
-  ObjectPtr Sphere::create(const Transform& objectToWorld, MaterialPtr& material,
+  ObjectPtr Sphere::create(const Transform& objectToWorld,
                            const real_t radius)
   {
-    return std::make_unique<Sphere>(objectToWorld, material, radius);
+    return std::make_unique<Sphere>(objectToWorld, radius);
   }
 
 } // namespace rt

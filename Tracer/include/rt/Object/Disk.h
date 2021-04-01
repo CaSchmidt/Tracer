@@ -38,13 +38,13 @@ namespace rt {
 
   class Disk : public IObject {
   public:
-    Disk(const Transform& objectToWorld, MaterialPtr& material,
+    Disk(const Transform& objectToWorld,
          const real_t radius) noexcept;
     ~Disk() noexcept;
 
     bool intersect(SurfaceInfo *info, const Ray& ray) const;
 
-    static ObjectPtr create(const Transform& objectToWorld, MaterialPtr& material,
+    static ObjectPtr create(const Transform& objectToWorld,
                             const real_t radius);
 
   private:

@@ -70,7 +70,10 @@ namespace rt {
         return ObjectPtr();
       }
 
-      return Cylinder::create(transform, material, height, radius);
+      ObjectPtr object = Cylinder::create(transform, height, radius);
+      object->setMaterial(material);
+
+      return object;
     }
 
     ObjectPtr parseDisk(const tinyxml2::XMLElement *node)
@@ -92,7 +95,10 @@ namespace rt {
         return ObjectPtr();
       }
 
-      return Disk::create(transform, material, radius);
+      ObjectPtr object = Disk::create(transform, radius);
+      object->setMaterial(material);
+
+      return object;
     }
 
     ObjectPtr parsePillar(const tinyxml2::XMLElement *node)
@@ -126,12 +132,14 @@ namespace rt {
 
       // (1) Body ////////////////////////////////////////////////////////////
 
-      ObjectPtr body = Cylinder::create(Transform(), material, height, radius);
+      ObjectPtr body = Cylinder::create(Transform(), height, radius);
+      body->setMaterial(material);
       group->add(body);
 
       // (2) Top /////////////////////////////////////////////////////////////
 
-      ObjectPtr top = Disk::create(Transform::translate(0, 0, height/2), materialTop, radius);
+      ObjectPtr top = Disk::create(Transform::translate(0, 0, height/2), radius);
+      top->setMaterial(materialTop);
       group->add(top);
 
       // (3) Bottom //////////////////////////////////////////////////////////
@@ -139,7 +147,8 @@ namespace rt {
       const Transform xfrmBottom =
           Transform::translate(0, 0, -height/2)*
           Transform::rotateZYXbyPI2(0, 0, 2);
-      ObjectPtr bottom = Disk::create(xfrmBottom, materialBottom, radius);
+      ObjectPtr bottom = Disk::create(xfrmBottom, radius);
+      bottom->setMaterial(materialBottom);
       group->add(bottom);
 
       return groupPtr;
@@ -169,7 +178,10 @@ namespace rt {
         return ObjectPtr();
       }
 
-      return Plane::create(transform, material, width, height);
+      ObjectPtr object = Plane::create(transform, width, height);
+      object->setMaterial(material);
+
+      return object;
     }
 
     ObjectPtr parseSphere(const tinyxml2::XMLElement *node)
@@ -191,7 +203,10 @@ namespace rt {
         return ObjectPtr();
       }
 
-      return Sphere::create(transform, material, radius);
+      ObjectPtr object = Sphere::create(transform, radius);
+      object->setMaterial(material);
+
+      return object;
     }
 
     // Export ////////////////////////////////////////////////////////////////

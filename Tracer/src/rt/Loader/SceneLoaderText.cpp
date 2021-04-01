@@ -53,12 +53,12 @@ namespace rt {
     {
       using size_type = std::string::size_type;
 
-      rt::Objects objs;
+      rt::Objects spheres;
 
       // Text ////////////////////////////////////////////////////////////////////
 
       if( text.empty() ) {
-        return objs;
+        return spheres;
       }
 
       std::for_each(text.begin(), text.end(), [](char& ch) -> void {
@@ -87,15 +87,18 @@ namespace rt {
               continue;
             }
 
-            MaterialPtr myMaterial = material->copy();
+            MaterialPtr objMaterial = material->copy();
 
-            objs.push_back(rt::Sphere::create(transform*rt::Transform::translate(ox, 0, oz),
-                                              myMaterial, radius));
+            ObjectPtr obj =
+                rt::Sphere::create(transform*rt::Transform::translate(ox, 0, oz), radius);
+            obj->setMaterial(objMaterial);
+
+            spheres.push_back(std::move(obj));
           } // For Each Column
         } // For Each Row
       } // For Each Glyph
 
-      return objs;
+      return spheres;
     }
 
     // Export ////////////////////////////////////////////////////////////////

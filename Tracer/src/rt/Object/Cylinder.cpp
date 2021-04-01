@@ -38,9 +38,9 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  Cylinder::Cylinder(const Transform& objectToWorld, MaterialPtr& material,
+  Cylinder::Cylinder(const Transform& objectToWorld,
                      const real_t height, const real_t radius) noexcept
-    : IObject(objectToWorld, material)
+    : IObject(objectToWorld)
     , _height{height}
     , _radius{radius}
   {
@@ -83,10 +83,10 @@ namespace rt {
     return true;
   }
 
-  ObjectPtr Cylinder::create(const Transform& objectToWorld, MaterialPtr& material,
+  ObjectPtr Cylinder::create(const Transform& objectToWorld,
                              const real_t height, const real_t radius)
   {
-    return std::make_unique<Cylinder>(objectToWorld, material, height, radius);
+    return std::make_unique<Cylinder>(objectToWorld, height, radius);
   }
 
 } // namespace rt
