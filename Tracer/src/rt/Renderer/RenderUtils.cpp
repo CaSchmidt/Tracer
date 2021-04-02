@@ -92,6 +92,23 @@ namespace rt {
     return Ld;
   }
 
+  Color uniformSampleAllLights(const SurfaceInfo& surface,
+                               const Scene& scene, const SamplerPtr& sampler)
+  {
+    Color L;
+    for(const LightPtr& light : scene.lights()) {
+      const size_t numSamples = light->numSamples();
+      Color Ld;
+      for(size_t s = 0; s < numSamples; s++) {
+        Ld += estimateDirectLighting(surface, sampler->sample2D(),
+                                     light, sampler->sample2D(),
+                                     scene, sampler);
+      }
+      L += Ld/real_t(numSamples);
+    }
+    return L;
+  }
+
   Color uniformSampleOneLight(const SurfaceInfo& surface,
                               const Scene& scene, const SamplerPtr& sampler)
   {
@@ -104,11 +121,11 @@ namespace rt {
     const size_t choice = sampling::choose(sampler->sample(), lights.size());
     const LightPtr& light = *std::next(lights.cbegin(), choice);
 
-    const real_t numLights = real_t(lights.size());
+    const size_t numLights = lights.size();
 
-    return numLights*estimateDirectLighting(surface, sampler->sample2D(),
-                                            light, sampler->sample2D(),
-                                            scene, sampler);
+    return real_t(numLights)*estimateDirectLighting(surface, sampler->sample2D(),
+                                                    light, sampler->sample2D(),
+                                                    scene, sampler);
   }
 
 } // namespace rt

@@ -41,7 +41,12 @@ namespace rt {
     DirectLightingRenderer() noexcept;
     ~DirectLightingRenderer() noexcept;
 
+    bool sampleOneLight() const;
+    void setSampleOneLight(const bool on);
+
   private:
+    bool _sample_one_light{false};
+
     Color radiance(const Ray& ray, const SamplerPtr& sampler, const unsigned int depth = 0) const;
   };
 

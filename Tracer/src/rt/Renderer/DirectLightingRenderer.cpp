@@ -47,6 +47,16 @@ namespace rt {
   {
   }
 
+  bool DirectLightingRenderer::sampleOneLight() const
+  {
+    return _sample_one_light;
+  }
+
+  void DirectLightingRenderer::setSampleOneLight(const bool on)
+  {
+    _sample_one_light = on;
+  }
+
   ////// private /////////////////////////////////////////////////////////////
 
   Color DirectLightingRenderer::radiance(const Ray& ray, const SamplerPtr& sampler,
@@ -66,7 +76,11 @@ namespace rt {
     Lo += Color(); // TODO: Account for emitted radiance when hitting an area light!
 
     if( scene.lights().size() > 0 ) {
-      Lo += uniformSampleOneLight(surface, scene, sampler);
+      if( !_sample_one_light ) {
+        Lo += uniformSampleAllLights(surface, scene, sampler);
+      } else {
+        Lo += uniformSampleOneLight(surface, scene, sampler);
+      }
     }
 
     if( depth + 1 < options.maxDepth ) {

@@ -45,6 +45,9 @@ namespace rt {
                                const Scene& scene, const SamplerPtr& sampler,
                                const bool is_specular = false);
 
+  Color uniformSampleAllLights(const SurfaceInfo& surface,
+                               const Scene& scene, const SamplerPtr& sampler);
+
   Color uniformSampleOneLight(const SurfaceInfo& surface,
                               const Scene& scene, const SamplerPtr& sampler);
 
