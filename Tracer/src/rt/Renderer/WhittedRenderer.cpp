@@ -54,29 +54,29 @@ namespace rt {
   {
     const Scene& scene = WhittedRenderer::scene();
 
-    SurfaceInfo info;
-    if( !scene.intersect(&info, ray) ) {
+    SurfaceInfo surface;
+    if( !scene.intersect(&surface, ray) ) {
       return options().backgroundColor;
     }
 
-    const BSDFdata data(info);
+    const BSDFdata data(surface);
 
     Color color;
     for(const LightPtr& light : scene.lights()) {
       Ray      vis;
       Direction wi;
-      const Color Li = light->sampleLi(info, &wi, sampler->sample2D(), nullptr, &vis);
+      const Color Li = light->sampleLi(surface, &wi, sampler->sample2D(), nullptr, &vis);
 
       if( scene.intersect(vis) ) {
         continue;
       }
 
-      const real_t absCosTi = geom::absDot(wi, info.N);
+      const real_t absCosTi = geom::absDot(wi, surface.N);
       if( absCosTi <= ZERO ) {
         continue;
       }
 
-      const Color fR = info->material()->bsdf()->eval(data, wi);
+      const Color fR = surface->material()->bsdf()->eval(data, wi);
       if( fR.isZero() ) {
         continue;
       }
@@ -85,8 +85,8 @@ namespace rt {
     }
 
     if( depth + 1 < options().maxDepth ) {
-      color += specularReflectOrTransmit(data, info, sampler, depth, false);
-      color += specularReflectOrTransmit(data, info, sampler, depth, true);
+      color += specularReflectOrTransmit(data, surface, sampler, depth, false);
+      color += specularReflectOrTransmit(data, surface, sampler, depth, true);
     }
 
     return color;

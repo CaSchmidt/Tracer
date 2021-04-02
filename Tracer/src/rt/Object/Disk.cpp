@@ -49,7 +49,7 @@ namespace rt {
   {
   }
 
-  bool Disk::intersect(SurfaceInfo *info, const Ray& ray) const
+  bool Disk::intersect(SurfaceInfo *surface, const Ray& ray) const
   {
     const Ray rayObj = toObject(ray);
 
@@ -64,18 +64,18 @@ namespace rt {
       return false;
     }
 
-    if( info != nullptr ) {
+    if( surface != nullptr ) {
       const real_t u = math::phase<real_t>(Pobj.x, Pobj.y)/TWO_PI;
 
-      *info = SurfaceInfo();
+      *surface = SurfaceInfo();
 
-      info->object = this;
-      info->t      = t;
-      info->wo     = -ray.direction();
-      info->N      = toWorld(Normal{0, 0, 1});
-      info->P      = toWorld(Pobj);
-      info->u      = u;
-      info->v      = v;
+      surface->object = this;
+      surface->t      = t;
+      surface->wo     = -ray.direction();
+      surface->N      = toWorld(Normal{0, 0, 1});
+      surface->P      = toWorld(Pobj);
+      surface->u      = u;
+      surface->v      = v;
     }
 
     return true;

@@ -46,7 +46,7 @@ namespace rt {
 
     bool castShadow(const Ray &ray) const;
 
-    bool intersect(SurfaceInfo *info, const Ray& ray) const;
+    bool intersect(SurfaceInfo *surface, const Ray& ray) const;
 
     static ObjectPtr create(const Transform& objectToWorld);
 

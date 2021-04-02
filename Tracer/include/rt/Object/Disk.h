@@ -42,7 +42,7 @@ namespace rt {
          const real_t radius) noexcept;
     ~Disk() noexcept;
 
-    bool intersect(SurfaceInfo *info, const Ray& ray) const;
+    bool intersect(SurfaceInfo *surface, const Ray& ray) const;
 
     static ObjectPtr create(const Transform& objectToWorld,
                             const real_t radius);

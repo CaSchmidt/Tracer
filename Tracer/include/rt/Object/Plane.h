@@ -42,7 +42,7 @@ namespace rt {
           const real_t width, const real_t height) noexcept;
     ~Plane() noexcept;
 
-    bool intersect(SurfaceInfo *info, const Ray& ray) const final;
+    bool intersect(SurfaceInfo *surface, const Ray& ray) const final;
 
     static ObjectPtr create(const Transform& objectToWorld,
                             const real_t width, const real_t height);

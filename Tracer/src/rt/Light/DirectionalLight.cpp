@@ -47,12 +47,12 @@ namespace rt {
   {
   }
 
-  real_t DirectionalLight::pdfLi(const SurfaceInfo& /*info*/, const Direction& /*wi*/) const
+  real_t DirectionalLight::pdfLi(const SurfaceInfo& /*surface*/, const Direction& /*wi*/) const
   {
     return 0;
   }
 
-  Color DirectionalLight::sampleLi(const SurfaceInfo& info, Direction *wi,
+  Color DirectionalLight::sampleLi(const SurfaceInfo& surface, Direction *wi,
                                    const Sample2D& /*xi*/, real_t *pdf, Ray *vis) const
   {
     *wi  = _wiW;
@@ -60,7 +60,7 @@ namespace rt {
       *pdf = 1;
     }
     if( vis != nullptr ) {
-      *vis = info.ray(*wi, TRACE_BIAS);
+      *vis = surface.ray(*wi, TRACE_BIAS);
     }
     return _L;
   }

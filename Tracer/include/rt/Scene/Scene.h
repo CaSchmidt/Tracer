@@ -50,7 +50,7 @@ namespace rt {
 
     void clear();
 
-    bool intersect(SurfaceInfo *info, const Ray& ray) const;
+    bool intersect(SurfaceInfo *surface, const Ray& ray) const;
     bool intersect(const Ray& ray) const;
 
     const Lights& lights() const;

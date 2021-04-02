@@ -59,8 +59,8 @@ namespace rt {
 
     Type type() const;
 
-    virtual real_t pdfLi(const SurfaceInfo& info, const Direction& wi) const = 0;
-    virtual Color sampleLi(const SurfaceInfo& info, Direction *wi,
+    virtual real_t pdfLi(const SurfaceInfo& surface, const Direction& wi) const = 0;
+    virtual Color sampleLi(const SurfaceInfo& surface, Direction *wi,
                            const Sample2D& xi, real_t *pdf, Ray *vis) const = 0;
 
     template<typename VecT>

@@ -47,7 +47,7 @@ namespace rt {
   {
   }
 
-  bool Sphere::intersect(SurfaceInfo *info, const Ray& ray) const
+  bool Sphere::intersect(SurfaceInfo *surface, const Ray& ray) const
   {
     const Ray rayObj = toObject(ray);
 
@@ -56,21 +56,21 @@ namespace rt {
       return false;
     }
 
-    if( info != nullptr ) {
+    if( surface != nullptr ) {
       const Vertex Pobj = rayObj(t);
       const Normal Nobj = geom::to_normal(n4::normalize(Pobj));
       const real_t    u = math::phase<real_t>(Nobj.x, Nobj.y)/TWO_PI;
       const real_t    v = n4::acos(std::clamp<real_t>(Nobj.z, -ONE, ONE))/PI;
 
-      *info = SurfaceInfo();
+      *surface = SurfaceInfo();
 
-      info->object = this;
-      info->t      = t;
-      info->wo     = -ray.direction();
-      info->N      = toWorld(Nobj);
-      info->P      = toWorld(Pobj);
-      info->u      = u;
-      info->v      = v;
+      surface->object = this;
+      surface->t      = t;
+      surface->wo     = -ray.direction();
+      surface->N      = toWorld(Nobj);
+      surface->P      = toWorld(Pobj);
+      surface->u      = u;
+      surface->v      = v;
     }
 
     return true;

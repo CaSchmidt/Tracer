@@ -70,24 +70,24 @@ namespace rt {
     return false;
   }
 
-  bool Group::intersect(SurfaceInfo *info, const Ray& ray) const
+  bool Group::intersect(SurfaceInfo *surface, const Ray& ray) const
   {
     const Ray rayObj = toObject(ray);
 
-    if( info != nullptr ) {
-      *info = SurfaceInfo();
+    if( surface != nullptr ) {
+      *surface = SurfaceInfo();
       for(const ObjectPtr& o : _objects) {
         SurfaceInfo hit;
         if( o->intersect(&hit, rayObj) ) {
-          if( !info->isHit()  ||  hit.t < info->t ) {
-            *info = hit;
+          if( !surface->isHit()  ||  hit.t < surface->t ) {
+            *surface = hit;
           }
         }
       }
-      if( info->isHit() ) {
-        info->wo = toWorld(info->wo);
-        info->N  = toWorld(info->N);
-        info->P  = toWorld(info->P);
+      if( surface->isHit() ) {
+        surface->wo = toWorld(surface->wo);
+        surface->N  = toWorld(surface->N);
+        surface->P  = toWorld(surface->P);
         return true;
       }
 

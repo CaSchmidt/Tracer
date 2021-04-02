@@ -64,7 +64,7 @@ namespace rt {
   {
   }
 
-  bool Plane::intersect(SurfaceInfo *info, const Ray& ray) const
+  bool Plane::intersect(SurfaceInfo *surface, const Ray& ray) const
   {
     const Ray rayObj = toObject(ray);
 
@@ -80,16 +80,16 @@ namespace rt {
       return false;
     }
 
-    if( info != nullptr ) {
-      *info = SurfaceInfo();
+    if( surface != nullptr ) {
+      *surface = SurfaceInfo();
 
-      info->object = this;
-      info->t      = t;
-      info->wo     = -ray.direction();
-      info->N      = toWorld(Normal{0, 0, 1});
-      info->P      = toWorld(Pobj);
-      info->u      = u;
-      info->v      = v;
+      surface->object = this;
+      surface->t      = t;
+      surface->wo     = -ray.direction();
+      surface->N      = toWorld(Normal{0, 0, 1});
+      surface->P      = toWorld(Pobj);
+      surface->u      = u;
+      surface->v      = v;
     }
 
     return true;

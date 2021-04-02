@@ -50,7 +50,7 @@ namespace rt {
   {
   }
 
-  bool Cylinder::intersect(SurfaceInfo *info, const Ray& ray) const
+  bool Cylinder::intersect(SurfaceInfo *surface, const Ray& ray) const
   {
     const Ray rayObj = toObject(ray);
 
@@ -64,20 +64,20 @@ namespace rt {
       return false;
     }
 
-    if( info != nullptr ) {
+    if( surface != nullptr ) {
       const Normal Nobj = n4::normalize(Normal{Pobj.x, Pobj.y, 0});
       const real_t    u = math::phase<real_t>(Pobj.x, Pobj.y)/TWO_PI;
       const real_t    v = (Pobj.z + _height/2)/_height;
 
-      *info = SurfaceInfo();
+      *surface = SurfaceInfo();
 
-      info->object = this;
-      info->t      = t;
-      info->wo     = -ray.direction();
-      info->N      = toWorld(Nobj);
-      info->P      = toWorld(Pobj);
-      info->u      = u;
-      info->v      = v;
+      surface->object = this;
+      surface->t      = t;
+      surface->wo     = -ray.direction();
+      surface->N      = toWorld(Nobj);
+      surface->P      = toWorld(Pobj);
+      surface->u      = u;
+      surface->v      = v;
     }
 
     return true;
