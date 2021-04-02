@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,67 +29,53 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <cstdio>
-#include <cstdlib>
-
-#include "rt/Camera/FrustumCamera.h"
-#include "rt/Camera/SimpleCamera.h"
-#include "rt/Loader/SceneLoader.h"
 #include "rt/Renderer/DirectLightingRenderer.h"
-#include "rt/Renderer/WhittedRenderer.h"
-#include "rt/Sampler/SimpleSampler.h"
 
-#include "Worker.h"
+#include "rt/Material/BSDFdata.h"
+#include "rt/Object/SurfaceInfo.h"
+#include "rt/Renderer/RenderUtils.h"
 
-#define BASE_PATH     "../../Tracer/Tracer/scenes/"
-#define FILE_1        BASE_PATH "scene_1.xml"
-#define FILE_2        BASE_PATH "scene_2.xml"
-#define FILE_3        BASE_PATH "scene_3.xml"
-#define FILE_4        BASE_PATH "scene_4.xml"
-#define FILE_OBJECTS  BASE_PATH "scene_objects.xml"
-#define FILE_SPHERES  BASE_PATH "scene_spheres.xml"
-#define FILE_TEXT     BASE_PATH "scene_text.xml"
+namespace rt {
 
-constexpr std::size_t numSamples = 64;
+  ////// public //////////////////////////////////////////////////////////////
 
-int main(int /*argc*/, char ** /*argv*/)
-{
-  const char *filename = FILE_1;
-
-#if 1
-  rt::DirectLightingRenderer renderer;
-#else
-  rt::WhittedRenderer renderer;
-#endif
-  if( !rt::loadScene(&renderer, filename) ) {
-    return EXIT_FAILURE;
-  }
-
-#if 0
+  DirectLightingRenderer::DirectLightingRenderer() noexcept
   {
-    rt::RenderOptions opts = renderer.options();
-    opts.aperture = 0.5;
-    opts.focus    = n4::distance(renderer.options().eye, renderer.options().lookAt);
-    renderer.setOptions(opts);
-
-    printf("aperture = %.3f\n", opts.aperture);
-    printf("   focus = %.3f\n", opts.focus);
-    fflush(stdout);
   }
-#endif
 
-#if 1
-  rt::CameraPtr cam = rt::FrustumCamera::create(renderer.options());
-#else
-  rt::CameraPtr cam = rt::SimpleCamera::create(renderer.options());
-#endif
-  renderer.setCamera(cam);
+  DirectLightingRenderer::~DirectLightingRenderer() noexcept
+  {
+  }
 
-  rt::SamplerPtr sampler = rt::SimpleSampler::create(numSamples);
+  ////// private /////////////////////////////////////////////////////////////
 
-  Worker worker;
-  const Image image = worker.execute(&renderer, sampler);
-  image.saveAsPNG("output.png");
+  Color DirectLightingRenderer::radiance(const Ray& ray, const SamplerPtr& sampler,
+                                         const unsigned int depth) const
+  {
+    const RenderOptions& options = DirectLightingRenderer::options();
+    const Scene&           scene = DirectLightingRenderer::scene();
 
-  return EXIT_SUCCESS;
-}
+    SurfaceInfo surface;
+    if( !scene.intersect(&surface, ray) ) {
+      // NOTE: PBR3 uses an InfiniteAreaLight to compute background radiance.
+      return options.backgroundColor;
+    }
+
+    Color Lo;
+
+    Lo += Color(); // TODO: Account for emitted radiance when hitting an area light!
+
+    if( scene.lights().size() > 0 ) {
+      Lo += uniformSampleOneLight(surface, scene, sampler);
+    }
+
+    if( depth + 1 < options.maxDepth ) {
+      const BSDFdata data(surface);
+      Lo += specularReflectOrTransmit(data, surface, sampler, depth, false);
+      Lo += specularReflectOrTransmit(data, surface, sampler, depth, true);
+    }
+
+    return Lo;
+  }
+
+} // namespace rt

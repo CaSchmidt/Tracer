@@ -64,9 +64,11 @@ set(Tracer_HEADERS
   include/rt/Object/Plane.h
   include/rt/Object/Sphere.h
   include/rt/Object/SurfaceInfo.h
+  include/rt/Renderer/DirectLightingRenderer.h
   include/rt/Renderer/IRenderer.h
   include/rt/Renderer/RenderLoop.h
   include/rt/Renderer/RenderOptions.h
+  include/rt/Renderer/RenderUtils.h
   include/rt/Renderer/WhittedRenderer.h
   include/rt/Sampler/ISampler.h
   include/rt/Sampler/Sample.h
@@ -115,7 +117,9 @@ set(Tracer_SOURCES
   src/rt/Object/IObject.cpp
   src/rt/Object/Plane.cpp
   src/rt/Object/Sphere.cpp
+  src/rt/Renderer/DirectLightingRenderer.cpp
   src/rt/Renderer/IRenderer.cpp
+  src/rt/Renderer/RenderUtils.cpp
   src/rt/Renderer/WhittedRenderer.cpp
   src/rt/Sampler/ISampler.cpp
   src/rt/Sampler/Sampling.cpp
