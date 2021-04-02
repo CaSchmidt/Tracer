@@ -32,7 +32,6 @@
 #ifndef BSDFDATA_H
 #define BSDFDATA_H
 
-#include "rt/Sampler/ISampler.h"
 #include "rt/Texture/TexCoord.h"
 
 namespace rt {
@@ -40,10 +39,8 @@ namespace rt {
   struct SurfaceInfo;
 
   struct BSDFdata {
-    BSDFdata(const SurfaceInfo& info) noexcept;
-    BSDFdata(const SurfaceInfo& info, const real_t etaA) noexcept;
-    BSDFdata(const SurfaceInfo& info, const SamplerPtr& sampler) noexcept;
-    BSDFdata(const SurfaceInfo& info, const real_t etaA, const SamplerPtr& sampler) noexcept;
+    BSDFdata(const SurfaceInfo& surface) noexcept;
+    BSDFdata(const SurfaceInfo& surface, const real_t etaA) noexcept;
 
     template<typename VecT>
     inline VecT toShading(const VecT& v) const
@@ -60,9 +57,9 @@ namespace rt {
     real_t    etaA{1};
     TexCoord2D tex{};
     Direction   wo{}; // World Coordinates
+    Direction  woS{}; // Shading Coordinates
     Matrix  xfrmSW{}; // World -> Shading
     Matrix  xfrmWS{}; // Shading -> World
-    Sample2D    xi{};
 
   private:
     BSDFdata() noexcept = delete;

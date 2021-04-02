@@ -67,7 +67,7 @@ namespace rt {
                const IBxDF::Flags flags = IBxDF::AllFlags) const;
     real_t pdf(const BSDFdata& data, const Direction& wi,
                const IBxDF::Flags flags = IBxDF::AllFlags) const;
-    Color sample(const BSDFdata& data, Direction *wi, real_t *pdf,
+    Color sample(const BSDFdata& data, Direction *wi, const Sample2D& xi, real_t *pdf,
                  const IBxDF::Flags flags = IBxDF::AllFlags,
                  IBxDF::Flags *sampledFlags = nullptr) const;
 

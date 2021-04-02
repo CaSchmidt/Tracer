@@ -35,34 +35,21 @@
 
 namespace rt {
 
-  BSDFdata::BSDFdata(const SurfaceInfo& info) noexcept
-    : BSDFdata(info, ONE, SamplerPtr())
+  BSDFdata::BSDFdata(const SurfaceInfo& surface) noexcept
+    : BSDFdata(surface, ONE)
   {
   }
 
-  BSDFdata::BSDFdata(const SurfaceInfo& info, const real_t etaA) noexcept
-    : BSDFdata(info, etaA, SamplerPtr())
-  {
-  }
-
-  BSDFdata::BSDFdata(const SurfaceInfo& info, const SamplerPtr& sampler) noexcept
-    : BSDFdata(info, ONE, sampler)
-  {
-  }
-
-  BSDFdata::BSDFdata(const SurfaceInfo& sinfo, const real_t etaA, const SamplerPtr& sampler) noexcept
+  BSDFdata::BSDFdata(const SurfaceInfo& surface, const real_t etaA) noexcept
     : etaA{etaA}
   {
-    tex = sinfo.texCoord2D();
+    tex = surface.texCoord2D();
 
-    if( sampler ) {
-      xi =sampler->sample2D();
-    }
-
-    xfrmWS = n4::util::frameFromZ(sinfo.N);
+    xfrmWS = n4::util::frameFromZ(surface.N);
     xfrmSW = xfrmWS.transpose();
 
-    wo = sinfo.wo;
+    wo  = surface.wo;
+    woS = toShading(wo);
   }
 
 } // namespace rt

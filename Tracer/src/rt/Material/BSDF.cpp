@@ -96,20 +96,18 @@ namespace rt {
   Color BSDF::eval(const BSDFdata& data, const Direction& wi,
                    const IBxDF::Flags flags) const
   {
-    const Direction woS = data.toShading(data.wo);
     const Direction wiS = data.toShading(wi);
-    return evalS(woS, wiS, data.tex, flags);
+    return evalS(data.woS, wiS, data.tex, flags);
   }
 
   real_t BSDF::pdf(const BSDFdata& data, const Direction& wi,
                    const IBxDF::Flags flags) const
   {
-    const Direction woS = data.toShading(data.wo);
     const Direction wiS = data.toShading(wi);
-    return pdfS(woS, wiS, flags);
+    return pdfS(data.woS, wiS, flags);
   }
 
-  Color BSDF::sample(const BSDFdata& data, Direction *wi, real_t *pdf,
+  Color BSDF::sample(const BSDFdata& data, Direction *wi, const Sample2D& xi, real_t *pdf,
                      const IBxDF::Flags flags, IBxDF::Flags *sampledFlags) const
   {
     if( pdf != nullptr ) {
@@ -127,7 +125,7 @@ namespace rt {
       return Color();
     }
 
-    SAMPLES_2D(data.xi);
+    SAMPLES_2D(xi);
 
     const size_t choice = sampling::choose(xi1, matching);
 
@@ -145,9 +143,8 @@ namespace rt {
 
     // (3) Sample Chosen BxDF ////////////////////////////////////////////////
 
-    const Direction woS = data.toShading(data.wo);
     Direction wiS;
-    Color f = bxdf->sample(woS, &wiS, xiRemapped, pdf);
+    Color f = bxdf->sample(data.woS, &wiS, xiRemapped, pdf);
     *wi = data.toWorld(wiS);
     if( pdf != nullptr  &&  *pdf <= ZERO ) {
       return Color();
@@ -160,14 +157,14 @@ namespace rt {
 
     if( pdf != nullptr ) {
       if( !bxdf->isSpecular()  &&  matching > 1 ) {
-        *pdf = pdfS(woS, wiS, flags);
+        *pdf = pdfS(data.woS, wiS, flags);
       }
     }
 
     // (5) Compute Value of BSDF for Sampled Direction ///////////////////////
 
     if( !bxdf->isSpecular()  &&  matching > 1 ) {
-      f = evalS(woS, wiS, data.tex, flags);
+      f = evalS(data.woS, wiS, data.tex, flags);
     }
 
     return f;

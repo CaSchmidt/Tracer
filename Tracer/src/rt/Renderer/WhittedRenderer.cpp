@@ -59,13 +59,13 @@ namespace rt {
       return options().backgroundColor;
     }
 
-    const BSDFdata data(info, sampler);
+    const BSDFdata data(info);
 
     Color color;
     for(const LightPtr& light : scene.lights()) {
-      Ray       vis;
+      Ray      vis;
       Direction wi;
-      const Color Li = light->sampleLi(info, &wi, data.xi, nullptr, &vis);
+      const Color Li = light->sampleLi(info, &wi, sampler->sample2D(), nullptr, &vis);
 
       if( scene.intersect(vis) ) {
         continue;
