@@ -31,6 +31,8 @@
 
 #include "rt/Object/IObject.h"
 
+#include "rt/Object/SurfaceInfo.h"
+
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
@@ -69,6 +71,55 @@ namespace rt {
     if( material ) {
       _material = std::move(material);
     }
+  }
+
+  real_t IObject::pdf(const SurfaceInfo& /*surface*/) const
+  {
+    return ONE/area();
+  }
+
+  SurfaceInfo IObject::sample(const SurfaceInfo& ref, const Sample2D& xi, real_t *pdf) const
+  {
+    const SurfaceInfo  surface = sample(xi, pdf);
+    const Vertex         delta = ref.P - surface.P; // NOTE: direction := to - from
+    const real_t lengthSquared = n4::dot(delta, delta);
+
+    if( pdf == nullptr ) {
+      return surface;
+    }
+
+    if( lengthSquared != ZERO ) {
+      // NOTE: 'wi' points towards 'ref'; cf. 'delta'!
+      const Direction    wi = geom::to_direction(n4::normalize(delta));
+      const real_t absCosTi = geom::absDot(surface.N, wi);
+      if( absCosTi != ZERO ) {
+        *pdf *= lengthSquared/absCosTi; // NOTE: Convert from area to solid angle.
+      } else {
+        *pdf = 0;
+      }
+    } else {
+      *pdf = 0;
+    }
+
+    return surface;
+  }
+
+  real_t IObject::pdf(const SurfaceInfo& ref, const Direction& wi) const
+  {
+    const Ray ray = ref.ray(wi);
+    SurfaceInfo surface;
+    if( !intersect(&surface, ray) ) {
+      return 0;
+    }
+
+    const Vertex         delta = ref.P - surface.P;
+    const real_t lengthSquared = n4::dot(delta, delta);
+    const real_t      absCosTi = geom::absDot(surface.N, -wi);
+    if( absCosTi == ZERO ) {
+      return 0;
+    }
+
+    return lengthSquared/absCosTi/area(); // NOTE: Return solid angle.
   }
 
 } // namespace rt

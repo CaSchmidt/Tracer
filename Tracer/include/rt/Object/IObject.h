@@ -67,6 +67,17 @@ namespace rt {
       return _xfrmWO*x;
     }
 
+    /*
+     * Cf. to PBR3 Chapter "14.2.2 Sampling Shapes"
+     * for an explanation of the following functions.
+     */
+    virtual real_t area() const = 0;
+    virtual SurfaceInfo sample(const Sample2D& xi, real_t *pdf) const = 0;
+    virtual real_t pdf(const SurfaceInfo& surface) const;
+    // NOTE: The following functions compute the PDF with respect to solid angle!
+    virtual SurfaceInfo sample(const SurfaceInfo& ref, const Sample2D& xi, real_t *pdf) const;
+    virtual real_t pdf(const SurfaceInfo& ref, const Direction& wi) const;
+
   private:
     IObject() noexcept = delete;
 
