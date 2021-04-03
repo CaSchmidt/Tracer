@@ -57,11 +57,7 @@ namespace rt {
 
     /*
      * Cf. to PBR3 Chapter "9.1 BSDFs" and Chapter "14.1.6 Sampling BSDFs"
-     * for an explanation of these functions.
-     *
-     * NOTE:
-     * In contrast to PBR3, this implementation uses the shading coordinate system
-     * to perform its computations.
+     * for an explanation of the following functions.
      */
     Color eval(const BSDFdata& data, const Direction& wi,
                const IBxDF::Flags flags = IBxDF::AllFlags) const;

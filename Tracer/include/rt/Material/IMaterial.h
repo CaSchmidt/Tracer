@@ -35,7 +35,6 @@
 #include <memory>
 
 #include "rt/Material/BSDF.h"
-#include "rt/Texture/TexCoord.h"
 
 namespace rt {
 
