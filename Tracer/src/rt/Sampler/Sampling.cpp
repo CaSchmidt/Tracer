@@ -130,7 +130,7 @@ namespace rt {
   {
     SAMPLES_2D(xi);
     const real_t   z = xi1;
-    const real_t   r = math::pythagoras<real_t>(xi1);
+    const real_t   r = math::pythagoras<real_t>(z);
     const real_t phi = TWO_PI*xi2;
     return {r*n4::cos(phi), r*n4::sin(phi), z};
   }
