@@ -33,6 +33,7 @@
 
 #include "geom/Intersect.h"
 #include "rt/Object/SurfaceInfo.h"
+#include "rt/Sampler/Sampling.h"
 
 namespace rt {
 
@@ -79,6 +80,29 @@ namespace rt {
     }
 
     return true;
+  }
+
+  real_t Disk::area() const
+  {
+    return PI*_radius*_radius;
+  }
+
+  SurfaceInfo Disk::sample(const Sample2D& xi, real_t *pdf) const
+  {
+    const Vertex Pdisk = ConcentricDisk::sample(xi);
+
+    const Vertex Pobj{_radius*Pdisk.x, _radius*Pdisk.y, 0};
+    const Normal Nobj{0, 0, 1};
+
+    SurfaceInfo surface;
+    surface.N = toWorld(Nobj);
+    surface.P = toWorld(Pobj);
+
+    if( pdf != nullptr ) {
+      *pdf = ONE/area();
+    }
+
+    return surface;
   }
 
   ObjectPtr Disk::create(const Transform& objectToWorld,

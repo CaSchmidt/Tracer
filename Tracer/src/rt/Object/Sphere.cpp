@@ -33,6 +33,7 @@
 
 #include "geom/Intersect.h"
 #include "rt/Object/SurfaceInfo.h"
+#include "rt/Sampler/Sampling.h"
 
 namespace rt {
 
@@ -74,6 +75,29 @@ namespace rt {
     }
 
     return true;
+  }
+
+  real_t Sphere::area() const
+  {
+    return FOUR_PI*_radius*_radius;
+  }
+
+  SurfaceInfo Sphere::sample(const Sample2D& xi, real_t *pdf) const
+  {
+    const Vertex Psphere = geom::to_vertex(UniformSphere::sample(xi));
+
+    const Vertex Pobj = _radius*Psphere;
+    const Normal Nobj = n4::normalize(geom::to_normal(Pobj));
+
+    SurfaceInfo surface;
+    surface.N = toWorld(Nobj);
+    surface.P = toWorld(Pobj);
+
+    if( pdf != nullptr ) {
+      *pdf = ONE/area();
+    }
+
+    return surface;
   }
 
   ObjectPtr Sphere::create(const Transform& objectToWorld,

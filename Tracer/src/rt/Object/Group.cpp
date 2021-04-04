@@ -102,6 +102,16 @@ namespace rt {
     return false;
   }
 
+  real_t Group::area() const
+  {
+    return 0;
+  }
+
+  SurfaceInfo Group::sample(const Sample2D &/*xi*/, real_t * /*pdf*/) const
+  {
+    return SurfaceInfo();
+  }
+
   ObjectPtr Group::create(const Transform& objectToWorld)
   {
     return std::make_unique<Group>(objectToWorld);

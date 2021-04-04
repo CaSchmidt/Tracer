@@ -48,6 +48,14 @@ namespace rt {
 
     bool intersect(SurfaceInfo *surface, const Ray& ray) const;
 
+    /*
+     * NOTE:
+     * The following implementations will NEVER be called
+     * due to intersect() returning a non-aggregate IObject or FALSE!
+     */
+    real_t area() const;
+    SurfaceInfo sample(const Sample2D &xi, real_t *pdf) const;
+
     static ObjectPtr create(const Transform& objectToWorld);
 
   private:

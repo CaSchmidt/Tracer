@@ -83,6 +83,31 @@ namespace rt {
     return true;
   }
 
+  real_t Cylinder::area() const
+  {
+    return TWO_PI*_radius*_height;
+  }
+
+  SurfaceInfo Cylinder::sample(const Sample2D& xi, real_t *pdf) const
+  {
+    SAMPLES_2D(xi);
+    const real_t phi = xi2*TWO_PI;
+    const real_t   z = xi1*_height - _height/TWO;
+
+    const Vertex Pobj{_radius*n4::cos(phi), _radius*n4::sin(phi), z};
+    const Normal Nobj = n4::normalize(Normal{Pobj.x, Pobj.y, 0});
+
+    SurfaceInfo surface;
+    surface.N = toWorld(Nobj);
+    surface.P = toWorld(Pobj);
+
+    if( pdf != nullptr ) {
+      *pdf = ONE/area();
+    }
+
+    return surface;
+  }
+
   ObjectPtr Cylinder::create(const Transform& objectToWorld,
                              const real_t height, const real_t radius)
   {

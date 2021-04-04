@@ -44,6 +44,9 @@ namespace rt {
 
     bool intersect(SurfaceInfo *surface, const Ray& ray) const final;
 
+    real_t area() const;
+    SurfaceInfo sample(const Sample2D& xi, real_t *pdf) const;
+
     static ObjectPtr create(const Transform& objectToWorld,
                             const real_t radius);
 

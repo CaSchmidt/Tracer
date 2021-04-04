@@ -95,6 +95,31 @@ namespace rt {
     return true;
   }
 
+  real_t Plane::area() const
+  {
+    return _width*_height;
+  }
+
+  SurfaceInfo Plane::sample(const Sample2D& xi, real_t *pdf) const
+  {
+    SAMPLES_2D(xi);
+    const real_t x = xi1*_width  - _width/2;
+    const real_t y = xi2*_height - _height/2;
+
+    const Vertex Pobj{x, y, 0};
+    const Normal Nobj{0, 0, 1};
+
+    SurfaceInfo surface;
+    surface.N = toWorld(Nobj);
+    surface.P = toWorld(Pobj);
+
+    if( pdf != nullptr ) {
+      *pdf = ONE/area();
+    }
+
+    return surface;
+  }
+
   ObjectPtr Plane::create(const Transform& objectToWorld,
                           const real_t width, const real_t height)
   {
