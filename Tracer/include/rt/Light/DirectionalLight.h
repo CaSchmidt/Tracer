@@ -41,8 +41,8 @@ namespace rt {
     DirectionalLight(const Transform& lightToWorld, const Color& L, const Direction& wiL) noexcept;
     ~DirectionalLight() noexcept;
 
-    real_t pdfLi(const SurfaceInfo& surface, const Direction& wi) const;
-    Color sampleLi(const SurfaceInfo& surface, Direction *wi,
+    real_t pdfLi(const SurfaceInfo& ref, const Direction& wi) const;
+    Color sampleLi(const SurfaceInfo& ref, Direction *wi,
                    const Sample2D& xi, real_t *pdf, Ray *vis) const;
 
     static LightPtr create(const Transform& lightToWorld, const Color& L, const Direction& wiL);

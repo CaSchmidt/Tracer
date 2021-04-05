@@ -53,7 +53,14 @@ namespace rt {
 
   size_t ILight::numSamples() const
   {
-    return 1;
+    return _numSamples;
+  }
+
+  void ILight::setNumSamples(const size_t numSamples)
+  {
+    _numSamples = numSamples > 1
+        ? numSamples
+        : 1;
   }
 
   ILight::Type ILight::type() const

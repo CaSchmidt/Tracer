@@ -48,21 +48,21 @@ namespace rt {
   {
   }
 
-  real_t PointLight::pdfLi(const SurfaceInfo& /*surface*/, const Direction& /*wi*/) const
+  real_t PointLight::pdfLi(const SurfaceInfo& /*ref*/, const Direction& /*wi*/) const
   {
     return 0;
   }
 
-  Color PointLight::sampleLi(const SurfaceInfo& surface, Direction *wi,
+  Color PointLight::sampleLi(const SurfaceInfo& ref, Direction *wi,
                              const Sample2D& /*xi*/, real_t *pdf, Ray *vis) const
   {
-    const real_t r = n4::distance(surface.P, _pW);
-    *wi  = geom::to_direction(n4::direction(surface.P, _pW));
+    const real_t r = n4::distance(ref.P, _pW);
+    *wi  = geom::to_direction(n4::direction(ref.P, _pW));
     if( pdf != nullptr ) {
       *pdf = 1;
     }
     if( vis != nullptr ) {
-      *vis = surface.ray(*wi, TRACE_BIAS, r);
+      *vis = ref.ray(*wi, TRACE_BIAS, r);
     }
     return _I*attenuation(r);
   }

@@ -55,12 +55,13 @@ namespace rt {
 
     bool isDeltaLight() const;
 
-    virtual size_t numSamples() const;
+    size_t numSamples() const;
+    void setNumSamples(const size_t numSamples);
 
     Type type() const;
 
-    virtual real_t pdfLi(const SurfaceInfo& surface, const Direction& wi) const = 0;
-    virtual Color sampleLi(const SurfaceInfo& surface, Direction *wi,
+    virtual real_t pdfLi(const SurfaceInfo& ref, const Direction& wi) const = 0;
+    virtual Color sampleLi(const SurfaceInfo& ref, Direction *wi,
                            const Sample2D& xi, real_t *pdf, Ray *vis) const = 0;
 
     template<typename VecT>
@@ -78,6 +79,7 @@ namespace rt {
   private:
     ILight() noexcept = delete;
 
+    size_t    _numSamples{1};
     Type      _type{Invalid};
     Transform _xfrmWL{}; // Light -> World
     Transform _xfrmLW{}; // World -> Light
