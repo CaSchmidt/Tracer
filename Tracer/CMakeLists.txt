@@ -45,7 +45,9 @@ set(Tracer_HEADERS
   include/rt/Camera/FrustumCamera.h
   include/rt/Camera/ICamera.h
   include/rt/Camera/SimpleCamera.h
+  include/rt/Light/DiffuseAreaLight.h
   include/rt/Light/DirectionalLight.h
+  include/rt/Light/IAreaLight.h
   include/rt/Light/ILight.h
   include/rt/Light/PointLight.h
   include/rt/Loader/SceneLoader.h
@@ -94,7 +96,9 @@ set(Tracer_SOURCES
   src/rt/Camera/FrustumCamera.cpp
   src/rt/Camera/ICamera.cpp
   src/rt/Camera/SimpleCamera.cpp
+  src/rt/Light/DiffuseAreaLight.cpp
   src/rt/Light/DirectionalLight.cpp
+  src/rt/Light/IAreaLight.cpp
   src/rt/Light/ILight.cpp
   src/rt/Light/PointLight.cpp
   src/rt/Loader/SceneLoader.cpp
