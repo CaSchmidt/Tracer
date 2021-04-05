@@ -76,12 +76,12 @@ namespace rt {
       return object;
     }
 
-    ObjectPtr parseDisk(const tinyxml2::XMLElement *node)
+    ObjectPtr parseDisk(const tinyxml2::XMLElement *node, const bool mat_is_opt)
     {
       bool myOk = false;
 
       MaterialPtr material = parseMaterial(node->FirstChildElement("Material"));
-      if( !material ) {
+      if( !mat_is_opt  &&  !material ) {
         return ObjectPtr();
       }
 
@@ -154,7 +154,7 @@ namespace rt {
       return groupPtr;
     }
 
-    ObjectPtr parsePlane(const tinyxml2::XMLElement *node)
+    ObjectPtr parsePlane(const tinyxml2::XMLElement *node, const bool mat_is_opt)
     {
       bool myOk = false;
 
@@ -164,7 +164,7 @@ namespace rt {
       }
 
       MaterialPtr material = parseMaterial(node->FirstChildElement("Material"));
-      if( !material ) {
+      if( !mat_is_opt  &&  !material ) {
         return ObjectPtr();
       }
 
@@ -184,12 +184,12 @@ namespace rt {
       return object;
     }
 
-    ObjectPtr parseSphere(const tinyxml2::XMLElement *node)
+    ObjectPtr parseSphere(const tinyxml2::XMLElement *node, const bool mat_is_opt)
     {
       bool myOk = false;
 
       MaterialPtr material = parseMaterial(node->FirstChildElement("Material"));
-      if( !material ) {
+      if( !mat_is_opt  &&  !material ) {
         return ObjectPtr();
       }
 
@@ -211,7 +211,7 @@ namespace rt {
 
     // Export ////////////////////////////////////////////////////////////////
 
-    ObjectPtr parseObject(const tinyxml2::XMLElement *node)
+    ObjectPtr parseObject(const tinyxml2::XMLElement *node, const bool mat_is_opt = false)
     {
       if( node == nullptr ) {
         return ObjectPtr();
@@ -220,13 +220,13 @@ namespace rt {
       if(        node->Attribute("type", "Cylinder") != nullptr ) {
         return parseCylinder(node);
       } else if( node->Attribute("type", "Disk") != nullptr ) {
-        return parseDisk(node);
+        return parseDisk(node, mat_is_opt);
       } else if( node->Attribute("type", "Pillar") != nullptr ) {
         return parsePillar(node);
       } else if( node->Attribute("type", "Plane") != nullptr ) {
-        return parsePlane(node);
+        return parsePlane(node, mat_is_opt);
       } else if( node->Attribute("type", "Sphere") != nullptr ) {
-        return parseSphere(node);
+        return parseSphere(node, mat_is_opt);
       }
 
       return ObjectPtr();

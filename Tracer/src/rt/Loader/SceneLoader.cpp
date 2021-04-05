@@ -51,7 +51,7 @@ namespace rt {
 
     LightPtr parseLight(const tinyxml2::XMLElement *node);
 
-    ObjectPtr parseObject(const tinyxml2::XMLElement *node);
+    ObjectPtr parseObject(const tinyxml2::XMLElement *node, const bool mat_is_opt = false);
 
     RenderOptions parseOptions(const tinyxml2::XMLElement *node, bool *ok);
 
