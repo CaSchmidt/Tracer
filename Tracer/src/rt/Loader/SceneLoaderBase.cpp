@@ -183,6 +183,8 @@ namespace rt {
 
     Matrix parseRotation(const tinyxml2::XMLElement *node, bool *ok)
     {
+      using MyElem = tinyxml2::XMLElement;
+
       if( ok != nullptr ) {
         *ok = false;
       }
@@ -193,45 +195,67 @@ namespace rt {
 
       bool myOk = false;
 
-      real_t rx = 0;
-      if( node->FirstChildElement("rx") != nullptr ) {
-        rx = parseAngle(node->FirstChildElement("rx"), &myOk);
+      Matrix Rx;
+      if( const MyElem *elem = node->FirstChildElement("rx"); elem != nullptr ) {
+        const real_t rx = parseAngle(elem, &myOk);
         if( !myOk ) {
           return Matrix();
         }
+        Rx = n4::rotateX(rx);
+      } else if( const MyElem *elem = node->FirstChildElement("rxByPI2"); elem != nullptr ) {
+        const signed int rx = parseSignedInt(elem, &myOk);
+        if( !myOk ) {
+          return Matrix();
+        }
+        Rx = n4::rotateXbyPI2(rx);
+      } else {
+        Rx = n4::identity();
       }
 
-      real_t ry = 0;
-      if( node->FirstChildElement("ry") != nullptr ) {
-        ry = parseAngle(node->FirstChildElement("ry"), &myOk);
+      Matrix Ry;
+      if( const MyElem *elem = node->FirstChildElement("ry"); elem != nullptr ) {
+        const real_t ry = parseAngle(elem, &myOk);
         if( !myOk ) {
           return Matrix();
         }
+        Ry = n4::rotateY(ry);
+      } else if( const MyElem *elem = node->FirstChildElement("ryByPI2"); elem != nullptr ) {
+        const signed int ry = parseSignedInt(elem, &myOk);
+        if( !myOk ) {
+          return Matrix();
+        }
+        Ry = n4::rotateYbyPI2(ry);
+      } else {
+        Ry = n4::identity();
       }
 
-      real_t rz = 0;
-      if( node->FirstChildElement("rz") != nullptr ) {
-        rz = parseAngle(node->FirstChildElement("rz"), &myOk);
+      Matrix Rz;
+      if( const MyElem *elem = node->FirstChildElement("rz"); elem != nullptr ) {
+        const real_t rz = parseAngle(elem, &myOk);
         if( !myOk ) {
           return Matrix();
         }
+        Rz = n4::rotateZ(rz);
+      } else if( const MyElem *elem = node->FirstChildElement("rzByPI2"); elem != nullptr ) {
+        const signed int rz = parseSignedInt(elem, &myOk);
+        if( !myOk ) {
+          return Matrix();
+        }
+        Rz = n4::rotateZbyPI2(rz);
+      } else {
+        Rz = n4::identity();
       }
 
       if( ok != nullptr ) {
         *ok = true;
       }
 
-      const Matrix Rz = n4::abs(rz) == ZERO
-          ? n4::rotateZbyPI2(0)
-          : n4::rotateZ(rz);
-      const Matrix Ry = n4::abs(ry) == ZERO
-          ? n4::rotateYbyPI2(0)
-          : n4::rotateY(ry);
-      const Matrix Rx = n4::abs(rx) == ZERO
-          ? n4::rotateXbyPI2(0)
-          : n4::rotateX(rx);
-
       return Rz*Ry*Rx;
+    }
+
+    signed int parseSignedInt(const tinyxml2::XMLElement *node, bool *ok)
+    {
+      return parseNodeAsInt<signed int>(node, ok);
     }
 
     size_t parseSize(const tinyxml2::XMLElement *node, bool *ok)
