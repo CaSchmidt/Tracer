@@ -37,6 +37,15 @@
 
 namespace rt {
 
+  ////// Public //////////////////////////////////////////////////////////////
+
+  bool isSphere(const ObjectPtr& o) // cf. IObject.h
+  {
+    return dynamic_cast<Sphere*>(o.get()) != nullptr;
+  }
+
+  ////// public //////////////////////////////////////////////////////////////
+
   Sphere::Sphere(const Transform& objectToWorld,
                  const real_t radius) noexcept
     : IObject(objectToWorld)

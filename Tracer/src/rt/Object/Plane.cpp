@@ -50,6 +50,13 @@ namespace rt {
 
   } // namespace priv
 
+  ////// Public //////////////////////////////////////////////////////////////
+
+  bool isPlane(const ObjectPtr& o) // cf. IObject.h
+  {
+    return dynamic_cast<Plane*>(o.get()) != nullptr;
+  }
+
   ////// public //////////////////////////////////////////////////////////////
 
   Plane::Plane(const Transform& objectToWorld,

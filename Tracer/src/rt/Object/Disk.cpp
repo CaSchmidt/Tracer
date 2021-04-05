@@ -37,6 +37,13 @@
 
 namespace rt {
 
+  ////// Public //////////////////////////////////////////////////////////////
+
+  bool isDisk(const ObjectPtr& o) // cf. IObject.h
+  {
+    return dynamic_cast<Disk*>(o.get()) != nullptr;
+  }
+
   ////// public //////////////////////////////////////////////////////////////
 
   Disk::Disk(const Transform& objectToWorld,

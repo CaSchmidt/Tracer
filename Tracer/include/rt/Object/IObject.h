@@ -99,6 +99,10 @@ namespace rt {
   using ObjectPtr = std::unique_ptr<IObject>;
   using   Objects = std::list<ObjectPtr>;
 
+  bool isDisk(const ObjectPtr& o);
+  bool isPlane(const ObjectPtr& o);
+  bool isSphere(const ObjectPtr& o);
+
 } // namespace rt
 
 #endif // IOBJECT_H
