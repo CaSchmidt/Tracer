@@ -40,6 +40,7 @@
 
 #include "rt/Loader/SceneLoader.h"
 
+#include "rt/Loader/SceneLoaderBase.h"
 #include "rt/Loader/SceneLoaderStringUtil.h"
 #include "rt/Renderer/IRenderer.h"
 
@@ -49,7 +50,7 @@ namespace rt {
 
     // Imports ///////////////////////////////////////////////////////////////
 
-    LightPtr parseLight(const tinyxml2::XMLElement *node);
+    LightPtr parseLight(const tinyxml2::XMLElement *node, const ObjectConsumer& add_object);
 
     ObjectPtr parseObject(const tinyxml2::XMLElement *node, const bool mat_is_opt = false);
 
@@ -91,10 +92,14 @@ namespace rt {
     }
 
     Scene scene;
+    const priv::ObjectConsumer add_object = [&](ObjectPtr& o) -> void {
+      scene.add(o);
+    };
+
     const tinyxml2::XMLElement *node = xml_Scene->FirstChildElement();
     while( node != nullptr ) {
       if(        priv::compare(node->Name(), "Light") ) {
-        LightPtr light = priv::parseLight(node);
+        LightPtr light = priv::parseLight(node, add_object);
         if( !light ) {
           fprintf(stderr, "Unable to add light of type \"%s\"!\n", node->Attribute("type"));
           return false;

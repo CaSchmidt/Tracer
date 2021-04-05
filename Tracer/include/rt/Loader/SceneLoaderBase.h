@@ -33,12 +33,13 @@
 #define SCENELOADERBASE_H
 
 #include <charconv>
+#include <functional>
 #include <string>
 #include <type_traits>
 
 #include <tinyxml2.h>
 
-#include "rt/Types.h"
+#include "rt/Object/IObject.h"
 
 namespace rt {
 
@@ -65,6 +66,8 @@ namespace rt {
     Transform parseTransform(const tinyxml2::XMLElement *node, bool *ok);
 
     Vertex parseVertex(const tinyxml2::XMLElement *node, bool *ok);
+
+    using ObjectConsumer = std::function<void(ObjectPtr&)>;
 
   } // namespace priv
 

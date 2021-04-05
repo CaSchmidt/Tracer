@@ -77,7 +77,7 @@ namespace rt {
 
     // Export ////////////////////////////////////////////////////////////////
 
-    LightPtr parseLight(const tinyxml2::XMLElement *node)
+    LightPtr parseLight(const tinyxml2::XMLElement *node, const ObjectConsumer& add_object)
     {
       if( node == nullptr ) {
         return LightPtr();
