@@ -54,6 +54,21 @@ namespace rt {
     return is_shadow_caster  &&  intersect(nullptr, ray);
   }
 
+  IAreaLight *IObject::areaLight()
+  {
+    return _areaLight;
+  }
+
+  const IAreaLight *IObject::areaLight() const
+  {
+    return _areaLight;
+  }
+
+  void IObject::setAreaLight(IAreaLight *light)
+  {
+    _areaLight = light;
+  }
+
   IMaterial *IObject::material()
   {
     return _material.get();

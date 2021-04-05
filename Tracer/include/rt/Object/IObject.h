@@ -39,6 +39,7 @@
 
 namespace rt {
 
+  class IAreaLight;
   struct SurfaceInfo;
 
   class IObject {
@@ -50,6 +51,10 @@ namespace rt {
 
     // NOTE: All arguments passed to/returned from this method are in WORLD coordinates!
     virtual bool intersect(SurfaceInfo *surface, const Ray& ray) const = 0;
+
+    IAreaLight *areaLight();
+    const IAreaLight *areaLight() const;
+    void setAreaLight(IAreaLight *light);
 
     IMaterial *material();
     const IMaterial *material() const;
@@ -87,6 +92,7 @@ namespace rt {
 
     Transform   _xfrmWO{}; // Object -> World
     Transform   _xfrmOW{}; // World -> Object
+    IAreaLight *_areaLight{nullptr};
     MaterialPtr _material{};
   };
 

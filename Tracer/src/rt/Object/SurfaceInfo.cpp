@@ -29,56 +29,19 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SURFACEINFO_H
-#define SURFACEINFO_H
+#include "rt/Object/SurfaceInfo.h"
 
-#include "rt/Texture/TexCoord.h"
-#include "rt/Types.h"
+#include "rt/Light/IAreaLight.h"
+#include "rt/Object/IObject.h"
 
 namespace rt {
 
-  class IObject;
-
-  struct SurfaceInfo {
-    SurfaceInfo() noexcept = default;
-
-    inline const IObject *operator->() const
-    {
-      return object;
-    }
-
-    inline bool isHit() const
-    {
-      return geom::intersect::isHit(t)  &&  object != nullptr;
-    }
-
-    Color Le(const Direction& wo) const;
-
-    inline Ray ray(const real_t bias = ZERO, const real_t tMax = Ray::MAX_T) const
-    {
-      return ray(wo, bias, tMax);
-    }
-
-    inline Ray ray(const Direction& dir,
-                   const real_t bias = ZERO, const real_t tMax = Ray::MAX_T) const
-    {
-      return Ray{P + bias*geom::to_vertex(N), dir, tMax};
-    }
-
-    inline TexCoord2D texCoord2D() const
-    {
-      return TexCoord2D{u, v};
-    }
-
-    // NOTE: All members are in world coordinates!
-    real_t     t{geom::intersect::NO_INTERSECTION};
-    Direction wo{};
-    Vertex     P{};
-    Normal     N{};
-    real_t     u{}, v{};
-    const IObject *object{nullptr};
-  };
+  Color SurfaceInfo::Le(const Direction& wo) const
+  {
+    const IAreaLight *light = object->areaLight();
+    return light != nullptr
+        ? light->radiance(*this, wo)
+        : Color();
+  }
 
 } // namespace rt
-
-#endif // SURFACEINFO_H

@@ -121,6 +121,7 @@ set(Tracer_SOURCES
   src/rt/Object/IObject.cpp
   src/rt/Object/Plane.cpp
   src/rt/Object/Sphere.cpp
+  src/rt/Object/SurfaceInfo.cpp
   src/rt/Renderer/DirectLightingRenderer.cpp
   src/rt/Renderer/IRenderer.cpp
   src/rt/Renderer/RenderUtils.cpp
