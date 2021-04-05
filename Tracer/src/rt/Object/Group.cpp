@@ -51,6 +51,7 @@ namespace rt {
   {
     if( object ) {
       _objects.push_back(std::move(object));
+      _objects.back()->moveObject(objectToWorld());
     }
   }
 
@@ -61,9 +62,8 @@ namespace rt {
 
   bool Group::castShadow(const Ray &ray) const
   {
-    const Ray rayObj = toObject(ray);
     for(const ObjectPtr& o : _objects) {
-      if( o->castShadow(rayObj) ) {
+      if( o->castShadow(ray) ) {
         return true;
       }
     }
@@ -72,28 +72,23 @@ namespace rt {
 
   bool Group::intersect(SurfaceInfo *surface, const Ray& ray) const
   {
-    const Ray rayObj = toObject(ray);
-
     if( surface != nullptr ) {
       *surface = SurfaceInfo();
       for(const ObjectPtr& o : _objects) {
         SurfaceInfo hit;
-        if( o->intersect(&hit, rayObj) ) {
+        if( o->intersect(&hit, ray) ) {
           if( !surface->isHit()  ||  hit.t < surface->t ) {
             *surface = hit;
           }
         }
       }
       if( surface->isHit() ) {
-        surface->wo = toWorld(surface->wo);
-        surface->N  = toWorld(surface->N);
-        surface->P  = toWorld(surface->P);
         return true;
       }
 
     } else {
       for(const ObjectPtr& o : _objects) {
-        if( o->intersect(nullptr, rayObj) ) {
+        if( o->intersect(nullptr, ray) ) {
           return true;
         }
       }

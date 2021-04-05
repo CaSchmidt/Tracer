@@ -55,6 +55,10 @@ namespace rt {
     const IMaterial *material() const;
     void setMaterial(MaterialPtr& material);
 
+    void moveObject(const Transform& objectToWorld);
+    const Transform& objectToWorld() const;
+    void setObjectToWorld(const Transform& objectToWorld);
+
     template<typename T>
     inline T toObject(const T& x) const
     {

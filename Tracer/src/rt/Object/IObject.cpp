@@ -38,9 +38,8 @@ namespace rt {
   ////// public //////////////////////////////////////////////////////////////
 
   IObject::IObject(const Transform& objectToWorld) noexcept
-    : _xfrmWO{objectToWorld}
   {
-    _xfrmOW = _xfrmWO.inverse();
+    setObjectToWorld(objectToWorld);
   }
 
   IObject::~IObject() noexcept
@@ -71,6 +70,23 @@ namespace rt {
     if( material ) {
       _material = std::move(material);
     }
+  }
+
+  void IObject::moveObject(const Transform& objectToWorld)
+  {
+    _xfrmWO = objectToWorld*_xfrmWO;
+    _xfrmOW = _xfrmWO.inverse();
+  }
+
+  const Transform& IObject::objectToWorld() const
+  {
+    return _xfrmWO;
+  }
+
+  void IObject::setObjectToWorld(const Transform& objectToWorld)
+  {
+    _xfrmWO = Transform();
+    moveObject(objectToWorld);
   }
 
   real_t IObject::pdf(const SurfaceInfo& /*surface*/) const
