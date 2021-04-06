@@ -29,6 +29,15 @@
   </Options>
   <Scene>
     <!-- SPACE -->
+    <Light type="DiffuseAreaLight">
+      <Emittance>
+        <r>real</r>
+        <g>real</g>
+        <b>real</b>
+      </Emittance>
+      <NumSamples>size</NumSamples>
+      <Object>object</Object>
+    </Light>
     <Light type="Directional">
       <Radiance>
         <r>real</r>
