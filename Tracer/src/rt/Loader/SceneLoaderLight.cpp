@@ -29,15 +29,61 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Loader/SceneLoaderBase.h"
+#include "rt/Light/DiffuseAreaLight.h"
 #include "rt/Light/DirectionalLight.h"
 #include "rt/Light/PointLight.h"
+#include "rt/Loader/SceneLoaderBase.h"
+#include "rt/Material/OpaqueMaterial.h"
+#if 0
+#include "rt/Texture/FlatTexture.h"
+#endif
 
 namespace rt {
 
   namespace priv {
 
     // Implementation ////////////////////////////////////////////////////////
+
+    LightPtr parseDiffuseAreaLight(const tinyxml2::XMLElement *node, const ObjectConsumer& add_object)
+    {
+      bool myOk = false;
+
+      const Color Lemit = parseColor(node->FirstChildElement("Emittance"), &myOk, false);
+      if( !myOk ) {
+        return LightPtr();
+      }
+
+      ObjectPtr object = parseObject(node->FirstChildElement("Object"), true);
+      if( !object ) {
+        return LightPtr();
+      }
+
+      MaterialPtr material = OpaqueMaterial::create();
+      if( !material ) {
+        return LightPtr();
+      }
+#if 0
+      OPAQUE(material)->setDiffuse(FlatTexture::create(Lemit));
+      if( !material->haveTexture(0) ) {
+        return LightPtr();
+      }
+#endif
+      object->setMaterial(material);
+
+      LightPtr light = DiffuseAreaLight::create(object.get(), Lemit);
+      if( !light ) {
+        return LightPtr();
+      }
+      object->setAreaLight(IAREALIGHT(light));
+      add_object(object);
+
+      const size_t numSamples = parseSize(node->FirstChildElement("NumSamples"), &myOk);
+      if( myOk ) {
+        light->setNumSamples(numSamples);
+      }
+
+      return light;
+    }
 
     LightPtr parseDirectionalLight(const tinyxml2::XMLElement *node)
     {
@@ -83,7 +129,9 @@ namespace rt {
         return LightPtr();
       }
 
-      if(        node->Attribute("type", "Directional") != nullptr ) {
+      if(        node->Attribute("type", "DiffuseAreaLight") != nullptr ) {
+        return parseDiffuseAreaLight(node, add_object);
+      } else if( node->Attribute("type", "Directional") != nullptr ) {
         return parseDirectionalLight(node);
       } else if( node->Attribute("type", "Point") != nullptr ) {
         return parsePointLight(node);

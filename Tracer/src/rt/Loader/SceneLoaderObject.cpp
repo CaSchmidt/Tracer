@@ -211,7 +211,7 @@ namespace rt {
 
     // Export ////////////////////////////////////////////////////////////////
 
-    ObjectPtr parseObject(const tinyxml2::XMLElement *node, const bool mat_is_opt = false)
+    ObjectPtr parseObject(const tinyxml2::XMLElement *node, const bool mat_is_opt)
     {
       if( node == nullptr ) {
         return ObjectPtr();

@@ -67,6 +67,10 @@ namespace rt {
 
     Vertex parseVertex(const tinyxml2::XMLElement *node, bool *ok);
 
+    // Object Utilities //////////////////////////////////////////////////////
+
+    ObjectPtr parseObject(const tinyxml2::XMLElement *node, const bool mat_is_opt = false);
+
     using ObjectConsumer = std::function<void(ObjectPtr&)>;
 
   } // namespace priv
