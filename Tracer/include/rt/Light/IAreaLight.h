@@ -47,6 +47,11 @@ namespace rt {
     IAreaLight() noexcept = delete;
   };
 
+  inline IAreaLight *IAREALIGHT(const LightPtr& light)
+  {
+    return dynamic_cast<IAreaLight*>(light.get());
+  }
+
 } // namespace rt
 
 #endif // IAREALIGHT_H

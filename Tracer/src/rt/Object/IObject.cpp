@@ -81,10 +81,12 @@ namespace rt {
 
   void IObject::setMaterial(MaterialPtr& material)
   {
-    _material.reset();
-    if( material ) {
-      _material = std::move(material);
-    }
+    _material = std::move(material);
+  }
+
+  void IObject::setMaterial(MaterialPtr&& material)
+  {
+    _material = std::move(material);
   }
 
   void IObject::moveObject(const Transform& objectToWorld)

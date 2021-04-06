@@ -59,6 +59,7 @@ namespace rt {
     IMaterial *material();
     const IMaterial *material() const;
     void setMaterial(MaterialPtr& material);
+    void setMaterial(MaterialPtr&& material);
 
     void moveObject(const Transform& objectToWorld);
     const Transform& objectToWorld() const;
