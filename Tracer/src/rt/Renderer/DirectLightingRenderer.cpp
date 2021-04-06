@@ -73,7 +73,7 @@ namespace rt {
 
     Color Lo;
 
-    Lo += Color(); // TODO: Account for emitted radiance when hitting an area light!
+    Lo += surface.Le(surface.wo);
 
     if( scene.lights().size() > 0 ) {
       if( !_sample_one_light ) {

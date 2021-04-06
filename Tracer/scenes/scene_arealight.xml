@@ -1,0 +1,117 @@
+<Tracer>
+  <Options>
+    <Width>1000</Width>
+    <Height>1000</Height>
+    <FoV>60</FoV>
+    <WorldToScreen>2</WorldToScreen>
+    <BackgroundColor>
+      <r>0</r>
+      <g>0.8</g>
+      <b>1</b>
+    </BackgroundColor>
+    <Eye>
+      <x>0</x>
+      <y>-6</y>
+      <z>1</z>
+    </Eye>
+    <LookAt>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </LookAt>
+    <CameraUp>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </CameraUp>
+  </Options>
+  <Scene>
+    <!-- ground plane -->
+    <Object type="Plane">
+      <Width>10</Width>
+      <Height>10</Height>
+      <Material type="Opaque">
+        <Diffuse type="Checked">
+          <ColorA>
+            <r>1</r>
+            <g>0</g>
+            <b>0</b>
+          </ColorA>
+          <ColorB>
+            <r>0.8</r>
+            <g>0</g>
+            <b>0</b>
+          </ColorB>
+          <ScaleS>5</ScaleS>
+          <ScaleT>5</ScaleT>
+        </Diffuse>
+      </Material>
+      <Transform/>
+    </Object>
+    <!-- green sphere -->
+    <Object type="Sphere">
+      <Material type="Opaque">
+        <Diffuse type="Checked">
+          <ColorA>
+            <r>0</r>
+            <g>1</g>
+            <b>0</b>
+          </ColorA>
+          <ColorB>
+            <r>0</r>
+            <g>0.8</g>
+            <b>0</b>
+          </ColorB>
+          <ScaleS>4</ScaleS>
+          <ScaleT>2</ScaleT>
+        </Diffuse>
+      </Material>
+      <Radius>1</Radius>
+      <Transform>
+        <Translate>
+          <x>0</x>
+          <y>0</y>
+          <z>1</z>
+        </Translate>
+      </Transform>
+    </Object>
+    <!-- SPACE -->
+    <!--
+    <Light type="Directional">
+      <Radiance>
+        <r>3</r>
+        <g>3</g>
+        <b>3</b>
+      </Radiance>
+      <Direction>
+        <x>0</x>
+        <y>0</y>
+        <z>1</z>
+      </Direction>
+    </Light>
+    -->
+    <!-- SPACE -->
+    <Light type="DiffuseAreaLight">
+      <Emittance>
+        <r>1</r>
+        <g>1</g>
+        <b>1</b>
+      </Emittance>
+      <NumSamples>8</NumSamples>
+      <Object type="Plane">
+        <Height>2</Height>
+        <Transform>
+          <Rotate>
+            <rxByPI2>2</rxByPI2>
+          </Rotate>
+          <Translate>
+            <x>0</x>
+            <y>0</y>
+            <z>4</z>
+          </Translate>
+        </Transform>
+        <Width>2</Width>
+      </Object>
+    </Light>
+  </Scene>
+</Tracer>
