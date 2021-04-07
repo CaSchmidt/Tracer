@@ -40,6 +40,7 @@ namespace geom {
   class Ray {
   public:
     static constexpr real_t MAX_T = math::Max<real_t>;
+    static constexpr real_t  ZERO = math::ZERO<real_t>;
 
     Ray() noexcept = default;
 
@@ -92,8 +93,10 @@ namespace geom {
 
     void setTMax(const real_t t)
     {
-      if( geom::intersect::isHit(t) ) {
+      if(        geom::intersect::isHit(t) ) {
         _tMax = t;
+      } else if( t == ZERO ) {
+        _tMax = ZERO; // NOTE: Effectively disables ray!
       } else {
         _tMax = MAX_T;
       }

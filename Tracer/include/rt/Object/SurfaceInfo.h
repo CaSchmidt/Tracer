@@ -62,7 +62,10 @@ namespace rt {
     inline Ray ray(const Direction& dir,
                    const real_t bias = ZERO, const real_t tMax = Ray::MAX_T) const
     {
-      return Ray{P + bias*geom::to_vertex(N), dir, tMax};
+      const real_t _tMax = n4::abs(bias) >= tMax
+          ? ZERO // Disable ray.
+          : tMax;
+      return Ray{P + bias*geom::to_vertex(N), dir, _tMax};
     }
 
     inline TexCoord2D texCoord2D() const
