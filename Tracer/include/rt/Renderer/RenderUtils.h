@@ -40,15 +40,15 @@ namespace rt {
   class Scene;
   struct SurfaceInfo;
 
-  Color estimateDirectLighting(const SurfaceInfo& surface, const Sample2D& xiSurface,
+  Color estimateDirectLighting(const SurfaceInfo& ref, const Sample2D& xiRef,
                                const LightPtr& light, const Sample2D& xiLight,
                                const Scene& scene, const SamplerPtr& sampler,
                                const bool is_specular = false);
 
-  Color uniformSampleAllLights(const SurfaceInfo& surface,
+  Color uniformSampleAllLights(const SurfaceInfo& ref,
                                const Scene& scene, const SamplerPtr& sampler);
 
-  Color uniformSampleOneLight(const SurfaceInfo& surface,
+  Color uniformSampleOneLight(const SurfaceInfo& ref,
                               const Scene& scene, const SamplerPtr& sampler);
 
 } // namespace rt
