@@ -102,7 +102,12 @@ namespace geom {
       }
     }
 
-    inline bool isValid(const real_t t) const
+    inline bool isValid() const
+    {
+      return n4::isFinite(_tMax)  &&  _tMax > ZERO;
+    }
+
+    inline bool isValidT(const real_t t) const
     {
       return geom::intersect::isHit(t)  &&  t < _tMax;
     }

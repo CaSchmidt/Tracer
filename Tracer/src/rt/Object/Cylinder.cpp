@@ -55,7 +55,7 @@ namespace rt {
     const Ray rayObj = toObject(ray);
 
     const real_t t = geom::intersect::cylinder(rayObj, _radius);
-    if( !rayObj.isValid(t) ) {
+    if( !rayObj.isValidT(t) ) {
       return false;
     }
 

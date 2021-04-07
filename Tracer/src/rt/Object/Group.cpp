@@ -72,6 +72,10 @@ namespace rt {
 
   bool Group::intersect(SurfaceInfo *surface, const Ray& ray) const
   {
+    if( !ray.isValid() ) {
+      return false;
+    }
+
     if( surface != nullptr ) {
       *surface = SurfaceInfo();
       for(const ObjectPtr& o : _objects) {

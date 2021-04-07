@@ -65,6 +65,10 @@ namespace rt {
 
   bool Scene::intersect(SurfaceInfo *surface, const Ray& ray) const
   {
+    if( !ray.isValid() ) {
+      return false;
+    }
+
     *surface = SurfaceInfo();
     for(const ObjectPtr& o : _objects) {
       SurfaceInfo hit;
@@ -80,6 +84,10 @@ namespace rt {
 
   bool Scene::intersect(const Ray& ray) const
   {
+    if( !ray.isValid() ) {
+      return false;
+    }
+
     for(const ObjectPtr& o : _objects) {
       if( o->castShadow(ray) ) {
         return true;
