@@ -113,20 +113,20 @@ namespace rt {
 
   SurfaceInfo IObject::sample(const SurfaceInfo& ref, const Sample2D& xi, real_t *pdf) const
   {
-    const SurfaceInfo  surface = sample(xi, pdf);
-    const Vertex         delta = ref.P - surface.P; // NOTE: direction := to - from
-    const real_t lengthSquared = n4::dot(delta, delta);
+    const SurfaceInfo surface = sample(xi, pdf);
+    const Vertex        delta = surface.P - ref.P;     // NOTE: direction := to - from
+    const real_t           rr = n4::dot(delta, delta); // Squared Distance
 
     if( pdf == nullptr ) {
       return surface;
     }
 
-    if( lengthSquared != ZERO ) {
-      // NOTE: 'wi' points towards 'ref'; cf. 'delta'!
-      const Direction    wi = geom::to_direction(n4::normalize(delta));
-      const real_t absCosTi = geom::absDot(surface.N, wi);
-      if( absCosTi != ZERO ) {
-        *pdf *= lengthSquared/absCosTi; // NOTE: Convert from area to solid angle.
+    if( rr != ZERO ) {
+      // NOTE: 'wi' points towards 'surface'; cf. 'delta'!
+      const Direction    wi = geom::to_direction(delta)/n4::sqrt(rr);
+      const real_t absCosTo = geom::absDot(surface.N, -wi);
+      if( absCosTo != ZERO ) {
+        *pdf *= rr/absCosTo; // NOTE: Convert from area to solid angle.
       } else {
         *pdf = 0;
       }
@@ -145,14 +145,14 @@ namespace rt {
       return 0;
     }
 
-    const Vertex         delta = ref.P - surface.P;
-    const real_t lengthSquared = n4::dot(delta, delta);
-    const real_t      absCosTi = geom::absDot(surface.N, -wi);
-    if( absCosTi == ZERO ) {
+    const Vertex    delta = ref.P - surface.P;
+    const real_t       rr = n4::dot(delta, delta); // Squared Distance
+    const real_t absCosTo = geom::absDot(surface.N, -wi);
+    if( absCosTo == ZERO ) {
       return 0;
     }
 
-    return lengthSquared/absCosTi/area(); // NOTE: Return solid angle.
+    return rr/absCosTo/area(); // NOTE: Return solid angle.
   }
 
 } // namespace rt
