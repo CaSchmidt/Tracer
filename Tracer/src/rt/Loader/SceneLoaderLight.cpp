@@ -33,10 +33,7 @@
 #include "rt/Light/DirectionalLight.h"
 #include "rt/Light/PointLight.h"
 #include "rt/Loader/SceneLoaderBase.h"
-#include "rt/Material/OpaqueMaterial.h"
-#if 0
-#include "rt/Texture/FlatTexture.h"
-#endif
+#include "rt/Material/MatteMaterial.h"
 
 namespace rt {
 
@@ -58,16 +55,10 @@ namespace rt {
         return LightPtr();
       }
 
-      MaterialPtr material = OpaqueMaterial::create();
+      MaterialPtr material = MatteMaterial::create();
       if( !material ) {
         return LightPtr();
       }
-#if 0
-      OPAQUE(material)->setDiffuse(FlatTexture::create(Lemit));
-      if( !material->haveTexture(0) ) {
-        return LightPtr();
-      }
-#endif
       object->setMaterial(material);
 
       LightPtr light = DiffuseAreaLight::create(object.get(), Lemit);

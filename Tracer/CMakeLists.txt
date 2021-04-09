@@ -56,6 +56,7 @@ set(Tracer_HEADERS
   include/rt/Material/BSDF.h
   include/rt/Material/BSDFdata.h
   include/rt/Material/IMaterial.h
+  include/rt/Material/MatteMaterial.h
   include/rt/Material/MirrorMaterial.h
   include/rt/Material/OpaqueMaterial.h
   include/rt/Material/TransparentMaterial.h
@@ -112,6 +113,7 @@ set(Tracer_SOURCES
   src/rt/Material/BSDF.cpp
   src/rt/Material/BSDFdata.cpp
   src/rt/Material/IMaterial.cpp
+  src/rt/Material/MatteMaterial.cpp
   src/rt/Material/MirrorMaterial.cpp
   src/rt/Material/OpaqueMaterial.cpp
   src/rt/Material/TransparentMaterial.cpp
