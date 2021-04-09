@@ -93,12 +93,26 @@
     <!-- SPACE -->
     <Light type="DiffuseAreaLight">
       <Emittance>
-        <r>1</r>
-        <g>1</g>
-        <b>1</b>
+        <r>10</r>
+        <g>10</g>
+        <b>10</b>
       </Emittance>
-      <NumSamples>8</NumSamples>
-      <Object type="Plane">
+      <NumSamples>4</NumSamples>
+      <Object type="Disk">
+        <Radius>1</Radius>
+        <Transform>
+          <Rotate>
+            <rxByPI2>2</rxByPI2>
+          </Rotate>
+          <Translate>
+            <x>0</x>
+            <y>0</y>
+            <z>4</z>
+          </Translate>
+        </Transform>
+      </Object>
+      <!-- SPACE -->
+      <!-- <Object type="Plane">
         <Height>2</Height>
         <Transform>
           <Rotate>
@@ -111,7 +125,7 @@
           </Translate>
         </Transform>
         <Width>2</Width>
-      </Object>
+      </Object> -->
     </Light>
   </Scene>
 </Tracer>
