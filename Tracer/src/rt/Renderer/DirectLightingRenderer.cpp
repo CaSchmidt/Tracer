@@ -65,28 +65,29 @@ namespace rt {
     const RenderOptions& options = DirectLightingRenderer::options();
     const Scene&           scene = DirectLightingRenderer::scene();
 
-    SurfaceInfo surface;
-    if( !scene.intersect(&surface, ray) ) {
+    SurfaceInfo ref;
+    if( !scene.intersect(&ref, ray) ) {
       // NOTE: PBR3 uses an InfiniteAreaLight to compute background radiance.
       return options.backgroundColor;
     }
 
     Color Lo;
 
-    Lo += surface.Le(surface.wo);
+    Lo += ref.Le(ref.wo);
+
+    const BSDFdata ref_data(ref);
 
     if( scene.lights().size() > 0 ) {
       if( !_sample_one_light ) {
-        Lo += uniformSampleAllLights(surface, scene, sampler);
+        Lo += uniformSampleAllLights(ref_data, ref, scene, sampler);
       } else {
-        Lo += uniformSampleOneLight(surface, scene, sampler);
+        Lo += uniformSampleOneLight(ref_data, ref, scene, sampler);
       }
     }
 
     if( depth + 1 < options.maxDepth ) {
-      const BSDFdata data(surface);
-      Lo += specularReflectOrTransmit(data, surface, sampler, depth, false);
-      Lo += specularReflectOrTransmit(data, surface, sampler, depth, true);
+      Lo += specularReflectOrTransmit(ref_data, ref, sampler, depth, false);
+      Lo += specularReflectOrTransmit(ref_data, ref, sampler, depth, true);
     }
 
     return Lo;

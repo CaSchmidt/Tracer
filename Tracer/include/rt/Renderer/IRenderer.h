@@ -61,7 +61,7 @@ namespace rt {
     Image render(size_t y0, size_t y1, const SamplerPtr& sampler) const;
 
   protected:
-    Color specularReflectOrTransmit(const BSDFdata& data, const SurfaceInfo& surface,
+    Color specularReflectOrTransmit(const BSDFdata& ref_data, const SurfaceInfo& ref,
                                     const SamplerPtr& sampler, const unsigned int depth,
                                     const bool is_transmit) const;
 

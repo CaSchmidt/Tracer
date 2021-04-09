@@ -33,6 +33,7 @@
 
 #include "geom/Shading.h"
 #include "rt/BxDF/IBxDF.h"
+#include "rt/Light/IAreaLight.h"
 #include "rt/Material/BSDFdata.h"
 #include "rt/Object/IObject.h"
 #include "rt/Object/SurfaceInfo.h"
@@ -41,57 +42,117 @@
 
 namespace rt {
 
-  Color estimateDirectLighting(const SurfaceInfo& ref, const Sample2D& xiRef,
-                               const LightPtr& light, const Sample2D& xiLight,
-                               const Scene& scene, const SamplerPtr& sampler,
-                               const bool is_specular)
-  {
-    const BSDF *bsdf = ref->material()->bsdf();
+  namespace priv {
 
-    const BSDFdata      bsdf_data(ref);
-    const IBxDF::Flags bsdf_flags = is_specular
+    Color multiSampleBSDF(const BSDFdata& ref_data, const IBxDF::Flags ref_flags,
+                          const SurfaceInfo& ref, const Sample2D& xiRef,
+                          const LightPtr& light,
+                          const Scene& scene)
+    {
+      const BSDF *bsdf = ref->material()->bsdf();
+
+      if( light->isDeltaLight() ) {
+        return Color();
+      }
+
+      // (1) Sample BSDF /////////////////////////////////////////////////////
+
+      real_t              pdfRef{};
+      IBxDF::Flags sampled_flags{IBxDF::InvalidFlags};
+      Direction               wi{};
+      const Color         f = bsdf->sample(ref_data, &wi, xiRef, &pdfRef, ref_flags, &sampled_flags);
+      const real_t absCosTi = geom::absDot(wi, ref.N);
+      if( pdfRef <= ZERO  ||  absCosTi == ZERO  ||  f.isZero() ) {
+        return Color();
+      }
+
+      // (2) Light Contribution //////////////////////////////////////////////
+
+      real_t pdfLight = 0;
+      real_t   weight = 1; // Disable MIS. Assumes specular reflection.
+      if( !isSpecular(sampled_flags) ) {
+        pdfLight = light->pdfLi(ref, wi);
+        if( pdfLight <= ZERO ) {
+          return Color();
+        }
+        weight = sampling::powerHeuristic(1, pdfRef, 1, pdfLight);
+      }
+
+      const Ray           ray = ref.ray(wi, TRACE_BIAS);
+      SurfaceInfo   lightInfo{};
+      const bool is_intersect = scene.intersect(&lightInfo, ray);
+      const Color Li = is_intersect  &&  lightInfo->areaLight() == IAREALIGHT(light)
+          ? lightInfo.Le(-wi)
+          : Color(); // TODO: Add light's background radiance.
+      if( Li.isZero() ) { // Light does not contribute...
+        return Color();
+      }
+
+      // (3) Compute radiance with Multiple Importance Sampling (MIS) ////////
+
+      return f*Li*absCosTi*weight/pdfRef;
+    }
+
+    Color multiSampleLight(const BSDFdata& ref_data, const IBxDF::Flags ref_flags,
+                           const SurfaceInfo& ref,
+                           const LightPtr& light, const Sample2D& xiLight,
+                           const Scene& scene)
+    {
+      const BSDF *bsdf = ref->material()->bsdf();
+
+      // (1) Sample light ////////////////////////////////////////////////////
+
+      real_t pdfLight{};
+      Ray         vis{};
+      Direction    wi{};
+      const Color Li = light->sampleLi(ref, &wi, xiLight, &pdfLight, &vis);
+      if( pdfLight <= ZERO  ||  Li.isZero() ) {
+        return Color();
+      }
+
+      // (2) Evaluate BSDF ///////////////////////////////////////////////////
+
+      const Color         f = bsdf->eval(ref_data, wi, ref_flags);
+      const real_t absCosTi = geom::absDot(wi, ref.N);
+      const real_t   pdfRef = bsdf->pdf(ref_data, wi, ref_flags);
+
+      /*
+       * NOTE:
+       * BSDF does not evaluate to black and 'ref' is visible to the light.
+       */
+      if( absCosTi == ZERO  ||  f.isZero()  ||  scene.intersect(vis) ) {
+        return Color();
+      }
+
+      // (3) Compute radiance with Multiple Importance Sampling (MIS) ////////
+
+      const real_t weight = !light->isDeltaLight()
+          ? sampling::powerHeuristic(1, pdfLight, 1, pdfRef) // Apply MIS.
+          : 1;                     // Disable MIS for delta distributions.
+
+      return f*Li*absCosTi*weight/pdfLight;
+    }
+
+  } // namespace priv
+
+  Color estimateDirectLighting(const BSDFdata& ref_data,
+                               const SurfaceInfo& ref, const Sample2D& xiRef,
+                               const LightPtr& light, const Sample2D& xiLight,
+                               const Scene& scene, const bool do_specular)
+  {
+    const IBxDF::Flags ref_flags = do_specular
         ? IBxDF::AllFlags
         : IBxDF::Flags(IBxDF::AllFlags & ~IBxDF::Specular);
 
     Color Ld;
 
-    // (1) Sample Light Source with Multiple Importance Sampling (MIS) ///////
-
-    real_t pdfLight = 0;
-    Ray         vis{};
-    Direction    wi{};
-    const Color  Li = light->sampleLi(ref, &wi, xiLight, &pdfLight, &vis);
-
-    if( pdfLight > ZERO  &&  !Li.isZero() ) {
-      const real_t absCosTi = geom::absDot(wi, ref.N);
-      const Color         f = bsdf->eval(bsdf_data, wi, bsdf_flags)*absCosTi;
-      const real_t   pdfRef = bsdf->pdf(bsdf_data, wi, bsdf_flags);
-
-      /*
-       * NOTE: Compute light's contribution, IFF
-       * 1. Surface DOES NOT reflect black
-       * AND
-       * 2. Light is visible to the surface
-       */
-      if( !f.isZero()  &&  !scene.intersect(vis) ) {
-        const real_t weight = !light->isDeltaLight()
-            ? sampling::powerHeuristic(1, pdfLight, 1, pdfRef) // Apply MIS.
-            : 1; // No MIS for lights with delta distributions!
-
-        Ld += f*Li*weight/pdfLight; // NOTE: 'f' accumulates 'absCosTi'!
-      }
-    }
-
-    // (2) Sample BSDF with Multiple Importance Sampling (MIS) ///////////////
-
-    if( !light->isDeltaLight() ) {
-      // TODO...
-    }
+    Ld += priv::multiSampleLight(ref_data, ref_flags, ref, light, xiLight, scene);
+    Ld += priv::multiSampleBSDF(ref_data, ref_flags, ref, xiRef, light, scene);
 
     return Ld;
   }
 
-  Color uniformSampleAllLights(const SurfaceInfo& ref,
+  Color uniformSampleAllLights(const BSDFdata& ref_data, const SurfaceInfo& ref,
                                const Scene& scene, const SamplerPtr& sampler)
   {
     Color L;
@@ -99,16 +160,17 @@ namespace rt {
       const size_t numSamples = light->numSamples();
       Color Ld;
       for(size_t s = 0; s < numSamples; s++) {
-        Ld += estimateDirectLighting(ref, sampler->sample2D(),
+        Ld += estimateDirectLighting(ref_data,
+                                     ref, sampler->sample2D(),
                                      light, sampler->sample2D(),
-                                     scene, sampler);
+                                     scene);
       }
       L += Ld/real_t(numSamples);
     }
     return L;
   }
 
-  Color uniformSampleOneLight(const SurfaceInfo& ref,
+  Color uniformSampleOneLight(const BSDFdata& ref_data, const SurfaceInfo& ref,
                               const Scene& scene, const SamplerPtr& sampler)
   {
     const Lights& lights = scene.lights();
@@ -122,9 +184,10 @@ namespace rt {
 
     const size_t numLights = lights.size();
 
-    return real_t(numLights)*estimateDirectLighting(ref, sampler->sample2D(),
+    return real_t(numLights)*estimateDirectLighting(ref_data,
+                                                    ref, sampler->sample2D(),
                                                     light, sampler->sample2D(),
-                                                    scene, sampler);
+                                                    scene);
   }
 
 } // namespace rt

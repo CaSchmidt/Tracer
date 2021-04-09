@@ -137,28 +137,30 @@ namespace rt {
 
   ////// protected ///////////////////////////////////////////////////////////
 
-  Color IRenderer::specularReflectOrTransmit(const BSDFdata& data, const SurfaceInfo& surface,
+  Color IRenderer::specularReflectOrTransmit(const BSDFdata& ref_data, const SurfaceInfo& ref,
                                              const SamplerPtr& sampler, const unsigned int depth,
                                              const bool is_transmit) const
   {
-    const BSDF         *bsdf = surface->material()->bsdf();
+    const BSDF         *bsdf = ref->material()->bsdf();
     const IBxDF::Flags flags = is_transmit
         ? IBxDF::Flags(IBxDF::Specular | IBxDF::Transmission)
         : IBxDF::Flags(IBxDF::Specular | IBxDF::Reflection);
 
     real_t    pdf = 0;
-    Direction wi;
-    const Color        fR = bsdf->sample(data, &wi, sampler->sample2D(), &pdf, flags);
-    const real_t absCosTi = geom::absDot(wi, surface.N);
-    if( pdf > ZERO  &&  !fR.isZero()  &&  absCosTi != ZERO ) {
-      const bool is_same = geom::isSameHemisphere(wi, surface.N);
-      const real_t  bias = is_same
-          ? +TRACE_BIAS
-          : -TRACE_BIAS;
-
-      const Color Li = radiance(surface.ray(wi, bias), sampler, depth + 1);
-      return fR*Li*absCosTi/pdf;
+    Direction  wi{};
+    const Color         f = bsdf->sample(ref_data, &wi, sampler->sample2D(), &pdf, flags);
+    const real_t absCosTi = geom::absDot(wi, ref.N);
+    if( pdf <= ZERO  ||  absCosTi == ZERO  ||  f.isZero() ) {
+      return Color();
     }
+
+    const bool is_same = geom::isSameHemisphere(wi, ref.N);
+    const real_t  bias = is_same
+        ? +TRACE_BIAS
+        : -TRACE_BIAS;
+
+    const Color Li = radiance(ref.ray(wi, bias), sampler, depth + 1);
+    return f*Li*absCosTi/pdf;
 
     return Color();
   }

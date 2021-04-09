@@ -37,18 +37,19 @@
 
 namespace rt {
 
-  class Scene;
+  struct BSDFdata;
+  class  Scene;
   struct SurfaceInfo;
 
-  Color estimateDirectLighting(const SurfaceInfo& ref, const Sample2D& xiRef,
+  Color estimateDirectLighting(const BSDFdata& ref_data,
+                               const SurfaceInfo& ref, const Sample2D& xiRef,
                                const LightPtr& light, const Sample2D& xiLight,
-                               const Scene& scene, const SamplerPtr& sampler,
-                               const bool is_specular = false);
+                               const Scene& scene, const bool do_specular = false);
 
-  Color uniformSampleAllLights(const SurfaceInfo& ref,
+  Color uniformSampleAllLights(const BSDFdata& ref_data, const SurfaceInfo& ref,
                                const Scene& scene, const SamplerPtr& sampler);
 
-  Color uniformSampleOneLight(const SurfaceInfo& ref,
+  Color uniformSampleOneLight(const BSDFdata& ref_data, const SurfaceInfo& ref,
                               const Scene& scene, const SamplerPtr& sampler);
 
 } // namespace rt
