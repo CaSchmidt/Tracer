@@ -30,10 +30,46 @@
 *****************************************************************************/
 
 #include <algorithm>
+#include <chrono>
 #include <execution>
+#include <iostream>
 #include <mutex>
 
 #include "Worker.h"
+
+template<typename CLOCK>
+struct Elapsed {
+  using      minutes = std::chrono::minutes;
+  using      seconds = std::chrono::seconds;
+  using milliseconds = std::chrono::milliseconds;
+
+  using time_point = typename CLOCK::time_point;
+
+  Elapsed(const time_point& begin, const time_point& end) noexcept
+  {
+    const milliseconds delta = std::chrono::duration_cast<milliseconds>(end - begin);
+    min  = std::chrono::duration_cast<minutes>(delta);
+    sec  = std::chrono::duration_cast<seconds>(delta % minutes(1));
+    msec = std::chrono::duration_cast<milliseconds>(delta % seconds(1));
+  }
+
+  minutes       min{};
+  seconds       sec{};
+  milliseconds msec{};
+
+private:
+  Elapsed() noexcept = delete;
+};
+
+template<typename CLOCK, typename CharT, typename Traits>
+std::basic_ostream<CharT,Traits>& operator<<(std::basic_ostream<CharT,Traits>& os,
+                                             const Elapsed<CLOCK>& elapsed)
+{
+  return os
+      << elapsed.min.count()  << "m"
+      << elapsed.sec.count()  << "s"
+      << elapsed.msec.count() << "ms";
+}
 
 Image Worker::execute(const rt::IRenderer *renderer, const rt::SamplerPtr& sampler,
                       const std::size_t blockSize) const
@@ -47,6 +83,8 @@ Image Worker::execute(const rt::IRenderer *renderer, const rt::SamplerPtr& sampl
   if( blocks.empty() ) {
     return Image();
   }
+
+  const auto tim_begin = std::chrono::high_resolution_clock::now();
 
   std::size_t done = 0;
   std::mutex mutex;
@@ -62,6 +100,10 @@ Image Worker::execute(const rt::IRenderer *renderer, const rt::SamplerPtr& sampl
       progress(done, image.height());
     }
   });
+
+  const auto tim_end = std::chrono::high_resolution_clock::now();
+  const Elapsed<std::chrono::high_resolution_clock> elapsed(tim_begin, tim_end);
+  std::cout << "Duration: " << elapsed << std::endl;
 
   return image;
 }
