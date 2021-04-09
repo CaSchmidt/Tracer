@@ -52,21 +52,24 @@ namespace rt {
       return geom::intersect::isHit(t)  &&  object != nullptr;
     }
 
+    inline Vertex biasedP(const real_t bias = 0) const
+    {
+      return P + bias*geom::to_vertex(N);
+    }
+
     Color Le(const Direction& wo) const;
 
-    inline Ray ray(const real_t bias = ZERO, const real_t tMax = Ray::MAX_T) const
+    inline Ray ray(const real_t bias = 0, const real_t tMax = Ray::MAX_T) const
     {
       return ray(wo, bias, tMax);
     }
 
-    inline Ray ray(const Direction& dir,
-                   const real_t bias = ZERO, const real_t tMax = Ray::MAX_T) const
+    inline Ray ray(const Direction& dir, const real_t bias = 0, const real_t tMax = Ray::MAX_T) const
     {
-      const real_t _tMax = n4::abs(bias) >= tMax
-          ? ZERO // Disable ray.
-          : tMax;
-      return Ray{P + bias*geom::to_vertex(N), dir, _tMax};
+      return Ray{biasedP(bias), dir, tMax};
     }
+
+    Ray ray(const SurfaceInfo& to, const real_t bias = 0) const;
 
     inline TexCoord2D texCoord2D() const
     {

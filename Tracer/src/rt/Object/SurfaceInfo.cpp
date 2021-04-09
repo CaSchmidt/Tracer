@@ -44,4 +44,13 @@ namespace rt {
         : Color();
   }
 
+  Ray SurfaceInfo::ray(const SurfaceInfo& to, const real_t bias) const
+  {
+    const Vertex begin = biasedP(bias);
+    const Vertex   end = to.biasedP(bias);
+    const Direction wi = geom::to_direction(n4::direction(begin, end));
+    const real_t  tMax = n4::distance(begin, end);
+    return Ray{begin, wi, tMax};
+  }
+
 } // namespace rt
