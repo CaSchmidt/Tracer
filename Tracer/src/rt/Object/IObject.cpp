@@ -145,7 +145,7 @@ namespace rt {
       return 0;
     }
 
-    const Vertex    delta = ref.P - surface.P;
+    const Vertex    delta = surface.P - ref.P;
     const real_t       rr = n4::dot(delta, delta); // Squared Distance
     const real_t absCosTo = geom::absDot(surface.N, -wi);
     if( absCosTo == ZERO ) {
