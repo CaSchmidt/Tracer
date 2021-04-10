@@ -56,6 +56,7 @@ namespace rt {
   };
 
   struct UniformCone {
+    static std::tuple<real_t,real_t> parameters(const Sample2D& xi, const real_t cosThetaMax);
     static Direction sample(const Sample2D& xi, const real_t cosThetaMax);
     static real_t pdf(const real_t cosThetaMax);
   };

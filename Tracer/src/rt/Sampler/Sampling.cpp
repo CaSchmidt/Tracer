@@ -68,10 +68,10 @@ namespace rt {
     const real_t     r = align_x
         ? real_t{offset.x}
         : real_t{offset.y};
-    const real_t theta = align_x
+    const real_t phi = align_x
         ? (PI_QUARTER)*(offset.y/offset.x)
         : (PI_HALF) - (PI_QUARTER)*(offset.x/offset.y);
-    return {r*n4::cos(theta), r*n4::sin(theta)};
+    return {r*n4::cos(phi), r*n4::sin(phi)};
   }
 
   real_t ConcentricDisk::pdf()
@@ -95,13 +95,19 @@ namespace rt {
 
   ////// UniformCone /////////////////////////////////////////////////////////
 
-  Direction UniformCone::sample(const Sample2D& xi, const real_t cosThetaMax)
+  std::tuple<real_t,real_t> UniformCone::parameters(const Sample2D& xi, const real_t cosThetaMax)
   {
     SAMPLES_2D(xi);
     const real_t cosTheta = (ONE - xi1) + xi1*cosThetaMax;
-    const real_t sinTheta = math::pythagoras<real_t>(cosTheta);
     const real_t      phi = TWO_PI*xi2;
-    return {n4::cos(phi)*sinTheta, n4::sin(phi)*sinTheta, cosTheta};
+    return std::tuple<real_t,real_t>{cosTheta, phi};
+  }
+
+  Direction UniformCone::sample(const Sample2D& xi, const real_t cosThetaMax)
+  {
+    const auto [cosTheta, phi] = parameters(xi, cosThetaMax);
+    const real_t sinTheta = math::pythagoras<real_t>(cosTheta);
+    return geom::spherical(sinTheta, cosTheta, phi);
   }
 
   real_t UniformCone::pdf(const real_t cosThetaMax)
@@ -114,9 +120,9 @@ namespace rt {
   Vertex UniformDisk::sample(const Sample2D& xi)
   {
     SAMPLES_2D(xi);
-    const real_t     r = n4::sqrt(xi1);
-    const real_t theta = TWO_PI*xi2;
-    return {r*n4::cos(theta), r*n4::sin(theta)};
+    const real_t   r = n4::sqrt(xi1);
+    const real_t phi = TWO_PI*xi2;
+    return {r*n4::cos(phi), r*n4::sin(phi)};
   }
 
   real_t UniformDisk::pdf()
@@ -129,10 +135,10 @@ namespace rt {
   Direction UniformHemisphere::sample(const Sample2D& xi)
   {
     SAMPLES_2D(xi);
-    const real_t   z = xi1;
-    const real_t   r = math::pythagoras<real_t>(z);
-    const real_t phi = TWO_PI*xi2;
-    return {r*n4::cos(phi), r*n4::sin(phi), z};
+    const real_t cosTheta = xi1;
+    const real_t sinTheta = math::pythagoras<real_t>(cosTheta);
+    const real_t      phi = TWO_PI*xi2;
+    return geom::spherical(sinTheta, cosTheta, phi);
   }
 
   real_t UniformHemisphere::pdf()
@@ -145,10 +151,10 @@ namespace rt {
   Direction UniformSphere::sample(const Sample2D& xi)
   {
     SAMPLES_2D(xi);
-    const real_t   z = ONE - TWO*xi1;
-    const real_t   r = math::pythagoras<real_t>(z);
-    const real_t phi = TWO_PI*xi2;
-    return {r*n4::cos(phi), r*n4::sin(phi), z};
+    const real_t cosTheta = ONE - TWO*xi1;
+    const real_t sinTheta = math::pythagoras<real_t>(cosTheta);
+    const real_t      phi = TWO_PI*xi2;
+    return geom::spherical(sinTheta, cosTheta, phi);
   }
 
   real_t UniformSphere::pdf()
