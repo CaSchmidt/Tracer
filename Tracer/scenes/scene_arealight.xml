@@ -98,7 +98,7 @@
         <b>10</b>
       </Emittance>
       <NumSamples>4</NumSamples>
-      <Object type="Disk">
+      <!-- <Object type="Disk">
         <Radius>1</Radius>
         <Transform>
           <Rotate>
@@ -110,9 +110,20 @@
             <z>4</z>
           </Translate>
         </Transform>
-      </Object>
+      </Object> -->
       <!-- SPACE -->
-      <!-- <Object type="Plane">
+      <!-- <Object type="Sphere">
+        <Radius>1</Radius>
+        <Transform>
+          <Translate>
+            <x>0</x>
+            <y>0</y>
+            <z>4</z>
+          </Translate>
+        </Transform>
+      </Object> -->
+      <!-- SPACE -->
+      <Object type="Plane">
         <Height>2</Height>
         <Transform>
           <Rotate>
@@ -125,7 +136,7 @@
           </Translate>
         </Transform>
         <Width>2</Width>
-      </Object> -->
+      </Object>
     </Light>
   </Scene>
 </Tracer>
