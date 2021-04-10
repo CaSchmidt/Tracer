@@ -74,6 +74,11 @@ namespace geom {
     return n4::dot(arg1, n4::expr_cast<traits1_T,traits2_T,ARG2>(arg2)) >= real_t{0};
   }
 
+  inline Direction spherical(const real_t sinTheta, const real_t cosTheta, const real_t phi)
+  {
+    return {sinTheta*n4::cos(phi), sinTheta*n4::sin(phi), cosTheta};
+  }
+
   // Helpers /////////////////////////////////////////////////////////////////
 
   template<typename traits_T, typename EXPR>

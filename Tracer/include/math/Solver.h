@@ -71,6 +71,13 @@ namespace math {
   }
 
   template<typename T>
+  inline T pythagoras(const T& x, const T& h)
+  {
+    // x^2 + y^2 = h^2  =>  y = sqrt(h^2 - x^2)
+    return n4::sqrt(std::max<T>(ZERO<T>, h*h - x*x));
+  }
+
+  template<typename T>
   inline bool quadratic(const T& _a, const T& _b, const T& _c,
                         T& x1, T& x2)
   {
