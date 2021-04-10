@@ -286,6 +286,8 @@ namespace rt {
 
     Transform parseTransform(const tinyxml2::XMLElement *node, bool *ok)
     {
+      using MyElem = tinyxml2::XMLElement;
+
       if( ok != nullptr ) {
         *ok = false;
       }
@@ -297,16 +299,16 @@ namespace rt {
       bool myOk = false;
 
       Vertex t = 0;
-      if( node->FirstChildElement("Translate") != nullptr ) {
-        t = parseVertex(node->FirstChildElement("Translate"), &myOk);
+      if( const MyElem *elem = node->FirstChildElement("Translate"); elem != nullptr ) {
+        t = parseVertex(elem, &myOk);
         if( !myOk ) {
           return Transform();
         }
       }
 
       Matrix R = n4::identity();
-      if( node->FirstChildElement("Rotate") != nullptr ) {
-        R = parseRotation(node->FirstChildElement("Rotate"), &myOk);
+      if( const MyElem *elem = node->FirstChildElement("Rotate"); elem != nullptr ) {
+        R = parseRotation(elem, &myOk);
         if( !myOk ) {
           return Transform();
         }
