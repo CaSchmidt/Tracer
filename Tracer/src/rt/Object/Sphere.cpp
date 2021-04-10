@@ -95,8 +95,8 @@ namespace rt {
   {
     const Vertex Psphere = geom::to_vertex(UniformSphere::sample(xi));
 
-    const Vertex Pobj = _radius*Psphere;
-    const Normal Nobj = n4::normalize(geom::to_normal(Pobj));
+    const Normal Nobj = geom::to_normal(Psphere);
+    const Vertex Pobj = _radius*geom::to_vertex(Nobj);
 
     SurfaceInfo surface;
     surface.N = toWorld(Nobj);
@@ -107,6 +107,64 @@ namespace rt {
     }
 
     return surface;
+  }
+
+  SurfaceInfo Sphere::sample(const SurfaceInfo& ref, const Sample2D& xi, real_t *pdf) const
+  {
+    const Vertex REFobj = toObject(ref.P);
+
+    // (1) Sample sphere from the inside /////////////////////////////////////
+
+    const real_t dc = n4::distance(Vertex(), REFobj);
+    if( dc <= _radius ) {
+      return IObject::sample(ref, xi, pdf); // NOTE: Computes 'pdf' as solid angle.
+    }
+
+    // (2) Sample cone subtended by 'ref' ////////////////////////////////////
+
+    const real_t sinThetaMax = _radius/dc;
+    const real_t cosThetaMax = math::pythagoras<real_t>(sinThetaMax);
+
+    const auto [cosTheta, phi] = UniformCone::parameters(xi, cosThetaMax);
+    const real_t sinTheta = math::pythagoras<real_t>(cosTheta);
+
+    // (3) Compute sample on sphere //////////////////////////////////////////
+
+    const real_t       ds = dc*cosTheta - math::pythagoras<real_t>(dc*sinTheta, _radius);
+    const real_t cosAlpha = (dc*dc + _radius*_radius - ds*ds)/(TWO*dc*_radius);
+    const real_t sinAlpha = math::pythagoras<real_t>(cosAlpha);
+
+    // NOTE: Cone-to-Sphere in sphere AKA object coordinates; cf. 'delta'!
+    const Vertex     zC = n4::direction(Vertex(), REFobj);
+    const Matrix xfrmSC = n4::util::frameFromZ(zC);
+
+    const Normal Nobj = geom::to_normal(xfrmSC*geom::spherical(sinAlpha, cosAlpha, phi));
+    const Vertex Pobj = _radius*geom::to_vertex(Nobj);
+
+    SurfaceInfo surface;
+    surface.N = toWorld(Nobj);
+    surface.P = toWorld(Pobj);
+
+    if( pdf != nullptr ) {
+      *pdf = UniformCone::pdf(cosThetaMax);
+    }
+
+    return surface;
+  }
+
+  real_t Sphere::pdf(const SurfaceInfo& ref, const Direction& wi) const
+  {
+    const Vertex REFobj = toObject(ref.P);
+
+    const real_t dc = n4::distance(Vertex(), REFobj);
+    if( dc <= _radius ) {
+      return IObject::pdf(ref, wi);
+    }
+
+    const real_t sinThetaMax = _radius/dc;
+    const real_t cosThetaMax = math::pythagoras<real_t>(sinThetaMax);
+
+    return UniformCone::pdf(cosThetaMax);
   }
 
   ObjectPtr Sphere::create(const Transform& objectToWorld,
