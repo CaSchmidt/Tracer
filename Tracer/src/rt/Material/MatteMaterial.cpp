@@ -35,10 +35,16 @@
 
 namespace rt {
 
+  ////// Constants ///////////////////////////////////////////////////////////
+
+  inline constexpr size_t LAMBERTIAN = 0;
+
+  ////// public //////////////////////////////////////////////////////////////
+
   MatteMaterial::MatteMaterial() noexcept
     : IMaterial()
   {
-    bsdf()->add(new LambertianBRDF());
+    bsdf()->add(new LambertianBRDF()); // #0
   }
 
   MatteMaterial::~MatteMaterial() noexcept
@@ -49,18 +55,33 @@ namespace rt {
   {
     MaterialPtr result = create();
     MatteMaterial *matte = MATTE(result);
-    matte->setColor(color());
+    if( _texture ) {
+      matte->setTexture(_texture->copy());
+    }
     return result;
   }
 
-  Color MatteMaterial::color() const
+  bool MatteMaterial::haveTexture(const size_t i) const
   {
-    return bsdf()->asBxDF<LambertianBRDF>(0)->color();
+    return i == LAMBERTIAN  &&  _texture;
   }
 
-  void MatteMaterial::setColor(const Color& c)
+  Color MatteMaterial::textureLookup(const size_t i, const TexCoord2D& tex) const
   {
-    bsdf()->asBxDF<LambertianBRDF>(0)->setColor(c);
+    if( i == LAMBERTIAN ) {
+      return _texture->lookup(tex);
+    }
+    return Color();
+  }
+
+  void MatteMaterial::setTexture(TexturePtr& texture)
+  {
+    _texture = std::move(texture);
+  }
+
+  void MatteMaterial::setTexture(TexturePtr&& texture)
+  {
+    _texture = std::move(texture);
   }
 
   MaterialPtr MatteMaterial::create()

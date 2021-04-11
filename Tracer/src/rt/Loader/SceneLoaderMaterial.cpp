@@ -30,6 +30,7 @@
 *****************************************************************************/
 
 #include "rt/Loader/SceneLoaderBase.h"
+#include "rt/Material/MatteMaterial.h"
 #include "rt/Material/MirrorMaterial.h"
 #include "rt/Material/OpaqueMaterial.h"
 #include "rt/Material/TransparentMaterial.h"
@@ -44,6 +45,20 @@ namespace rt {
     TexturePtr parseTexture(const tinyxml2::XMLElement *node);
 
     // Implementation ////////////////////////////////////////////////////////
+
+    MaterialPtr parseMatteMaterial(const tinyxml2::XMLElement *node)
+    {
+      TexturePtr texture = parseTexture(node->FirstChildElement("Texture"));
+      if( !texture ) {
+        return MaterialPtr();
+      }
+
+      MaterialPtr result = MatteMaterial::create();
+      MatteMaterial *matte = MATTE(result);
+      matte->setTexture(texture);
+
+      return result;
+    }
 
     MaterialPtr parseMirrorMaterial(const tinyxml2::XMLElement *node)
     {
@@ -123,7 +138,9 @@ namespace rt {
         return MaterialPtr();
       }
 
-      if(        node->Attribute("type", "Mirror") != nullptr ) {
+      if(        node->Attribute("type", "Matte") != nullptr ) {
+        return parseMatteMaterial(node);
+      } else if( node->Attribute("type", "Mirror") != nullptr ) {
         return parseMirrorMaterial(node);
       } else if( node->Attribute("type", "Opaque") != nullptr ) {
         return parseOpaqueMaterial(node);

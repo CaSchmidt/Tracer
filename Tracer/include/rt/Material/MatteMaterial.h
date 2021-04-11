@@ -33,6 +33,7 @@
 #define MATTEMATERIAL_H
 
 #include "rt/Material/IMaterial.h"
+#include "rt/Texture/ITexture.h"
 
 namespace rt {
 
@@ -42,11 +43,16 @@ namespace rt {
     ~MatteMaterial() noexcept;
 
     MaterialPtr copy() const;
+    bool haveTexture(const size_t i) const;
+    Color textureLookup(const size_t i, const TexCoord2D& tex) const;
 
-    Color color() const;
-    void setColor(const Color& c);
+    void setTexture(TexturePtr& texture);
+    void setTexture(TexturePtr&& texture);
 
     static MaterialPtr create();
+
+  private:
+    TexturePtr _texture{};
   };
 
   inline MatteMaterial *MATTE(const MaterialPtr& p)
