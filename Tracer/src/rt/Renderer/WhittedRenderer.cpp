@@ -54,42 +54,45 @@ namespace rt {
   {
     const Scene& scene = WhittedRenderer::scene();
 
-    SurfaceInfo surface;
-    if( !scene.intersect(&surface, ray) ) {
+    SurfaceInfo ref;
+    if( !scene.intersect(&ref, ray) ) {
       return options().backgroundColor;
     }
 
-    const BSDFdata data(surface);
+    const BSDFdata data(ref);
 
-    Color color;
+    Color Lo;
+
+    Lo += ref.Le(ref.wo); // Account for emissive lighting.
+
     for(const LightPtr& light : scene.lights()) {
-      Ray      vis;
-      Direction wi;
-      const Color Li = light->sampleLi(surface, &wi, sampler->sample2D(), nullptr, &vis);
-
-      if( scene.intersect(vis) ) {
+      real_t pdfLight{0};
+      Ray         vis{};
+      Direction    wi{};
+      const Color Li = light->sampleLi(ref, &wi, sampler->sample2D(), &pdfLight, &vis);
+      if( pdfLight <= ZERO  ||  Li.isZero() ) { // No light contribution.
         continue;
       }
 
-      const real_t absCosTi = geom::absDot(wi, surface.N);
-      if( absCosTi <= ZERO ) {
+      if( scene.intersect(vis) ) { // Light is occluded by scene.
         continue;
       }
 
-      const Color fR = surface->material()->bsdf()->eval(data, wi);
-      if( fR.isZero() ) {
+      const Color         f = ref->material()->bsdf()->eval(data, wi);
+      const real_t absCosTi = geom::absDot(wi, ref.N);
+      if( absCosTi == ZERO  ||  f.isZero() ) {
         continue;
       }
 
-      color += fR*Li*absCosTi;
+      Lo += f*Li*absCosTi/pdfLight;
     }
 
     if( depth + 1 < options().maxDepth ) {
-      color += specularReflectOrTransmit(data, surface, sampler, depth, false);
-      color += specularReflectOrTransmit(data, surface, sampler, depth, true);
+      Lo += specularReflectOrTransmit(data, ref, sampler, depth, false);
+      Lo += specularReflectOrTransmit(data, ref, sampler, depth, true);
     }
 
-    return color;
+    return Lo;
   }
 
 } // namespace rt
