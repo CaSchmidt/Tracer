@@ -85,6 +85,9 @@
       </Color>
     </Texture>
     <!-- SPACE -->
+    <Material type="Matte">
+      <Texture>texture</Texture>
+    </Material>
     <Material type="Mirror">
       <Reflectance>real</Reflectance>
     </Material>
