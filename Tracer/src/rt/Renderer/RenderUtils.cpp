@@ -81,8 +81,10 @@ namespace rt {
       const Ray           ray = ref.ray(wi, TRACE_BIAS);
       SurfaceInfo   lightInfo{};
       const bool is_intersect = scene.intersect(&lightInfo, ray);
-      const Color Li = is_intersect  &&  lightInfo->areaLight() == IAREALIGHT(light)
-          ? lightInfo.Le(-wi)
+      const Color Li = is_intersect
+          ? lightInfo->areaLight() == IAREALIGHT(light)
+            ? lightInfo.Le(-wi) // Area light's emittance.
+            : Color()
           : Color(); // TODO: Add light's background radiance.
       if( Li.isZero() ) { // Light does not contribute...
         return Color();
