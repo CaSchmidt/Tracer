@@ -43,7 +43,7 @@ namespace rt {
 
   class ILight {
   public:
-    enum Type : unsigned int {
+    enum Type : uint_t {
       Invalid        = 0,
       Area           = 1,
       DeltaDirection = 2,

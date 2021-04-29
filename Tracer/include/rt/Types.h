@@ -46,6 +46,8 @@ namespace rt {
   using geom::real_t;
   using geom::size_t;
 
+  using uint_t = unsigned int;
+
   using Color = n4::Color3f;
   using geom::Direction;
   using geom::Matrix;

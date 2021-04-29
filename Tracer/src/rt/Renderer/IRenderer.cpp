@@ -138,7 +138,7 @@ namespace rt {
   ////// protected ///////////////////////////////////////////////////////////
 
   Color IRenderer::specularReflectOrTransmit(const BSDFdata& ref_data, const SurfaceInfo& ref,
-                                             const SamplerPtr& sampler, const unsigned int depth,
+                                             const SamplerPtr& sampler, const uint_t depth,
                                              const bool is_transmit) const
   {
     const BSDF         *bsdf = ref->material()->bsdf();

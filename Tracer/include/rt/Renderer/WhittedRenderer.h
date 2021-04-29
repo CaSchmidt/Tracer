@@ -44,7 +44,7 @@ namespace rt {
     ~WhittedRenderer() noexcept;
 
   private:
-    Color radiance(const Ray& ray, const SamplerPtr& sampler, const unsigned int depth = 0) const;
+    Color radiance(const Ray& ray, const SamplerPtr& sampler, const uint_t depth) const;
   };
 
 } // namespace rt

@@ -38,7 +38,7 @@ namespace rt {
 
   class IBxDF {
   public:
-    enum Flags : unsigned int {
+    enum Flags : uint_t {
       InvalidFlags = 0,
       Reflection   = 1 << 0,
       Transmission = 1 << 1,

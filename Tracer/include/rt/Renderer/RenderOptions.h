@@ -39,18 +39,18 @@ namespace rt {
   struct RenderOptions {
     RenderOptions() = default;
 
-    Color        backgroundColor{};
-    Vertex       eye{};
-    Vertex       lookAt{};
-    Direction    cameraUp{};
-    size_t       width{};
-    size_t       height{};
-    real_t       fov_rad{};
-    real_t       worldToScreen{};
-    real_t       aperture{};
-    real_t       focus{};
-    unsigned int maxDepth{15};
-    real_t       globalRefraction{1};
+    Color   backgroundColor{};
+    Vertex              eye{};
+    Vertex           lookAt{};
+    Direction      cameraUp{};
+    size_t            width{};
+    size_t           height{};
+    real_t          fov_rad{};
+    real_t    worldToScreen{};
+    real_t         aperture{};
+    real_t            focus{};
+    uint_t         maxDepth{15};
+    real_t globalRefraction{1};
   };
 
 } // namespace rt
