@@ -31,8 +31,6 @@
 
 #include "rt/Renderer/WhittedRenderer.h"
 
-#include "geom/Shading.h"
-#include "rt/Material/BSDFdata.h"
 #include "rt/Object/SurfaceInfo.h"
 
 namespace rt {
@@ -59,7 +57,7 @@ namespace rt {
       return options().backgroundColor;
     }
 
-    const BSDFdata data(ref);
+    ref.initializeShading();
 
     Color Lo;
 
@@ -78,7 +76,7 @@ namespace rt {
         continue;
       }
 
-      const Color         f = ref->material()->bsdf()->eval(data, wi);
+      const Color         f = ref->material()->bsdf()->eval(ref, wi);
       const real_t absCosTi = geom::absDot(wi, ref.N);
       if( absCosTi == ZERO  ||  f.isZero() ) {
         continue;
@@ -88,8 +86,8 @@ namespace rt {
     }
 
     if( depth + 1 < options().maxDepth ) {
-      Lo += specularReflectOrTransmit(data, ref, sampler, depth, false);
-      Lo += specularReflectOrTransmit(data, ref, sampler, depth, true);
+      Lo += specularReflectOrTransmit(ref, sampler, depth, false);
+      Lo += specularReflectOrTransmit(ref, sampler, depth, true);
     }
 
     return Lo;

@@ -31,7 +31,6 @@
 
 #include "rt/Renderer/DirectLightingRenderer.h"
 
-#include "rt/Material/BSDFdata.h"
 #include "rt/Object/SurfaceInfo.h"
 #include "rt/Renderer/RenderUtils.h"
 
@@ -75,19 +74,19 @@ namespace rt {
 
     Lo += ref.Le(ref.wo);
 
-    const BSDFdata ref_data(ref);
+    ref.initializeShading();
 
     if( scene.lights().size() > 0 ) {
       if( !_sample_one_light ) {
-        Lo += uniformSampleAllLights(ref_data, ref, scene, sampler);
+        Lo += uniformSampleAllLights(ref, scene, sampler);
       } else {
-        Lo += uniformSampleOneLight(ref_data, ref, scene, sampler);
+        Lo += uniformSampleOneLight(ref, scene, sampler);
       }
     }
 
     if( depth + 1 < options.maxDepth ) {
-      Lo += specularReflectOrTransmit(ref_data, ref, sampler, depth, false);
-      Lo += specularReflectOrTransmit(ref_data, ref, sampler, depth, true);
+      Lo += specularReflectOrTransmit(ref, sampler, depth, false);
+      Lo += specularReflectOrTransmit(ref, sampler, depth, true);
     }
 
     return Lo;

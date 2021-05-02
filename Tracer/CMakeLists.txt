@@ -54,7 +54,6 @@ set(Tracer_HEADERS
   include/rt/Loader/SceneLoaderBase.h
   include/rt/Loader/SceneLoaderStringUtil.h
   include/rt/Material/BSDF.h
-  include/rt/Material/BSDFdata.h
   include/rt/Material/IMaterial.h
   include/rt/Material/MatteMaterial.h
   include/rt/Material/MirrorMaterial.h
@@ -111,7 +110,6 @@ set(Tracer_SOURCES
   src/rt/Loader/SceneLoaderText.cpp
   src/rt/Loader/SceneLoaderTexture.cpp
   src/rt/Material/BSDF.cpp
-  src/rt/Material/BSDFdata.cpp
   src/rt/Material/IMaterial.cpp
   src/rt/Material/MatteMaterial.cpp
   src/rt/Material/MirrorMaterial.cpp

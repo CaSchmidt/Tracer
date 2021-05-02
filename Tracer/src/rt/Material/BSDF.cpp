@@ -34,8 +34,8 @@
 #include "rt/Material/BSDF.h"
 
 #include "geom/Shading.h"
-#include "rt/Material/BSDFdata.h"
 #include "rt/Material/IMaterial.h"
+#include "rt/Object/SurfaceInfo.h"
 #include "rt/Sampler/Sampling.h"
 
 namespace rt {
@@ -93,21 +93,21 @@ namespace rt {
     return _bxdfs[i];
   }
 
-  Color BSDF::eval(const BSDFdata& data, const Direction& wi,
+  Color BSDF::eval(const SurfaceInfo& surface, const Direction& wi,
                    const IBxDF::Flags flags) const
   {
-    const Direction wiS = data.toShading(wi);
-    return evalS(data.woS, wiS, data.tex, flags);
+    const Direction wiS = surface.toShading(wi);
+    return evalS(surface.woS, wiS, surface.texCoord2D(), flags);
   }
 
-  real_t BSDF::pdf(const BSDFdata& data, const Direction& wi,
+  real_t BSDF::pdf(const SurfaceInfo& surface, const Direction& wi,
                    const IBxDF::Flags flags) const
   {
-    const Direction wiS = data.toShading(wi);
-    return pdfS(data.woS, wiS, flags);
+    const Direction wiS = surface.toShading(wi);
+    return pdfS(surface.woS, wiS, flags);
   }
 
-  Color BSDF::sample(const BSDFdata& data, Direction *wi, const Sample2D& xi, real_t *pdf,
+  Color BSDF::sample(const SurfaceInfo& surface, Direction *wi, const Sample2D& xi, real_t *pdf,
                      const IBxDF::Flags flags, IBxDF::Flags *sampledFlags) const
   {
     if( pdf != nullptr ) {
@@ -144,8 +144,8 @@ namespace rt {
     // (3) Sample Chosen BxDF ////////////////////////////////////////////////
 
     Direction wiS;
-    Color f = bxdf->sample(data.woS, &wiS, xiRemapped, pdf);
-    *wi = data.toWorld(wiS);
+    Color f = bxdf->sample(surface.woS, &wiS, xiRemapped, pdf);
+    *wi = surface.toWorld(wiS);
     if( pdf != nullptr  &&  *pdf <= ZERO ) {
       return Color();
     }
@@ -157,14 +157,14 @@ namespace rt {
 
     if( pdf != nullptr ) {
       if( !bxdf->isSpecular()  &&  matching > 1 ) {
-        *pdf = pdfS(data.woS, wiS, flags);
+        *pdf = pdfS(surface.woS, wiS, flags);
       }
     }
 
     // (5) Compute Value of BSDF for Sampled Direction ///////////////////////
 
     if( !bxdf->isSpecular()  &&  matching > 1 ) {
-      f = evalS(data.woS, wiS, data.tex, flags);
+      f = evalS(surface.woS, wiS, surface.texCoord2D(), flags);
     }
 
     return f;

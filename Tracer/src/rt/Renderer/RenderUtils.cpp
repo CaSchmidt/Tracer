@@ -31,10 +31,8 @@
 
 #include "rt/Renderer/RenderUtils.h"
 
-#include "geom/Shading.h"
 #include "rt/BxDF/IBxDF.h"
 #include "rt/Light/IAreaLight.h"
-#include "rt/Material/BSDFdata.h"
 #include "rt/Object/IObject.h"
 #include "rt/Object/SurfaceInfo.h"
 #include "rt/Sampler/Sampling.h"
@@ -44,8 +42,8 @@ namespace rt {
 
   namespace priv {
 
-    Color multiSampleBSDF(const BSDFdata& ref_data, const IBxDF::Flags ref_flags,
-                          const SurfaceInfo& ref, const Sample2D& xiRef,
+    Color multiSampleBSDF(const SurfaceInfo& ref, const Sample2D& xiRef,
+                          const IBxDF::Flags ref_flags,
                           const LightPtr& light,
                           const Scene& scene)
     {
@@ -60,7 +58,7 @@ namespace rt {
       real_t              pdfRef{};
       IBxDF::Flags sampled_flags{IBxDF::InvalidFlags};
       Direction               wi{};
-      const Color         f = bsdf->sample(ref_data, &wi, xiRef, &pdfRef, ref_flags, &sampled_flags);
+      const Color         f = bsdf->sample(ref, &wi, xiRef, &pdfRef, ref_flags, &sampled_flags);
       const real_t absCosTi = geom::absDot(wi, ref.N);
       if( pdfRef <= ZERO  ||  absCosTi == ZERO  ||  f.isZero() ) {
         return Color();
@@ -95,8 +93,8 @@ namespace rt {
       return f*Li*absCosTi*weight/pdfRef;
     }
 
-    Color multiSampleLight(const BSDFdata& ref_data, const IBxDF::Flags ref_flags,
-                           const SurfaceInfo& ref,
+    Color multiSampleLight(const SurfaceInfo& ref,
+                           const IBxDF::Flags ref_flags,
                            const LightPtr& light, const Sample2D& xiLight,
                            const Scene& scene)
     {
@@ -114,13 +112,13 @@ namespace rt {
 
       // (2) Evaluate BSDF ///////////////////////////////////////////////////
 
-      const Color         f = bsdf->eval(ref_data, wi, ref_flags);
+      const Color         f = bsdf->eval(ref, wi, ref_flags);
       const real_t absCosTi = geom::absDot(wi, ref.N);
-      const real_t   pdfRef = bsdf->pdf(ref_data, wi, ref_flags);
+      const real_t   pdfRef = bsdf->pdf(ref, wi, ref_flags);
 
       /*
        * NOTE:
-       * BSDF does not evaluate to black and 'ref' is visible to the light.
+       * Pass if BSDF does not evaluate to black and 'ref' is visible to the light.
        */
       if( absCosTi == ZERO  ||  f.isZero()  ||  scene.intersect(vis) ) {
         return Color();
@@ -137,8 +135,7 @@ namespace rt {
 
   } // namespace priv
 
-  Color estimateDirectLighting(const BSDFdata& ref_data,
-                               const SurfaceInfo& ref, const Sample2D& xiRef,
+  Color estimateDirectLighting(const SurfaceInfo& ref, const Sample2D& xiRef,
                                const LightPtr& light, const Sample2D& xiLight,
                                const Scene& scene, const bool do_specular)
   {
@@ -148,13 +145,13 @@ namespace rt {
 
     Color Ld;
 
-    Ld += priv::multiSampleLight(ref_data, ref_flags, ref, light, xiLight, scene);
-    Ld += priv::multiSampleBSDF(ref_data, ref_flags, ref, xiRef, light, scene);
+    Ld += priv::multiSampleLight(ref, ref_flags, light, xiLight, scene);
+    Ld += priv::multiSampleBSDF(ref, xiRef, ref_flags, light, scene);
 
     return Ld;
   }
 
-  Color uniformSampleAllLights(const BSDFdata& ref_data, const SurfaceInfo& ref,
+  Color uniformSampleAllLights(const SurfaceInfo& ref,
                                const Scene& scene, const SamplerPtr& sampler)
   {
     Color L;
@@ -162,8 +159,7 @@ namespace rt {
       const size_t numSamples = light->numSamples();
       Color Ld;
       for(size_t s = 0; s < numSamples; s++) {
-        Ld += estimateDirectLighting(ref_data,
-                                     ref, sampler->sample2D(),
+        Ld += estimateDirectLighting(ref, sampler->sample2D(),
                                      light, sampler->sample2D(),
                                      scene);
       }
@@ -172,7 +168,7 @@ namespace rt {
     return L;
   }
 
-  Color uniformSampleOneLight(const BSDFdata& ref_data, const SurfaceInfo& ref,
+  Color uniformSampleOneLight(const SurfaceInfo& ref,
                               const Scene& scene, const SamplerPtr& sampler)
   {
     const Lights& lights = scene.lights();
@@ -186,8 +182,7 @@ namespace rt {
 
     const size_t numLights = lights.size();
 
-    return real_t(numLights)*estimateDirectLighting(ref_data,
-                                                    ref, sampler->sample2D(),
+    return real_t(numLights)*estimateDirectLighting(ref, sampler->sample2D(),
                                                     light, sampler->sample2D(),
                                                     scene);
   }

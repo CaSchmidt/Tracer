@@ -36,6 +36,14 @@
 
 namespace rt {
 
+  void SurfaceInfo::initializeShading()
+  {
+    xfrmWS = n4::util::frameFromZ(N);
+    xfrmSW = xfrmWS.transpose();
+
+    woS = toShading(wo);
+  }
+
   Color SurfaceInfo::Le(const Direction& wo) const
   {
     const IAreaLight *light = object->areaLight();

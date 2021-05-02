@@ -47,14 +47,16 @@ namespace rt {
       return object;
     }
 
+    inline Vertex biasedP(const real_t bias) const
+    {
+      return P + bias*geom::to_vertex(N);
+    }
+
+    void initializeShading();
+
     inline bool isHit() const
     {
       return geom::intersect::isHit(t)  &&  object != nullptr;
-    }
-
-    inline Vertex biasedP(const real_t bias = 0) const
-    {
-      return P + bias*geom::to_vertex(N);
     }
 
     Color Le(const Direction& wo) const;
@@ -76,12 +78,27 @@ namespace rt {
       return TexCoord2D{u, v};
     }
 
+    template<typename VecT>
+    inline VecT toShading(const VecT& v) const
+    {
+      return xfrmSW*v;
+    }
+
+    template<typename VecT>
+    inline VecT toWorld(const VecT& v) const
+    {
+      return xfrmWS*v;
+    }
+
     // NOTE: All members are in world coordinates!
-    real_t     t{geom::intersect::NO_INTERSECTION};
-    Direction wo{};
-    Vertex     P{};
-    Normal     N{};
-    real_t     u{}, v{};
+    real_t      t{geom::intersect::NO_INTERSECTION};
+    Direction  wo{};
+    Direction woS{}; // 'wo' in shading coordinates
+    Vertex      P{};
+    Normal      N{};
+    real_t      u{}, v{};
+    Matrix xfrmSW; // World-to-Shading
+    Matrix xfrmWS; // Shading-to-World
     const IObject *object{nullptr};
   };
 

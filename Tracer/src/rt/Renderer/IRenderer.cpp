@@ -31,8 +31,6 @@
 
 #include "rt/Renderer/IRenderer.h"
 
-#include "geom/Shading.h"
-#include "rt/Material/BSDFdata.h"
 #include "rt/Renderer/RenderLoop.h"
 #include "rt/Object/SurfaceInfo.h"
 
@@ -137,7 +135,7 @@ namespace rt {
 
   ////// protected ///////////////////////////////////////////////////////////
 
-  Color IRenderer::specularReflectOrTransmit(const BSDFdata& ref_data, const SurfaceInfo& ref,
+  Color IRenderer::specularReflectOrTransmit(const SurfaceInfo& ref,
                                              const SamplerPtr& sampler, const uint_t depth,
                                              const bool is_transmit) const
   {
@@ -148,7 +146,7 @@ namespace rt {
 
     real_t    pdf = 0;
     Direction  wi{};
-    const Color         f = bsdf->sample(ref_data, &wi, sampler->sample2D(), &pdf, flags);
+    const Color         f = bsdf->sample(ref, &wi, sampler->sample2D(), &pdf, flags);
     const real_t absCosTi = geom::absDot(wi, ref.N);
     if( pdf <= ZERO  ||  absCosTi == ZERO  ||  f.isZero() ) {
       return Color();

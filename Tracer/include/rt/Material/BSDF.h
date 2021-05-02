@@ -39,8 +39,8 @@
 
 namespace rt {
 
-  struct BSDFdata;
   class IMaterial;
+  struct SurfaceInfo;
 
   class BSDF {
   public:
@@ -59,11 +59,11 @@ namespace rt {
      * Cf. to PBR3 Chapter "9.1 BSDFs" and Chapter "14.1.6 Sampling BSDFs"
      * for an explanation of the following functions.
      */
-    Color eval(const BSDFdata& data, const Direction& wi,
+    Color eval(const SurfaceInfo& surface, const Direction& wi,
                const IBxDF::Flags flags = IBxDF::AllFlags) const;
-    real_t pdf(const BSDFdata& data, const Direction& wi,
+    real_t pdf(const SurfaceInfo& surface, const Direction& wi,
                const IBxDF::Flags flags = IBxDF::AllFlags) const;
-    Color sample(const BSDFdata& data, Direction *wi, const Sample2D& xi, real_t *pdf,
+    Color sample(const SurfaceInfo& surface, Direction *wi, const Sample2D& xi, real_t *pdf,
                  const IBxDF::Flags flags = IBxDF::AllFlags,
                  IBxDF::Flags *sampledFlags = nullptr) const;
 
