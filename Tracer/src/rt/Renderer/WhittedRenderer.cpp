@@ -57,8 +57,6 @@ namespace rt {
       return options().backgroundColor;
     }
 
-    ref.initializeShading();
-
     Color Lo;
 
     Lo += ref.Le(ref.wo); // Account for emissive lighting.

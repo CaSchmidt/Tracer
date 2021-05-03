@@ -92,11 +92,12 @@ namespace rt {
 
       surface->object = this;
       surface->t      = t;
-      surface->wo     = -ray.direction();
       surface->N      = toWorld(Normal{0, 0, 1});
       surface->P      = toWorld(Pobj);
       surface->u      = u;
       surface->v      = v;
+
+      surface->initializeShading(ray);
     }
 
     return true;

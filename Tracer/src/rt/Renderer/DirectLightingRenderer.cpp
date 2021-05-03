@@ -74,8 +74,6 @@ namespace rt {
 
     Lo += ref.Le(ref.wo);
 
-    ref.initializeShading();
-
     if( scene.lights().size() > 0 ) {
       if( !_sample_one_light ) {
         Lo += uniformSampleAllLights(ref, scene, sampler);

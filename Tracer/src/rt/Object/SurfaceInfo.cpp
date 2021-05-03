@@ -36,11 +36,12 @@
 
 namespace rt {
 
-  void SurfaceInfo::initializeShading()
+  void SurfaceInfo::initializeShading(const Ray& ray)
   {
     xfrmWS = n4::util::frameFromZ(N);
     xfrmSW = xfrmWS.transpose();
 
+    wo  = -ray.direction();
     woS = toShading(wo);
   }
 

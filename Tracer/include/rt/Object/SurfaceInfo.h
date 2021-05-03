@@ -52,7 +52,7 @@ namespace rt {
       return P + bias*geom::to_vertex(N);
     }
 
-    void initializeShading();
+    void initializeShading(const Ray& ray);
 
     inline bool isHit() const
     {
