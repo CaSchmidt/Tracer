@@ -43,6 +43,8 @@ namespace rt {
 
   void idleDebug();
 
+  void debugMessage(const char *msg, const bool nl = true);
+
   template<typename traits_T, typename manip_T>
   inline void debugPrint(const n4::Vector4f<traits_T,manip_T>& v, const bool nl = true)
   {

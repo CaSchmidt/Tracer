@@ -39,8 +39,8 @@ namespace rt {
 
     constexpr size_t INVALID = std::numeric_limits<size_t>::max();
 
-    constexpr size_t TRIGGER_X = 0;
-    constexpr size_t TRIGGER_Y = 625;
+    constexpr size_t TRIGGER_X = 10;
+    constexpr size_t TRIGGER_Y = 10;
 
     size_t trigger_x = INVALID;
     size_t trigger_y = INVALID;
@@ -78,6 +78,15 @@ namespace rt {
       return;
     }
     debug::tick += 1;
+  }
+
+  void debugMessage(const char *msg, const bool nl)
+  {
+    if( !isDebug() ) {
+      return;
+    }
+    printf("%s%s", msg, nl ? "\n" : "");
+    fflush(stdout);
   }
 
 } // namespace rt
