@@ -62,7 +62,7 @@ namespace rt {
       *pdf = 1;
     }
     if( vis != nullptr ) {
-      *vis = ref.ray(*wi, TRACE_BIAS, r);
+      *vis = ref.ray(*wi, r);
     }
     return _I*attenuation(r);
   }

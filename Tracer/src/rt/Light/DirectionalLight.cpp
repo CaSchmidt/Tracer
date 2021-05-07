@@ -60,7 +60,7 @@ namespace rt {
       *pdf = 1;
     }
     if( vis != nullptr ) {
-      *vis = ref.ray(*wi, TRACE_BIAS);
+      *vis = ref.ray(*wi);
     }
     return _L;
   }

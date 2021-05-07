@@ -76,7 +76,7 @@ namespace rt {
         weight = sampling::powerHeuristic(1, pdfRef, 1, pdfLight);
       }
 
-      const Ray           ray = ref.ray(wi, TRACE_BIAS);
+      const Ray           ray = ref.ray(wi);
       SurfaceInfo   lightInfo{};
       const bool is_intersect = scene.intersect(&lightInfo, ray);
       const Color Li = is_intersect

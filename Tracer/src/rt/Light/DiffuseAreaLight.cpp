@@ -58,7 +58,7 @@ namespace rt {
     const SurfaceInfo surface = _object->sample(ref, xi, pdf);
     *wi = geom::to_direction(n4::direction(ref.P, surface.P));
     if( vis != nullptr ) {
-      *vis = ref.ray(surface, TRACE_BIAS);
+      *vis = ref.ray(surface);
     }
     return radiance(surface, -(*wi));
   }

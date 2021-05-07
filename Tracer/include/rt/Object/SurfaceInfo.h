@@ -47,11 +47,6 @@ namespace rt {
       return object;
     }
 
-    inline Vertex biasedP(const real_t bias) const
-    {
-      return P + bias*geom::to_vertex(N);
-    }
-
     void initializeShading(const Ray& ray);
 
     inline bool isHit() const
@@ -61,17 +56,17 @@ namespace rt {
 
     Color Le(const Direction& wo) const;
 
-    inline Ray ray(const real_t bias = 0, const real_t tMax = Ray::MAX_T) const
+    inline Ray ray(const real_t tMax = Ray::MAX_T) const
     {
-      return ray(wo, bias, tMax);
+      return ray(wo, tMax);
     }
 
-    inline Ray ray(const Direction& dir, const real_t bias = 0, const real_t tMax = Ray::MAX_T) const
+    inline Ray ray(const Direction& dir, const real_t tMax = Ray::MAX_T) const
     {
-      return Ray{biasedP(bias), dir, tMax};
+      return Ray{biasedP(dir), dir, tMax};
     }
 
-    Ray ray(const SurfaceInfo& to, const real_t bias = 0) const;
+    Ray ray(const SurfaceInfo& to) const;
 
     inline TexCoord2D texCoord2D() const
     {
@@ -100,6 +95,20 @@ namespace rt {
     Matrix xfrmSW; // World-to-Shading
     Matrix xfrmWS; // Shading-to-World
     const IObject *object{nullptr};
+
+  private:
+    inline Vertex biasedP(const bool is_front = true) const
+    {
+      const real_t bias = is_front
+          ? +TRACE_BIAS
+          : -TRACE_BIAS;
+      return P + bias*geom::to_vertex(N);
+    }
+
+    inline Vertex biasedP(const Direction& dir) const
+    {
+      return biasedP(geom::isSameHemisphere(dir, N));
+    }
   };
 
 } // namespace rt

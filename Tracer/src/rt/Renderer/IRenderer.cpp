@@ -157,12 +157,7 @@ namespace rt {
       return Color();
     }
 
-    const bool is_same = geom::isSameHemisphere(wi, ref.N);
-    const real_t  bias = is_same
-        ? +TRACE_BIAS
-        : -TRACE_BIAS;
-
-    const Color Li = radiance(ref.ray(wi, bias), sampler, depth + 1);
+    const Color Li = radiance(ref.ray(wi), sampler, depth + 1);
     return f*Li*absCosTi/pdf;
 
     return Color();
