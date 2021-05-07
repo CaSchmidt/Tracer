@@ -55,12 +55,16 @@ namespace rt {
 
     const Lights& lights() const;
 
+    bool useCastShadow() const;
+    void setUseCastShadow(const bool on);
+
   private:
     Scene(const Scene&) = delete;
     Scene& operator=(const Scene&) = delete;
 
     Lights _lights;
     Objects _objects;
+    bool _use_cast_shadow{false};
   };
 
 } // namespace rt

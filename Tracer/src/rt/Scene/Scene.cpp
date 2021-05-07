@@ -88,9 +88,17 @@ namespace rt {
       return false;
     }
 
-    for(const ObjectPtr& o : _objects) {
-      if( o->castShadow(ray) ) {
-        return true;
+    if( _use_cast_shadow ) {
+      for(const ObjectPtr& o : _objects) {
+        if( o->castShadow(ray) ) {
+          return true;
+        }
+      }
+    } else {
+      for(const ObjectPtr& o : _objects) {
+        if( o->intersect(nullptr, ray) ) {
+          return true;
+        }
       }
     }
     return false;
@@ -99,6 +107,16 @@ namespace rt {
   const Lights& Scene::lights() const
   {
     return _lights;
+  }
+
+  bool Scene::useCastShadow() const
+  {
+    return _use_cast_shadow;
+  }
+
+  void Scene::setUseCastShadow(const bool on)
+  {
+    _use_cast_shadow = on;
   }
 
 } // namespace rt

@@ -55,6 +55,7 @@ namespace rt {
     const RenderOptions& options() const;
     bool setOptions(const RenderOptions& options);
 
+    Scene& scene();
     const Scene& scene() const;
     void setScene(Scene& scene);
 

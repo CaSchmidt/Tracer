@@ -96,6 +96,11 @@ namespace rt {
     return true;
   }
 
+  Scene& IRenderer::scene()
+  {
+    return _scene;
+  }
+
   const Scene& IRenderer::scene() const
   {
     return _scene;
