@@ -46,7 +46,7 @@ public:
   ~Worker() = default;
 
   Image execute(const rt::IRenderer *renderer, const rt::SamplerPtr& sampler,
-                const std::size_t blockSize = 32) const;
+                const std::size_t blockSize = 8) const;
 
 private:
   static Blocks makeBlocks(const std::size_t height, const std::size_t blockSize);
