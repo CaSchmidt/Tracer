@@ -36,6 +36,7 @@
 #include "rt/Camera/SimpleCamera.h"
 #include "rt/Loader/SceneLoader.h"
 #include "rt/Renderer/DirectLightingRenderer.h"
+#include "rt/Renderer/PathTracingRenderer.h"
 #include "rt/Renderer/WhittedRenderer.h"
 #include "rt/Sampler/SimpleSampler.h"
 
@@ -47,24 +48,25 @@
 #define FILE_3          BASE_PATH "scene_3.xml"
 #define FILE_4          BASE_PATH "scene_4.xml"
 #define FILE_AREALIGHT  BASE_PATH "scene_arealight.xml"
+#define FILE_BOX        BASE_PATH "scene_box.xml"
 #define FILE_OBJECTS    BASE_PATH "scene_objects.xml"
 #define FILE_SPHERES    BASE_PATH "scene_spheres.xml"
 #define FILE_TEXT       BASE_PATH "scene_text.xml"
 
-constexpr std::size_t numSamples = 64;
+constexpr std::size_t numSamples = 16;
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-  const char *filename = FILE_1;
+  const char *filename = FILE_AREALIGHT;
 
-#if 1
   rt::DirectLightingRenderer renderer;
-#else
-  rt::WhittedRenderer renderer;
-#endif
+  // rt::PathTracingRenderer renderer;
+  // rt::WhittedRenderer renderer;
   if( !rt::loadScene(&renderer, filename) ) {
     return EXIT_FAILURE;
   }
+
+  // renderer.scene().setUseCastShadow(true);
 
 #if 0
   {
