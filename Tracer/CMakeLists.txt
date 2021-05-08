@@ -23,125 +23,17 @@ add_subdirectory(3rdparty/tinyxml2-800)
 ### Project ##################################################################
 
 add_subdirectory(libutil)
+add_subdirectory(librt)
 
 ### Tracer ###################################################################
 
 set(Tracer_HEADERS
   include/Worker.h
-  include/geom/Geom.h
-  include/geom/Hit.h
-  include/geom/Intersect.h
-  include/geom/Optics.h
-  include/geom/Ray.h
-  include/geom/Shading.h
-  include/geom/Transform.h
-  include/math/Constants.h
-  include/math/Logical.h
-  include/math/Solver.h
-  include/rt/Types.h
-  include/rt/BxDF/IBxDF.h
-  include/rt/BxDF/LambertianBRDF.h
-  include/rt/BxDF/MirrorBRDF.h
-  include/rt/BxDF/PhongBRDF.h
-  include/rt/BxDF/SpecularReflectionBRDF.h
-  include/rt/BxDF/SpecularTransmissionBTDF.h
-  include/rt/Camera/FrustumCamera.h
-  include/rt/Camera/ICamera.h
-  include/rt/Camera/SimpleCamera.h
-  include/rt/Light/DiffuseAreaLight.h
-  include/rt/Light/DirectionalLight.h
-  include/rt/Light/IAreaLight.h
-  include/rt/Light/ILight.h
-  include/rt/Light/PointLight.h
-  include/rt/Loader/SceneLoader.h
-  include/rt/Loader/SceneLoaderBase.h
-  include/rt/Loader/SceneLoaderStringUtil.h
-  include/rt/Material/BSDF.h
-  include/rt/Material/IMaterial.h
-  include/rt/Material/MatteMaterial.h
-  include/rt/Material/MirrorMaterial.h
-  include/rt/Material/OpaqueMaterial.h
-  include/rt/Material/TransparentMaterial.h
-  include/rt/Object/Cylinder.h
-  include/rt/Object/Disk.h
-  include/rt/Object/Group.h
-  include/rt/Object/IObject.h
-  include/rt/Object/Plane.h
-  include/rt/Object/Sphere.h
-  include/rt/Object/SurfaceInfo.h
-  include/rt/Renderer/DirectLightingRenderer.h
-  include/rt/Renderer/IRenderer.h
-  include/rt/Renderer/PathTracingRenderer.h
-  include/rt/Renderer/RenderLoop.h
-  include/rt/Renderer/RenderOptions.h
-  include/rt/Renderer/RenderUtils.h
-  include/rt/Renderer/WhittedRenderer.h
-  include/rt/Sampler/ISampler.h
-  include/rt/Sampler/Sample.h
-  include/rt/Sampler/Sampling.h
-  include/rt/Sampler/SimpleSampler.h
-  include/rt/Scene/Scene.h
-  include/rt/Texture/CheckedTexture.h
-  include/rt/Texture/FlatTexture.h
-  include/rt/Texture/ITexture.h
-  include/rt/Texture/TexCoord.h
   )
 
 set(Tracer_SOURCES
   src/main.cpp
   src/Worker.cpp
-  src/rt/BxDF/IBxDF.cpp
-  src/rt/BxDF/LambertianBRDF.cpp
-  src/rt/BxDF/MirrorBRDF.cpp
-  src/rt/BxDF/PhongBRDF.cpp
-  src/rt/BxDF/SpecularReflectionBRDF.cpp
-  src/rt/BxDF/SpecularTransmissionBTDF.cpp
-  src/rt/Camera/FrustumCamera.cpp
-  src/rt/Camera/ICamera.cpp
-  src/rt/Camera/SimpleCamera.cpp
-  src/rt/Light/DiffuseAreaLight.cpp
-  src/rt/Light/DirectionalLight.cpp
-  src/rt/Light/IAreaLight.cpp
-  src/rt/Light/ILight.cpp
-  src/rt/Light/PointLight.cpp
-  src/rt/Loader/SceneLoader.cpp
-  src/rt/Loader/SceneLoaderBase.cpp
-  src/rt/Loader/SceneLoaderLight.cpp
-  src/rt/Loader/SceneLoaderMaterial.cpp
-  src/rt/Loader/SceneLoaderObject.cpp
-  src/rt/Loader/SceneLoaderOptions.cpp
-  src/rt/Loader/SceneLoaderText.cpp
-  src/rt/Loader/SceneLoaderTexture.cpp
-  src/rt/Material/BSDF.cpp
-  src/rt/Material/IMaterial.cpp
-  src/rt/Material/MatteMaterial.cpp
-  src/rt/Material/MirrorMaterial.cpp
-  src/rt/Material/OpaqueMaterial.cpp
-  src/rt/Material/TransparentMaterial.cpp
-  src/rt/Object/Cylinder.cpp
-  src/rt/Object/Disk.cpp
-  src/rt/Object/Group.cpp
-  src/rt/Object/IObject.cpp
-  src/rt/Object/Plane.cpp
-  src/rt/Object/Sphere.cpp
-  src/rt/Object/SurfaceInfo.cpp
-  src/rt/Renderer/DirectLightingRenderer.cpp
-  src/rt/Renderer/IRenderer.cpp
-  src/rt/Renderer/PathTracingRenderer.cpp
-  src/rt/Renderer/RenderUtils.cpp
-  src/rt/Renderer/WhittedRenderer.cpp
-  src/rt/Sampler/ISampler.cpp
-  src/rt/Sampler/Sampling.cpp
-  src/rt/Sampler/SimpleSampler.cpp
-  src/rt/Scene/Scene.cpp
-  src/rt/Texture/CheckedTexture.cpp
-  src/rt/Texture/FlatTexture.cpp
-  src/rt/Texture/ITexture.cpp
-  )
-
-set(Tracer_3rdparty
-  3rdparty/font8x8/include/font8x8_basic.h
-  3rdparty/stb/include/stb_image_write.h
   )
 
 ### Target ###################################################################
@@ -149,17 +41,16 @@ set(Tracer_3rdparty
 add_executable(Tracer
   ${Tracer_HEADERS}
   ${Tracer_SOURCES}
-  ${Tracer_3rdparty}
   )
 
 format_output_name(Tracer "Tracer")
 
-add_dependencies(Tracer N4)
+add_dependencies(Tracer N4 tinyxml2 rt util)
 
-target_include_directories(Tracer PRIVATE
-  ${Tracer_SOURCE_DIR}/3rdparty/font8x8/include
-  ${NumericArray_SOURCE_DIR}/include
-  ${Tracer_SOURCE_DIR}/include
+target_include_directories(Tracer
+  PRIVATE ${Tracer_SOURCE_DIR}/include
   )
 
-target_link_libraries(Tracer tinyxml2 util)
+target_link_libraries(Tracer
+  PRIVATE rt
+  )

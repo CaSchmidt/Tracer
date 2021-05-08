@@ -22,3 +22,5 @@ target_include_directories(util
   )
 
 add_dependencies(util N4)
+
+target_link_libraries(util)
