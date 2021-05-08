@@ -29,32 +29,58 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef TRACER_DEBUG_H
-#define TRACER_DEBUG_H
+#include <limits>
 
-#include "rt/Types.h"
+#include "Debug.h"
 
-namespace rt {
+namespace priv_debug {
 
-  void enableDebug(const size_t x, const size_t y);
-  void disableDebug();
+  constexpr n4::size_t INVALID = std::numeric_limits<n4::size_t>::max();
 
-  bool isDebug();
+  constexpr n4::size_t TRIGGER_X = 10;
+  constexpr n4::size_t TRIGGER_Y = 10;
 
-  void idleDebug();
+  n4::size_t trigger_x = INVALID;
+  n4::size_t trigger_y = INVALID;
 
-  void debugMessage(const char *msg, const bool nl = true);
+  volatile n4::size_t tick{0};
 
-  template<typename traits_T, typename manip_T>
-  inline void debugPrint(const n4::Vector4f<traits_T,manip_T>& v, const bool nl = true)
-  {
-    const real_t x = v(0);
-    const real_t y = v(1);
-    const real_t z = v(2);
-    printf("(%.6f,%.6f,%.6f)%s", x, y, z, nl ? "\n" : "");
-    fflush(stdout);
+} // namespace priv_debug
+
+void enableDebug(const n4::size_t x, const n4::size_t y)
+{
+  using namespace priv_debug;
+  if( x == TRIGGER_X  &&  y == TRIGGER_Y ) {
+    trigger_x = TRIGGER_X;
+    trigger_y = TRIGGER_Y;
   }
+}
 
-} // namespace rt
+void disableDebug()
+{
+  using namespace priv_debug;
+  trigger_x = trigger_y = INVALID;
+}
 
-#endif // TRACER_DEBUG_H
+bool isDebug()
+{
+  using namespace priv_debug;
+  return trigger_x == TRIGGER_X  &&  trigger_y == TRIGGER_Y;
+}
+
+void idleDebug()
+{
+  if( !isDebug() ) {
+    return;
+  }
+  priv_debug::tick += 1;
+}
+
+void debugMessage(const char *msg, const bool nl)
+{
+  if( !isDebug() ) {
+    return;
+  }
+  printf("%s%s", msg, nl ? "\n" : "");
+  fflush(stdout);
+}

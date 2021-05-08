@@ -29,64 +29,31 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <limits>
+#ifndef RT_DEBUG_H
+#define RT_DEBUG_H
 
-#include "debug.h"
+#include "N4/Vector4f.h"
 
-namespace rt {
+void enableDebug(const n4::size_t x, const n4::size_t y);
+void disableDebug();
 
-  namespace debug {
+bool isDebug();
 
-    constexpr size_t INVALID = std::numeric_limits<size_t>::max();
+void idleDebug();
 
-    constexpr size_t TRIGGER_X = 10;
-    constexpr size_t TRIGGER_Y = 10;
+void debugMessage(const char *msg, const bool nl = true);
 
-    size_t trigger_x = INVALID;
-    size_t trigger_y = INVALID;
-
-    volatile size_t tick{0};
-
-  } // namespace debug
-
-  void enableDebug(const size_t x, const size_t y)
-  {
-    using namespace debug;
-    if( x == TRIGGER_X  &&  y == TRIGGER_Y ) {
-      trigger_x = TRIGGER_X;
-      trigger_y = TRIGGER_Y;
-    }
+template<typename traits_T, typename manip_T>
+inline void debugPrint(const n4::Vector4f<traits_T,manip_T>& v, const bool nl = true)
+{
+  if( !isDebug() ) {
+    return;
   }
+  const n4::real_t x = v(0);
+  const n4::real_t y = v(1);
+  const n4::real_t z = v(2);
+  printf("(%.6f,%.6f,%.6f)%s", x, y, z, nl ? "\n" : "");
+  fflush(stdout);
+}
 
-  void disableDebug()
-  {
-    using namespace debug;
-    if( isDebug() ) {
-      trigger_x = trigger_y = INVALID;
-    }
-  }
-
-  bool isDebug()
-  {
-    using namespace debug;
-    return trigger_x == TRIGGER_X  &&  trigger_y == TRIGGER_Y;
-  }
-
-  void idleDebug()
-  {
-    if( !isDebug() ) {
-      return;
-    }
-    debug::tick += 1;
-  }
-
-  void debugMessage(const char *msg, const bool nl)
-  {
-    if( !isDebug() ) {
-      return;
-    }
-    printf("%s%s", msg, nl ? "\n" : "");
-    fflush(stdout);
-  }
-
-} // namespace rt
+#endif // RT_DEBUG_H

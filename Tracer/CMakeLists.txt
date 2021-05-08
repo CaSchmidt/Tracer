@@ -20,10 +20,13 @@ add_subdirectory(../NumericArray/NumericArray
 
 add_subdirectory(3rdparty/tinyxml2-800)
 
+### Project ##################################################################
+
+add_subdirectory(libutil)
+
 ### Tracer ###################################################################
 
 set(Tracer_HEADERS
-  include/Image.h
   include/Worker.h
   include/geom/Geom.h
   include/geom/Hit.h
@@ -85,7 +88,6 @@ set(Tracer_HEADERS
   )
 
 set(Tracer_SOURCES
-  src/Image.cpp
   src/main.cpp
   src/Worker.cpp
   src/rt/BxDF/IBxDF.cpp
@@ -156,9 +158,8 @@ add_dependencies(Tracer N4)
 
 target_include_directories(Tracer PRIVATE
   ${Tracer_SOURCE_DIR}/3rdparty/font8x8/include
-  ${Tracer_SOURCE_DIR}/3rdparty/stb/include
   ${NumericArray_SOURCE_DIR}/include
   ${Tracer_SOURCE_DIR}/include
   )
 
-target_link_libraries(Tracer tinyxml2)
+target_link_libraries(Tracer tinyxml2 util)
