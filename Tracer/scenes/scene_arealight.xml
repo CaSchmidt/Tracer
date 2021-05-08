@@ -50,6 +50,10 @@
     </Object>
     <!-- green sphere -->
     <Object type="Sphere">
+      <Material type="Transparent">
+        <Refraction>1.5</Refraction>
+      </Material>
+      <!--
       <Material type="Opaque">
         <Diffuse type="Checked">
           <ColorA>
@@ -66,6 +70,7 @@
           <ScaleT>2</ScaleT>
         </Diffuse>
       </Material>
+      -->
       <Radius>1</Radius>
       <Transform>
         <Translate>

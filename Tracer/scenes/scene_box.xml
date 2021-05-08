@@ -1,0 +1,228 @@
+<Tracer>
+  <Options>
+    <Width>1000</Width>
+    <Height>1000</Height>
+    <FoV>60</FoV>
+    <WorldToScreen>2</WorldToScreen>
+    <BackgroundColor>
+      <r>0</r>
+      <g>0.8</g>
+      <b>1</b>
+    </BackgroundColor>
+    <Eye>
+      <x>0</x>
+      <y>-5.5</y>
+      <z>2</z>
+    </Eye>
+    <LookAt>
+      <x>0</x>
+      <y>0</y>
+      <z>2</z>
+    </LookAt>
+    <CameraUp>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </CameraUp>
+  </Options>
+  <Scene>
+    <!-- bottom -->
+    <Object type="Plane">
+      <Width>4.1</Width>
+      <Height>4.1</Height>
+      <Material type="Matte">
+        <Texture type="Flat">
+          <Color>
+            <r>0.75</r>
+            <g>0.75</g>
+            <b>0.75</b>
+          </Color>
+        </Texture>
+      </Material>
+      <Transform/>
+    </Object>
+    <!-- top -->
+    <Object type="Plane">
+      <Width>4.1</Width>
+      <Height>4.1</Height>
+      <Material type="Matte">
+        <Texture type="Flat">
+          <Color>
+            <r>0.75</r>
+            <g>0.75</g>
+            <b>0.75</b>
+          </Color>
+        </Texture>
+      </Material>
+      <Transform>
+        <Rotate>
+          <rxByPI2>2</rxByPI2>
+        </Rotate>
+        <Translate>
+          <x>0</x>
+          <y>0</y>
+          <z>4</z>
+        </Translate>
+      </Transform>
+    </Object>
+    <!-- back -->
+    <Object type="Plane">
+      <Width>4.1</Width>
+      <Height>4.1</Height>
+      <Material type="Matte">
+        <Texture type="Flat">
+          <Color>
+            <r>0.75</r>
+            <g>0.75</g>
+            <b>0.75</b>
+          </Color>
+        </Texture>
+      </Material>
+      <Transform>
+        <Rotate>
+          <rxByPI2>1</rxByPI2>
+        </Rotate>
+        <Translate>
+          <x>0</x>
+          <y>2</y>
+          <z>2</z>
+        </Translate>
+      </Transform>
+    </Object>
+    <!-- left -->
+    <Object type="Plane">
+      <Width>4.1</Width>
+      <Height>4.1</Height>
+      <Material type="Matte">
+        <Texture type="Flat">
+          <Color>
+            <r>0.75</r>
+            <g>0.25</g>
+            <b>0.25</b>
+          </Color>
+        </Texture>
+      </Material>
+      <Transform>
+        <Rotate>
+          <ryByPI2>1</ryByPI2>
+        </Rotate>
+        <Translate>
+          <x>-2</x>
+          <y>0</y>
+          <z>2</z>
+        </Translate>
+      </Transform>
+    </Object>
+    <!-- right -->
+    <Object type="Plane">
+      <Width>4.1</Width>
+      <Height>4.1</Height>
+      <Material type="Matte">
+        <Texture type="Flat">
+          <Color>
+            <r>0.25</r>
+            <g>0.25</g>
+            <b>0.75</b>
+          </Color>
+        </Texture>
+      </Material>
+      <Transform>
+        <Rotate>
+          <ryByPI2>3</ryByPI2>
+        </Rotate>
+        <Translate>
+          <x>2</x>
+          <y>0</y>
+          <z>2</z>
+        </Translate>
+      </Transform>
+    </Object>
+    <!-- front -->
+    <!-- <Object type="Plane">
+      <Width>4.1</Width>
+      <Height>4.1</Height>
+      <Material type="Matte">
+        <Texture type="Flat">
+          <Color>
+            <r>0.75</r>
+            <g>0.75</g>
+            <b>0.75</b>
+          </Color>
+        </Texture>
+      </Material>
+      <Transform>
+        <Rotate>
+          <rxByPI2>3</rxByPI2>
+        </Rotate>
+        <Translate>
+          <x>0</x>
+          <y>-2</y>
+          <z>2</z>
+        </Translate>
+      </Transform>
+    </Object> -->
+    <!-- SPACE -->
+    <!--
+    <Light type="Directional">
+      <Radiance>
+        <r>3</r>
+        <g>3</g>
+        <b>3</b>
+      </Radiance>
+      <Direction>
+        <x>0</x>
+        <y>0</y>
+        <z>1</z>
+      </Direction>
+    </Light>
+    -->
+    <!-- SPACE -->
+    <Light type="DiffuseAreaLight">
+      <Emittance>
+        <r>4</r>
+        <g>4</g>
+        <b>4</b>
+      </Emittance>
+      <NumSamples>4</NumSamples>
+      <!-- <Object type="Disk">
+        <Radius>1</Radius>
+        <Transform>
+          <Rotate>
+            <rxByPI2>2</rxByPI2>
+          </Rotate>
+          <Translate>
+            <x>0</x>
+            <y>0</y>
+            <z>4</z>
+          </Translate>
+        </Transform>
+      </Object> -->
+      <!-- SPACE -->
+      <Object type="Sphere">
+        <Radius>1.5</Radius>
+        <Transform>
+          <Translate>
+            <x>0</x>
+            <y>0</y>
+            <z>5.25</z>
+          </Translate>
+        </Transform>
+      </Object>
+      <!-- SPACE -->
+      <!-- <Object type="Plane">
+        <Height>2</Height>
+        <Transform>
+          <Rotate>
+            <rxByPI2>2</rxByPI2>
+          </Rotate>
+          <Translate>
+            <x>0</x>
+            <y>0</y>
+            <z>4</z>
+          </Translate>
+        </Transform>
+        <Width>2</Width>
+      </Object> -->
+    </Light>
+  </Scene>
+</Tracer>
