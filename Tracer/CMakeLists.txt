@@ -68,6 +68,7 @@ set(Tracer_HEADERS
   include/rt/Object/SurfaceInfo.h
   include/rt/Renderer/DirectLightingRenderer.h
   include/rt/Renderer/IRenderer.h
+  include/rt/Renderer/PathTracingRenderer.h
   include/rt/Renderer/RenderLoop.h
   include/rt/Renderer/RenderOptions.h
   include/rt/Renderer/RenderUtils.h
@@ -124,6 +125,7 @@ set(Tracer_SOURCES
   src/rt/Object/SurfaceInfo.cpp
   src/rt/Renderer/DirectLightingRenderer.cpp
   src/rt/Renderer/IRenderer.cpp
+  src/rt/Renderer/PathTracingRenderer.cpp
   src/rt/Renderer/RenderUtils.cpp
   src/rt/Renderer/WhittedRenderer.cpp
   src/rt/Sampler/ISampler.cpp
