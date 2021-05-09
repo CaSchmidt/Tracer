@@ -26,3 +26,7 @@ add_subdirectory(libutil)
 add_subdirectory(librt)
 
 add_subdirectory(cli)
+
+### Tests ####################################################################
+
+add_subdirectory(tests)
