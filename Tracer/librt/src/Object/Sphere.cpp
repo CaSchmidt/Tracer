@@ -32,6 +32,7 @@
 #include "rt/Object/Sphere.h"
 
 #include "geom/Intersect.h"
+#include "geom/Util.h"
 #include "rt/Object/SurfaceInfo.h"
 #include "rt/Sampler/Sampling.h"
 
@@ -140,7 +141,7 @@ namespace rt {
     const Matrix xfrmSC = n4::util::frameFromZ(zC);
 
     const Normal Nobj = geom::to_normal(xfrmSC*geom::spherical(sinAlpha, cosAlpha, phi));
-    const Vertex Pobj = _radius*geom::to_vertex(Nobj);
+    const Vertex Pobj = geom::reproject3D(_radius*geom::to_vertex(Nobj), _radius);
 
     SurfaceInfo surface;
     surface.N = toWorld(Nobj);

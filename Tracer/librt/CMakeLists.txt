@@ -6,6 +6,7 @@ list(APPEND rt_HEADERS
   include/geom/Ray.h
   include/geom/Shading.h
   include/geom/Transform.h
+  include/geom/Util.h
   include/math/Constants.h
   include/math/Logical.h
   include/math/Solver.h

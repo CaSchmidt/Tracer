@@ -32,6 +32,7 @@
 #include "rt/Object/Cylinder.h"
 
 #include "geom/Intersect.h"
+#include "geom/Util.h"
 #include "rt/Object/SurfaceInfo.h"
 
 namespace rt {
@@ -95,7 +96,7 @@ namespace rt {
     const real_t phi = xi2*TWO_PI;
     const real_t   z = xi1*_height - _height/TWO;
 
-    const Vertex Pobj{_radius*n4::cos(phi), _radius*n4::sin(phi), z};
+    const Vertex Pobj = geom::reproject2D({_radius*n4::cos(phi), _radius*n4::sin(phi), z}, _radius);
     const Normal Nobj = n4::normalize(Normal{Pobj.x, Pobj.y, 0});
 
     SurfaceInfo surface;
