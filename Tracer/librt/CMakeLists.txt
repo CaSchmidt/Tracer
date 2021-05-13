@@ -125,6 +125,6 @@ target_include_directories(rt
 add_dependencies(rt N4 util tinyxml2)
 
 target_link_libraries(rt
-  PUBLIC tinyxml2
-  PUBLIC util
+  PRIVATE tinyxml2
+  PUBLIC  util
   )
