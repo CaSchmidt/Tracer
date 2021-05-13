@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,20 +29,50 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef WORKER_H
-#define WORKER_H
-
 #include "rt/Renderer/RenderContext.h"
 
-class Worker {
-public:
-  Worker() = default;
-  ~Worker() = default;
+namespace rt {
 
-  Image execute(const rt::RenderContext& rc, const rt::size_t blockSize = 8) const;
+  ////// Public //////////////////////////////////////////////////////////////
 
-private:
-  static void progress(const rt::size_t y, const rt::size_t height);
-};
+  RenderBlocks makeRenderBlocks(const size_t height, const size_t blockSize)
+  {
+    RenderBlocks blocks;
 
-#endif // WORKER_H
+    const size_t numBlocks = height/blockSize;
+    for(size_t i = 0; i < numBlocks; i++) {
+      const size_t y0 = i*blockSize;
+      blocks.emplace_back(y0, y0 + blockSize);
+    }
+
+    if( const size_t numRemain = height%blockSize; numRemain > 0 ) {
+      const size_t y0 = numBlocks*blockSize;
+      blocks.emplace_back(y0, y0 + numRemain);
+    }
+
+    return blocks;
+  }
+
+  ////// RenderContext - public //////////////////////////////////////////////
+
+  void RenderContext::clear()
+  {
+    camera.reset();
+    renderer.reset();
+    sampler.reset();
+    scene.clear();
+  }
+
+  bool RenderContext::isValid() const
+  {
+    return camera  &&  renderer  &&  sampler;
+  }
+
+  Image RenderContext::operator()(const RenderBlock& block) const
+  {
+    const SamplerPtr mysampler = sampler->copy();
+    const auto [y0, y1] = block;
+    return renderer->render(y0, y1, scene, camera, mysampler);
+  }
+
+} // namespace rt

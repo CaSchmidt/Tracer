@@ -44,6 +44,7 @@ list(APPEND rt_HEADERS
   include/rt/Renderer/DirectLightingRenderer.h
   include/rt/Renderer/IRenderer.h
   include/rt/Renderer/PathTracingRenderer.h
+  include/rt/Renderer/RenderContext.h
   include/rt/Renderer/RenderLoop.h
   include/rt/Renderer/RenderOptions.h
   include/rt/Renderer/RenderUtils.h
@@ -98,6 +99,7 @@ list(APPEND rt_SOURCES
   src/Renderer/DirectLightingRenderer.cpp
   src/Renderer/IRenderer.cpp
   src/Renderer/PathTracingRenderer.cpp
+  src/Renderer/RenderContext.cpp
   src/Renderer/RenderUtils.cpp
   src/Renderer/WhittedRenderer.cpp
   src/Sampler/ISampler.cpp

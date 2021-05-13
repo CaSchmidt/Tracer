@@ -71,31 +71,28 @@ std::basic_ostream<CharT,Traits>& operator<<(std::basic_ostream<CharT,Traits>& o
       << elapsed.msec.count() << "ms";
 }
 
-Image Worker::execute(const rt::RendererPtr& renderer, const rt::Scene& scene,
-                      const rt::CameraPtr& camera, const rt::SamplerPtr& sampler,
-                      const std::size_t blockSize) const
+Image Worker::execute(const rt::RenderContext& rc, const rt::size_t blockSize) const
 {
-  Image image(camera->width(), camera->height());
+  Image image(rc.camera->width(), rc.camera->height());
   if( image.isEmpty() ) {
     return Image();
   }
 
-  const Blocks blocks = makeBlocks(image.height(), blockSize);
+  const rt::RenderBlocks blocks = rt::makeRenderBlocks(image.height(), blockSize);
   if( blocks.empty() ) {
     return Image();
   }
 
   const auto tim_begin = std::chrono::high_resolution_clock::now();
 
-  std::size_t done = 0;
+  rt::size_t done = 0;
   std::mutex mutex;
   std::for_each(std::execution::par_unseq,
-                blocks.begin(), blocks.end(), [&](const Block& block) -> void {
-    const rt::SamplerPtr mysampler = sampler->copy();
-    const auto [y0, y1] = block;
-    const Image slice = renderer->render(y0, y1, scene, camera, mysampler);
+                blocks.begin(), blocks.end(), [&](const rt::RenderBlock& block) -> void {
+    const Image slice = rc(block);
     {
       std::lock_guard<std::mutex> lock(mutex);
+      const auto [y0, y1] = block;
       image.copy(y0, slice);
       done += y1 - y0;
       progress(done, image.height());
@@ -111,28 +108,9 @@ Image Worker::execute(const rt::RendererPtr& renderer, const rt::Scene& scene,
 
 ////// private ///////////////////////////////////////////////////////////////
 
-Blocks Worker::makeBlocks(const std::size_t height, const std::size_t blockSize)
+void Worker::progress(const rt::size_t y, const rt::size_t height)
 {
-  Blocks blocks;
-
-  const std::size_t numBlocks = height/blockSize;
-  for(std::size_t i = 0; i < numBlocks; i++) {
-    const std::size_t y0 = i*blockSize;
-    blocks.emplace_back(y0, y0 + blockSize);
-  }
-
-  const std::size_t numRemain = height%blockSize;
-  if( numRemain > 0 ) {
-    const std::size_t y0 = numBlocks*blockSize;
-    blocks.emplace_back(y0, y0 + numRemain);
-  }
-
-  return blocks;
-}
-
-void Worker::progress(const std::size_t y, const std::size_t height)
-{
-  const std::size_t p = (y*100)/height;
+  const rt::size_t p = (y*100)/height;
   printf("Progress: %3d%% (%6d/%6d)\n", int(p), int(y), int(height));
   fflush(stdout);
 }

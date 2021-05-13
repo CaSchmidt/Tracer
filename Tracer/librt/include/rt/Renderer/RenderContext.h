@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,20 +29,44 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef WORKER_H
-#define WORKER_H
+#ifndef RENDERCONTEXT_H
+#define RENDERCONTEXT_H
 
-#include "rt/Renderer/RenderContext.h"
+#include <list>
+#include <tuple>
 
-class Worker {
-public:
-  Worker() = default;
-  ~Worker() = default;
+#include "rt/Renderer/IRenderer.h"
+#include "rt/Scene/Scene.h"
 
-  Image execute(const rt::RenderContext& rc, const rt::size_t blockSize = 8) const;
+namespace rt {
 
-private:
-  static void progress(const rt::size_t y, const rt::size_t height);
-};
+  using RenderBlock  = std::tuple<size_t,size_t>;
+  using RenderBlocks = std::list<RenderBlock>;
 
-#endif // WORKER_H
+  RenderBlocks makeRenderBlocks(const size_t height, const size_t blockSize);
+
+  struct RenderContext {
+    RenderContext() noexcept = default;
+
+    void clear();
+
+    bool isValid() const;
+
+    Image operator()(const RenderBlock& block) const;
+
+    CameraPtr camera;
+    RendererPtr renderer;
+    SamplerPtr sampler;
+    Scene scene;
+
+  private:
+    RenderContext(const RenderContext&) noexcept = delete;
+    RenderContext& operator=(const RenderContext&) noexcept = delete;
+
+    RenderContext(RenderContext&&) noexcept = delete;
+    RenderContext& operator=(RenderContext&&) noexcept = delete;
+  };
+
+} // namespace rt
+
+#endif // RENDERCONTEXT_H

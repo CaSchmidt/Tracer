@@ -63,16 +63,17 @@ int main(int /*argc*/, char ** /*argv*/)
 {
   const char *filename = FILE_AREALIGHT;
 
-  rt::Scene scene;
+  rt::RenderContext rc;
+
   rt::RenderOptions options;
-  if( !rt::loadScene(scene, options, filename) ) {
+  if( !rt::loadScene(rc.scene, options, filename) ) {
     return EXIT_FAILURE;
   }
-  //scene.setUseCastShadow(true);
+  //rc.scene.setUseCastShadow(true);
 
-  rt::RendererPtr renderer = rt::DirectLightingRenderer::create(options);
-  //rt::RendererPtr renderer = rt::PathTracingRenderer::create(options);
-  //rt::RendererPtr renderer = rt::WhittedRenderer::create(options);
+  rc.renderer = rt::DirectLightingRenderer::create(options);
+  //rc.renderer = rt::PathTracingRenderer::create(options);
+  //rc.renderer = rt::WhittedRenderer::create(options);
 
 #if 0
   {
@@ -88,15 +89,15 @@ int main(int /*argc*/, char ** /*argv*/)
 #endif
 
 #if 1
-  rt::CameraPtr camera = rt::FrustumCamera::create(width, height, renderer->options());
+  rc.camera = rt::FrustumCamera::create(width, height, rc.renderer->options());
 #else
-  rt::CameraPtr camera = rt::SimpleCamera::create(width, height, renderer->options());
+  rc.camera = rt::SimpleCamera::create(width, height, rc.renderer->options());
 #endif
 
-  rt::SamplerPtr sampler = rt::SimpleSampler::create(numSamples);
+  rc.sampler = rt::SimpleSampler::create(numSamples);
 
   Worker worker;
-  const Image image = worker.execute(renderer, scene, camera, sampler);
+  const Image image = worker.execute(rc);
   image.saveAsPNG("output.png");
 
   return EXIT_SUCCESS;
