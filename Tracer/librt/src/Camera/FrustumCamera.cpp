@@ -38,8 +38,8 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  FrustumCamera::FrustumCamera(const RenderOptions& options)
-    : ICamera(options.width, options.height)
+  FrustumCamera::FrustumCamera(const size_t width, const size_t height, const RenderOptions& options)
+    : ICamera(width, height)
   {
     if( !isValidFoV(options.fov_rad)  ||  options.worldToScreen <= ZERO ) {
       return;
@@ -52,7 +52,7 @@ namespace rt {
       _rLens = _zFocus = 0;
     }
 
-    _windowTransform = windowTransform(width(), height(),
+    _windowTransform = windowTransform(ICamera::width(), ICamera::height(),
                                        options.fov_rad, options.worldToScreen);
     _zNear = _windowTransform(2, 3);
   }
@@ -98,9 +98,9 @@ namespace rt {
     return makeRay(_windowTransform, x, y, sampler);
   }
 
-  CameraPtr FrustumCamera::create(const RenderOptions& options)
+  CameraPtr FrustumCamera::create(const size_t width, const size_t height, const RenderOptions& options)
   {
-    return std::make_unique<FrustumCamera>(options);
+    return std::make_unique<FrustumCamera>(width, height, options);
   }
 
   ////// private /////////////////////////////////////////////////////////////

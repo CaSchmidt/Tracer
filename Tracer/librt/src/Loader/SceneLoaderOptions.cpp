@@ -49,16 +49,6 @@ namespace rt {
       bool myOk = false;
       RenderOptions opts;
 
-      opts.width = parseSize(node->FirstChildElement("Width"), &myOk);
-      if( !myOk ) {
-        return RenderOptions();
-      }
-
-      opts.height = parseSize(node->FirstChildElement("Height"), &myOk);
-      if( !myOk ) {
-        return RenderOptions();
-      }
-
       opts.fov_rad = parseAngle(node->FirstChildElement("FoV"), &myOk);
       if( !myOk ) {
         return RenderOptions();

@@ -53,7 +53,10 @@
 #define FILE_SPHERES    BASE_PATH "scene_spheres.xml"
 #define FILE_TEXT       BASE_PATH "scene_text.xml"
 
-constexpr std::size_t numSamples = 16;
+constexpr rt::size_t numSamples = 16;
+
+constexpr rt::size_t  width = 1000;
+constexpr rt::size_t height = 1000;
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -82,9 +85,9 @@ int main(int /*argc*/, char ** /*argv*/)
 #endif
 
 #if 1
-  rt::CameraPtr camera = rt::FrustumCamera::create(renderer.options());
+  rt::CameraPtr camera = rt::FrustumCamera::create(width, height, renderer.options());
 #else
-  rt::CameraPtr camera = rt::SimpleCamera::create(renderer.options());
+  rt::CameraPtr camera = rt::SimpleCamera::create(width, height, renderer.options());
 #endif
 
   rt::SamplerPtr sampler = rt::SimpleSampler::create(numSamples);

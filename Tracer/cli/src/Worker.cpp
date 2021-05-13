@@ -75,7 +75,7 @@ Image Worker::execute(const rt::IRenderer *renderer,
                       const rt::CameraPtr& camera, const rt::SamplerPtr& sampler,
                       const std::size_t blockSize) const
 {
-  Image image(renderer->options().width, renderer->options().height);
+  Image image(camera->width(), camera->height());
   if( image.isEmpty() ) {
     return Image();
   }

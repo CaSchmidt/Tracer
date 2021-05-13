@@ -40,14 +40,14 @@ namespace rt {
 
   class FrustumCamera : public ICamera {
   public:
-    FrustumCamera(const RenderOptions& options);
+    FrustumCamera(const size_t width, const size_t height, const RenderOptions& options);
     ~FrustumCamera();
 
     bool isValid() const;
 
     Ray ray(const size_t x, const size_t y, const SamplerPtr& sampler) const;
 
-    static CameraPtr create(const RenderOptions& options);
+    static CameraPtr create(const size_t width, const size_t height, const RenderOptions& options);
 
   private:
     static Matrix windowTransform(const size_t width, const size_t height,

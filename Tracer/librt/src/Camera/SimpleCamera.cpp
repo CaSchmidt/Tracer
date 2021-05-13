@@ -37,14 +37,14 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  SimpleCamera::SimpleCamera(const RenderOptions& options)
-    : ICamera(options.width, options.height)
+  SimpleCamera::SimpleCamera(const size_t width, const size_t height, const RenderOptions& options)
+    : ICamera(width, height)
   {
     if( !isValidFoV(options.fov_rad) ) {
       return;
     }
 
-    _windowTransform = windowTransform(width(), height(), options.fov_rad);
+    _windowTransform = windowTransform(ICamera::width(), ICamera::height(), options.fov_rad);
   }
 
   SimpleCamera::~SimpleCamera()
@@ -61,9 +61,9 @@ namespace rt {
     return makeRay(_windowTransform, x, y, sampler);
   }
 
-  CameraPtr SimpleCamera::create(const RenderOptions& options)
+  CameraPtr SimpleCamera::create(const size_t width, const size_t height, const RenderOptions& options)
   {
-    return std::make_unique<SimpleCamera>(options);
+    return std::make_unique<SimpleCamera>(width, height, options);
   }
 
   ////// private /////////////////////////////////////////////////////////////
