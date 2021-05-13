@@ -62,6 +62,9 @@ namespace rt {
 
   bool loadScene(Scene& scene, RenderOptions& options, const char *filename)
   {
+    scene.clear();
+    options = RenderOptions();
+
     tinyxml2::XMLDocument doc;
     if( doc.LoadFile(filename) != tinyxml2::XML_SUCCESS ) {
       fprintf(stderr, "Unable to load XML scene \"%s\"!\n", filename);
