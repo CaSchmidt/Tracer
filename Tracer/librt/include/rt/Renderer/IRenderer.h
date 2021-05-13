@@ -46,11 +46,11 @@ namespace rt {
 
   class IRenderer {
   public:
-    IRenderer() noexcept;
+    IRenderer(const RenderOptions& options) noexcept;
     virtual ~IRenderer() noexcept;
 
     const RenderOptions& options() const;
-    bool setOptions(const RenderOptions& options);
+    void setOptions(const RenderOptions& options);
 
     Image render(size_t y0, size_t y1, const Scene& scene,
                  const CameraPtr& camera, const SamplerPtr& sampler) const;
@@ -61,7 +61,9 @@ namespace rt {
                                     const bool is_transmit) const;
 
   private:
-    Image createImage(size_t& y0, size_t& y1, const CameraPtr& camera) const;
+    IRenderer() noexcept = delete;
+
+    static Image createImage(size_t& y0, size_t& y1, const CameraPtr& camera);
     virtual Color radiance(const Ray& ray, const Scene& scene,
                            const SamplerPtr& sampler, const uint_t depth = 0) const = 0;
 

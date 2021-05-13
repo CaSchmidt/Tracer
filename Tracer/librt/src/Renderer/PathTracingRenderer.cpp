@@ -39,12 +39,18 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  PathTracingRenderer::PathTracingRenderer() noexcept
+  PathTracingRenderer::PathTracingRenderer(const RenderOptions& options) noexcept
+    : IRenderer(options)
   {
   }
 
   PathTracingRenderer::~PathTracingRenderer() noexcept
   {
+  }
+
+  RendererPtr PathTracingRenderer::create(const RenderOptions& options)
+  {
+    return std::make_unique<PathTracingRenderer>(options);
   }
 
   ////// private /////////////////////////////////////////////////////////////

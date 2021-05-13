@@ -38,12 +38,18 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  WhittedRenderer::WhittedRenderer() noexcept
+  WhittedRenderer::WhittedRenderer(const RenderOptions& options) noexcept
+    : IRenderer(options)
   {
   }
 
   WhittedRenderer::~WhittedRenderer() noexcept
   {
+  }
+
+  RendererPtr WhittedRenderer::create(const RenderOptions& options)
+  {
+    return std::make_unique<WhittedRenderer>(options);
   }
 
   ////// private /////////////////////////////////////////////////////////////

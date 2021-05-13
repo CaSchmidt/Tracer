@@ -38,11 +38,13 @@ namespace rt {
 
   class DirectLightingRenderer : public IRenderer {
   public:
-    DirectLightingRenderer() noexcept;
+    DirectLightingRenderer(const RenderOptions& options) noexcept;
     ~DirectLightingRenderer() noexcept;
 
     bool sampleOneLight() const;
     void setSampleOneLight(const bool on);
+
+    static RendererPtr create(const RenderOptions& options);
 
   private:
     bool _sample_one_light{false};

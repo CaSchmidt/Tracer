@@ -45,7 +45,7 @@ public:
   Worker() = default;
   ~Worker() = default;
 
-  Image execute(const rt::IRenderer *renderer, const rt::Scene& scene,
+  Image execute(const rt::RendererPtr& renderer, const rt::Scene& scene,
                 const rt::CameraPtr& camera, const rt::SamplerPtr& sampler,
                 const std::size_t blockSize = 8) const;
 

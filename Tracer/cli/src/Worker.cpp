@@ -71,7 +71,7 @@ std::basic_ostream<CharT,Traits>& operator<<(std::basic_ostream<CharT,Traits>& o
       << elapsed.msec.count() << "ms";
 }
 
-Image Worker::execute(const rt::IRenderer *renderer, const rt::Scene& scene,
+Image Worker::execute(const rt::RendererPtr& renderer, const rt::Scene& scene,
                       const rt::CameraPtr& camera, const rt::SamplerPtr& sampler,
                       const std::size_t blockSize) const
 {

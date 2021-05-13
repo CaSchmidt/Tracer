@@ -39,7 +39,8 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  DirectLightingRenderer::DirectLightingRenderer() noexcept
+  DirectLightingRenderer::DirectLightingRenderer(const RenderOptions& options) noexcept
+    : IRenderer(options)
   {
   }
 
@@ -55,6 +56,11 @@ namespace rt {
   void DirectLightingRenderer::setSampleOneLight(const bool on)
   {
     _sample_one_light = on;
+  }
+
+  RendererPtr DirectLightingRenderer::create(const RenderOptions& options)
+  {
+    return std::make_unique<DirectLightingRenderer>(options);
   }
 
   ////// private /////////////////////////////////////////////////////////////

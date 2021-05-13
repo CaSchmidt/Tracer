@@ -41,8 +41,9 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  IRenderer::IRenderer() noexcept
+  IRenderer::IRenderer(const RenderOptions& options) noexcept
   {
+    setOptions(options);
   }
 
   IRenderer::~IRenderer() noexcept
@@ -54,7 +55,7 @@ namespace rt {
     return _options;
   }
 
-  bool IRenderer::setOptions(const RenderOptions& options)
+  void IRenderer::setOptions(const RenderOptions& options)
   {
     _options = options;
 
@@ -72,8 +73,6 @@ namespace rt {
      * 2. camera space is transformed to world space
      */
     _view = xfrmCW.inverse()*Transform::lookAt(eyeC, lookAtC, cameraUpC);
-
-    return true;
   }
 
   Image IRenderer::render(size_t y0, size_t y1, const Scene& scene,
@@ -131,7 +130,7 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Image IRenderer::createImage(size_t& y0, size_t& y1, const CameraPtr& camera) const
+  Image IRenderer::createImage(size_t& y0, size_t& y1, const CameraPtr& camera)
   {
     if( !camera  ||  camera->width() < 1  ||  camera->height() < 1 ) {
       return Image();

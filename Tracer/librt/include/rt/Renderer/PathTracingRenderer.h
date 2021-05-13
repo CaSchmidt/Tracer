@@ -38,8 +38,10 @@ namespace rt {
 
   class PathTracingRenderer : public IRenderer {
   public:
-    PathTracingRenderer() noexcept;
+    PathTracingRenderer(const RenderOptions& options) noexcept;
     ~PathTracingRenderer() noexcept;
+
+    static RendererPtr create(const RenderOptions& options);
 
   private:
     Color radiance(const Ray& ray, const Scene& scene,

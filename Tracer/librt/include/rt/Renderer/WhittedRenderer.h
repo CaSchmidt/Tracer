@@ -40,8 +40,10 @@ namespace rt {
 
   class WhittedRenderer : public IRenderer {
   public:
-    WhittedRenderer() noexcept;
+    WhittedRenderer(const RenderOptions& options) noexcept;
     ~WhittedRenderer() noexcept;
+
+    static RendererPtr create(const RenderOptions& options);
 
   private:
     Color radiance(const Ray& ray, const Scene& scene,
