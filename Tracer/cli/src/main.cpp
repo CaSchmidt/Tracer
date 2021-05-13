@@ -39,6 +39,7 @@
 #include "rt/Renderer/PathTracingRenderer.h"
 #include "rt/Renderer/WhittedRenderer.h"
 #include "rt/Sampler/SimpleSampler.h"
+#include "rt/Scene/Scene.h"
 
 #include "Worker.h"
 
@@ -65,11 +66,14 @@ int main(int /*argc*/, char ** /*argv*/)
   rt::DirectLightingRenderer renderer;
   // rt::PathTracingRenderer renderer;
   // rt::WhittedRenderer renderer;
-  if( !rt::loadScene(&renderer, filename) ) {
+
+  rt::Scene scene;
+  rt::RenderOptions options;
+  if( !rt::loadScene(scene, options, filename) ) {
     return EXIT_FAILURE;
   }
-
-  // renderer.scene().setUseCastShadow(true);
+  //scene.setUseCastShadow(true);
+  renderer.setOptions(options);
 
 #if 0
   {
@@ -93,7 +97,7 @@ int main(int /*argc*/, char ** /*argv*/)
   rt::SamplerPtr sampler = rt::SimpleSampler::create(numSamples);
 
   Worker worker;
-  const Image image = worker.execute(&renderer, camera, sampler);
+  const Image image = worker.execute(&renderer, scene, camera, sampler);
   image.saveAsPNG("output.png");
 
   return EXIT_SUCCESS;

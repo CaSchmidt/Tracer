@@ -71,7 +71,7 @@ std::basic_ostream<CharT,Traits>& operator<<(std::basic_ostream<CharT,Traits>& o
       << elapsed.msec.count() << "ms";
 }
 
-Image Worker::execute(const rt::IRenderer *renderer,
+Image Worker::execute(const rt::IRenderer *renderer, const rt::Scene& scene,
                       const rt::CameraPtr& camera, const rt::SamplerPtr& sampler,
                       const std::size_t blockSize) const
 {
@@ -93,7 +93,7 @@ Image Worker::execute(const rt::IRenderer *renderer,
                 blocks.begin(), blocks.end(), [&](const Block& block) -> void {
     const rt::SamplerPtr mysampler = sampler->copy();
     const auto [y0, y1] = block;
-    const Image slice = renderer->render(y0, y1, camera, mysampler);
+    const Image slice = renderer->render(y0, y1, scene, camera, mysampler);
     {
       std::lock_guard<std::mutex> lock(mutex);
       image.copy(y0, slice);
