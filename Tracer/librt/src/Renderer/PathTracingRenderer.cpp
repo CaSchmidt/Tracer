@@ -33,6 +33,7 @@
 
 #include "rt/Object/SurfaceInfo.h"
 #include "rt/Renderer/RenderUtils.h"
+#include "rt/Scene/Scene.h"
 
 namespace rt {
 
@@ -48,11 +49,10 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Color PathTracingRenderer::radiance(const Ray& _ray, const SamplerPtr& sampler,
-                                      const uint_t /*depth*/) const
+  Color PathTracingRenderer::radiance(const Ray& _ray, const Scene& scene,
+                                      const SamplerPtr& sampler, const uint_t /*depth*/) const
   {
     const RenderOptions& options = PathTracingRenderer::options();
-    const Scene&           scene = PathTracingRenderer::scene();
 
     Color              beta(1);
     Color                 L;

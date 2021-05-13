@@ -31,6 +31,8 @@
 
 #include "rt/Renderer/IRenderer.h"
 
+#include "rt/Material/BSDF.h"
+#include "rt/Object/IObject.h"
 #include "rt/Object/SurfaceInfo.h"
 #include "rt/Renderer/RenderLoop.h"
 #include "rt/Sampler/ISampler.h"
@@ -45,13 +47,6 @@ namespace rt {
 
   IRenderer::~IRenderer() noexcept
   {
-  }
-
-  void IRenderer::clear()
-  {
-    _options = RenderOptions();
-    _view    = Transform();
-    _scene.clear();
   }
 
   const RenderOptions& IRenderer::options() const
@@ -81,22 +76,7 @@ namespace rt {
     return true;
   }
 
-  Scene& IRenderer::scene()
-  {
-    return _scene;
-  }
-
-  const Scene& IRenderer::scene() const
-  {
-    return _scene;
-  }
-
-  void IRenderer::setScene(Scene& scene)
-  {
-    _scene = std::move(scene);
-  }
-
-  Image IRenderer::render(size_t y0, size_t y1,
+  Image IRenderer::render(size_t y0, size_t y1, const Scene& scene,
                           const CameraPtr& camera, const SamplerPtr& sampler) const
   {
     Image image = createImage(y0, y1, camera);
@@ -108,7 +88,7 @@ namespace rt {
       render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
         Color color;
         for(size_t s = 0; s < sampler->numSamplesPerPixel(); s++) {
-          const Color Li = radiance(_view*camera->ray(x, y, sampler), sampler);
+          const Color Li = radiance(_view*camera->ray(x, y, sampler), scene, sampler);
           color += n4::clamp(Li, 0, 1);
         }
         color /= static_cast<real_t>(sampler->numSamplesPerPixel());
@@ -116,7 +96,7 @@ namespace rt {
       });
     } else {
       render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
-        const Color Li = radiance(_view*camera->ray(x, y, sampler), sampler);
+        const Color Li = radiance(_view*camera->ray(x, y, sampler), scene, sampler);
         return Li;
       });
     }
@@ -126,7 +106,7 @@ namespace rt {
 
   ////// protected ///////////////////////////////////////////////////////////
 
-  Color IRenderer::specularReflectOrTransmit(const SurfaceInfo& ref,
+  Color IRenderer::specularReflectOrTransmit(const SurfaceInfo& ref, const Scene& scene,
                                              const SamplerPtr& sampler, const uint_t depth,
                                              const bool is_transmit) const
   {
@@ -143,7 +123,7 @@ namespace rt {
       return Color();
     }
 
-    const Color Li = radiance(ref.ray(wi), sampler, depth + 1);
+    const Color Li = radiance(ref.ray(wi), scene, sampler, depth + 1);
     return f*Li*absCosTi/pdf;
 
     return Color();

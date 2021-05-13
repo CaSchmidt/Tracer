@@ -40,9 +40,11 @@
 
 #include "rt/Loader/SceneLoader.h"
 
+#include "rt/Light/ILight.h"
 #include "rt/Loader/SceneLoaderBase.h"
 #include "rt/Loader/SceneLoaderStringUtil.h"
 #include "rt/Renderer/IRenderer.h"
+#include "rt/Scene/Scene.h"
 
 namespace rt {
 
@@ -58,10 +60,8 @@ namespace rt {
 
   } // namespace priv
 
-  bool loadScene(IRenderer *renderer, const char *filename)
+  bool loadScene(Scene& scene, RenderOptions& options, const char *filename)
   {
-    renderer->clear();
-
     tinyxml2::XMLDocument doc;
     if( doc.LoadFile(filename) != tinyxml2::XML_SUCCESS ) {
       fprintf(stderr, "Unable to load XML scene \"%s\"!\n", filename);
@@ -77,9 +77,9 @@ namespace rt {
     bool ok = false;
 
     const tinyxml2::XMLElement *xml_Options = xml_Tracer->FirstChildElement("Options");
-    const RenderOptions opts = priv::parseOptions(xml_Options, &ok);
-    if( !ok  ||  !renderer->setOptions(opts) ) {
-      fprintf(stderr, "Unable to initialize renderer!\n");
+    options = priv::parseOptions(xml_Options, &ok);
+    if( !ok ) {
+      fprintf(stderr, "Unable to parse render options!\n");
       return false;
     }
 
@@ -89,7 +89,6 @@ namespace rt {
       return false;
     }
 
-    Scene scene;
     const priv::ObjectConsumer add_object = [&](ObjectPtr& o) -> void {
       scene.add(o);
     };
@@ -123,7 +122,6 @@ namespace rt {
 
       node = node->NextSiblingElement();
     }
-    renderer->setScene(scene);
 
     return true;
   }

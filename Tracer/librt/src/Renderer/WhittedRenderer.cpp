@@ -32,6 +32,7 @@
 #include "rt/Renderer/WhittedRenderer.h"
 
 #include "rt/Object/SurfaceInfo.h"
+#include "rt/Scene/Scene.h"
 
 namespace rt {
 
@@ -47,11 +48,9 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Color WhittedRenderer::radiance(const Ray& ray, const SamplerPtr& sampler,
-                                  const uint_t depth) const
+  Color WhittedRenderer::radiance(const Ray& ray, const Scene& scene,
+                                  const SamplerPtr& sampler, const uint_t depth) const
   {
-    const Scene& scene = WhittedRenderer::scene();
-
     SurfaceInfo ref;
     if( !scene.intersect(&ref, ray) ) {
       return options().backgroundColor;
@@ -84,8 +83,8 @@ namespace rt {
     }
 
     if( depth + 1 < options().maxDepth ) {
-      Lo += specularReflectOrTransmit(ref, sampler, depth, false);
-      Lo += specularReflectOrTransmit(ref, sampler, depth, true);
+      Lo += specularReflectOrTransmit(ref, scene, sampler, depth, false);
+      Lo += specularReflectOrTransmit(ref, scene, sampler, depth, true);
     }
 
     return Lo;

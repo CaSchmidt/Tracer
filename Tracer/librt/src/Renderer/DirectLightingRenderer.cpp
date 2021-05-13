@@ -33,6 +33,7 @@
 
 #include "rt/Object/SurfaceInfo.h"
 #include "rt/Renderer/RenderUtils.h"
+#include "rt/Scene/Scene.h"
 
 namespace rt {
 
@@ -58,11 +59,10 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Color DirectLightingRenderer::radiance(const Ray& ray, const SamplerPtr& sampler,
-                                         const uint_t depth) const
+  Color DirectLightingRenderer::radiance(const Ray& ray, const Scene& scene,
+                                         const SamplerPtr& sampler, const uint_t depth) const
   {
     const RenderOptions& options = DirectLightingRenderer::options();
-    const Scene&           scene = DirectLightingRenderer::scene();
 
     SurfaceInfo ref;
     if( !scene.intersect(&ref, ray) ) {
@@ -83,8 +83,8 @@ namespace rt {
     }
 
     if( depth + 1 < options.maxDepth ) {
-      Lo += specularReflectOrTransmit(ref, sampler, depth, false);
-      Lo += specularReflectOrTransmit(ref, sampler, depth, true);
+      Lo += specularReflectOrTransmit(ref, scene, sampler, depth, false);
+      Lo += specularReflectOrTransmit(ref, scene, sampler, depth, true);
     }
 
     return Lo;

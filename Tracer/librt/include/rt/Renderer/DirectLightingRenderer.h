@@ -47,7 +47,8 @@ namespace rt {
   private:
     bool _sample_one_light{false};
 
-    Color radiance(const Ray& ray, const SamplerPtr& sampler, const uint_t depth) const;
+    Color radiance(const Ray& ray, const Scene& scene,
+                   const SamplerPtr& sampler, const uint_t depth) const;
   };
 
 } // namespace rt

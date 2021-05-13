@@ -34,9 +34,10 @@
 
 namespace rt {
 
-  class IRenderer;
+  struct RenderOptions;
+  class Scene;
 
-  bool loadScene(IRenderer *renderer, const char *filename);
+  bool loadScene(Scene& scene, RenderOptions& options, const char *filename);
 
 } // namespace rt
 
