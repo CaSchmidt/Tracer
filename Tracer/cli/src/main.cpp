@@ -82,16 +82,15 @@ int main(int /*argc*/, char ** /*argv*/)
 #endif
 
 #if 1
-  rt::CameraPtr cam = rt::FrustumCamera::create(renderer.options());
+  rt::CameraPtr camera = rt::FrustumCamera::create(renderer.options());
 #else
-  rt::CameraPtr cam = rt::SimpleCamera::create(renderer.options());
+  rt::CameraPtr camera = rt::SimpleCamera::create(renderer.options());
 #endif
-  renderer.setCamera(cam);
 
   rt::SamplerPtr sampler = rt::SimpleSampler::create(numSamples);
 
   Worker worker;
-  const Image image = worker.execute(&renderer, sampler);
+  const Image image = worker.execute(&renderer, camera, sampler);
   image.saveAsPNG("output.png");
 
   return EXIT_SUCCESS;

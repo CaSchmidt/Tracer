@@ -49,9 +49,6 @@ namespace rt {
 
     void clear();
 
-    const ICamera *camera() const;
-    void setCamera(CameraPtr& camera);
-
     const RenderOptions& options() const;
     bool setOptions(const RenderOptions& options);
 
@@ -59,7 +56,8 @@ namespace rt {
     const Scene& scene() const;
     void setScene(Scene& scene);
 
-    Image render(size_t y0, size_t y1, const SamplerPtr& sampler) const;
+    Image render(size_t y0, size_t y1,
+                 const CameraPtr& camera, const SamplerPtr& sampler) const;
 
   protected:
     Color specularReflectOrTransmit(const SurfaceInfo& ref,
@@ -67,11 +65,10 @@ namespace rt {
                                     const bool is_transmit) const;
 
   private:
-    Image createImage(size_t& y0, size_t& y1) const;
+    Image createImage(size_t& y0, size_t& y1, const CameraPtr& camera) const;
     virtual Color radiance(const Ray& ray, const SamplerPtr& sampler,
                            const uint_t depth = 0) const = 0;
 
-    CameraPtr     _camera;
     RenderOptions _options{};
     Scene         _scene{};
     Transform     _view{};

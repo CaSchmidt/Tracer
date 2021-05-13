@@ -31,8 +31,9 @@
 
 #include "rt/Renderer/IRenderer.h"
 
-#include "rt/Renderer/RenderLoop.h"
 #include "rt/Object/SurfaceInfo.h"
+#include "rt/Renderer/RenderLoop.h"
+#include "rt/Sampler/ISampler.h"
 
 namespace rt {
 
@@ -48,25 +49,9 @@ namespace rt {
 
   void IRenderer::clear()
   {
-    _camera.reset(nullptr);
     _options = RenderOptions();
     _view    = Transform();
     _scene.clear();
-  }
-
-  const ICamera *IRenderer::camera() const
-  {
-    return _camera.get();
-  }
-
-  void IRenderer::setCamera(CameraPtr& camera)
-  {
-    _camera.reset(nullptr);
-    if( !camera  ||
-        camera->width() != _options.width  ||  camera->height() != _options.height ) {
-      return;
-    }
-    _camera = std::move(camera);
   }
 
   const RenderOptions& IRenderer::options() const
@@ -111,9 +96,10 @@ namespace rt {
     _scene = std::move(scene);
   }
 
-  Image IRenderer::render(size_t y0, size_t y1, const SamplerPtr& sampler) const
+  Image IRenderer::render(size_t y0, size_t y1,
+                          const CameraPtr& camera, const SamplerPtr& sampler) const
   {
-    Image image = createImage(y0, y1);
+    Image image = createImage(y0, y1, camera);
     if( image.isEmpty() ) {
       return Image();
     }
@@ -122,7 +108,7 @@ namespace rt {
       render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
         Color color;
         for(size_t s = 0; s < sampler->numSamplesPerPixel(); s++) {
-          const Color Li = radiance(_view*_camera->ray(x, y, sampler), sampler);
+          const Color Li = radiance(_view*camera->ray(x, y, sampler), sampler);
           color += n4::clamp(Li, 0, 1);
         }
         color /= static_cast<real_t>(sampler->numSamplesPerPixel());
@@ -130,7 +116,7 @@ namespace rt {
       });
     } else {
       render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
-        const Color Li = radiance(_view*_camera->ray(x, y, sampler), sampler);
+        const Color Li = radiance(_view*camera->ray(x, y, sampler), sampler);
         return Li;
       });
     }
@@ -165,17 +151,17 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Image IRenderer::createImage(size_t& y0, size_t& y1) const
+  Image IRenderer::createImage(size_t& y0, size_t& y1, const CameraPtr& camera) const
   {
-    if( !_camera  ||  _camera->width() < 1  ||  _camera->height() < 1 ) {
+    if( !camera  ||  camera->width() < 1  ||  camera->height() < 1 ) {
       return Image();
     }
-    y0 = std::clamp<size_t>(y0, 0, _camera->height());
-    y1 = std::clamp<size_t>(y1, 0, _camera->height());
-    if( y0 == y1  ||  y0 >= _camera->height() ) {
+    y0 = std::clamp<size_t>(y0, 0, camera->height());
+    y1 = std::clamp<size_t>(y1, 0, camera->height());
+    if( y0 == y1  ||  y0 >= camera->height() ) {
       return Image();
     }
-    return Image(_camera->width(), y1 - y0);
+    return Image(camera->width(), y1 - y0);
   }
 
 } // namespace rt
