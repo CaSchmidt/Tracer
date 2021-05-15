@@ -89,7 +89,7 @@ Image Worker::execute(const rt::RenderContext& rc, const rt::size_t blockSize) c
   std::mutex mutex;
   std::for_each(std::execution::par_unseq,
                 blocks.begin(), blocks.end(), [&](const rt::RenderBlock& block) -> void {
-    const Image slice = rc(block);
+    const Image slice = rc.render(block);
     {
       std::lock_guard<std::mutex> lock(mutex);
       const auto [y0, y1] = block;

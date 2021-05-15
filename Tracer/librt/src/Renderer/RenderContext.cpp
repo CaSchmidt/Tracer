@@ -68,7 +68,7 @@ namespace rt {
     return camera  &&  renderer  &&  sampler;
   }
 
-  Image RenderContext::operator()(const RenderBlock& block) const
+  Image RenderContext::render(const RenderBlock& block) const
   {
     const SamplerPtr mysampler = sampler->copy();
     const auto [y0, y1] = block;

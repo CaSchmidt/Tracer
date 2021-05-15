@@ -52,7 +52,7 @@ namespace rt {
 
     bool isValid() const;
 
-    Image operator()(const RenderBlock& block) const;
+    Image render(const RenderBlock& block) const;
 
     CameraPtr camera;
     RendererPtr renderer;
