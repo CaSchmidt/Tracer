@@ -56,8 +56,6 @@ private:
   void initializeWork();
   void openScene();
   void saveAs();
-  void setProgressRange(int minimum, int maximum);
-  void setProgressValue(int value);
   void startWork();
   void updateResult(int index);
 

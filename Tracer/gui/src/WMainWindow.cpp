@@ -50,6 +50,8 @@
 
 ////// Macros ////////////////////////////////////////////////////////////////
 
+#define HAVE_MANUAL_PROGRESS
+
 #define CAM_FRUSTUM  QStringLiteral("Frustum")
 #define CAM_SIMPLE   QStringLiteral("Simple")
 
@@ -242,16 +244,6 @@ void WMainWindow::saveAs()
   QDir::setCurrent(QFileInfo(filename).absolutePath());
 }
 
-void WMainWindow::setProgressRange(int minimum, int maximum)
-{
-  ui->progressBar->setRange(minimum, maximum);
-}
-
-void WMainWindow::setProgressValue(int value)
-{
-  ui->progressBar->setValue(value);
-}
-
 void WMainWindow::startWork()
 {
   if( watcher.isRunning() ) {
@@ -266,11 +258,22 @@ void WMainWindow::startWork()
 
     QThreadPool::globalInstance()->setMaxThreadCount(ui->numThreadsSpin->value());
 
+#ifdef HAVE_MANUAL_PROGRESS
+    ui->progressBar->setRange(0, int(blocks.size()));
+    ui->progressBar->setValue(0);
+#endif
+
     using Watcher = QFutureWatcher<Image>;
-    connect(&watcher, &Watcher::finished,             this, &WMainWindow::initializeProgress);
-    connect(&watcher, &Watcher::progressRangeChanged, this, &WMainWindow::setProgressRange);
-    connect(&watcher, &Watcher::progressValueChanged, this, &WMainWindow::setProgressValue);
-    connect(&watcher, &Watcher::resultReadyAt,        this, &WMainWindow::updateResult);
+    connect(&watcher, &Watcher::finished,
+            this, &WMainWindow::initializeProgress);
+#ifndef HAVE_MANUAL_PROGRESS
+    connect(&watcher, &Watcher::progressRangeChanged,
+            ui->progressBar, &QProgressBar::setRange);
+    connect(&watcher, &Watcher::progressValueChanged,
+            ui->progressBar, &QProgressBar::setValue);
+#endif
+    connect(&watcher, &Watcher::resultReadyAt,
+            this, &WMainWindow::updateResult);
 
     // NOTE: No Lambdas with captures for QtConcurrent::mapped() !!!
     using RenderFunc = std::function<Image(const rt::RenderBlock&)>;
@@ -290,4 +293,7 @@ void WMainWindow::updateResult(int index)
   const rt::RenderBlocks::const_iterator it = std::next(blocks.begin(), index);
   const rt::size_t y0 = std::get<0>(*it);
   ui->imageWidget->insert(y0, watcher.resultAt(index));
+#ifdef HAVE_MANUAL_PROGRESS
+  ui->progressBar->setValue(ui->progressBar->value() + 1);
+#endif
 }
