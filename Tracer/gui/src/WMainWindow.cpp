@@ -214,7 +214,7 @@ void WMainWindow::initializeWork()
   connect(ui->startButton, &QPushButton::clicked, this, &WMainWindow::startWork);
 
   ui->numThreadsSpin->setRange(1, QThread::idealThreadCount());
-  ui->numThreadsSpin->setValue(QThread::idealThreadCount()/2);
+  ui->numThreadsSpin->setValue(QThread::idealThreadCount());
 
   ui->blockSizeSpin->setRange(1, 128);
   ui->blockSizeSpin->setValue(8);
