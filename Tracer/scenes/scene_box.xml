@@ -3,7 +3,7 @@
     <Width>1000</Width>
     <Height>1000</Height>
     <FoV>60</FoV>
-    <WorldToScreen>2</WorldToScreen>
+    <WorldToScreen>4</WorldToScreen>
     <BackgroundColor>
       <r>0</r>
       <g>0.8</g>
@@ -11,12 +11,13 @@
     </BackgroundColor>
     <Eye>
       <x>0</x>
-      <y>-5.5</y>
+      <!--<y>-5.5</y>-->
+      <y>-5.25</y>
       <z>2</z>
     </Eye>
     <LookAt>
       <x>0</x>
-      <y>0</y>
+      <y>10</y>
       <z>2</z>
     </LookAt>
     <CameraUp>
@@ -138,7 +139,7 @@
       </Transform>
     </Object>
     <!-- front -->
-    <!-- <Object type="Plane">
+    <Object type="Plane">
       <Width>4.1</Width>
       <Height>4.1</Height>
       <Material type="Matte">
@@ -160,7 +161,34 @@
           <z>2</z>
         </Translate>
       </Transform>
-    </Object> -->
+    </Object>
+    <!-- Objects -->
+    <Object type="Sphere">
+      <Material type="Mirror">
+        <Reflectance>1</Reflectance>
+      </Material>
+      <Radius>0.75</Radius>
+      <Transform>
+        <Translate>
+          <x>-0.85</x>
+          <y>0.75</y>
+          <z>0.75</z>
+        </Translate>
+      </Transform>
+    </Object>
+    <Object type="Sphere">
+      <Material type="Transparent">
+        <Refraction>1.5</Refraction>
+      </Material>
+      <Radius>0.75</Radius>
+      <Transform>
+        <Translate>
+          <x>0.85</x>
+          <y>-0.75</y>
+          <z>0.75</z>
+        </Translate>
+      </Transform>
+    </Object>
     <!-- SPACE -->
     <!--
     <Light type="Directional">
@@ -179,9 +207,9 @@
     <!-- SPACE -->
     <Light type="DiffuseAreaLight">
       <Emittance>
-        <r>4</r>
-        <g>4</g>
-        <b>4</b>
+        <r>1</r>
+        <g>1</g>
+        <b>1</b>
       </Emittance>
       <NumSamples>4</NumSamples>
       <!-- <Object type="Disk">
@@ -199,12 +227,12 @@
       </Object> -->
       <!-- SPACE -->
       <Object type="Sphere">
-        <Radius>1.5</Radius>
+        <Radius>4</Radius>
         <Transform>
           <Translate>
             <x>0</x>
             <y>0</y>
-            <z>5.25</z>
+            <z>7.9</z>
           </Translate>
         </Transform>
       </Object>
