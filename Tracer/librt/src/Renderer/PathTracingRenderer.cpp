@@ -92,18 +92,18 @@ namespace rt {
       // Sample BSDF to get new path direction
       const BSDF *bsdf = ref->material()->bsdf();
 
-      real_t              pdfRef{0};
-      IBxDF::Flags sampled_flags{IBxDF::InvalidFlags};
-      Direction               wi;
-      const Color         f = bsdf->sample(ref, &wi, sampler->sample2D(), &pdfRef,
-                                           IBxDF::AllFlags, &sampled_flags);
+      real_t          pdfRef{0};
+      IBxDF::Flags ref_flags{IBxDF::InvalidFlags};
+      Direction           wi;
+      const Color          f = bsdf->sample(ref, &wi, sampler->sample2D(), &pdfRef,
+                                            IBxDF::AllFlags, &ref_flags);
       const real_t absCosTi = geom::absDot(wi, ref.N);
-      if( pdfRef <= ZERO  ||  absCosTi == ZERO  ||  f.isZero() ) {
+      if( pdfRef <= ZERO  ||  /*absCosTi == ZERO  ||*/  f.isZero() ) {
         break;
       }
 
       beta *= f*absCosTi/pdfRef;
-      is_specular_bounce = isSpecular(sampled_flags);
+      is_specular_bounce = isSpecular(ref_flags);
       ray = ref.ray(wi);
 
       // Possibly terminate the path with Russian roulette
