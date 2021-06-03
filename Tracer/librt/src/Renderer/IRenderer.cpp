@@ -124,8 +124,6 @@ namespace rt {
 
     const Color Li = radiance(ref.ray(wi), scene, sampler, depth + 1);
     return f*Li*absCosTi/pdf;
-
-    return Color();
   }
 
   ////// private /////////////////////////////////////////////////////////////
