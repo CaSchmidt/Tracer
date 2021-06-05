@@ -53,6 +53,11 @@ namespace rt {
                    const SamplerPtr& sampler, const uint_t depth) const;
   };
 
+  inline DirectLightingRenderer *DIRECT_LIGHTING(const RendererPtr& renderer)
+  {
+    return dynamic_cast<DirectLightingRenderer*>(renderer.get());
+  }
+
 } // namespace rt
 
 #endif // DIRECTLIGHTINGRENDERER_H

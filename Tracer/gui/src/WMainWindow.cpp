@@ -150,6 +150,7 @@ bool WMainWindow::initializeRenderContext()
 
   if(        ui->methodCombo->currentText() == METH_DIRECT ) {
     rc.renderer = rt::DirectLightingRenderer::create(options);
+    rt::DIRECT_LIGHTING(rc.renderer)->setSampleOneLight(ui->sampleOneLightCheck->isChecked());
   } else if( ui->methodCombo->currentText() == METH_PATH ) {
     rc.renderer = rt::PathTracingRenderer::create(options);
   } else if( ui->methodCombo->currentText() == METH_WHITTED ) {

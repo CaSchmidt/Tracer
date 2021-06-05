@@ -106,7 +106,7 @@
            <property name="bottomMargin">
             <number>4</number>
            </property>
-           <property name="spacing">
+           <property name="verticalSpacing">
             <number>4</number>
            </property>
            <item row="0" column="0">
@@ -158,6 +158,16 @@
            </item>
            <item row="4" column="1">
             <widget class="QSpinBox" name="heightSpin"/>
+           </item>
+           <item row="5" column="0" colspan="2">
+            <widget class="QCheckBox" name="sampleOneLightCheck">
+             <property name="text">
+              <string>Sample one Light</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -360,6 +370,7 @@
   <tabstop>samplesPerPixelCombo</tabstop>
   <tabstop>widthSpin</tabstop>
   <tabstop>heightSpin</tabstop>
+  <tabstop>sampleOneLightCheck</tabstop>
   <tabstop>numThreadsSpin</tabstop>
   <tabstop>blockSizeSpin</tabstop>
   <tabstop>startButton</tabstop>
