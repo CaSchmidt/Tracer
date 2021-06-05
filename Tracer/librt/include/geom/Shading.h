@@ -68,6 +68,7 @@ namespace geom {
     template<typename VecT>
     inline bool isSameHemisphere(const VecT& w1, const VecT& w2)
     {
+      // NOTE: Implements sign(dot(w1,n)) == sign(dot(w2,n)) in shading coordinates.
       return w1.z*w2.z >= ZERO;
     }
 
