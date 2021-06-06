@@ -42,24 +42,6 @@ namespace geom {
     inline constexpr real_t  ONE = 1;
 
     template<typename VecT>
-    inline real_t cosTheta(const VecT& w)
-    {
-      return std::clamp<real_t>(w.z, -1, 1);
-    }
-
-    template<typename VecT>
-    inline real_t absCosTheta(const VecT& w)
-    {
-      return n4::abs(cosTheta(w));
-    }
-
-    template<typename VecT>
-    inline real_t cos2Theta(const VecT& w)
-    {
-      return cosTheta(w)*cosTheta(w);
-    }
-
-    template<typename VecT>
     inline bool isSameHemisphere(const VecT& w)
     {
       return w.z >= ZERO;
@@ -72,18 +54,40 @@ namespace geom {
       return w1.z*w2.z >= ZERO;
     }
 
+    template<typename VecT>
+    inline real_t cosTheta(const VecT& w)
+    {
+      return std::clamp<real_t>(w.z, -1, 1);
+    }
+
+    template<typename VecT>
+    inline real_t absCosTheta(const VecT& w)
+    {
+      return n4::abs(cosTheta(w));
+    }
+
+    template<typename VecT>
+    inline real_t boundaryEta(const VecT& w, const real_t etaOut, const real_t etaIn)
+    {
+      return isSameHemisphere(w)
+          ? etaOut/etaIn
+          : etaIn/etaOut;
+    }
+
+    template<typename VecT>
+    inline real_t cos2Theta(const VecT& w)
+    {
+      return cosTheta(w)*cosTheta(w);
+    }
+
     inline Direction reflect(const Direction& wi)
     {
       return {-wi.x, -wi.y, wi.z};
     }
 
-    inline Direction refract(const Direction& wi, const real_t etai, const real_t etat)
+    inline Direction refract(const Direction& wi, const real_t eta)
     {
-      const bool entering = isSameHemisphere(wi);
-      const real_t eta = entering
-          ? etai/etat
-          : etat/etai;
-      const real_t nz = entering
+      const real_t nz = isSameHemisphere(wi)
           ? +ONE
           : -ONE;
       const real_t  cosTi = std::clamp<real_t>(wi.z*nz, -1, 1);
@@ -93,6 +97,11 @@ namespace geom {
       return cos2Tt >= ZERO // Handle Internal Reflection: sin2Tt > 1
           ? Direction{-eta*wi.x, -eta*wi.y, -eta*wi.z + (eta*cosTi - n4::sqrt(cos2Tt))*nz}
           : Direction();
+    }
+
+    inline Direction refract(const Direction& wi, const real_t etaOut, const real_t etaIn)
+    {
+      return refract(wi, boundaryEta(wi, etaOut, etaIn));
     }
 
     template<typename VecT>

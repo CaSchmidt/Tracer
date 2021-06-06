@@ -55,23 +55,24 @@ namespace geom {
 
   namespace optics {
 
-    inline constexpr real_t ZERO      = 0;
-    inline constexpr real_t  ONE      = 1;
-    inline constexpr real_t  ONE_HALF = 0.5;
+    inline constexpr real_t ZERO = 0;
+    inline constexpr real_t  ONE = 1;
+    inline constexpr real_t  TWO = 2;
 
-    inline real_t dielectric(real_t cosTi_, const real_t etai, const real_t etat)
+    inline real_t boundaryEta(const real_t cosTi, const real_t etaOut, const real_t etaIn)
     {
-      cosTi_ = std::clamp<real_t>(cosTi_, -1, 1);
-      const bool entering = cosTi_ >= ZERO;
-      const real_t    eta = entering
-          ? etai/etat
-          : etat/etai;
+      return cosTi >= ZERO
+          ? etaOut/etaIn
+          : etaIn/etaOut;
+    }
 
-      const real_t cosTi = n4::abs(cosTi_);
+    inline real_t dielectric(const real_t cosTi_, const real_t eta)
+    {
+      const real_t cosTi = n4::abs(std::clamp<real_t>(cosTi_, -1, 1));
       const real_t sinTi = math::pythagoras<real_t>(cosTi);
 
       const real_t sinTt = eta*sinTi; // Snell's law
-      if( sinTt >= ONE ) { // total internal reflection
+      if( sinTt > ONE ) { // total internal reflection
         return ONE;
       }
 
@@ -80,7 +81,12 @@ namespace geom {
       const real_t para = (cosTi - eta*cosTt)/(cosTi + eta*cosTt);
       const real_t perp = (eta*cosTi - cosTt)/(eta*cosTi + cosTt);
 
-      return (para*para + perp*perp)*ONE_HALF;
+      return (para*para + perp*perp)/TWO;
+    }
+
+    inline real_t dielectric(const real_t cosTi, const real_t etaOut, const real_t etaIn)
+    {
+      return dielectric(cosTi, boundaryEta(cosTi, etaOut, etaIn));
     }
 
   } // namespace optics
