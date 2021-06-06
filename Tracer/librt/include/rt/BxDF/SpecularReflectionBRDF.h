@@ -42,7 +42,7 @@ namespace rt {
     ~SpecularReflectionBRDF();
 
     real_t refraction() const;
-    void setRefraction(const real_t etaB);
+    void setRefraction(const real_t eta);
 
     bool isShadowCaster() const;
 
@@ -51,7 +51,7 @@ namespace rt {
     Color sample(const Direction& wo, Direction *wi, const Sample2D& xi, real_t *pdf) const;
 
   private:
-    real_t _etaB{};
+    real_t _etaIn{};
   };
 
 } // namespace rt
