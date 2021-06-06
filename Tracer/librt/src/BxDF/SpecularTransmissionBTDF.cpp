@@ -81,7 +81,9 @@ namespace rt {
 
     // (1) Compute Perfect Specular Refraction ///////////////////////////////
 
-    *wi = geom::shading::refract(wo, TODO_etaOut, _etaIn);
+    const real_t eta = geom::shading::boundaryEta(wo, TODO_etaOut, _etaIn);
+
+    *wi = geom::shading::refract(wo, eta);
     if( wi->isZero() ) {
       *wi = Direction();
       return Color();
@@ -90,7 +92,7 @@ namespace rt {
     // (2) Compute Transmitted Energy ////////////////////////////////////////
 
     const real_t cosTi = geom::shading::cosTheta(*wi);
-    const real_t    kR = geom::optics::dielectric(cosTi, TODO_etaOut, _etaIn);
+    const real_t    kR = geom::optics::dielectric(cosTi, ONE/eta);
     const real_t    kT = ONE - kR;
     if( kT <= ZERO ) {
       *wi = Direction();
