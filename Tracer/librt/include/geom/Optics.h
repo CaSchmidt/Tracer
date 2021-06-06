@@ -32,8 +32,8 @@
 #ifndef OPTICS_H
 #define OPTICS_H
 
-#include "geom/Shading.h"
 #include "math/Solver.h"
+#include "rt/Types.h"
 
 /*
  * Optics API:
@@ -55,17 +55,19 @@ namespace geom {
 
   namespace optics {
 
-    inline constexpr real_t ONE      = 1;
-    inline constexpr real_t ONE_HALF = 0.5;
+    inline constexpr real_t ZERO      = 0;
+    inline constexpr real_t  ONE      = 1;
+    inline constexpr real_t  ONE_HALF = 0.5;
 
-    inline real_t dielectric(const Direction& wi, const real_t etai, const real_t etat)
+    inline real_t dielectric(real_t cosTi_, const real_t etai, const real_t etat)
     {
-      const bool entering = shading::isSameHemisphere(wi);
+      cosTi_ = std::clamp<real_t>(cosTi_, -1, 1);
+      const bool entering = cosTi_ >= ZERO;
       const real_t    eta = entering
           ? etai/etat
           : etat/etai;
 
-      const real_t cosTi = shading::absCosTheta(wi);
+      const real_t cosTi = n4::abs(cosTi_);
       const real_t sinTi = math::pythagoras<real_t>(cosTi);
 
       const real_t sinTt = eta*sinTi; // Snell's law

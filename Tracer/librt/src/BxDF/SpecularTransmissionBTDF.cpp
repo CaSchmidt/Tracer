@@ -89,8 +89,9 @@ namespace rt {
 
     // (2) Compute Transmitted Energy ////////////////////////////////////////
 
-    const real_t kR = geom::optics::dielectric(*wi, TODO_etaA, _etaB);
-    const real_t kT = ONE - kR;
+    const real_t cosTi = geom::shading::cosTheta(*wi);
+    const real_t    kR = geom::optics::dielectric(cosTi, TODO_etaA, _etaB);
+    const real_t    kT = ONE - kR;
     if( kT <= ZERO ) {
       *wi = Direction();
       return Color();
@@ -101,7 +102,7 @@ namespace rt {
     if( pdf != nullptr ) {
       *pdf = 1;
     }
-    return kT*_color/geom::shading::absCosTheta(*wi);
+    return kT*_color/n4::abs(cosTi);
   }
 
 } // namespace rt

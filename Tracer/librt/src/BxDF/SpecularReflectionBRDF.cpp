@@ -74,7 +74,9 @@ namespace rt {
   Color SpecularReflectionBRDF::sample(const Direction& wo, Direction *wi, const Sample2D& /*xi*/, real_t *pdf) const
   {
     constexpr real_t TODO_etaA = 1;
-    const real_t kR = geom::optics::dielectric(wo, TODO_etaA, _etaB);
+
+    const real_t cosTo = geom::shading::cosTheta(wo);
+    const real_t    kR = geom::optics::dielectric(cosTo, TODO_etaA, _etaB);
     *wi = geom::shading::reflect(wo);
     if( pdf != nullptr ) {
       *pdf = 1;
