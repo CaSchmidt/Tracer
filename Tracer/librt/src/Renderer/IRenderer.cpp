@@ -59,6 +59,10 @@ namespace rt {
   {
     _options = options;
 
+    if( _options.maxDepth < 2 ) {
+      _options.maxDepth = 2;
+    }
+
     const Transform xfrmCW{Transform::rotateZYXbyPI2(0, 0, -1)};
 
     // Transform camera setup from world to camera coordinates...
