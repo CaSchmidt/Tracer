@@ -104,7 +104,7 @@ namespace rt {
     if( pdf != nullptr ) {
       *pdf = 1;
     }
-    return kT*_color/n4::abs(cosTi);
+    return (kT*eta*eta)*_color/n4::abs(cosTi);
   }
 
 } // namespace rt
