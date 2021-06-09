@@ -81,7 +81,7 @@ namespace geom {
 
     inline Ray operator*(const Ray& ray) const
     {
-      return Ray{operator*(ray.origin()), operator*(ray.direction()), ray.tMax()};
+      return Ray(operator*(ray.origin()), operator*(ray.direction()), ray.tMax());
     }
 
     // Special Transforms ////////////////////////////////////////////////////
