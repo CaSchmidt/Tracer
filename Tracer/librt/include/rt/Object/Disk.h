@@ -51,6 +51,8 @@ namespace rt {
                             const real_t radius);
 
   private:
+    static constexpr real_t EPSILON0 = EPSILON0_BASE;
+
     real_t _radius{};
   };
 

@@ -51,6 +51,8 @@ namespace rt {
                             const real_t width, const real_t height);
 
   private:
+    static constexpr real_t EPSILON0 = EPSILON0_BASE;
+
     real_t _width{};
     real_t _height{};
   };

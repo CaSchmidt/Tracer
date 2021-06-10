@@ -80,7 +80,8 @@ namespace rt {
   inline constexpr real_t  TWO_PI         = math::TWO_PI<real_t>;
   inline constexpr real_t FOUR_PI         = math::FOUR_PI<real_t>;
 
-  inline constexpr real_t TRACE_BIAS = 0x1p-13;
+  inline constexpr real_t EPSILON0_BASE = 0x1p-13;
+  inline constexpr real_t   SHADOW_BIAS = 0x1p-10;
 
 } // namespace rt
 

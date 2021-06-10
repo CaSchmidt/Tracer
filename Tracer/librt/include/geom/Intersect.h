@@ -45,7 +45,7 @@ namespace geom {
 
     // Intersection Tests ////////////////////////////////////////////////////
 
-    inline real_t cylinder(const Ray& ray, const real_t r)
+    inline real_t cylinder(const Ray& ray, const real_t r, const real_t epsilon0)
     {
       const real_t ox = ray.origin().x;
       const real_t oy = ray.origin().y;
@@ -58,27 +58,28 @@ namespace geom {
       if( !math::quadratic<real_t>(a, b, c, t1, t2) ) {
         return NO_INTERSECTION;
       }
-      if( t1 < ZERO ) {
-        t1 = t2;
-        if( t1 < ZERO ) {
-          return NO_INTERSECTION;
-        }
+      // NOTE: Assumes t1 < t2 !!!
+      if( t1 >= epsilon0 ) {
+        return t1;
       }
-      return t1;
+      if( t2 >= epsilon0 ) {
+        return t2;
+      }
+      return NO_INTERSECTION;
     }
 
-    inline real_t plane(const Ray& ray, const real_t h = ZERO)
+    inline real_t plane(const Ray& ray, const real_t epsilon0, const real_t h = ZERO)
     {
       if( ray.direction().z == ZERO ) {
         return NO_INTERSECTION;
       }
       const real_t t0 = (h - ray.origin().z)/ray.direction().z;
-      return t0 >= ZERO
+      return t0 >= epsilon0
           ? t0
           : NO_INTERSECTION;
     }
 
-    inline real_t sphere(const Ray& ray, const real_t r)
+    inline real_t sphere(const Ray& ray, const real_t r, const real_t epsilon0)
     {
       const real_t a =     n4::dot(ray.direction(), ray.direction());
       const real_t b = TWO*n4::dot(ray.direction(), to_direction(ray.origin()));
@@ -87,13 +88,14 @@ namespace geom {
       if( !math::quadratic<real_t>(a, b, c, t1, t2) ) {
         return NO_INTERSECTION;
       }
-      if( t1 < ZERO ) { // ray is at least inside sphere
-        t1 = t2;
-        if( t1 < ZERO ) { // sphere is behind ray
-          return NO_INTERSECTION;
-        }
+      // NOTE: Assumes t1 < t2 !!!
+      if( t1 >= epsilon0 ) {
+        return t1;
       }
-      return t1; // return nearest hit from the ray's origin
+      if( t2 >= epsilon0 ) {
+        return t2;
+      }
+      return NO_INTERSECTION;
     }
 
   } // namespace intersect

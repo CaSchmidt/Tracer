@@ -63,7 +63,9 @@ namespace rt {
 
     inline Ray ray(const Direction& dir, const real_t tMax = Ray::MAX_T) const
     {
-      return Ray{biasedP(dir), dir, tMax};
+      return Ray(P, dir, geom::intersect::isHit(tMax)  &&  tMax < Ray::MAX_T
+                 ? tMax - SHADOW_BIAS
+                 : Ray::MAX_T);
     }
 
     Ray ray(const SurfaceInfo& to) const;
@@ -95,20 +97,6 @@ namespace rt {
     Matrix xfrmSW; // World-to-Shading
     Matrix xfrmWS; // Shading-to-World
     const IObject *object{nullptr};
-
-  private:
-    inline Vertex biasedP(const bool is_front = true) const
-    {
-      const real_t bias = is_front
-          ? +TRACE_BIAS
-          : -TRACE_BIAS;
-      return P + bias*geom::to_vertex(N);
-    }
-
-    inline Vertex biasedP(const Direction& dir) const
-    {
-      return biasedP(geom::isSameHemisphere(dir, N));
-    }
   };
 
 } // namespace rt

@@ -56,11 +56,9 @@ namespace rt {
   Ray SurfaceInfo::ray(const SurfaceInfo& to) const
   {
     // NOTE: DIR := TO - FROM
-    const Vertex    begin = biasedP(geom::to_direction(to.P - P));
-    const Vertex      end = to.biasedP(geom::to_direction(begin - to.P));
-    const Direction delta = geom::to_direction(end - begin);
-    const real_t     tMax = n4::length(delta);
-    return Ray{begin, delta, tMax};
+    const Direction delta = geom::to_direction(to.P - P);
+    const real_t     tMax = n4::length(delta) - SHADOW_BIAS;
+    return Ray(P, delta, tMax);
   }
 
 } // namespace rt

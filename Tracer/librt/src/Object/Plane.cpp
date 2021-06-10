@@ -75,7 +75,7 @@ namespace rt {
   {
     const Ray rayObj = toObject(ray);
 
-    const real_t t = geom::intersect::plane(rayObj);
+    const real_t t = geom::intersect::plane(rayObj, EPSILON0);
     if( !rayObj.isValidT(t) ) {
       return false;
     }
