@@ -124,6 +124,9 @@ void WMainWindow::initializeRender()
 
   ui->heightSpin->setRange(128, 4096);
   ui->heightSpin->setValue(1000);
+
+  ui->maxDepthSpin->setRange(2, 32);
+  ui->maxDepthSpin->setValue(5);
 }
 
 bool WMainWindow::initializeRenderContext()
@@ -145,6 +148,8 @@ bool WMainWindow::initializeRenderContext()
     return false;
   }
   rc.scene.setUseCastShadow(ui->castShadowCheck->isChecked());
+
+  options.maxDepth = ui->maxDepthSpin->value();
 
   // (2) Renderer ////////////////////////////////////////////////////////////
 

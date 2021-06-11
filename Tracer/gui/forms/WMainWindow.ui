@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>591</height>
+    <height>653</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <property name="spacing">
          <number>4</number>
@@ -81,7 +81,7 @@
            <item row="1" column="0" colspan="2">
             <widget class="QCheckBox" name="castShadowCheck">
              <property name="text">
-              <string>Use castShadow()</string>
+              <string>Material supplied shadows</string>
              </property>
             </widget>
            </item>
@@ -106,7 +106,7 @@
            <property name="bottomMargin">
             <number>4</number>
            </property>
-           <property name="verticalSpacing">
+           <property name="spacing">
             <number>4</number>
            </property>
            <item row="0" column="0">
@@ -168,6 +168,16 @@
               <bool>true</bool>
              </property>
             </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Max. depth:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QSpinBox" name="maxDepthSpin"/>
            </item>
           </layout>
          </widget>
@@ -371,6 +381,7 @@
   <tabstop>widthSpin</tabstop>
   <tabstop>heightSpin</tabstop>
   <tabstop>sampleOneLightCheck</tabstop>
+  <tabstop>maxDepthSpin</tabstop>
   <tabstop>numThreadsSpin</tabstop>
   <tabstop>blockSizeSpin</tabstop>
   <tabstop>startButton</tabstop>
