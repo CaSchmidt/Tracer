@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "rt/Object/Plane.h"
 #include "rt/Object/Sphere.h"
 #include "rt/Object/SurfaceInfo.h"
 
@@ -22,7 +23,11 @@ int main(int /*argc*/, char ** /*argv*/)
   constexpr size_t ni = n;
   constexpr size_t nj = n;
 
-  const rt::ObjectPtr sphere = rt::Sphere::create(n4::translate(0, 0, 5), 1);
+#if 1
+  const rt::ObjectPtr object = rt::Sphere::create(n4::translate(0, 0, 5), 1);
+#else
+  const rt::ObjectPtr object = rt::Plane::create(n4::translate(0, 0, -5), 2, 2);
+#endif
 
   rt::SurfaceInfo ref;
   ref.P = rt::Vertex();
@@ -40,7 +45,7 @@ int main(int /*argc*/, char ** /*argv*/)
 
       const rt::Sample2D xi{real_t(i)*si, real_t(j)*sj};
 
-      const rt::SurfaceInfo surface = sphere->sample(ref, xi, nullptr);
+      const rt::SurfaceInfo surface = object->sample(ref, xi, nullptr);
 
       print(surface.P);
     }
