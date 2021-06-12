@@ -79,9 +79,9 @@ namespace math {
 
   template<typename T>
   inline bool quadratic(const T& _a, const T& _b, const T& _c,
-                        T& x1, T& x2)
+                        T *x1, T *x2)
   {
-    x1 = x2 = qNaN<T>;
+    *x1 = *x2 = qNaN<T>;
 
     const double a = static_cast<double>(_a);
     const double b = static_cast<double>(_b);
@@ -97,11 +97,11 @@ namespace math {
         ? -ONE_HALF<double>*(b - rootDiscrim)
         : -ONE_HALF<double>*(b + rootDiscrim);
 
-    x1 = static_cast<T>(q/a);
-    x2 = static_cast<T>(c/q);
+    *x1 = static_cast<T>(q/a);
+    *x2 = static_cast<T>(c/q);
 
-    if( x1 > x2 ) {
-      std::swap<T>(x1, x2);
+    if( *x1 > *x2 ) {
+      std::swap<T>(*x1, *x2);
     }
 
     return true;
