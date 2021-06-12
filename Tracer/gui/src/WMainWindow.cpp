@@ -141,7 +141,7 @@ bool WMainWindow::initializeRenderContext()
   // (1) Scene & RenderOptions ///////////////////////////////////////////////
 
   rt::RenderOptions options;
-  if( !rt::loadScene(rc.scene, options, filename.toUtf8().constData()) ) {
+  if( !rt::loadScene(&rc.scene, &options, filename.toUtf8().constData()) ) {
     QMessageBox::critical(this, tr("Error"),
                           tr("Unable to load scene!"),
                           QMessageBox::Ok, QMessageBox::NoButton);

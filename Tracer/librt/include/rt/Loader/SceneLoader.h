@@ -37,7 +37,7 @@ namespace rt {
   struct RenderOptions;
   class Scene;
 
-  bool loadScene(Scene& scene, RenderOptions& options, const char *filename);
+  bool loadScene(Scene *scene, RenderOptions *options, const char *filename);
 
 } // namespace rt
 

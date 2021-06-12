@@ -60,10 +60,10 @@ namespace rt {
 
   } // namespace priv
 
-  bool loadScene(Scene& scene, RenderOptions& options, const char *filename)
+  bool loadScene(Scene *scene, RenderOptions *options, const char *filename)
   {
-    scene.clear();
-    options = RenderOptions();
+    scene->clear();
+    *options = RenderOptions();
 
     tinyxml2::XMLDocument doc;
     if( doc.LoadFile(filename) != tinyxml2::XML_SUCCESS ) {
@@ -80,7 +80,7 @@ namespace rt {
     bool ok = false;
 
     const tinyxml2::XMLElement *xml_Options = xml_Tracer->FirstChildElement("Options");
-    options = priv::parseOptions(xml_Options, &ok);
+    *options = priv::parseOptions(xml_Options, &ok);
     if( !ok ) {
       fprintf(stderr, "Unable to parse render options!\n");
       return false;
@@ -93,7 +93,7 @@ namespace rt {
     }
 
     const priv::ObjectConsumer add_object = [&](ObjectPtr& o) -> void {
-      scene.add(o);
+      scene->add(o);
     };
 
     const tinyxml2::XMLElement *node = xml_Scene->FirstChildElement();
@@ -104,14 +104,14 @@ namespace rt {
           fprintf(stderr, "Unable to add light of type \"%s\"!\n", node->Attribute("type"));
           return false;
         }
-        scene.add(light);
+        scene->add(light);
       } else if( priv::compare(node->Name(), "Object") ) {
         ObjectPtr object = priv::parseObject(node);
         if( !object ) {
           fprintf(stderr, "Unable to add object of type \"%s\"!\n", node->Attribute("type"));
           return false;
         }
-        scene.add(object);
+        scene->add(object);
       } else if( priv::compare(node->Name(), "Text") ) {
         Objects objects = priv::parseText(node);
         if( objects.empty() ) {
@@ -119,7 +119,7 @@ namespace rt {
           return false;
         }
         for(ObjectPtr& object : objects) {
-          scene.add(object);
+          scene->add(object);
         }
       }
 

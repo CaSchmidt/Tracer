@@ -54,19 +54,19 @@
 #define FILE_SPHERES    BASE_PATH "scene_spheres.xml"
 #define FILE_TEXT       BASE_PATH "scene_text.xml"
 
-constexpr rt::size_t numSamples = 16;
+constexpr rt::size_t numSamples = 64;
 
 constexpr rt::size_t  width = 1000;
 constexpr rt::size_t height = 1000;
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-  const char *filename = FILE_AREALIGHT;
+  const char *filename = FILE_1;
 
   rt::RenderContext rc;
 
   rt::RenderOptions options;
-  if( !rt::loadScene(rc.scene, options, filename) ) {
+  if( !rt::loadScene(&rc.scene, &options, filename) ) {
     return EXIT_FAILURE;
   }
   //rc.scene.setUseCastShadow(true);
