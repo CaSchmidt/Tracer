@@ -35,7 +35,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <property name="spacing">
          <number>4</number>
@@ -81,7 +81,7 @@
            <item row="1" column="0" colspan="2">
             <widget class="QCheckBox" name="castShadowCheck">
              <property name="text">
-              <string>Material supplied shadows</string>
+              <string>Material supported shadow casting</string>
              </property>
             </widget>
            </item>
