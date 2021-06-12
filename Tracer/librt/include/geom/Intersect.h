@@ -39,6 +39,27 @@ namespace geom {
 
   namespace intersect {
 
+    namespace priv {
+
+      inline real_t quadraticHit(const real_t a, const real_t b, const real_t c,
+                                 const real_t epsilon0)
+      {
+        real_t t1, t2;
+        if( !math::quadratic<real_t>(a, b, c, &t1, &t2) ) {
+          return NO_INTERSECTION;
+        }
+        // NOTE: Assumes t1 < t2 !!!
+        if( t1 >= epsilon0 ) {
+          return t1;
+        }
+        if( t2 >= epsilon0 ) {
+          return t2;
+        }
+        return NO_INTERSECTION;
+      }
+
+    } // namespace priv
+
     // Constants /////////////////////////////////////////////////////////////
 
     inline constexpr real_t TWO = 2;
@@ -54,18 +75,8 @@ namespace geom {
       const real_t  a =      dx*dx + dy*dy;
       const real_t  b = TWO*(dx*ox + dy*oy);
       const real_t  c =      ox*ox + oy*oy - r*r;
-      real_t t1, t2;
-      if( !math::quadratic<real_t>(a, b, c, t1, t2) ) {
-        return NO_INTERSECTION;
-      }
-      // NOTE: Assumes t1 < t2 !!!
-      if( t1 >= epsilon0 ) {
-        return t1;
-      }
-      if( t2 >= epsilon0 ) {
-        return t2;
-      }
-      return NO_INTERSECTION;
+
+      return priv::quadraticHit(a, b, c, epsilon0);
     }
 
     inline real_t plane(const Ray& ray, const real_t epsilon0, const real_t h = ZERO)
@@ -84,18 +95,8 @@ namespace geom {
       const real_t a =     n4::dot(ray.direction(), ray.direction());
       const real_t b = TWO*n4::dot(ray.direction(), to_direction(ray.origin()));
       const real_t c =     n4::dot(ray.origin(),    ray.origin()) - r*r;
-      real_t t1, t2;
-      if( !math::quadratic<real_t>(a, b, c, t1, t2) ) {
-        return NO_INTERSECTION;
-      }
-      // NOTE: Assumes t1 < t2 !!!
-      if( t1 >= epsilon0 ) {
-        return t1;
-      }
-      if( t2 >= epsilon0 ) {
-        return t2;
-      }
-      return NO_INTERSECTION;
+
+      return priv::quadraticHit(a, b, c, epsilon0);
     }
 
   } // namespace intersect
