@@ -69,11 +69,6 @@ namespace rt {
         opts.focus = 0;
       }
 
-      opts.backgroundColor = parseColor(node->FirstChildElement("BackgroundColor"), &myOk);
-      if( !myOk ) {
-        return RenderOptions();
-      }
-
       opts.eye = parseVertex(node->FirstChildElement("Eye"), &myOk);
       if( !myOk ) {
         return RenderOptions();

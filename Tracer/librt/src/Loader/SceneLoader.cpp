@@ -98,7 +98,15 @@ namespace rt {
 
     const tinyxml2::XMLElement *node = xml_Scene->FirstChildElement();
     while( node != nullptr ) {
-      if(        priv::compare(node->Name(), "Light") ) {
+      if(        priv::compare(node->Name(), "BackgroundColor") ) {
+        bool myOk{false};
+        const Color bg = priv::parseColor(node, &myOk);
+        if( !myOk ) {
+          fprintf(stderr, "Unable to parse background color!");
+          return false;
+        }
+        scene->setBackgroundColor(bg);
+      } else if( priv::compare(node->Name(), "Light") ) {
         LightPtr light = priv::parseLight(node, add_object);
         if( !light ) {
           fprintf(stderr, "Unable to add light of type \"%s\"!\n", node->Attribute("type"));

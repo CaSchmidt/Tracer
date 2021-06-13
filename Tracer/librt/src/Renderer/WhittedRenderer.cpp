@@ -59,7 +59,7 @@ namespace rt {
   {
     SurfaceInfo ref;
     if( !scene.intersect(&ref, ray) ) {
-      return options().backgroundColor;
+      return scene.backgroundColor();
     }
 
     Color Lo;

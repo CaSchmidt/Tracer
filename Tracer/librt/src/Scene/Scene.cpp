@@ -57,8 +57,19 @@ namespace rt {
     }
   }
 
+  Color Scene::backgroundColor() const
+  {
+    return _backgroundColor;
+  }
+
+  void Scene::setBackgroundColor(const Color& color)
+  {
+    _backgroundColor = color;
+  }
+
   void Scene::clear()
   {
+    _backgroundColor = 0;
     _lights.clear();
     _objects.clear();
   }

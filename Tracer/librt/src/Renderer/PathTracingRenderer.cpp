@@ -77,7 +77,7 @@ namespace rt {
         if( is_intersect ) {
           L += beta*ref.Le(ref.wo);
         } else {
-          L += beta*options.backgroundColor;
+          L += beta*scene.backgroundColor();
         }
       }
 

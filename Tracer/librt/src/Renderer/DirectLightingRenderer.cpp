@@ -73,7 +73,7 @@ namespace rt {
     SurfaceInfo ref;
     if( !scene.intersect(&ref, ray) ) {
       // NOTE: PBR3 uses an InfiniteAreaLight to compute background radiance.
-      return options.backgroundColor;
+      return scene.backgroundColor();
     }
 
     Color Lo;

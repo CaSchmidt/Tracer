@@ -48,6 +48,9 @@ namespace rt {
     void add(LightPtr& light);
     void add(ObjectPtr& object);
 
+    Color backgroundColor() const;
+    void setBackgroundColor(const Color& color);
+
     void clear();
 
     bool intersect(SurfaceInfo *surface, const Ray& ray) const;
@@ -62,6 +65,7 @@ namespace rt {
     Scene(const Scene&) = delete;
     Scene& operator=(const Scene&) = delete;
 
+    Color _backgroundColor;
     Lights _lights;
     Objects _objects;
     bool _use_cast_shadow{false};

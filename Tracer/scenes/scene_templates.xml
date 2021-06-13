@@ -6,11 +6,6 @@
     <WorldToScreen>real</WorldToScreen>
     <Aperture>real</Aperture> <!-- OPTIONAL -->
     <Focus>real</Focus> <!-- OPTIONAL -->
-    <BackgroundColor>
-      <r>real</r>
-      <g>real</g>
-      <b>real</b>
-    </BackgroundColor>
     <Eye>
       <x>real</x>
       <y>real</y>
@@ -28,6 +23,11 @@
     </CameraUp>
   </Options>
   <Scene>
+    <BackgroundColor>
+      <r>real</r>
+      <g>real</g>
+      <b>real</b>
+    </BackgroundColor>
     <!-- SPACE -->
     <Light type="DiffuseAreaLight">
       <Emittance>
