@@ -48,7 +48,6 @@ namespace rt {
     real_t         aperture{};
     real_t            focus{};
     uint_t         maxDepth{15};
-    real_t globalRefraction{1};
   };
 
 } // namespace rt
