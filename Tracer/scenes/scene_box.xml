@@ -4,11 +4,6 @@
     <Height>1000</Height>
     <FoV>60</FoV>
     <WorldToScreen>4</WorldToScreen>
-    <BackgroundColor>
-      <r>0</r>
-      <g>0.8</g>
-      <b>1</b>
-    </BackgroundColor>
     <Eye>
       <x>0</x>
       <!--<y>-5.5</y>-->
@@ -27,6 +22,11 @@
     </CameraUp>
   </Options>
   <Scene>
+    <BackgroundColor>
+      <r>0</r>
+      <g>0.8</g>
+      <b>1</b>
+    </BackgroundColor>
     <!-- bottom -->
     <Object type="Plane">
       <Width>4.1</Width>
