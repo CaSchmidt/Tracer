@@ -83,7 +83,7 @@ namespace rt {
           ? lightInfo->areaLight() == IAREALIGHT(light)
             ? lightInfo.Le(-wi) // Area light's emittance.
             : Color()
-          : Color(); // TODO: Add light's background radiance.
+          : scene.backgroundColor();
       if( Li.isZero() ) { // Light does not contribute...
         return Color();
       }
