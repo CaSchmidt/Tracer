@@ -12,4 +12,4 @@ endmacro()
 
 ### Tests ####################################################################
 
-cs_test(test_sphere src/test_sphere.cpp)
+cs_test(test_sampling src/test_sampling.cpp)
