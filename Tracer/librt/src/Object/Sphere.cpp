@@ -136,7 +136,7 @@ namespace rt {
     const real_t cosAlpha = (dc*dc + _radius*_radius - ds*ds)/(TWO*dc*_radius);
     const real_t sinAlpha = math::pythagoras<real_t>(cosAlpha);
 
-    // NOTE: Cone-to-Sphere in sphere AKA object coordinates; cf. 'delta'!
+    // NOTE: Cone-to-Sphere in sphere AKA object coordinates; cf. 'dc'!
     const Vertex     zC = n4::direction(Vertex(), REFobj);
     const Matrix xfrmSC = n4::util::frameFromZ(zC);
 

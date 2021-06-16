@@ -41,7 +41,7 @@ namespace geom {
 
     namespace priv {
 
-      inline real_t quadraticHit(const real_t a, const real_t b, const real_t c,
+      inline real_t quadraticHit(const real_t& a, const real_t& b, const real_t& c,
                                  const real_t epsilon0)
       {
         real_t t1, t2;
@@ -85,6 +85,7 @@ namespace geom {
         return NO_INTERSECTION;
       }
       const real_t t0 = (h - ray.origin().z)/ray.direction().z;
+
       return t0 >= epsilon0
           ? t0
           : NO_INTERSECTION;
