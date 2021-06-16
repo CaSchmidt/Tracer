@@ -29,15 +29,16 @@
     <!-- SPACE -->
     <Light type="Point">
       <Intensity>
-        <r>10</r>
-        <g>10</g>
-        <b>10</b>
+        <r>1</r>
+        <g>1</g>
+        <b>1</b>
       </Intensity>
       <Position>
         <x>0</x>
         <y>0</y>
         <z>2</z>
       </Position>
+      <Scale>10</Scale>
     </Light>
     <!-- ground plane -->
     <Object type="Plane">

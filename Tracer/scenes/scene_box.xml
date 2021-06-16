@@ -211,6 +211,7 @@
         <g>1</g>
         <b>1</b>
       </Emittance>
+      <Scale>1</Scale>
       <NumSamples>4</NumSamples>
       <!-- <Object type="Disk">
         <Radius>1</Radius>
