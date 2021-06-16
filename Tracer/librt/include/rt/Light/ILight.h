@@ -58,6 +58,9 @@ namespace rt {
     size_t numSamples() const;
     void setNumSamples(const size_t numSamples);
 
+    real_t scale() const;
+    void setScale(const real_t s);
+
     Type type() const;
 
     virtual real_t pdfLi(const SurfaceInfo& ref, const Direction& wi) const = 0;
@@ -80,6 +83,7 @@ namespace rt {
     ILight() noexcept = delete;
 
     size_t    _numSamples{1};
+    real_t    _scale{1};
     Type      _type{Invalid};
     Transform _xfrmWL{}; // Light -> World
     Transform _xfrmLW{}; // World -> Light

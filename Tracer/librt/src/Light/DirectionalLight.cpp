@@ -62,7 +62,7 @@ namespace rt {
     if( vis != nullptr ) {
       *vis = ref.ray(*wi);
     }
-    return _L;
+    return _L*scale();
   }
 
   LightPtr DirectionalLight::create(const Transform& lightToWorld,

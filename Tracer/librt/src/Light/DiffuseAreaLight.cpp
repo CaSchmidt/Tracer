@@ -66,7 +66,7 @@ namespace rt {
   Color DiffuseAreaLight::radiance(const SurfaceInfo& surface, const Direction& wo) const
   {
     return n4::dot(surface.N, geom::to_normal(wo)) > ZERO
-        ? _Lemit
+        ? _Lemit*scale()
         : Color();
   }
 

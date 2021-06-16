@@ -158,12 +158,10 @@ namespace rt {
       return math::radian<real_t>(parseNodeAsFloat<real_t>(node, ok));
     }
 
-    Color parseColor(const tinyxml2::XMLElement *node, bool *ok, const bool clamp)
+    Color parseColor(const tinyxml2::XMLElement *node, bool *ok)
     {
       const Color result = parseVector3D<Color>(node, "r", "g", "b", ok);
-      return clamp
-          ? Color(n4::clamp(result, 0, 1))
-          : Color(n4::max(result, 0));
+      return n4::clamp(result, 0, 1);
     }
 
     Direction parseDirection(const tinyxml2::XMLElement *node, bool *ok)

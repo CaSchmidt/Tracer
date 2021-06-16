@@ -63,6 +63,18 @@ namespace rt {
         : 1;
   }
 
+  real_t ILight::scale() const
+  {
+    return _scale;
+  }
+
+  void ILight::setScale(const real_t s)
+  {
+    _scale = s > ZERO
+        ? s
+        : 1;
+  }
+
   ILight::Type ILight::type() const
   {
     return _type;

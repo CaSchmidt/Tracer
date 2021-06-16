@@ -45,7 +45,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      const Color Lemit = parseColor(node->FirstChildElement("Emittance"), &myOk, false);
+      const Color Lemit = parseColor(node->FirstChildElement("Emittance"), &myOk);
       if( !myOk ) {
         return LightPtr();
       }
@@ -73,6 +73,11 @@ namespace rt {
         light->setNumSamples(numSamples);
       }
 
+      const real_t scale = parseReal(node->FirstChildElement("Scale"), &myOk);
+      if( myOk ) {
+        light->setScale(scale);
+      }
+
       return light;
     }
 
@@ -80,7 +85,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      const Color L = parseColor(node->FirstChildElement("Radiance"), &myOk, false);
+      const Color L = parseColor(node->FirstChildElement("Radiance"), &myOk);
       if( !myOk ) {
         return LightPtr();
       }
@@ -90,14 +95,24 @@ namespace rt {
         return LightPtr();
       }
 
-      return DirectionalLight::create(n4::identity(), L, wi);
+      LightPtr light = DirectionalLight::create(n4::identity(), L, wi);
+      if( !light ) {
+        return LightPtr();
+      }
+
+      const real_t scale = parseReal(node->FirstChildElement("Scale"), &myOk);
+      if( myOk ) {
+        light->setScale(scale);
+      }
+
+      return light;
     }
 
     LightPtr parsePointLight(const tinyxml2::XMLElement *node)
     {
       bool myOk = false;
 
-      const Color I = parseColor(node->FirstChildElement("Intensity"), &myOk, false);
+      const Color I = parseColor(node->FirstChildElement("Intensity"), &myOk);
       if( !myOk ) {
         return LightPtr();
       }
@@ -109,7 +124,17 @@ namespace rt {
 
       const Matrix lightToWorld = n4::translate(pos.x, pos.y, pos.z);
 
-      return PointLight::create(lightToWorld, I);
+      LightPtr light = PointLight::create(lightToWorld, I);
+      if( !light ) {
+        return LightPtr();
+      }
+
+      const real_t scale = parseReal(node->FirstChildElement("Scale"), &myOk);
+      if( myOk ) {
+        light->setScale(scale);
+      }
+
+      return light;
     }
 
     // Export ////////////////////////////////////////////////////////////////

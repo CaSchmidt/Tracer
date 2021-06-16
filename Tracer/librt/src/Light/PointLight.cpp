@@ -64,7 +64,7 @@ namespace rt {
     if( vis != nullptr ) {
       *vis = ref.ray(*wi, r);
     }
-    return _I*attenuation(r);
+    return _I*attenuation(r)*scale();
   }
 
   LightPtr PointLight::create(const Transform& lightToWorld, const Color& I)

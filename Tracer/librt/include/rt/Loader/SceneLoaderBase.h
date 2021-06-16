@@ -47,7 +47,7 @@ namespace rt {
 
     real_t parseAngle(const tinyxml2::XMLElement *node, bool *ok);
 
-    Color parseColor(const tinyxml2::XMLElement *node, bool *ok, const bool clamp = true);
+    Color parseColor(const tinyxml2::XMLElement *node, bool *ok);
 
     Direction parseDirection(const tinyxml2::XMLElement *node, bool *ok);
 

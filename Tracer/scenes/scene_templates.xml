@@ -37,6 +37,7 @@
       </Emittance>
       <NumSamples>size</NumSamples>
       <Object>object</Object>
+      <Scale>real</Scale>
     </Light>
     <Light type="Directional">
       <Radiance>
@@ -49,6 +50,7 @@
         <y>real</y>
         <z>real</z>
       </Direction>
+      <Scale>real</Scale>
     </Light>
     <Light type="Point">
       <Intensity>
@@ -61,6 +63,7 @@
         <y>real</y>
         <z>real</z>
       </Position>
+      <Scale>real</Scale>
     </Light>
     <!-- SPACE -->
     <Texture type="Checked">
