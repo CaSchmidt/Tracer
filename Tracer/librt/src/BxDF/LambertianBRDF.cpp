@@ -42,11 +42,6 @@ namespace rt {
   {
   }
 
-  bool LambertianBRDF::isShadowCaster() const
-  {
-    return true;
-  }
-
   Color LambertianBRDF::eval(const Direction& /*wo*/, const Direction& /*wi*/) const
   {
     return _color/PI;

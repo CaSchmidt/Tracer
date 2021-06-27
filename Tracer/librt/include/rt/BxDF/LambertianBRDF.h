@@ -41,8 +41,6 @@ namespace rt {
     LambertianBRDF() noexcept;
     ~LambertianBRDF();
 
-    bool isShadowCaster() const;
-
     Color eval(const Direction& wo, const Direction& wi) const;
   };
 

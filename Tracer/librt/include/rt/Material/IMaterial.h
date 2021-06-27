@@ -52,7 +52,7 @@ namespace rt {
 
     virtual Color textureLookup(const size_t i, const TexCoord2D& tex) const;
 
-    bool isShadowCaster() const;
+    virtual bool isShadowCaster() const;
 
   private:
     BSDF _bsdf;

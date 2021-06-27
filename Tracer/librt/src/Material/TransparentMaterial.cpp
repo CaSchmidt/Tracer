@@ -62,6 +62,11 @@ namespace rt {
     return result;
   }
 
+  bool TransparentMaterial::isShadowCaster() const
+  {
+    return false;
+  }
+
   void TransparentMaterial::setRefraction(const real_t eta)
   {
     bsdf()->asBxDF<SpecularReflectionBRDF>(BRDF)->setRefraction(eta);

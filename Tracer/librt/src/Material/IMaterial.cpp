@@ -64,13 +64,7 @@ namespace rt {
 
   bool IMaterial::isShadowCaster() const
   {
-    for(size_t i = 0; i < _bsdf.size(); i++) {
-      const IBxDF *bxdf = _bsdf[i];
-      if( bxdf->isShadowCaster() ) {
-        return true;
-      }
-    }
-    return false;
+    return true;
   }
 
 } // namespace rt

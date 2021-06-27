@@ -55,11 +55,6 @@ namespace rt {
     _reflectance = std::clamp<real_t>(r, 0, 1);
   }
 
-  bool MirrorBRDF::isShadowCaster() const
-  {
-    return true;
-  }
-
   Color MirrorBRDF::eval(const Direction& /*wo*/, const Direction& /*wi*/) const
   {
     return Color();

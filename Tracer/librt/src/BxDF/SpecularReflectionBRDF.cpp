@@ -56,11 +56,6 @@ namespace rt {
     _etaIn = std::max<real_t>(1, eta);
   }
 
-  bool SpecularReflectionBRDF::isShadowCaster() const
-  {
-    return false;
-  }
-
   Color SpecularReflectionBRDF::eval(const Direction& /*wo*/, const Direction& /*wi*/) const
   {
     return Color();

@@ -43,6 +43,8 @@ namespace rt {
 
     MaterialPtr copy() const;
 
+    bool isShadowCaster() const;
+
     void setRefraction(const real_t eta);
     real_t refraction() const;
 

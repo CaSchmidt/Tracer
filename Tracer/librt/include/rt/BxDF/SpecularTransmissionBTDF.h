@@ -44,8 +44,6 @@ namespace rt {
     real_t refraction() const;
     void setRefraction(const real_t eta);
 
-    bool isShadowCaster() const;
-
     Color eval(const Direction& wo, const Direction& wi) const;
     real_t pdf(const Direction& wo, const Direction& wi) const;
     Color sample(const Direction& wo, Direction *wi, const Sample2D& xi, real_t *pdf) const;

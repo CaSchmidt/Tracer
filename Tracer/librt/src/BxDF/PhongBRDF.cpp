@@ -56,11 +56,6 @@ namespace rt {
     _norm = (_shin + TWO)/TWO/PI;
   }
 
-  bool PhongBRDF::isShadowCaster() const
-  {
-    return true;
-  }
-
   Color PhongBRDF::eval(const Direction& wo, const Direction& wi) const
   {
     const Direction     R = geom::shading::reflect(wi);

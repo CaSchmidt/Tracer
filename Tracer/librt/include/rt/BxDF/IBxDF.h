@@ -61,8 +61,6 @@ namespace rt {
     bool isSpecular() const;
     bool isTransmission() const;
 
-    virtual bool isShadowCaster() const = 0;
-
     virtual Color eval(const Direction& wo, const Direction& wi) const = 0;
     virtual real_t pdf(const Direction& wo, const Direction& wi) const;
     virtual Color sample(const Direction& wo, Direction *wi, const Sample2D& xi, real_t *pdf) const;

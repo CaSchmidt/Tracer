@@ -44,8 +44,6 @@ namespace rt {
     real_t shininess() const;
     void setShininess(const real_t spec);
 
-    bool isShadowCaster() const;
-
     Color eval(const Direction& wo, const Direction& wi) const;
 
   private:
