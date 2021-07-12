@@ -40,15 +40,23 @@ namespace rt {
   template<typename RadianceFunc>
   void render_loop(Image& image, const size_t y0, const RadianceFunc& radiance)
   {
+    constexpr real_t     GAMMA = 2.2f;
+    constexpr real_t INV_GAMMA = 1.0f/GAMMA;
+    constexpr real_t   MAX_RGB = 256.0 - 0x1p-7;
+
     const size_t y1 = y0 + image.height();
     for(size_t y = y0; y < y1; y++) {
       uint8_t *row = image.row(y - y0);
       for(size_t x = 0; x < image.width(); x++) {
-        constexpr real_t MAX_RGB = 256.0 - 0x1p-7;
-        const Color color = n4::clamp(radiance(x, y), 0, 1)*MAX_RGB;
-        *row++ = static_cast<uint8_t>(color.r);
-        *row++ = static_cast<uint8_t>(color.g);
-        *row++ = static_cast<uint8_t>(color.b);
+        const Color Li = radiance(x, y);
+
+        const real_t r = n4::pow(Li.r, INV_GAMMA);
+        const real_t g = n4::pow(Li.g, INV_GAMMA);
+        const real_t b = n4::pow(Li.b, INV_GAMMA);
+
+        *row++ = static_cast<uint8_t>(std::clamp<real_t>(r, 0, 1)*MAX_RGB);
+        *row++ = static_cast<uint8_t>(std::clamp<real_t>(g, 0, 1)*MAX_RGB);
+        *row++ = static_cast<uint8_t>(std::clamp<real_t>(b, 0, 1)*MAX_RGB);
         *row++ = 0xFF;
       }
     }
