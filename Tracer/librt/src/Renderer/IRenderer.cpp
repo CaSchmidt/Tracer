@@ -90,7 +90,7 @@ namespace rt {
         Color color;
         for(size_t s = 0; s < sampler->numSamplesPerPixel(); s++) {
           const Color Li = radiance(_view*camera->ray(x, y, sampler), scene, sampler);
-          color += n4::clamp(Li, 0, 1);
+          color += Li;
         }
         color /= static_cast<real_t>(sampler->numSamplesPerPixel());
         return color;
