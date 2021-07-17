@@ -34,7 +34,7 @@
 
 #include <tuple>
 
-#include "rt/Types.h"
+#include "rt/Base/Types.h"
 
 #define TEXCOORDS_2D(tex)  const auto [s, t] = tex;
 

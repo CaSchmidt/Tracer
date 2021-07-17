@@ -26,6 +26,7 @@ add_subdirectory(3rdparty/tinyxml2-800)
 ### Project ##################################################################
 
 add_subdirectory(libutil)
+add_subdirectory(librtbase)
 add_subdirectory(librt)
 
 add_subdirectory(cli)

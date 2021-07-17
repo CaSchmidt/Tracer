@@ -32,7 +32,7 @@
 #ifndef RENDEROPTIONS_H
 #define RENDEROPTIONS_H
 
-#include "rt/Types.h"
+#include "rt/Base/Types.h"
 
 namespace rt {
 

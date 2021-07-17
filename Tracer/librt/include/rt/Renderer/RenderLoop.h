@@ -33,7 +33,7 @@
 #define RENDERLOOP_H
 
 #include "Image.h"
-#include "rt/Types.h"
+#include "rt/Base/Types.h"
 
 namespace rt {
 

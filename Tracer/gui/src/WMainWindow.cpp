@@ -172,9 +172,12 @@ bool WMainWindow::initializeRenderContext()
   const rt::size_t  width = ui->widthSpin->value();
   const rt::size_t height = ui->heightSpin->value();
   if(        ui->cameraCombo->currentText() == CAM_FRUSTUM ) {
-    rc.camera = rt::FrustumCamera::create(width, height, rc.renderer->options());
+    rc.camera = rt::FrustumCamera::create(width, height,
+                                          rc.renderer->options().fov_rad,
+                                          rc.renderer->options().worldToScreen);
   } else if( ui->cameraCombo->currentText() == CAM_SIMPLE ) {
-    rc.camera = rt::SimpleCamera::create(width, height, rc.renderer->options());
+    rc.camera = rt::SimpleCamera::create(width, height,
+                                         rc.renderer->options().fov_rad);
   } else {
     QMessageBox::critical(this, tr("Error"),
                           tr("Invalid camera!"),

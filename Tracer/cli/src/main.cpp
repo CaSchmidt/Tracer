@@ -89,9 +89,12 @@ int main(int /*argc*/, char ** /*argv*/)
 #endif
 
 #if 1
-  rc.camera = rt::FrustumCamera::create(width, height, rc.renderer->options());
+  rc.camera = rt::FrustumCamera::create(width, height,
+                                        rc.renderer->options().fov_rad,
+                                        rc.renderer->options().worldToScreen);
 #else
-  rc.camera = rt::SimpleCamera::create(width, height, rc.renderer->options());
+  rc.camera = rt::SimpleCamera::create(width, height,
+                                       rc.renderer->options().fov_rad);
 #endif
 
   rc.sampler = rt::SimpleSampler::create(numSamples);

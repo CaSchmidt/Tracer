@@ -1,25 +1,10 @@
 list(APPEND rt_HEADERS
-  include/geom/Geom.h
-  include/geom/Hit.h
-  include/geom/Intersect.h
-  include/geom/Optics.h
-  include/geom/Ray.h
-  include/geom/Shading.h
-  include/geom/Transform.h
-  include/geom/Util.h
-  include/math/Constants.h
-  include/math/Logical.h
-  include/math/Solver.h
-  include/rt/Types.h
   include/rt/BxDF/IBxDF.h
   include/rt/BxDF/LambertianBRDF.h
   include/rt/BxDF/MirrorBRDF.h
   include/rt/BxDF/PhongBRDF.h
   include/rt/BxDF/SpecularReflectionBRDF.h
   include/rt/BxDF/SpecularTransmissionBTDF.h
-  include/rt/Camera/FrustumCamera.h
-  include/rt/Camera/ICamera.h
-  include/rt/Camera/SimpleCamera.h
   include/rt/Light/DiffuseAreaLight.h
   include/rt/Light/DirectionalLight.h
   include/rt/Light/IAreaLight.h
@@ -49,10 +34,6 @@ list(APPEND rt_HEADERS
   include/rt/Renderer/RenderOptions.h
   include/rt/Renderer/RenderUtils.h
   include/rt/Renderer/WhittedRenderer.h
-  include/rt/Sampler/ISampler.h
-  include/rt/Sampler/Sample.h
-  include/rt/Sampler/Sampling.h
-  include/rt/Sampler/SimpleSampler.h
   include/rt/Scene/Scene.h
   include/rt/Texture/CheckedTexture.h
   include/rt/Texture/FlatTexture.h
@@ -67,9 +48,6 @@ list(APPEND rt_SOURCES
   src/BxDF/PhongBRDF.cpp
   src/BxDF/SpecularReflectionBRDF.cpp
   src/BxDF/SpecularTransmissionBTDF.cpp
-  src/Camera/FrustumCamera.cpp
-  src/Camera/ICamera.cpp
-  src/Camera/SimpleCamera.cpp
   src/Light/DiffuseAreaLight.cpp
   src/Light/DirectionalLight.cpp
   src/Light/IAreaLight.cpp
@@ -102,9 +80,6 @@ list(APPEND rt_SOURCES
   src/Renderer/RenderContext.cpp
   src/Renderer/RenderUtils.cpp
   src/Renderer/WhittedRenderer.cpp
-  src/Sampler/ISampler.cpp
-  src/Sampler/Sampling.cpp
-  src/Sampler/SimpleSampler.cpp
   src/Scene/Scene.cpp
   src/Texture/CheckedTexture.cpp
   src/Texture/FlatTexture.cpp
@@ -121,12 +96,12 @@ format_output_name(rt "rt")
 target_include_directories(rt
   PRIVATE ${Tracer_SOURCE_DIR}/3rdparty/font8x8/include
   PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  PUBLIC  ${NumericArray_SOURCE_DIR}/include
   )
 
 add_dependencies(rt N4 util tinyxml2)
 
 target_link_libraries(rt
+  PUBLIC  rtbase
   PRIVATE tinyxml2
   PUBLIC  util
   )

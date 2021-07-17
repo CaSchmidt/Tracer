@@ -33,7 +33,6 @@
 #define SURFACEINFO_H
 
 #include "rt/Texture/TexCoord.h"
-#include "rt/Types.h"
 
 namespace rt {
 

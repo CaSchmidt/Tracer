@@ -33,7 +33,7 @@
 #define OPTICS_H
 
 #include "math/Solver.h"
-#include "rt/Types.h"
+#include "rt/Base/Types.h"
 
 /*
  * Optics API:
