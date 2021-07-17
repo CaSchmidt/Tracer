@@ -32,8 +32,6 @@
 #ifndef ICAMERA_H
 #define ICAMERA_H
 
-#include <memory>
-
 #include "rt/Sampler/ISampler.h"
 
 namespace rt {
