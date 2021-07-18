@@ -26,6 +26,7 @@ list(APPEND rt_HEADERS
   include/rt/Object/Plane.h
   include/rt/Object/Sphere.h
   include/rt/Object/SurfaceInfo.h
+  include/rt/Renderer/BaseRenderer.h
   include/rt/Renderer/DirectLightingRenderer.h
   include/rt/Renderer/IRenderer.h
   include/rt/Renderer/PathTracingRenderer.h
@@ -74,6 +75,7 @@ list(APPEND rt_SOURCES
   src/Object/Plane.cpp
   src/Object/Sphere.cpp
   src/Object/SurfaceInfo.cpp
+  src/Renderer/BaseRenderer.cpp
   src/Renderer/DirectLightingRenderer.cpp
   src/Renderer/IRenderer.cpp
   src/Renderer/PathTracingRenderer.cpp
