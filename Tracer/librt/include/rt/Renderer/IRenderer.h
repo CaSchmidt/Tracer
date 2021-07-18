@@ -40,7 +40,6 @@
 namespace rt {
 
   class Scene;
-  struct SurfaceInfo;
 
   using RendererPtr = std::unique_ptr<class IRenderer>;
 
@@ -56,16 +55,13 @@ namespace rt {
                  const CameraPtr& camera, const SamplerPtr& sampler) const;
 
   protected:
-    Color specularReflectOrTransmit(const SurfaceInfo& ref, const Scene& scene,
-                                    const SamplerPtr& sampler, const uint_t depth,
-                                    const bool is_transmit) const;
+    virtual Color radiance(const Ray& ray, const Scene& scene,
+                           const SamplerPtr& sampler, const uint_t depth = 0) const = 0;
 
   private:
     IRenderer() noexcept = delete;
 
     static Image createImage(size_t& y0, size_t& y1, const CameraPtr& camera);
-    virtual Color radiance(const Ray& ray, const Scene& scene,
-                           const SamplerPtr& sampler, const uint_t depth = 0) const = 0;
 
     RenderOptions _options{};
     Transform     _view{};

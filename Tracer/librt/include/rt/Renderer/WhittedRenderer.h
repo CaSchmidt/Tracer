@@ -32,13 +32,11 @@
 #ifndef WHITTEDRENDERER_H
 #define WHITTEDRENDERER_H
 
-#include "rt/Renderer/IRenderer.h"
+#include "rt/Renderer/BaseRenderer.h"
 
 namespace rt {
 
-  struct BSDFdata;
-
-  class WhittedRenderer : public IRenderer {
+  class WhittedRenderer : public BaseRenderer {
   public:
     WhittedRenderer(const RenderOptions& options) noexcept;
     ~WhittedRenderer() noexcept;

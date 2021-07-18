@@ -40,7 +40,7 @@ namespace rt {
   ////// public //////////////////////////////////////////////////////////////
 
   DirectLightingRenderer::DirectLightingRenderer(const RenderOptions& options) noexcept
-    : IRenderer(options)
+    : BaseRenderer(options)
   {
   }
 

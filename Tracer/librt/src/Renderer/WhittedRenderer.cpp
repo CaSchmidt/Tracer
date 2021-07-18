@@ -39,7 +39,7 @@ namespace rt {
   ////// public //////////////////////////////////////////////////////////////
 
   WhittedRenderer::WhittedRenderer(const RenderOptions& options) noexcept
-    : IRenderer(options)
+    : BaseRenderer(options)
   {
   }
 

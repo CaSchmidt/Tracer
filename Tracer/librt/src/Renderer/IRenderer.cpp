@@ -31,11 +31,7 @@
 
 #include "rt/Renderer/IRenderer.h"
 
-#include "rt/Material/BSDF.h"
-#include "rt/Object/IObject.h"
-#include "rt/Object/SurfaceInfo.h"
 #include "rt/Renderer/RenderLoop.h"
-#include "rt/Sampler/ISampler.h"
 
 namespace rt {
 
@@ -103,29 +99,6 @@ namespace rt {
     }
 
     return image;
-  }
-
-  ////// protected ///////////////////////////////////////////////////////////
-
-  Color IRenderer::specularReflectOrTransmit(const SurfaceInfo& ref, const Scene& scene,
-                                             const SamplerPtr& sampler, const uint_t depth,
-                                             const bool is_transmit) const
-  {
-    const BSDF         *bsdf = ref->material()->bsdf();
-    const IBxDF::Flags flags = is_transmit
-        ? IBxDF::Flags(IBxDF::Specular | IBxDF::Transmission)
-        : IBxDF::Flags(IBxDF::Specular | IBxDF::Reflection);
-
-    real_t    pdf = 0;
-    Direction  wi{};
-    const Color         f = bsdf->sample(ref, &wi, sampler->sample2D(), &pdf, flags);
-    const real_t absCosTi = geom::absDot(wi, ref.N);
-    if( pdf <= ZERO  ||  absCosTi == ZERO  ||  f.isZero() ) {
-      return Color();
-    }
-
-    const Color Li = radiance(ref.ray(wi), scene, sampler, depth + 1);
-    return f*Li*absCosTi/pdf;
   }
 
   ////// private /////////////////////////////////////////////////////////////

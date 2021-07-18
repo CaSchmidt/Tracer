@@ -32,11 +32,11 @@
 #ifndef DIRECTLIGHTINGRENDERER_H
 #define DIRECTLIGHTINGRENDERER_H
 
-#include "rt/Renderer/IRenderer.h"
+#include "rt/Renderer/BaseRenderer.h"
 
 namespace rt {
 
-  class DirectLightingRenderer : public IRenderer {
+  class DirectLightingRenderer : public BaseRenderer {
   public:
     DirectLightingRenderer(const RenderOptions& options) noexcept;
     ~DirectLightingRenderer() noexcept;
