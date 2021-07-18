@@ -18,6 +18,7 @@ list(APPEND rtbase_HEADERS
   include/rt/Sampler/Sample.h
   include/rt/Sampler/Sampling.h
   include/rt/Sampler/SimpleSampler.h
+  include/rt/Scene/IScene.h
   )
 
 list(APPEND rtbase_SOURCES
@@ -27,6 +28,7 @@ list(APPEND rtbase_SOURCES
   src/Sampler/ISampler.cpp
   src/Sampler/Sampling.cpp
   src/Sampler/SimpleSampler.cpp
+  src/Scene/IScene.cpp
   )
 
 add_library(rtbase STATIC
