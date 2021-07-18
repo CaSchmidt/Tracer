@@ -44,7 +44,7 @@ namespace rt {
     ~BaseRenderer() noexcept;
 
   protected:
-    Color specularReflectOrTransmit(const SurfaceInfo& ref, const Scene& scene,
+    Color specularReflectOrTransmit(const SurfaceInfo& ref, const ScenePtr& scene,
                                     const SamplerPtr& sampler, const uint_t depth,
                                     const bool is_transmit) const;
 

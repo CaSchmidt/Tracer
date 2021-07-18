@@ -34,10 +34,11 @@
 
 #include "rt/Light/ILight.h"
 #include "rt/Object/IObject.h"
+#include "rt/Scene/IScene.h"
 
 namespace rt {
 
-  class Scene {
+  class Scene : public IScene {
   public:
     Scene();
     ~Scene();
@@ -61,6 +62,8 @@ namespace rt {
     bool useCastShadow() const;
     void setUseCastShadow(const bool on);
 
+    static ScenePtr create();
+
   private:
     Scene(const Scene&) = delete;
     Scene& operator=(const Scene&) = delete;
@@ -70,6 +73,11 @@ namespace rt {
     Objects _objects;
     bool _use_cast_shadow{false};
   };
+
+  inline Scene *SCENE(const ScenePtr& p)
+  {
+    return dynamic_cast<Scene*>(p.get());
+  }
 
 } // namespace rt
 

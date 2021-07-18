@@ -54,19 +54,21 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Color WhittedRenderer::radiance(const Ray& ray, const Scene& scene,
+  Color WhittedRenderer::radiance(const Ray& ray, const ScenePtr& _scene,
                                   const SamplerPtr& sampler, const uint_t depth) const
   {
+    const Scene *scene = SCENE(_scene);
+
     SurfaceInfo ref;
-    if( !scene.intersect(&ref, ray) ) {
-      return scene.backgroundColor();
+    if( !scene->intersect(&ref, ray) ) {
+      return scene->backgroundColor();
     }
 
     Color Lo;
 
     Lo += ref.Le(ref.wo); // Account for emissive lighting.
 
-    for(const LightPtr& light : scene.lights()) {
+    for(const LightPtr& light : scene->lights()) {
       real_t pdfLight{0};
       Ray         vis{};
       Direction    wi{};
@@ -75,7 +77,7 @@ namespace rt {
         continue;
       }
 
-      if( scene.intersect(vis) ) { // Light is occluded by scene.
+      if( scene->intersect(vis) ) { // Light is occluded by scene.
         continue;
       }
 
@@ -89,8 +91,8 @@ namespace rt {
     }
 
     if( depth + 1 < options().maxDepth ) {
-      Lo += specularReflectOrTransmit(ref, scene, sampler, depth, false);
-      Lo += specularReflectOrTransmit(ref, scene, sampler, depth, true);
+      Lo += specularReflectOrTransmit(ref, _scene, sampler, depth, false);
+      Lo += specularReflectOrTransmit(ref, _scene, sampler, depth, true);
     }
 
     return Lo;

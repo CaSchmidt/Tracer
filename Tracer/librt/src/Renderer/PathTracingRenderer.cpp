@@ -55,10 +55,11 @@ namespace rt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  Color PathTracingRenderer::radiance(const Ray& _ray, const Scene& scene,
+  Color PathTracingRenderer::radiance(const Ray& _ray, const ScenePtr& _scene,
                                       const SamplerPtr& sampler, const uint_t /*depth*/) const
   {
     const RenderOptions& options = PathTracingRenderer::options();
+    const Scene           *scene = SCENE(_scene);
 
     Color              beta(1);
     Color                 L;
@@ -69,7 +70,7 @@ namespace rt {
     for(uint_t bounces = 0; ; bounces++) {
       // Intersect ray with scene and store intersection in 'ref'
       SurfaceInfo ref;
-      const bool is_intersect = scene.intersect(&ref, ray);
+      const bool is_intersect = scene->intersect(&ref, ray);
 
       // Possibly add emitted light at intersection
       if( bounces == 0  ||  is_specular_bounce ) {
@@ -77,7 +78,7 @@ namespace rt {
         if( is_intersect ) {
           L += beta*ref.Le(ref.wo);
         } else {
-          L += beta*scene.backgroundColor();
+          L += beta*scene->backgroundColor();
         }
       }
 
@@ -87,7 +88,7 @@ namespace rt {
       }
 
       // Sample illumination from lights to find path contribution
-      L += beta*uniformSampleOneLight(ref, scene, sampler);
+      L += beta*uniformSampleOneLight(ref, *scene, sampler);
 
       // Sample BSDF to get new path direction
       const BSDF *bsdf = ref->material()->bsdf();

@@ -14,6 +14,10 @@ list(APPEND rtbase_HEADERS
   include/rt/Camera/FrustumCamera.h
   include/rt/Camera/ICamera.h
   include/rt/Camera/SimpleCamera.h
+  include/rt/Renderer/IRenderer.h
+  include/rt/Renderer/RenderContext.h
+  include/rt/Renderer/RenderLoop.h
+  include/rt/Renderer/RenderOptions.h
   include/rt/Sampler/ISampler.h
   include/rt/Sampler/Sample.h
   include/rt/Sampler/Sampling.h
@@ -25,6 +29,8 @@ list(APPEND rtbase_SOURCES
   src/Camera/FrustumCamera.cpp
   src/Camera/ICamera.cpp
   src/Camera/SimpleCamera.cpp
+  src/Renderer/IRenderer.cpp
+  src/Renderer/RenderContext.cpp
   src/Sampler/ISampler.cpp
   src/Sampler/Sampling.cpp
   src/Sampler/SimpleSampler.cpp
@@ -45,4 +51,6 @@ target_include_directories(rtbase
 
 add_dependencies(rtbase N4)
 
-target_link_libraries(rtbase)
+target_link_libraries(rtbase
+  PUBLIC util
+  )

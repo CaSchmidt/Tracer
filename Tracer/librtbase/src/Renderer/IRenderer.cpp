@@ -73,7 +73,7 @@ namespace rt {
     _view = xfrmCW.inverse()*Transform::lookAt(eyeC, lookAtC, cameraUpC);
   }
 
-  Image IRenderer::render(size_t y0, size_t y1, const Scene& scene,
+  Image IRenderer::render(size_t y0, size_t y1, const ScenePtr& scene,
                           const CameraPtr& camera, const SamplerPtr& sampler) const
   {
     Image image = createImage(y0, y1, camera);

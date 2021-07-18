@@ -130,4 +130,9 @@ namespace rt {
     _use_cast_shadow = on;
   }
 
+  ScenePtr Scene::create()
+  {
+    return std::make_unique<Scene>();
+  }
+
 } // namespace rt

@@ -29,44 +29,50 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef RENDERCONTEXT_H
-#define RENDERCONTEXT_H
-
-#include <list>
-#include <tuple>
-
-#include "rt/Renderer/IRenderer.h"
-#include "rt/Scene/Scene.h"
+#include "rt/Renderer/RenderContext.h"
 
 namespace rt {
 
-  using RenderBlock  = std::tuple<size_t,size_t>;
-  using RenderBlocks = std::list<RenderBlock>;
+  ////// Public //////////////////////////////////////////////////////////////
 
-  RenderBlocks makeRenderBlocks(const size_t height, const size_t blockSize);
+  RenderBlocks makeRenderBlocks(const size_t height, const size_t blockSize)
+  {
+    RenderBlocks blocks;
 
-  struct RenderContext {
-    RenderContext() noexcept = default;
+    const size_t numBlocks = height/blockSize;
+    for(size_t i = 0; i < numBlocks; i++) {
+      const size_t y0 = i*blockSize;
+      blocks.emplace_back(y0, y0 + blockSize);
+    }
 
-    void clear();
+    if( const size_t numRemain = height%blockSize; numRemain > 0 ) {
+      const size_t y0 = numBlocks*blockSize;
+      blocks.emplace_back(y0, y0 + numRemain);
+    }
 
-    bool isValid() const;
+    return blocks;
+  }
 
-    Image render(const RenderBlock& block) const;
+  ////// RenderContext - public //////////////////////////////////////////////
 
-    CameraPtr camera;
-    RendererPtr renderer;
-    SamplerPtr sampler;
-    Scene scene;
+  void RenderContext::clear()
+  {
+    camera.reset();
+    renderer.reset();
+    sampler.reset();
+    scene.reset();
+  }
 
-  private:
-    RenderContext(const RenderContext&) noexcept = delete;
-    RenderContext& operator=(const RenderContext&) noexcept = delete;
+  bool RenderContext::isValid() const
+  {
+    return camera  &&  renderer  &&  sampler  &&  scene;
+  }
 
-    RenderContext(RenderContext&&) noexcept = delete;
-    RenderContext& operator=(RenderContext&&) noexcept = delete;
-  };
+  Image RenderContext::render(const RenderBlock& block) const
+  {
+    const SamplerPtr mysampler = sampler->copy();
+    const auto [y0, y1] = block;
+    return renderer->render(y0, y1, scene, camera, mysampler);
+  }
 
 } // namespace rt
-
-#endif // RENDERCONTEXT_H

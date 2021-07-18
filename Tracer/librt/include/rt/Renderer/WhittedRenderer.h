@@ -44,7 +44,7 @@ namespace rt {
     static RendererPtr create(const RenderOptions& options);
 
   private:
-    Color radiance(const Ray& ray, const Scene& scene,
+    Color radiance(const Ray& ray, const ScenePtr& scene,
                    const SamplerPtr& sampler, const uint_t depth) const;
   };
 

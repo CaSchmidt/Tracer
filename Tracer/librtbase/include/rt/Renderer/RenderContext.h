@@ -29,44 +29,44 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef IRENDERER_H
-#define IRENDERER_H
+#ifndef RENDERCONTEXT_H
+#define RENDERCONTEXT_H
 
-#include "Image.h"
-#include "rt/Camera/ICamera.h"
-#include "rt/Renderer/RenderOptions.h"
-#include "rt/Sampler/ISampler.h"
+#include <list>
+#include <tuple>
+
+#include "rt/Renderer/IRenderer.h"
+#include "rt/Scene/IScene.h"
 
 namespace rt {
 
-  class Scene;
+  using RenderBlock  = std::tuple<size_t,size_t>;
+  using RenderBlocks = std::list<RenderBlock>;
 
-  using RendererPtr = std::unique_ptr<class IRenderer>;
+  RenderBlocks makeRenderBlocks(const size_t height, const size_t blockSize);
 
-  class IRenderer {
-  public:
-    IRenderer(const RenderOptions& options) noexcept;
-    virtual ~IRenderer() noexcept;
+  struct RenderContext {
+    RenderContext() noexcept = default;
 
-    const RenderOptions& options() const;
-    void setOptions(const RenderOptions& options);
+    void clear();
 
-    Image render(size_t y0, size_t y1, const Scene& scene,
-                 const CameraPtr& camera, const SamplerPtr& sampler) const;
+    bool isValid() const;
 
-  protected:
-    virtual Color radiance(const Ray& ray, const Scene& scene,
-                           const SamplerPtr& sampler, const uint_t depth = 0) const = 0;
+    Image render(const RenderBlock& block) const;
+
+    CameraPtr camera;
+    RendererPtr renderer;
+    SamplerPtr sampler;
+    ScenePtr scene;
 
   private:
-    IRenderer() noexcept = delete;
+    RenderContext(const RenderContext&) noexcept = delete;
+    RenderContext& operator=(const RenderContext&) noexcept = delete;
 
-    static Image createImage(size_t& y0, size_t& y1, const CameraPtr& camera);
-
-    RenderOptions _options{};
-    Transform     _view{};
+    RenderContext(RenderContext&&) noexcept = delete;
+    RenderContext& operator=(RenderContext&&) noexcept = delete;
   };
 
 } // namespace rt
 
-#endif // IRENDERER_H
+#endif // RENDERCONTEXT_H

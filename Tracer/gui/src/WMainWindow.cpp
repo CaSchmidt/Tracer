@@ -46,6 +46,7 @@
 #include "rt/Renderer/PathTracingRenderer.h"
 #include "rt/Renderer/WhittedRenderer.h"
 #include "rt/Sampler/SimpleSampler.h"
+#include "rt/Scene/Scene.h"
 #include "Util.h"
 
 ////// Macros ////////////////////////////////////////////////////////////////
@@ -140,14 +141,17 @@ bool WMainWindow::initializeRenderContext()
 
   // (1) Scene & RenderOptions ///////////////////////////////////////////////
 
+  rc.scene = rt::Scene::create();
+  rt::Scene *scene = rt::SCENE(rc.scene);
+
   rt::RenderOptions options;
-  if( !rt::loadScene(&rc.scene, &options, filename.toUtf8().constData()) ) {
+  if( !rt::loadScene(scene, &options, filename.toUtf8().constData()) ) {
     QMessageBox::critical(this, tr("Error"),
                           tr("Unable to load scene!"),
                           QMessageBox::Ok, QMessageBox::NoButton);
     return false;
   }
-  rc.scene.setUseCastShadow(ui->castShadowCheck->isChecked());
+  scene->setUseCastShadow(ui->castShadowCheck->isChecked());
 
   options.maxDepth = ui->maxDepthSpin->value();
 

@@ -64,9 +64,10 @@ int main(int /*argc*/, char ** /*argv*/)
   const char *filename = FILE_1;
 
   rt::RenderContext rc;
+  rc.scene = rt::Scene::create();
 
   rt::RenderOptions options;
-  if( !rt::loadScene(&rc.scene, &options, filename) ) {
+  if( !rt::loadScene(rt::SCENE(rc.scene), &options, filename) ) {
     return EXIT_FAILURE;
   }
   //rc.scene.setUseCastShadow(true);

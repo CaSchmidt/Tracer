@@ -29,50 +29,43 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Renderer/RenderContext.h"
+#ifndef IRENDERER_H
+#define IRENDERER_H
+
+#include "Image.h"
+#include "rt/Camera/ICamera.h"
+#include "rt/Renderer/RenderOptions.h"
+#include "rt/Sampler/ISampler.h"
+#include "rt/Scene/IScene.h"
 
 namespace rt {
 
-  ////// Public //////////////////////////////////////////////////////////////
+  using RendererPtr = std::unique_ptr<class IRenderer>;
 
-  RenderBlocks makeRenderBlocks(const size_t height, const size_t blockSize)
-  {
-    RenderBlocks blocks;
+  class IRenderer {
+  public:
+    IRenderer(const RenderOptions& options) noexcept;
+    virtual ~IRenderer() noexcept;
 
-    const size_t numBlocks = height/blockSize;
-    for(size_t i = 0; i < numBlocks; i++) {
-      const size_t y0 = i*blockSize;
-      blocks.emplace_back(y0, y0 + blockSize);
-    }
+    const RenderOptions& options() const;
+    void setOptions(const RenderOptions& options);
 
-    if( const size_t numRemain = height%blockSize; numRemain > 0 ) {
-      const size_t y0 = numBlocks*blockSize;
-      blocks.emplace_back(y0, y0 + numRemain);
-    }
+    Image render(size_t y0, size_t y1, const ScenePtr& scene,
+                 const CameraPtr& camera, const SamplerPtr& sampler) const;
 
-    return blocks;
-  }
+  protected:
+    virtual Color radiance(const Ray& ray, const ScenePtr& scene,
+                           const SamplerPtr& sampler, const uint_t depth = 0) const = 0;
 
-  ////// RenderContext - public //////////////////////////////////////////////
+  private:
+    IRenderer() noexcept = delete;
 
-  void RenderContext::clear()
-  {
-    camera.reset();
-    renderer.reset();
-    sampler.reset();
-    scene.clear();
-  }
+    static Image createImage(size_t& y0, size_t& y1, const CameraPtr& camera);
 
-  bool RenderContext::isValid() const
-  {
-    return camera  &&  renderer  &&  sampler;
-  }
-
-  Image RenderContext::render(const RenderBlock& block) const
-  {
-    const SamplerPtr mysampler = sampler->copy();
-    const auto [y0, y1] = block;
-    return renderer->render(y0, y1, scene, camera, mysampler);
-  }
+    RenderOptions _options{};
+    Transform     _view{};
+  };
 
 } // namespace rt
+
+#endif // IRENDERER_H
