@@ -31,6 +31,7 @@
 
 #include "rt/Camera/FrustumCamera.h"
 
+#include "rt/Renderer/RenderOptions.h"
 #include "rt/Sampler/Sampling.h"
 
 namespace rt {
@@ -104,6 +105,13 @@ namespace rt {
                                   const real_t aperture, const real_t focus)
   {
     return std::make_unique<FrustumCamera>(width, height, fov_rad, worldToScreen, aperture, focus);
+  }
+
+  CameraPtr FrustumCamera::create(const size_t width, const size_t height,
+                                  const RenderOptions& options)
+  {
+    return create(width, height, options.fov_rad, options.worldToScreen,
+                  options.aperture, options.focus);
   }
 
   ////// private /////////////////////////////////////////////////////////////

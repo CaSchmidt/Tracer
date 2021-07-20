@@ -31,6 +31,8 @@
 
 #include "rt/Camera/SimpleCamera.h"
 
+#include "rt/Renderer/RenderOptions.h"
+
 namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
@@ -64,6 +66,12 @@ namespace rt {
                                  const real_t fov_rad)
   {
     return std::make_unique<SimpleCamera>(width, height, fov_rad);
+  }
+
+  CameraPtr SimpleCamera::create(const size_t width, const size_t height,
+                                 const RenderOptions& options)
+  {
+    return create(width, height, options.fov_rad);
   }
 
   ////// private /////////////////////////////////////////////////////////////

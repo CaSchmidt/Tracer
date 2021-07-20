@@ -36,6 +36,8 @@
 
 namespace rt {
 
+  struct RenderOptions;
+
   class SimpleCamera : public ICamera {
   public:
     SimpleCamera(const size_t width, const size_t height,
@@ -48,6 +50,9 @@ namespace rt {
 
     static CameraPtr create(const size_t width, const size_t height,
                             const real_t fov_rad);
+
+    static CameraPtr create(const size_t width, const size_t height,
+                            const RenderOptions& options);
 
   private:
     static Matrix windowTransform(const size_t width, const size_t height, const real_t fov_rad);

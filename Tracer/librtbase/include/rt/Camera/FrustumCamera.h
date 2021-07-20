@@ -36,6 +36,8 @@
 
 namespace rt {
 
+  struct RenderOptions;
+
   class FrustumCamera : public ICamera {
   public:
     FrustumCamera(const size_t width, const size_t height,
@@ -50,6 +52,9 @@ namespace rt {
     static CameraPtr create(const size_t width, const size_t height,
                             const real_t fov_rad, const real_t worldToScreen,
                             const real_t aperture = ZERO, const real_t focus = ZERO);
+
+    static CameraPtr create(const size_t width, const size_t height,
+                            const RenderOptions& options);
 
   private:
     static Matrix windowTransform(const size_t width, const size_t height,
