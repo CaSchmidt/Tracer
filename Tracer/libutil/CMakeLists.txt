@@ -21,6 +21,4 @@ target_include_directories(util
   PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}/include
   )
 
-add_dependencies(util N4)
-
 target_link_libraries(util)

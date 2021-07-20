@@ -94,8 +94,6 @@ target_include_directories(rt
   PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}/include
   )
 
-add_dependencies(rt N4 util tinyxml2)
-
 target_link_libraries(rt
   PUBLIC  rtbase
   PRIVATE tinyxml2

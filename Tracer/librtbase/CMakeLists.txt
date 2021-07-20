@@ -49,8 +49,6 @@ target_include_directories(rtbase
   PUBLIC ${NumericArray_SOURCE_DIR}/include
   )
 
-add_dependencies(rtbase N4)
-
 target_link_libraries(rtbase
   PUBLIC util
   )
