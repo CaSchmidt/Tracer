@@ -110,7 +110,7 @@ namespace rt {
     }
     y0 = std::clamp<size_t>(y0, 0, camera->height());
     y1 = std::clamp<size_t>(y1, 0, camera->height());
-    if( y0 == y1  ||  y0 >= camera->height() ) {
+    if( y0 >= y1  ||  y0 >= camera->height() ) {
       return Image();
     }
     return Image(camera->width(), y1 - y0);
