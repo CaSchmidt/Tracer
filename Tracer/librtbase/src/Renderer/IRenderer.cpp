@@ -90,12 +90,12 @@ namespace rt {
         }
         color /= static_cast<real_t>(sampler->numSamplesPerPixel());
         return color;
-      });
+      }, _options.gamma);
     } else {
       render_loop(image, y0, [&](const size_t x, const size_t y) -> Color {
         const Color Li = radiance(_view*camera->ray(x, y, sampler), scene, sampler);
         return Li;
-      });
+      }, _options.gamma);
     }
 
     return image;

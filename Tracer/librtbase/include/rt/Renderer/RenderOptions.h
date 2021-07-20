@@ -46,6 +46,7 @@ namespace rt {
     real_t worldToScreen{};
     real_t      aperture{};
     real_t         focus{};
+    real_t         gamma{1};
     uint_t    maxDepth{15};
   };
 

@@ -126,6 +126,10 @@ void WMainWindow::initializeRender()
   ui->heightSpin->setRange(128, 4096);
   ui->heightSpin->setValue(1000);
 
+  ui->gammaSpin->setRange(1, 10);
+  ui->gammaSpin->setSingleStep(0.1);
+  ui->gammaSpin->setValue(1);
+
   ui->maxDepthSpin->setRange(2, 32);
   ui->maxDepthSpin->setValue(5);
 }
@@ -153,6 +157,7 @@ bool WMainWindow::initializeRenderContext()
   }
   scene->setUseCastShadow(ui->castShadowCheck->isChecked());
 
+  options.gamma    = ui->gammaSpin->value();
   options.maxDepth = ui->maxDepthSpin->value();
 
   // (2) Renderer ////////////////////////////////////////////////////////////
