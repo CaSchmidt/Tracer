@@ -1,14 +1,8 @@
-set(cli_HEADERS
-  include/Worker.h
-  )
-
 set(cli_SOURCES
   src/main.cpp
-  src/Worker.cpp
   )
 
 add_executable(cli
-  ${cli_HEADERS}
   ${cli_SOURCES}
   )
 

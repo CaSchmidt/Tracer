@@ -41,7 +41,7 @@
 #include "rt/Sampler/SimpleSampler.h"
 #include "rt/Scene/Scene.h"
 
-#include "Worker.h"
+#include "Util/Worker.h"
 
 #define BASE_PATH       "../../Tracer/Tracer/scenes/"
 #define FILE_1          BASE_PATH "scene_1.xml"

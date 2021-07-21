@@ -35,7 +35,7 @@
 #include <iostream>
 #include <mutex>
 
-#include "Worker.h"
+#include "Util/Worker.h"
 
 template<typename CLOCK>
 struct Elapsed {
