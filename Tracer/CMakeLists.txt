@@ -31,6 +31,7 @@ add_subdirectory(librt)
 
 add_subdirectory(cli)
 add_subdirectory(gui)
+add_subdirectory(pt)
 
 ### Tests ####################################################################
 
