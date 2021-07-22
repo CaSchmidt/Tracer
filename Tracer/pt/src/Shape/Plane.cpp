@@ -83,11 +83,12 @@ namespace pt {
     if( info != nullptr ) {
       *info = IntersectionInfo();
 
-      info->t      = t;
-      info->N      = toWorld(rt::Normal{0, 0, 1});
-      info->P      = toWorld(Pobj);
-      info->u      = u;
-      info->v      = v;
+      info->shape = this;
+      info->t     = t;
+      info->N     = toWorld(rt::Normal{0, 0, 1});
+      info->P     = toWorld(Pobj);
+      info->u     = u;
+      info->v     = v;
 
       info->initializeShading(ray);
     }

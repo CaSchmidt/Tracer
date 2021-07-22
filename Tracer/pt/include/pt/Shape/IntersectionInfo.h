@@ -36,6 +36,8 @@
 
 namespace pt {
 
+  class IShape;
+
   struct IntersectionInfo {
     IntersectionInfo() noexcept = default;
 
@@ -43,7 +45,7 @@ namespace pt {
 
     inline bool isHit() const
     {
-      return geom::intersect::isHit(t);
+      return geom::intersect::isHit(t)  &&  shape != nullptr;
     }
 
     inline rt::Ray ray(const rt::real_t tMax = rt::Ray::MAX_T) const
@@ -86,6 +88,7 @@ namespace pt {
     rt::real_t      u{}, v{};
     rt::Matrix xfrmSW; // World-to-Shading
     rt::Matrix xfrmWS; // Shading-to-World
+    const IShape *shape{nullptr};
   };
 
 } // namespace pt
