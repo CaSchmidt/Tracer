@@ -50,7 +50,7 @@ namespace rt {
 
   TexturePtr CheckedTexture::copy() const
   {
-    return std::make_unique<CheckedTexture>(_colorA, _colorB, _scaleS, _scaleT);
+    return create(_colorA, _colorB, _scaleS, _scaleT);
   }
 
   Color CheckedTexture::lookup(const TexCoord2D& tex) const

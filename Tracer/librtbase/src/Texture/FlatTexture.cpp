@@ -44,7 +44,7 @@ namespace rt {
 
   TexturePtr FlatTexture::copy() const
   {
-    return std::make_unique<FlatTexture>(_color);
+    return create(_color);
   }
 
   Color FlatTexture::lookup(const TexCoord2D& /*tex*/) const
