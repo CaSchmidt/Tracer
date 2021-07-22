@@ -40,7 +40,6 @@ namespace rt {
 
   class IScene {
   public:
-    IScene() noexcept;
     virtual ~IScene() noexcept;
   };
 

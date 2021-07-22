@@ -36,7 +36,6 @@ namespace pt {
   ////// public //////////////////////////////////////////////////////////////
 
   Scene::Scene() noexcept
-    : rt::IScene()
   {
   }
 

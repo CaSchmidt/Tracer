@@ -35,10 +35,6 @@ namespace rt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  IScene::IScene() noexcept
-  {
-  }
-
   IScene::~IScene() noexcept
   {
   }
