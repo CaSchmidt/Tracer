@@ -23,6 +23,10 @@ list(APPEND rtbase_HEADERS
   include/rt/Sampler/Sampling.h
   include/rt/Sampler/SimpleSampler.h
   include/rt/Scene/IScene.h
+  include/rt/Texture/CheckedTexture.h
+  include/rt/Texture/FlatTexture.h
+  include/rt/Texture/ITexture.h
+  include/rt/Texture/TexCoord.h
   include/Util/Worker.h
   )
 
@@ -36,6 +40,9 @@ list(APPEND rtbase_SOURCES
   src/Sampler/Sampling.cpp
   src/Sampler/SimpleSampler.cpp
   src/Scene/IScene.cpp
+  src/Texture/CheckedTexture.cpp
+  src/Texture/FlatTexture.cpp
+  src/Texture/ITexture.cpp
   src-util/Worker.cpp
   )
 

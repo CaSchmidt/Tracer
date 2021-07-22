@@ -32,10 +32,6 @@ list(APPEND rt_HEADERS
   include/rt/Renderer/RenderUtils.h
   include/rt/Renderer/WhittedRenderer.h
   include/rt/Scene/Scene.h
-  include/rt/Texture/CheckedTexture.h
-  include/rt/Texture/FlatTexture.h
-  include/rt/Texture/ITexture.h
-  include/rt/Texture/TexCoord.h
   )
 
 list(APPEND rt_SOURCES
@@ -77,9 +73,6 @@ list(APPEND rt_SOURCES
   src/Renderer/RenderUtils.cpp
   src/Renderer/WhittedRenderer.cpp
   src/Scene/Scene.cpp
-  src/Texture/CheckedTexture.cpp
-  src/Texture/FlatTexture.cpp
-  src/Texture/ITexture.cpp
   )
 
 add_library(rt STATIC
