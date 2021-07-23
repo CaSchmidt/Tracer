@@ -52,9 +52,9 @@ namespace pt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  Plane::Plane(const rt::Transform& objectToWorld,
+  Plane::Plane(const rt::Transform& shapeToWorld,
                const rt::real_t width, const rt::real_t height) noexcept
-    : IShape(objectToWorld)
+    : IShape(shapeToWorld)
     , _width{width}
     , _height{height}
   {
@@ -66,7 +66,7 @@ namespace pt {
 
   bool Plane::intersect(IntersectionInfo *info, const rt::Ray& ray) const
   {
-    const rt::Ray rayObj = toObject(ray);
+    const rt::Ray rayObj = toShape(ray);
 
     const rt::real_t t = geom::intersect::plane(rayObj, EPSILON0);
     if( !rayObj.isValidT(t) ) {
@@ -96,10 +96,10 @@ namespace pt {
     return true;
   }
 
-  ShapePtr Plane::create(const rt::Transform& objectToWorld,
+  ShapePtr Plane::create(const rt::Transform& shapeToWorld,
                          const rt::real_t width, const rt::real_t height)
   {
-    return std::make_unique<Plane>(objectToWorld, width, height);
+    return std::make_unique<Plane>(shapeToWorld, width, height);
   }
 
 } // namespace pt

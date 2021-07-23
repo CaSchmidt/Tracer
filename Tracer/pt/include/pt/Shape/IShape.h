@@ -43,33 +43,35 @@ namespace pt {
 
   class IShape {
   public:
-    IShape(const rt::Transform& objectToWorld) noexcept;
+    IShape(const rt::Transform& shapeToWorld) noexcept;
     virtual ~IShape() noexcept;
 
     // NOTE: All arguments passed to/returned from this method are in WORLD coordinates!
     virtual bool intersect(IntersectionInfo *info, const rt::Ray& ray) const = 0;
 
-    void moveObject(const rt::Transform& objectToWorld);
-    const rt::Transform& objectToWorld() const;
-    void setObjectToWorld(const rt::Transform& objectToWorld);
+    void moveShape(const rt::Transform& shapeToWorld);
+    const rt::Transform& shapeToWorld() const;
+    void resetShapeToWorld();
+    void setShapeToWorld(const rt::Transform& shapeToWorld);
 
     template<typename T>
-    inline T toObject(const T& x) const
+    inline T toShape(const T& x) const
     {
-      return _xfrmOW*x;
+      return _xfrmSW*x;
     }
 
     template<typename T>
     inline T toWorld(const T& x) const
     {
-      return _xfrmWO*x;
+      return _xfrmWS*x;
     }
 
   private:
     IShape() noexcept = delete;
 
-    rt::Transform   _xfrmWO{}; // Object -> World
-    rt::Transform   _xfrmOW{}; // World -> Object
+    rt::Transform _initialShapeToWorld{};
+    rt::Transform _xfrmWS{}; // Shape -> World
+    rt::Transform _xfrmSW{}; // World -> Shape
   };
 
   using ShapePtr = std::unique_ptr<IShape>;

@@ -37,30 +37,36 @@ namespace pt {
 
   ////// public //////////////////////////////////////////////////////////////
 
-  IShape::IShape(const rt::Transform& objectToWorld) noexcept
+  IShape::IShape(const rt::Transform& shapeToWorld) noexcept
   {
-    setObjectToWorld(objectToWorld);
+    setShapeToWorld(shapeToWorld);
   }
 
   IShape::~IShape() noexcept
   {
   }
 
-  void IShape::moveObject(const rt::Transform& objectToWorld)
+  void IShape::moveShape(const rt::Transform& shapeToWorld)
   {
-    _xfrmWO = objectToWorld*_xfrmWO;
-    _xfrmOW = _xfrmWO.inverse();
+    _xfrmWS = shapeToWorld*_xfrmWS;
+    _xfrmSW = _xfrmWS.inverse();
   }
 
-  const rt::Transform& IShape::objectToWorld() const
+  const rt::Transform& IShape::shapeToWorld() const
   {
-    return _xfrmWO;
+    return _xfrmWS;
   }
 
-  void IShape::setObjectToWorld(const rt::Transform& objectToWorld)
+  void IShape::resetShapeToWorld()
   {
-    _xfrmWO = rt::Transform();
-    moveObject(objectToWorld);
+    setShapeToWorld(_initialShapeToWorld);
+  }
+
+  void IShape::setShapeToWorld(const rt::Transform& shapeToWorld)
+  {
+    _initialShapeToWorld = shapeToWorld;
+    _xfrmWS = rt::Transform();
+    moveShape(shapeToWorld);
   }
 
 } // namespace pt

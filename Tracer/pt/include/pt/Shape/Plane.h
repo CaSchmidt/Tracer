@@ -38,13 +38,13 @@ namespace pt {
 
   class Plane : public IShape {
   public:
-    Plane(const rt::Transform& objectToWorld,
+    Plane(const rt::Transform& shapeToWorld,
           const rt::real_t width, const rt::real_t height) noexcept;
     ~Plane() noexcept;
 
     bool intersect(IntersectionInfo *info, const rt::Ray& ray) const final;
 
-    static ShapePtr create(const rt::Transform& objectToWorld,
+    static ShapePtr create(const rt::Transform& shapeToWorld,
                            const rt::real_t width, const rt::real_t height);
 
   private:
