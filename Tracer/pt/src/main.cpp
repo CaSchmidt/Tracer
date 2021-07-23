@@ -32,17 +32,131 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "math/Solver.h"
 #include "pt/Renderer/PathTracer.h"
 #include "pt/Scene/Scene.h"
+#include "pt/Shape/Plane.h"
 #include "rt/Camera/FrustumCamera.h"
 #include "rt/Renderer/RenderContext.h"
 #include "rt/Sampler/SimpleSampler.h"
 #include "Util/Worker.h"
 
-constexpr rt::size_t numSamples = 64;
+constexpr rt::size_t numSamples = 16;
 
-constexpr rt::size_t  width = 1000;
-constexpr rt::size_t height = 1000;
+constexpr rt::size_t  width = 768;
+constexpr rt::size_t height = 768;
+
+namespace pt {
+
+  void createBox(Scene *scene,
+                 const rt::real_t dimx, const rt::real_t dimy, const rt::real_t dimz)
+  {
+    if( scene == nullptr  ||
+        dimx <= rt::ZERO  ||  dimy <= rt::ZERO  ||  dimz <= rt::ZERO ) {
+      return;
+    }
+
+    ShapePtr shape;
+    rt::Matrix X;
+
+    // (X.1) Left ////////////////////////////////////////////////////////////
+
+    const rt::real_t left = -dimx/rt::TWO;
+    X = n4::translate(left, 0, 0)*n4::rotateYbyPI2(3);
+    shape = Plane::create(X, dimz, dimy);
+    scene->add(shape);
+
+    // (X.2) Right ///////////////////////////////////////////////////////////
+
+    const rt::real_t right = dimx/rt::TWO;
+    X = n4::translate(right, 0, 0)*n4::rotateYbyPI2(1);
+    shape = Plane::create(X, dimz, dimy);
+    scene->add(shape);
+
+    // (Y.3) Front ///////////////////////////////////////////////////////////
+
+    const rt::real_t front = -dimy/rt::TWO;
+    X = n4::translate(0, front, 0)*n4::rotateXbyPI2(1);
+    shape = Plane::create(X, dimx, dimz);
+    scene->add(shape);
+
+    // (Y.4) Back ////////////////////////////////////////////////////////////
+
+    const rt::real_t back = dimy/rt::TWO;
+    X = n4::translate(0, back, 0)*n4::rotateXbyPI2(3);
+    shape = Plane::create(X, dimx, dimz);
+    scene->add(shape);
+
+    // (Z.5) Bottom //////////////////////////////////////////////////////////
+
+    const rt::real_t bottom = -dimz/rt::TWO;
+    X = n4::translate(0, 0, bottom)*n4::rotateXbyPI2(2);
+    shape = Plane::create(X, dimx, dimy);
+    scene->add(shape);
+
+    // (Z.6) Top /////////////////////////////////////////////////////////////
+
+    const rt::real_t top = dimz/rt::TWO;
+    X = n4::translate(0, 0, top);
+    shape = Plane::create(X, dimx, dimy);
+    scene->add(shape);
+  }
+
+  void createInvertedBox(Scene *scene,
+                         const rt::real_t dimx, const rt::real_t dimy, const rt::real_t dimz)
+  {
+    if( scene == nullptr  ||
+        dimx <= rt::ZERO  ||  dimy <= rt::ZERO  ||  dimz <= rt::ZERO ) {
+      return;
+    }
+
+    ShapePtr shape;
+    rt::Matrix X;
+
+    // (X.1) Left ////////////////////////////////////////////////////////////
+
+    const rt::real_t left = -dimx/rt::TWO;
+    X = n4::translate(left, 0, 0)*n4::rotateYbyPI2(1);
+    shape = Plane::create(X, dimz, dimy);
+    scene->add(shape);
+
+    // (X.2) Right ///////////////////////////////////////////////////////////
+
+    const rt::real_t right = dimx/rt::TWO;
+    X = n4::translate(right, 0, 0)*n4::rotateYbyPI2(3);
+    shape = Plane::create(X, dimz, dimy);
+    scene->add(shape);
+
+    // (Y.3) Front ///////////////////////////////////////////////////////////
+
+    const rt::real_t front = -dimy/rt::TWO;
+    X = n4::translate(0, front, 0)*n4::rotateXbyPI2(3);
+    shape = Plane::create(X, dimx, dimz);
+    scene->add(shape);
+
+    // (Y.4) Back ////////////////////////////////////////////////////////////
+
+    const rt::real_t back = dimy/rt::TWO;
+    X = n4::translate(0, back, 0)*n4::rotateXbyPI2(1);
+    shape = Plane::create(X, dimx, dimz);
+    scene->add(shape);
+
+    // (Z.5) Bottom //////////////////////////////////////////////////////////
+
+    const rt::real_t bottom = -dimz/rt::TWO;
+    X = n4::translate(0, 0, bottom);
+    shape = Plane::create(X, dimx, dimy);
+    scene->add(shape);
+
+    // (Z.6) Top /////////////////////////////////////////////////////////////
+
+    const rt::real_t top = dimz/rt::TWO;
+    X = n4::translate(0, 0, top)*n4::rotateXbyPI2(2);
+    shape = Plane::create(X, dimx, dimy);
+    scene->add(shape);
+  }
+
+} // namespace pt
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -53,14 +167,18 @@ int main(int /*argc*/, char ** /*argv*/)
   rc.scene = pt::Scene::create();
   pt::Scene *scene = pt::SCENE(rc.scene);
   scene->setBackgroundColor(rt::Color{0, 0.8f, 1});
-  // TODO...
+  pt::createInvertedBox(scene, 2, 2, 2);
 
   // (2.1) Render Options ////////////////////////////////////////////////////
 
   rt::RenderOptions options;
-  options.gamma = 1;
+  options.eye      = rt::Vertex{0, -2.5, 0};
+  options.lookAt   = rt::Vertex{0, 0, 0};
+  options.cameraUp = rt::Direction{0, 0, 1};
+  options.fov_rad       = math::radian<rt::real_t>(60);
+  options.worldToScreen = 2;
+  options.gamma    = 1;
   options.maxDepth = 5;
-  // TODO...
 
   // (2.2) Renderer //////////////////////////////////////////////////////////
 
