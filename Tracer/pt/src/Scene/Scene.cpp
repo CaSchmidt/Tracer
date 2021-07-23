@@ -31,16 +31,33 @@
 
 #include "pt/Scene/Scene.h"
 
+#include "pt/Shape/IntersectionInfo.h"
+
 namespace pt {
 
   ////// public //////////////////////////////////////////////////////////////
 
   Scene::Scene() noexcept
   {
+    clear();
   }
 
   Scene::~Scene() noexcept
   {
+  }
+
+  void Scene::clear()
+  {
+    _background = rt::Color(0);
+    _shapes.clear();
+  }
+
+  void Scene::add(ShapePtr& shape)
+  {
+    if( !shape ) {
+      return;
+    }
+    _shapes.push_back(std::move(shape));
   }
 
   rt::Color Scene::backgroundColor() const
@@ -51,6 +68,41 @@ namespace pt {
   void Scene::setBackgroundColor(const rt::Color& c)
   {
     _background = n4::clamp(c, 0, 1);
+  }
+
+  bool Scene::intersect(IntersectionInfo *info, const rt::Ray& ray) const
+  {
+    if( !ray.isValid() ) {
+      return false;
+    }
+
+    *info = IntersectionInfo();
+    for(const ShapePtr& shape : _shapes) {
+      IntersectionInfo hit;
+      if( !shape->intersect(&hit, ray) ) {
+        continue;
+      }
+      if( !info->isHit()  ||  hit.t < info->t ) {
+        *info = hit;
+      }
+    }
+
+    return info->isHit();
+  }
+
+  bool Scene::intersect(const rt::Ray& ray) const
+  {
+    if( !ray.isValid() ) {
+      return false;
+    }
+
+    for(const ShapePtr& shape : _shapes) {
+      if( shape->intersect(nullptr, ray) ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   rt::ScenePtr Scene::create()

@@ -32,6 +32,7 @@
 #include "pt/Renderer/PathTracer.h"
 
 #include "pt/Scene/Scene.h"
+#include "pt/Shape/IntersectionInfo.h"
 
 namespace pt {
 
@@ -63,7 +64,12 @@ namespace pt {
       return rt::Color(0);
     }
 
-    return scene->backgroundColor();
+    IntersectionInfo info;
+    if( !scene->intersect(&info, ray) ) {
+      return scene->backgroundColor();
+    }
+
+    return rt::Color{1, 1, 1}*geom::dot1(info.wo, info.N);
   }
 
 } // namespace pt
