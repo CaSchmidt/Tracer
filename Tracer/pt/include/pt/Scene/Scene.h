@@ -34,7 +34,7 @@
 
 #include "rt/Base/Types.h"
 #include "rt/Scene/IScene.h"
-#include "pt/Shape/IShape.h"
+#include "pt/Scene/Object.h"
 
 namespace pt {
 
@@ -45,19 +45,22 @@ namespace pt {
 
     void clear();
 
-    void add(ShapePtr& shape);
+    void add(ObjectPtr& object);
 
     rt::Color backgroundColor() const;
     void setBackgroundColor(const rt::Color& c);
 
     bool intersect(IntersectionInfo *info, const rt::Ray& ray) const;
-    bool intersect(const rt::Ray& ray) const;
+    inline bool intersect(const rt::Ray& ray) const
+    {
+      return intersect(nullptr, ray);
+    }
 
     static rt::ScenePtr create();
 
   private:
     rt::Color _background;
-    Shapes _shapes;
+    Objects _objects;
   };
 
   inline Scene *SCENE(const rt::ScenePtr& p)

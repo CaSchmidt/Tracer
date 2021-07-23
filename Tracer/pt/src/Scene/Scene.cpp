@@ -49,15 +49,15 @@ namespace pt {
   void Scene::clear()
   {
     _background = rt::Color(0);
-    _shapes.clear();
+    _objects.clear();
   }
 
-  void Scene::add(ShapePtr& shape)
+  void Scene::add(ObjectPtr& object)
   {
-    if( !shape ) {
+    if( !object ) {
       return;
     }
-    _shapes.push_back(std::move(shape));
+    _objects.push_back(std::move(object));
   }
 
   rt::Color Scene::backgroundColor() const
@@ -76,30 +76,26 @@ namespace pt {
       return false;
     }
 
-    *info = IntersectionInfo();
-    for(const ShapePtr& shape : _shapes) {
-      IntersectionInfo hit;
-      if( !shape->intersect(&hit, ray) ) {
-        continue;
+    if( info != nullptr ) {
+      *info = IntersectionInfo();
+      for(const ObjectPtr& object : _objects) {
+        IntersectionInfo hit;
+        if( !object->intersect(&hit, ray) ) {
+          continue;
+        }
+        if( !info->isHit()  ||  hit.t < info->t ) {
+          *info = hit;
+        }
       }
-      if( !info->isHit()  ||  hit.t < info->t ) {
-        *info = hit;
+      return info->isHit();
+
+    } else {
+      for(const ObjectPtr& object : _objects) {
+        if( object->intersect(nullptr, ray) ) {
+          return true;
+        }
       }
-    }
 
-    return info->isHit();
-  }
-
-  bool Scene::intersect(const rt::Ray& ray) const
-  {
-    if( !ray.isValid() ) {
-      return false;
-    }
-
-    for(const ShapePtr& shape : _shapes) {
-      if( shape->intersect(nullptr, ray) ) {
-        return true;
-      }
     }
 
     return false;

@@ -1,5 +1,6 @@
 list(APPEND pt_HEADERS
   include/pt/Renderer/PathTracer.h
+  include/pt/Scene/Object.h
   include/pt/Scene/Scene.h
   include/pt/Shape/IntersectionInfo.h
   include/pt/Shape/IShape.h
@@ -8,6 +9,8 @@ list(APPEND pt_HEADERS
 
 list(APPEND pt_SOURCES
   src/Renderer/PathTracer.cpp
+  src/Scene/Object.cpp
+  src/Scene/ObjectLibrary.cpp
   src/Scene/Scene.cpp
   src/Shape/IntersectionInfo.cpp
   src/Shape/IShape.cpp

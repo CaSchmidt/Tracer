@@ -29,62 +29,45 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include <cstdio>
-#include <cstdlib>
+#ifndef OBJECT_H
+#define OBJECT_H
 
-#include "math/Solver.h"
-#include "pt/Renderer/PathTracer.h"
-#include "pt/Scene/Scene.h"
-#include "rt/Camera/FrustumCamera.h"
-#include "rt/Renderer/RenderContext.h"
-#include "rt/Sampler/SimpleSampler.h"
-#include "Util/Worker.h"
+#include "pt/Shape/IShape.h"
 
-constexpr rt::size_t numSamples = 16;
+namespace pt {
 
-constexpr rt::size_t  width = 768;
-constexpr rt::size_t height = 768;
+  using ObjectPtr = std::unique_ptr<class Object>;
 
-int main(int /*argc*/, char ** /*argv*/)
-{
-  rt::RenderContext rc;
+  class Object {
+  public:
+    Object(const rt::Transform& objectToWorld) noexcept;
+    ~Object() noexcept;
 
-  // (1) Scene ///////////////////////////////////////////////////////////////
+    void add(ShapePtr& shape);
 
-  rc.scene = pt::Scene::create();
-  pt::Scene *scene = pt::SCENE(rc.scene);
-  scene->setBackgroundColor(rt::Color{0, 0.8f, 1});
-  pt::ObjectPtr box = pt::Object::createInvertedBox(n4::identity(), 2, 2, 2);
-  scene->add(box);
+    bool intersect(IntersectionInfo *info, const rt::Ray& ray) const;
 
-  // (2.1) Render Options ////////////////////////////////////////////////////
+    static ObjectPtr create(const rt::Transform& objectToWorld);
 
-  rt::RenderOptions options;
-  options.eye      = rt::Vertex{0, -2.7f, 0};
-  options.lookAt   = rt::Vertex{0, 0, 0};
-  options.cameraUp = rt::Direction{0, 0, 1};
-  options.fov_rad       = math::radian<rt::real_t>(60);
-  options.worldToScreen = 2;
-  options.gamma    = 1;
-  options.maxDepth = 5;
+    static ObjectPtr createBox(const rt::Transform& objectToWorld,
+                               const rt::real_t dimx,
+                               const rt::real_t dimy,
+                               const rt::real_t dimz);
 
-  // (2.2) Renderer //////////////////////////////////////////////////////////
+    static ObjectPtr createInvertedBox(const rt::Transform& objectToWorld,
+                                       const rt::real_t dimx,
+                                       const rt::real_t dimy,
+                                       const rt::real_t dimz);
 
-  rc.renderer = pt::PathTracer::create(options);
+  private:
+    Object() noexcept = delete;
 
-  // (3) Camera //////////////////////////////////////////////////////////////
+    Shapes _shapes;
+    rt::Transform _xformWO{}; // Object -> World
+  };
 
-  rc.camera = rt::FrustumCamera::create(width, height, options);
+  using Objects = std::list<ObjectPtr>;
 
-  // (4) Sampler /////////////////////////////////////////////////////////////
+} // namespace pt
 
-  rc.sampler = rt::SimpleSampler::create(numSamples);
-
-  // Done! ///////////////////////////////////////////////////////////////////
-
-  Worker worker;
-  const Image image = worker.execute(rc);
-  image.saveAsPNG("pt-output.png");
-
-  return EXIT_SUCCESS;
-}
+#endif // OBJECT_H
