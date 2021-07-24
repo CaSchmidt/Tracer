@@ -70,8 +70,10 @@ void build_scene(pt::Scene *scene)
   pt::ObjectPtr light = pt::Object::create(n4::translate(0, 0, 0.99f)*n4::rotateXbyPI2(2));
   shape = pt::Plane::create(n4::identity(), 0.5, 0.5);
   light->add(shape);
-  texture = rt::FlatTexture::create(rt::Color{1, 1, 0});
+  texture = rt::FlatTexture::create(white);
   light->setTexture(1, texture);
+  light->setEmissiveColor(white);
+  light->setEmissiveScale(2);
   scene->add(light);
 }
 
@@ -92,7 +94,7 @@ int main(int /*argc*/, char ** /*argv*/)
   options.cameraUp = rt::Direction{0, 0, 1};
   options.fov_rad       = math::radian<rt::real_t>(60);
   options.worldToScreen = 2;
-  options.gamma    = 1;
+  options.gamma    = 2.2f;
   options.maxDepth = 5;
 
   // (2.2) Renderer //////////////////////////////////////////////////////////

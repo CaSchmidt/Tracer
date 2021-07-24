@@ -34,6 +34,9 @@
 #include "pt/Scene/Scene.h"
 #include "pt/Shape/IntersectionInfo.h"
 
+#include "geom/Shading.h"
+#include "rt/Sampler/Sampling.h"
+
 namespace pt {
 
   ////// public //////////////////////////////////////////////////////////////
@@ -69,7 +72,24 @@ namespace pt {
       return scene->backgroundColor();
     }
 
+#if 1
+    const rt::Color Le = info.emittance();
+    const rt::Color  f = info.textureColor()/rt::PI; // BxDF
+
+    const rt::Direction wiS = rt::CosineHemisphere::sample(sampler->sample2D());
+    const rt::Direction  wi = info.toWorld(wiS);
+    const rt::real_t  cosTi = std::max<rt::real_t>(0, geom::shading::cosTheta(wiS));
+    const rt::real_t    pdf = rt::CosineHemisphere::pdf(cosTi);
+
+    const rt::Ray ray_y = info.ray(wi);
+    IntersectionInfo info_y;
+    scene->intersect(&info_y, ray_y);
+    const rt::Color Li = info_y.emittance();
+
+    return Le + f*Li*cosTi/pdf;
+#else
     return info.textureColor()*geom::dot1(info.wo, info.N);
+#endif
   }
 
 } // namespace pt
