@@ -32,14 +32,23 @@
 #ifndef INTERSECTIONINFO_H
 #define INTERSECTIONINFO_H
 
-#include "rt/Texture/ITexture.h"
+#include "rt/Texture/TexCoord.h"
+
+namespace rt {
+
+  class ITexture;
+
+} // namespace rt
 
 namespace pt {
 
   class IShape;
+  class Object;
 
   struct IntersectionInfo {
     IntersectionInfo() noexcept = default;
+
+    rt::Color emittance() const;
 
     void initializeShading(const rt::Ray& ray);
 
@@ -67,12 +76,7 @@ namespace pt {
       return rt::TexCoord2D{u, v};
     }
 
-    inline rt::Color textureColor() const
-    {
-      return texture != nullptr
-          ? texture->lookup(texCoord2D())
-          : rt::Color(1);
-    }
+    rt::Color textureColor() const;
 
     template<typename VecT>
     inline VecT toShading(const VecT& v) const
@@ -96,6 +100,7 @@ namespace pt {
     rt::Matrix xfrmSW; // World-to-Shading
     rt::Matrix xfrmWS; // Shading-to-World
     const IShape         *shape{nullptr};
+    const Object        *object{nullptr};
     const rt::ITexture *texture{nullptr};
   };
 

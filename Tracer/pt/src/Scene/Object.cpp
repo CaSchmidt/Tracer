@@ -69,6 +69,7 @@ namespace pt {
         if( !face.shape->intersect(&hit, ray) ) {
           continue;
         } else {
+          hit.object  = this;
           hit.texture = face.texture.get();
         }
         if( !info->isHit()  ||  hit.t < info->t ) {
@@ -91,6 +92,21 @@ namespace pt {
     }
 
     return false;
+  }
+
+  rt::Color Object::emittance() const
+  {
+    return _emitColor*_emitScale;
+  }
+
+  void Object::setEmissiveColor(const rt::Color& c)
+  {
+    _emitColor = n4::clamp(c, 0, 1);
+  }
+
+  void Object::setEmissiveScale(const rt::real_t s)
+  {
+    _emitScale = std::max<rt::real_t>(1, s);
   }
 
   bool Object::setTexture(const rt::size_t id, rt::TexturePtr& texture)

@@ -31,7 +31,16 @@
 
 #include "pt/Shape/IntersectionInfo.h"
 
+#include "pt/Scene/Object.h"
+
 namespace pt {
+
+  rt::Color IntersectionInfo::emittance() const
+  {
+    return object != nullptr
+        ? object->emittance()
+        : rt::Color(0);
+  }
 
   void IntersectionInfo::initializeShading(const rt::Ray& ray)
   {
@@ -48,6 +57,13 @@ namespace pt {
     const rt::Direction delta = geom::to_direction(to.P - P);
     const rt::real_t     tMax = n4::length(delta) - rt::SHADOW_BIAS;
     return rt::Ray(P, delta, tMax);
+  }
+
+  rt::Color IntersectionInfo::textureColor() const
+  {
+    return texture != nullptr
+        ? texture->lookup(texCoord2D())
+        : rt::Color(1);
   }
 
 } // namespace pt

@@ -48,6 +48,10 @@ namespace pt {
 
     bool intersect(IntersectionInfo *info, const rt::Ray& ray) const;
 
+    rt::Color emittance() const;
+    void setEmissiveColor(const rt::Color& c);
+    void setEmissiveScale(const rt::real_t s);
+
     bool setTexture(const rt::size_t id, rt::TexturePtr& texture);
 
     static ObjectPtr create(const rt::Transform& objectToWorld);
@@ -80,6 +84,8 @@ namespace pt {
 
     Object() noexcept = delete;
 
+    rt::Color      _emitColor{0, 0, 0};
+    rt::real_t     _emitScale{1};
     Faces          _faces;
     rt::TexturePtr _texture;
     rt::Transform  _xformWO{}; // Object -> World
