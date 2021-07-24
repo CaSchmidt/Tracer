@@ -42,7 +42,8 @@
 #include "rt/Texture/FlatTexture.h"
 #include "Util/Worker.h"
 
-constexpr rt::size_t numSamples = 16;
+constexpr rt::size_t  blockSize = 1;
+constexpr rt::size_t numSamples = 128;
 
 constexpr rt::size_t  width = 768;
 constexpr rt::size_t height = 768;
@@ -73,7 +74,7 @@ void build_scene(pt::Scene *scene)
   texture = rt::FlatTexture::create(white);
   light->setTexture(1, texture);
   light->setEmissiveColor(white);
-  light->setEmissiveScale(2);
+  light->setEmissiveScale(1);
   scene->add(light);
 }
 
@@ -112,7 +113,7 @@ int main(int /*argc*/, char ** /*argv*/)
   // Done! ///////////////////////////////////////////////////////////////////
 
   Worker worker;
-  const Image image = worker.execute(rc);
+  const Image image = worker.execute(rc, blockSize);
   image.saveAsPNG("pt-output.png");
 
   return EXIT_SUCCESS;

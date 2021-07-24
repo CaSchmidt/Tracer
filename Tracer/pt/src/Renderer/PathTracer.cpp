@@ -72,7 +72,6 @@ namespace pt {
       return scene->backgroundColor();
     }
 
-#if 1
     const rt::Color Le = info.emittance();
     const rt::Color  f = info.textureColor()/rt::PI; // BxDF
 
@@ -81,15 +80,9 @@ namespace pt {
     const rt::real_t  cosTi = std::max<rt::real_t>(0, geom::shading::cosTheta(wiS));
     const rt::real_t    pdf = rt::CosineHemisphere::pdf(cosTi);
 
-    const rt::Ray ray_y = info.ray(wi);
-    IntersectionInfo info_y;
-    scene->intersect(&info_y, ray_y);
-    const rt::Color Li = info_y.emittance();
+    const rt::Color Li = radiance(info.ray(wi), _scene, sampler, depth + 1);
 
     return Le + f*Li*cosTi/pdf;
-#else
-    return info.textureColor()*geom::dot1(info.wo, info.N);
-#endif
   }
 
 } // namespace pt
