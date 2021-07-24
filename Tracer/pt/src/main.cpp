@@ -35,6 +35,7 @@
 #include "math/Solver.h"
 #include "pt/Renderer/PathTracer.h"
 #include "pt/Scene/Scene.h"
+#include "pt/Shape/Plane.h"
 #include "rt/Camera/FrustumCamera.h"
 #include "rt/Renderer/RenderContext.h"
 #include "rt/Sampler/SimpleSampler.h"
@@ -52,6 +53,7 @@ void build_scene(pt::Scene *scene)
   const rt::Color   red{1, 0, 0};
   const rt::Color green{0, 1, 0};
 
+  pt::ShapePtr     shape;
   rt::TexturePtr texture;
 
   scene->setBackgroundColor(rt::Color{0, 0.8f, 1});
@@ -64,6 +66,13 @@ void build_scene(pt::Scene *scene)
   texture = rt::FlatTexture::create(red);
   box->setTexture(2, texture);
   scene->add(box);
+
+  pt::ObjectPtr light = pt::Object::create(n4::translate(0, 0, 0.99f)*n4::rotateXbyPI2(2));
+  shape = pt::Plane::create(n4::identity(), 0.5, 0.5);
+  light->add(shape);
+  texture = rt::FlatTexture::create(rt::Color{1, 1, 0});
+  light->setTexture(1, texture);
+  scene->add(light);
 }
 
 int main(int /*argc*/, char ** /*argv*/)
