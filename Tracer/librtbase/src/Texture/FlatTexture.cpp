@@ -34,8 +34,8 @@
 namespace rt {
 
   FlatTexture::FlatTexture(const Color& color) noexcept
-    : _color{color}
   {
+    _color = n4::clamp(color, 0, 1);
   }
 
   FlatTexture::~FlatTexture() noexcept

@@ -37,11 +37,11 @@ namespace rt {
 
   CheckedTexture::CheckedTexture(const Color& colorA, const Color& colorB,
                                  const real_t scaleS, const real_t scaleT) noexcept
-    : _colorA{colorA}
-    , _colorB{colorB}
-    , _scaleS{scaleS}
+    : _scaleS{scaleS}
     , _scaleT{scaleT}
   {
+    _colorA = n4::clamp(colorA, 0, 1);
+    _colorB = n4::clamp(colorB, 0, 1);
   }
 
   CheckedTexture::~CheckedTexture() noexcept
