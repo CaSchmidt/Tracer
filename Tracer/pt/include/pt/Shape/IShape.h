@@ -75,7 +75,6 @@ namespace pt {
   };
 
   using ShapePtr = std::unique_ptr<IShape>;
-  using   Shapes = std::list<ShapePtr>;
 
 } // namespace pt
 

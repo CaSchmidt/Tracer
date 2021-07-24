@@ -38,12 +38,33 @@
 #include "rt/Camera/FrustumCamera.h"
 #include "rt/Renderer/RenderContext.h"
 #include "rt/Sampler/SimpleSampler.h"
+#include "rt/Texture/FlatTexture.h"
 #include "Util/Worker.h"
 
 constexpr rt::size_t numSamples = 16;
 
 constexpr rt::size_t  width = 768;
 constexpr rt::size_t height = 768;
+
+void build_scene(pt::Scene *scene)
+{  
+  const rt::Color white{1, 1, 1};
+  const rt::Color   red{1, 0, 0};
+  const rt::Color green{0, 1, 0};
+
+  rt::TexturePtr texture;
+
+  scene->setBackgroundColor(rt::Color{0, 0.8f, 1});
+
+  pt::ObjectPtr box = pt::Object::createInvertedBox(n4::identity(), 2, 2, 2);
+  texture = rt::FlatTexture::create(white);
+  box->setTexture(0, texture);
+  texture = rt::FlatTexture::create(green);
+  box->setTexture(1, texture);
+  texture = rt::FlatTexture::create(red);
+  box->setTexture(2, texture);
+  scene->add(box);
+}
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -52,10 +73,7 @@ int main(int /*argc*/, char ** /*argv*/)
   // (1) Scene ///////////////////////////////////////////////////////////////
 
   rc.scene = pt::Scene::create();
-  pt::Scene *scene = pt::SCENE(rc.scene);
-  scene->setBackgroundColor(rt::Color{0, 0.8f, 1});
-  pt::ObjectPtr box = pt::Object::createInvertedBox(n4::identity(), 2, 2, 2);
-  scene->add(box);
+  build_scene(pt::SCENE(rc.scene));
 
   // (2.1) Render Options ////////////////////////////////////////////////////
 

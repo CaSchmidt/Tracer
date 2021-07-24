@@ -33,6 +33,7 @@
 #define OBJECT_H
 
 #include "pt/Shape/IShape.h"
+#include "rt/Texture/ITexture.h"
 
 namespace pt {
 
@@ -47,6 +48,8 @@ namespace pt {
 
     bool intersect(IntersectionInfo *info, const rt::Ray& ray) const;
 
+    bool setTexture(const rt::size_t id, rt::TexturePtr& texture);
+
     static ObjectPtr create(const rt::Transform& objectToWorld);
 
     static ObjectPtr createBox(const rt::Transform& objectToWorld,
@@ -60,10 +63,26 @@ namespace pt {
                                        const rt::real_t dimz);
 
   private:
+    struct Face {
+      Face(ShapePtr& _shape) noexcept
+        : shape(std::move(_shape))
+      {
+      }
+
+      ShapePtr       shape;
+      rt::TexturePtr texture;
+
+    private:
+      Face() noexcept = delete;
+    };
+
+    using Faces = std::list<Face>;
+
     Object() noexcept = delete;
 
-    Shapes _shapes;
-    rt::Transform _xformWO{}; // Object -> World
+    Faces          _faces;
+    rt::TexturePtr _texture;
+    rt::Transform  _xformWO{}; // Object -> World
   };
 
   using Objects = std::list<ObjectPtr>;

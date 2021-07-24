@@ -51,8 +51,8 @@ namespace pt {
     if( !shape ) {
       return;
     }
-    _shapes.push_back(std::move(shape));
-    _shapes.back()->moveShape(_xformWO);
+    _faces.push_back(Face(shape));
+    _faces.back().shape->moveShape(_xformWO);
   }
 
   bool Object::intersect(IntersectionInfo *info, const rt::Ray& ray) const
@@ -63,20 +63,27 @@ namespace pt {
 
     if( info != nullptr ) {
       *info = IntersectionInfo();
-      for(const ShapePtr& shape : _shapes) {
+
+      for(const Face& face : _faces) {
         IntersectionInfo hit;
-        if( !shape->intersect(&hit, ray) ) {
+        if( !face.shape->intersect(&hit, ray) ) {
           continue;
+        } else {
+          hit.texture = face.texture.get();
         }
         if( !info->isHit()  ||  hit.t < info->t ) {
           *info = hit;
         }
       }
+
+      if( info->isHit()  &&  info->texture == nullptr ) {
+        info->texture = _texture.get();
+      }
       return info->isHit();
 
     } else {
-      for(const ShapePtr& shape : _shapes) {
-        if( shape->intersect(nullptr, ray) ) {
+      for(const Face& face : _faces) {
+        if( face.shape->intersect(nullptr, ray) ) {
           return true;
         }
       }
@@ -85,6 +92,22 @@ namespace pt {
 
     return false;
   }
+
+  bool Object::setTexture(const rt::size_t id, rt::TexturePtr& texture)
+  {
+    if( id == 0 ) {
+      _texture = std::move(texture);
+      return bool(_texture);
+    }
+    if( id < 1  ||  id > _faces.size() ) {
+      return false;
+    }
+    Faces::iterator face = std::next(_faces.begin(), id - 1);
+    face->texture = std::move(texture);
+    return bool(face->texture);
+  }
+
+  ////// public static ///////////////////////////////////////////////////////
 
   ObjectPtr Object::create(const rt::Transform& objectToWorld)
   {

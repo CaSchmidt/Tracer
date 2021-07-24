@@ -69,7 +69,7 @@ namespace pt {
       return scene->backgroundColor();
     }
 
-    return rt::Color{1, 1, 1}*geom::dot1(info.wo, info.N);
+    return info.textureColor()*geom::dot1(info.wo, info.N);
   }
 
 } // namespace pt

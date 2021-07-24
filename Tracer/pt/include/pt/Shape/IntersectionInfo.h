@@ -32,7 +32,7 @@
 #ifndef INTERSECTIONINFO_H
 #define INTERSECTIONINFO_H
 
-#include "rt/Texture/TexCoord.h"
+#include "rt/Texture/ITexture.h"
 
 namespace pt {
 
@@ -67,6 +67,13 @@ namespace pt {
       return rt::TexCoord2D{u, v};
     }
 
+    inline rt::Color textureColor() const
+    {
+      return texture != nullptr
+          ? texture->lookup(texCoord2D())
+          : rt::Color(1);
+    }
+
     template<typename VecT>
     inline VecT toShading(const VecT& v) const
     {
@@ -88,7 +95,8 @@ namespace pt {
     rt::real_t      u{}, v{};
     rt::Matrix xfrmSW; // World-to-Shading
     rt::Matrix xfrmWS; // Shading-to-World
-    const IShape *shape{nullptr};
+    const IShape         *shape{nullptr};
+    const rt::ITexture *texture{nullptr};
   };
 
 } // namespace pt
