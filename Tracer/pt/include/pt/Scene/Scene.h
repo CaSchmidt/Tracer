@@ -51,10 +51,6 @@ namespace pt {
     void setBackgroundColor(const rt::Color& c);
 
     bool intersect(IntersectionInfo *info, const rt::Ray& ray) const;
-    inline bool intersect(const rt::Ray& ray) const
-    {
-      return intersect(nullptr, ray);
-    }
 
     static rt::ScenePtr create();
 

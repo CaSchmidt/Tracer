@@ -91,6 +91,8 @@ namespace pt {
     return info->isHit();
   }
 
+  ////// public static ///////////////////////////////////////////////////////
+
   rt::ScenePtr Scene::create()
   {
     return std::make_unique<Scene>();
