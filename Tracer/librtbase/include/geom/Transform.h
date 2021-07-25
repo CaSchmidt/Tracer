@@ -34,7 +34,7 @@
 
 #include <N4/Util.h>
 
-#include "geom/Ray.h"
+#include "geom/Bounds.h"
 
 namespace geom {
 
@@ -72,6 +72,13 @@ namespace geom {
     inline Vertex operator*(const Vertex& v) const
     {
       return _X*v;
+    }
+
+    inline Bounds operator*(const Bounds& bounds) const
+    {
+      const Vertex p1 = _X*bounds.min();
+      const Vertex p2 = _X*bounds.max();
+      return Bounds(p1, p2);
     }
 
     inline Ray operator*(const Ray& ray) const

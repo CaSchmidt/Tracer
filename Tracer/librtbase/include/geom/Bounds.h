@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,60 +29,79 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef BOUNDS_H
+#define BOUNDS_H
 
-#include <limits>
-#include <type_traits>
+#include "geom/Ray.h"
 
-#include "geom/Transform.h"
-#include "math/Constants.h"
+namespace geom {
 
-namespace rt {
+  class Bounds {
+  public:
+    static constexpr real_t MAX_REAL_T = math::Max<real_t>;
+    static constexpr real_t MIN_REAL_T = math::Min<real_t>;
+    static constexpr real_t        ONE = math::ONE<real_t>;
 
-  ////// Types ///////////////////////////////////////////////////////////////
+    Bounds() noexcept
+      : _min(MAX_REAL_T)
+      , _max(MIN_REAL_T)
+    {
+    }
 
-  using geom::real_t;
-  using geom::size_t;
+    Bounds(const Vertex& p1, const Vertex& p2) noexcept
+    {
+      set(p1, p2);
+    }
 
-  using uint_t = unsigned int;
+    ~Bounds() noexcept = default;
 
-  using Color = n4::Color3f;
-  using geom::Direction;
-  using geom::Matrix;
-  using geom::Normal;
-  using geom::Vertex;
+    inline bool isValid() const
+    {
+      return simd::cmpLEQ<false>(_min.eval(), _max.eval());
+    }
 
-  using geom::Bounds;
-  using geom::Ray;
-  using geom::Transform;
+    void set(const Vertex& p1, const Vertex& p2)
+    {
+      _min = n4::min(p1, p2);
+      _max = n4::max(p1, p2);
+    }
 
-  ////// Special Values //////////////////////////////////////////////////////
+    inline Vertex min() const
+    {
+      return _min;
+    }
 
-  inline constexpr real_t INF_REAL_T = math::Inf<real_t>;
+    inline Vertex max() const
+    {
+      return _max;
+    }
 
-  inline constexpr real_t MAX_REAL_T = math::Max<real_t>;
-  inline constexpr real_t MIN_REAL_T = math::Min<real_t>;
+    bool intersect(const Ray& ray) const
+    {
+      real_t t0 = 0;
+      real_t t1 = ray.tMax();
+      for(size_t i = 0; i < 3; i++) {
+        const real_t invDir = ONE/ray.direction()(i);
+        real_t tNear = (_min(i) - ray.origin()(i))*invDir;
+        real_t tFar  = (_max(i) - ray.origin()(i))*invDir;
+        if( tNear > tFar ) {
+          std::swap<real_t>(tNear, tFar);
+        }
+        t0 = tNear > t0 ? tNear : t0;
+        t1 = tFar  < t1 ? tFar  : t1;
+        if( t0 > t1 ) {
+          return false;
+        }
+      }
 
-  inline constexpr real_t NAN_REAL_T = math::qNaN<real_t>;
+      return true;
+    }
 
-  ////// Constants ///////////////////////////////////////////////////////////
+  private:
+    Vertex _min;
+    Vertex _max;
+  };
 
-  inline constexpr real_t ZERO = 0;
-  inline constexpr real_t  ONE = 1;
-  inline constexpr real_t  TWO = 2;
+} // namespace geom
 
-  inline constexpr real_t ONE_HALF = static_cast<real_t>(0.5);
-
-  inline constexpr real_t      PI         = math::PI<real_t>;
-  inline constexpr real_t      PI_HALF    = math::PI_HALF<real_t>;
-  inline constexpr real_t      PI_QUARTER = math::PI_QUARTER<real_t>;
-  inline constexpr real_t  TWO_PI         = math::TWO_PI<real_t>;
-  inline constexpr real_t FOUR_PI         = math::FOUR_PI<real_t>;
-
-  inline constexpr real_t EPSILON0_BASE = 0x1p-13;
-  inline constexpr real_t   SHADOW_BIAS = 0x1p-10;
-
-} // namespace rt
-
-#endif // TYPES_H
+#endif // BOUNDS_H

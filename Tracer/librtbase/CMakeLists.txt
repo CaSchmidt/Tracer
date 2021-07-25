@@ -1,4 +1,5 @@
 list(APPEND rtbase_HEADERS
+  include/geom/Bounds.h
   include/geom/Geom.h
   include/geom/Hit.h
   include/geom/Intersect.h
