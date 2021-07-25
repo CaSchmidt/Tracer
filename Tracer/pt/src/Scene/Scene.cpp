@@ -76,29 +76,19 @@ namespace pt {
       return false;
     }
 
-    if( info != nullptr ) {
-      *info = IntersectionInfo();
-      for(const ObjectPtr& object : _objects) {
-        IntersectionInfo hit;
-        if( !object->intersect(&hit, ray) ) {
-          continue;
-        }
-        if( !info->isHit()  ||  hit.t < info->t ) {
-          *info = hit;
-        }
-      }
-      return info->isHit();
+    *info = IntersectionInfo();
 
-    } else {
-      for(const ObjectPtr& object : _objects) {
-        if( object->intersect(nullptr, ray) ) {
-          return true;
-        }
+    for(const ObjectPtr& object : _objects) {
+      IntersectionInfo hit;
+      if( !object->intersect(&hit, ray) ) {
+        continue;
       }
-
+      if( !info->isHit()  ||  hit.t < info->t ) {
+        *info = hit;
+      }
     }
 
-    return false;
+    return info->isHit();
   }
 
   rt::ScenePtr Scene::create()

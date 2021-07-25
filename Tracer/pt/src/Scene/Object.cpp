@@ -61,37 +61,26 @@ namespace pt {
       return false;
     }
 
-    if( info != nullptr ) {
-      *info = IntersectionInfo();
+    *info = IntersectionInfo();
 
-      for(const Face& face : _faces) {
-        IntersectionInfo hit;
-        if( !face.shape->intersect(&hit, ray) ) {
-          continue;
-        } else {
-          hit.object  = this;
-          hit.texture = face.texture.get();
-        }
-        if( !info->isHit()  ||  hit.t < info->t ) {
-          *info = hit;
-        }
+    for(const Face& face : _faces) {
+      IntersectionInfo hit;
+      if( !face.shape->intersect(&hit, ray) ) {
+        continue;
+      } else {
+        hit.object  = this;
+        hit.texture = face.texture.get();
       }
-
-      if( info->isHit()  &&  info->texture == nullptr ) {
-        info->texture = _texture.get();
+      if( !info->isHit()  ||  hit.t < info->t ) {
+        *info = hit;
       }
-      return info->isHit();
-
-    } else {
-      for(const Face& face : _faces) {
-        if( face.shape->intersect(nullptr, ray) ) {
-          return true;
-        }
-      }
-
     }
 
-    return false;
+    if( info->isHit()  &&  info->texture == nullptr ) {
+      info->texture = _texture.get();
+    }
+
+    return info->isHit();
   }
 
   rt::Color Object::emittance() const
