@@ -43,7 +43,7 @@
 #include "Util/Worker.h"
 
 constexpr rt::size_t  blockSize = 1;
-constexpr rt::size_t numSamples = 128;
+constexpr rt::size_t numSamples = 16;
 
 constexpr rt::size_t  width = 768;
 constexpr rt::size_t height = 768;
@@ -56,17 +56,18 @@ void build_scene(pt::Scene *scene)
 
   pt::ShapePtr     shape;
   rt::TexturePtr texture;
+  rt::Matrix      matrix;
 
   scene->setBackgroundColor(rt::Color{0, 0.8f, 1});
 
-  pt::ObjectPtr box = pt::Object::createInvertedBox(n4::identity(), 2, 2, 2);
+  pt::ObjectPtr cornell = pt::Object::createInvertedBox(n4::identity(), 2, 2, 2);
   texture = rt::FlatTexture::create(white);
-  box->setTexture(0, texture);
-  texture = rt::FlatTexture::create(green);
-  box->setTexture(1, texture);
+  cornell->setTexture(0, texture);
   texture = rt::FlatTexture::create(red);
-  box->setTexture(2, texture);
-  scene->add(box);
+  cornell->setTexture(1, texture);
+  texture = rt::FlatTexture::create(green);
+  cornell->setTexture(2, texture);
+  scene->add(cornell);
 
   pt::ObjectPtr light = pt::Object::create(n4::translate(0, 0, 0.99f)*n4::rotateXbyPI2(2));
   shape = pt::Plane::create(n4::identity(), 0.5, 0.5);
@@ -76,6 +77,28 @@ void build_scene(pt::Scene *scene)
   light->setEmissiveColor(white);
   light->setEmissiveScale(1);
   scene->add(light);
+
+  {
+    const rt::real_t d1 = 0.5;
+    const rt::real_t h1 = 1;
+    const rt::real_t p1 = 0.375;
+    matrix = n4::translate(-p1, p1, h1/2.0 - 1.0)*n4::rotateZ(rt::PI/6.0);
+    pt::ObjectPtr box1 = pt::Object::createBox(matrix, d1, d1, h1);
+    texture = rt::FlatTexture::create(white);
+    box1->setTexture(0, texture);
+    scene->add(box1);
+  }
+
+  {
+    const rt::real_t d2 = 0.5;
+    const rt::real_t h2 = 0.5;
+    const rt::real_t p2 = 0.375;
+    matrix = n4::translate(p2, -p2, h2/2.0 - 1.0)*n4::rotateZ(-rt::PI/6.0);
+    pt::ObjectPtr box2 = pt::Object::createBox(matrix, d2, d2, h2);
+    texture = rt::FlatTexture::create(white);
+    box2->setTexture(0, texture);
+    scene->add(box2);
+  }
 }
 
 int main(int /*argc*/, char ** /*argv*/)
@@ -96,7 +119,7 @@ int main(int /*argc*/, char ** /*argv*/)
   options.fov_rad       = math::radian<rt::real_t>(60);
   options.worldToScreen = 2;
   options.gamma    = 2.2f;
-  options.maxDepth = 5;
+  options.maxDepth = 3;
 
   // (2.2) Renderer //////////////////////////////////////////////////////////
 
