@@ -74,14 +74,14 @@ namespace geom {
       return _X*v;
     }
 
-    inline Transform operator*(const Transform& other) const
-    {
-      return Transform(_X*other._X);
-    }
-
     inline Ray operator*(const Ray& ray) const
     {
       return Ray(operator*(ray.origin()), operator*(ray.direction()), ray.tMax());
+    }
+
+    inline Transform operator*(const Transform& other) const
+    {
+      return Transform(_X*other._X);
     }
 
     // Special Transforms ////////////////////////////////////////////////////
