@@ -63,7 +63,7 @@ namespace pt {
     const rt::RenderOptions& options = IRenderer::options();
     const Scene               *scene = SCENE(_scene);
 
-    if( depth > options.maxDepth ) {
+    if( depth >= options.maxDepth ) {
       return rt::Color(0);
     }
 
