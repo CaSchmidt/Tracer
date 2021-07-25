@@ -60,6 +60,12 @@ namespace geom {
       return simd::cmpLEQ<false>(_min.eval(), _max.eval());
     }
 
+    void set(const Vertex& p)
+    {
+      _min = n4::min(_min, p);
+      _max = n4::max(_max, p);
+    }
+
     void set(const Vertex& p1, const Vertex& p2)
     {
       _min = n4::min(p1, p2);
