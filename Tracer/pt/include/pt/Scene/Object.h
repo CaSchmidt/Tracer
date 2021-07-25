@@ -67,8 +67,8 @@ namespace pt {
                                        const rt::real_t dimz);
 
   private:
-    struct Face {
-      Face(ShapePtr& _shape) noexcept
+    struct ObjectFace {
+      ObjectFace(ShapePtr& _shape) noexcept
         : shape(std::move(_shape))
       {
       }
@@ -77,16 +77,16 @@ namespace pt {
       rt::TexturePtr texture;
 
     private:
-      Face() noexcept = delete;
+      ObjectFace() noexcept = delete;
     };
 
-    using Faces = std::list<Face>;
+    using ObjectFaces = std::list<ObjectFace>;
 
     Object() noexcept = delete;
 
     rt::Color      _emitColor{0, 0, 0};
     rt::real_t     _emitScale{1};
-    Faces          _faces;
+    ObjectFaces    _faces;
     rt::TexturePtr _texture;
     rt::Transform  _xformWO{}; // Object -> World
   };

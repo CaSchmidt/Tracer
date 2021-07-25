@@ -51,7 +51,7 @@ namespace pt {
     if( !shape ) {
       return;
     }
-    _faces.push_back(Face(shape));
+    _faces.push_back(ObjectFace(shape));
     _faces.back().shape->moveShape(_xformWO);
   }
 
@@ -63,7 +63,7 @@ namespace pt {
 
     *info = IntersectionInfo();
 
-    for(const Face& face : _faces) {
+    for(const ObjectFace& face : _faces) {
       IntersectionInfo hit;
       if( !face.shape->intersect(&hit, ray) ) {
         continue;
@@ -107,7 +107,7 @@ namespace pt {
     if( id < 1  ||  id > _faces.size() ) {
       return false;
     }
-    Faces::iterator face = std::next(_faces.begin(), id - 1);
+    ObjectFaces::iterator face = std::next(_faces.begin(), id - 1);
     face->texture = std::move(texture);
     return bool(face->texture);
   }
