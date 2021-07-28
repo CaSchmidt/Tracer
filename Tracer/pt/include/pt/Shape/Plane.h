@@ -44,6 +44,8 @@ namespace pt {
 
     bool intersect(IntersectionInfo *info, const rt::Ray& ray) const final;
 
+    rt::Bounds shapeBounds() const;
+
     static ShapePtr create(const rt::Transform& shapeToWorld,
                            const rt::real_t width, const rt::real_t height);
 

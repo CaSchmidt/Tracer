@@ -96,6 +96,13 @@ namespace pt {
     return true;
   }
 
+  rt::Bounds Plane::shapeBounds() const
+  {
+    const rt::real_t hx = _width /rt::TWO;
+    const rt::real_t hy = _height/rt::TWO;
+    return rt::Bounds({-hx, -hy, 0}, {hx, hy, 0});
+  }
+
   ShapePtr Plane::create(const rt::Transform& shapeToWorld,
                          const rt::real_t width, const rt::real_t height)
   {

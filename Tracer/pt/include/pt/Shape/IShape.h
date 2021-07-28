@@ -54,6 +54,12 @@ namespace pt {
     void resetShapeToWorld();
     void setShapeToWorld(const rt::Transform& shapeToWorld);
 
+    virtual rt::Bounds shapeBounds() const = 0;
+    inline rt::Bounds worldBounds() const
+    {
+      return toWorld(shapeBounds());
+    }
+
     template<typename T>
     inline T toShape(const T& x) const
     {
