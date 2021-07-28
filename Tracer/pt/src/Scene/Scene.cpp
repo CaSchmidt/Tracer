@@ -58,6 +58,7 @@ namespace pt {
       return;
     }
     _objects.push_back(std::move(object));
+    _objects.back()->preprocess();
   }
 
   rt::Color Scene::backgroundColor() const

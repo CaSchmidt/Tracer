@@ -54,6 +54,8 @@ namespace pt {
 
     bool setTexture(const rt::size_t id, rt::TexturePtr& texture);
 
+    void preprocess();
+
     static ObjectPtr create(const rt::Transform& objectToWorld);
 
     static ObjectPtr createBox(const rt::Transform& objectToWorld,
@@ -84,6 +86,7 @@ namespace pt {
 
     Object() noexcept = delete;
 
+    rt::Bounds     _bounds;
     rt::Color      _emitColor{0, 0, 0};
     rt::real_t     _emitScale{1};
     ObjectFaces    _faces;

@@ -61,6 +61,10 @@ namespace pt {
       return false;
     }
 
+    if( !_bounds.isValid()  ||  !_bounds.intersect(ray) ) {
+      return false;
+    }
+
     *info = IntersectionInfo();
 
     for(const ObjectFace& face : _faces) {
@@ -110,6 +114,16 @@ namespace pt {
     ObjectFaces::iterator face = std::next(_faces.begin(), id - 1);
     face->texture = std::move(texture);
     return bool(face->texture);
+  }
+
+  void Object::preprocess()
+  {
+    _bounds = rt::Bounds();
+    for(const ObjectFace& face : _faces) {
+      const rt::Bounds wb = face.shape->worldBounds();
+      _bounds.update(wb.min());
+      _bounds.update(wb.max());
+    }
   }
 
   ////// public static ///////////////////////////////////////////////////////
