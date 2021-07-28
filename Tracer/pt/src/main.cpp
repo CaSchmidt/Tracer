@@ -42,31 +42,35 @@
 #include "rt/Texture/FlatTexture.h"
 #include "Util/Worker.h"
 
-constexpr rt::size_t  blockSize = 1;
-constexpr rt::size_t numSamples = 16;
+constexpr rt::size_t  blockSize = 8;
+constexpr rt::size_t numSamples = 32;
 
 constexpr rt::size_t  width = 768;
 constexpr rt::size_t height = 768;
 
 void build_scene(pt::Scene *scene)
 {  
-  const rt::Color white{1, 1, 1};
-  const rt::Color   red{1, 0, 0};
-  const rt::Color green{0, 1, 0};
+  const rt::Color black{0, 0, 0};
+  const rt::Color white{0.75, 0.75, 0.75};
+  const rt::Color   red{0.75, 0.25, 0.25};
+  const rt::Color green{0.25, 0.75, 0.25};
+  const rt::Color   sky{0, 0.8f, 1};
 
   pt::ShapePtr     shape;
   rt::TexturePtr texture;
   rt::Matrix      matrix;
 
-  scene->setBackgroundColor(rt::Color{0, 0.8f, 1});
+  scene->setBackgroundColor(black);
 
   pt::ObjectPtr cornell = pt::Object::createInvertedBox(n4::identity(), 2, 2, 2);
   texture = rt::FlatTexture::create(white);
   cornell->setTexture(0, texture);
-  texture = rt::FlatTexture::create(red);
+  texture = rt::FlatTexture::create(red); // Left
   cornell->setTexture(1, texture);
-  texture = rt::FlatTexture::create(green);
+  texture = rt::FlatTexture::create(green); // Right
   cornell->setTexture(2, texture);
+  texture = rt::FlatTexture::create(black); // Front
+  cornell->setTexture(3, texture);
   scene->add(cornell);
 
   pt::ObjectPtr light = pt::Object::create(n4::translate(0, 0, 0.99f)*n4::rotateXbyPI2(2));
@@ -75,7 +79,7 @@ void build_scene(pt::Scene *scene)
   texture = rt::FlatTexture::create(white);
   light->setTexture(1, texture);
   light->setEmissiveColor(white);
-  light->setEmissiveScale(1);
+  light->setEmissiveScale(4);
   scene->add(light);
 
   {
