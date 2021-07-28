@@ -83,7 +83,7 @@ namespace geom {
 
     inline Ray operator*(const Ray& ray) const
     {
-      return Ray(operator*(ray.origin()), operator*(ray.direction()), ray.tMax());
+      return Ray(_X*ray.origin(), _X*ray.direction(), ray.tMax());
     }
 
     inline Transform operator*(const Transform& other) const
