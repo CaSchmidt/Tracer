@@ -57,19 +57,19 @@ namespace geom {
 
     inline bool isValid() const
     {
-      return simd::cmpLEQ<false>(_min.eval(), _max.eval());
-    }
-
-    void set(const Vertex& p)
-    {
-      _min = n4::min(_min, p);
-      _max = n4::max(_max, p);
+      return simd::compareLEQ<false>(_min.eval(), _max.eval());
     }
 
     void set(const Vertex& p1, const Vertex& p2)
     {
       _min = n4::min(p1, p2);
       _max = n4::max(p1, p2);
+    }
+
+    void update(const Vertex& p)
+    {
+      _min = n4::min(_min, p);
+      _max = n4::max(_max, p);
     }
 
     inline Vertex min() const
@@ -82,25 +82,13 @@ namespace geom {
       return _max;
     }
 
-    bool intersect(const Ray& ray) const
+    bool intersect(const Ray& ray, const bool use_tMax = false) const
     {
-      real_t t0 = 0;
-      real_t t1 = ray.tMax();
-      for(size_t i = 0; i < 3; i++) {
-        const real_t invDir = ONE/ray.direction()(i);
-        real_t tNear = (_min(i) - ray.origin()(i))*invDir;
-        real_t tFar  = (_max(i) - ray.origin()(i))*invDir;
-        if( tNear > tFar ) {
-          std::swap<real_t>(tNear, tFar);
-        }
-        t0 = tNear > t0 ? tNear : t0;
-        t1 = tFar  < t1 ? tFar  : t1;
-        if( t0 > t1 ) {
-          return false;
-        }
-      }
-
-      return true;
+      return use_tMax
+          ? simd::intersectRayAABBox(_min.eval(), _max.eval(),
+                                     ray.origin().eval(), ray.direction().eval(), ray.tMax())
+          : simd::intersectRayAABBox(_min.eval(), _max.eval(),
+                                     ray.origin().eval(), ray.direction().eval());
     }
 
   private:
