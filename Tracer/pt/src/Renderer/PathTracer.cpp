@@ -58,7 +58,8 @@ namespace pt {
   ////// private /////////////////////////////////////////////////////////////
 
   rt::Color PathTracer::radiance(const rt::Ray& ray, const rt::ScenePtr& _scene,
-                                 const rt::SamplerPtr& sampler, const rt::uint_t depth) const
+                                 const rt::SamplerPtr& sampler,
+                                 const rt::uint_t depth, const rt::Color& throughput) const
   {
     const rt::RenderOptions& options = IRenderer::options();
     const Scene               *scene = SCENE(_scene);
@@ -80,7 +81,7 @@ namespace pt {
     const rt::real_t  cosTi = std::max<rt::real_t>(0, geom::shading::cosTheta(wiS));
     const rt::real_t    pdf = rt::CosineHemisphere::pdf(cosTi);
 
-    const rt::Color Li = radiance(info.ray(wi), _scene, sampler, depth + 1);
+    const rt::Color Li = radiance(info.ray(wi), _scene, sampler, depth + 1, rt::Color(1));
 
     return Le + f*Li*cosTi/pdf;
   }

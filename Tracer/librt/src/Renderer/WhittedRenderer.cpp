@@ -55,7 +55,8 @@ namespace rt {
   ////// private /////////////////////////////////////////////////////////////
 
   Color WhittedRenderer::radiance(const Ray& ray, const ScenePtr& _scene,
-                                  const SamplerPtr& sampler, const uint_t depth) const
+                                  const SamplerPtr& sampler,
+                                  const uint_t depth, const Color& /*throughput*/) const
   {
     const Scene *scene = SCENE(_scene);
 

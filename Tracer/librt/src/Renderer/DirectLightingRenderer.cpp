@@ -66,7 +66,8 @@ namespace rt {
   ////// private /////////////////////////////////////////////////////////////
 
   Color DirectLightingRenderer::radiance(const Ray& ray, const ScenePtr& _scene,
-                                         const SamplerPtr& sampler, const uint_t depth) const
+                                         const SamplerPtr& sampler,
+                                         const uint_t depth, const Color& /*throughput*/) const
   {
     const RenderOptions& options = DirectLightingRenderer::options();
     const Scene           *scene = SCENE(_scene);

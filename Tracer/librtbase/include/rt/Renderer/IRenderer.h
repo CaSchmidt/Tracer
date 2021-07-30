@@ -54,8 +54,8 @@ namespace rt {
                  const CameraPtr& camera, const SamplerPtr& sampler) const;
 
   protected:
-    virtual Color radiance(const Ray& ray, const ScenePtr& scene,
-                           const SamplerPtr& sampler, const uint_t depth = 0) const = 0;
+    virtual Color radiance(const Ray& ray, const ScenePtr& scene, const SamplerPtr& sampler,
+                           const uint_t depth = 0, const Color& throughput = Color(1)) const = 0;
 
   private:
     IRenderer() noexcept = delete;

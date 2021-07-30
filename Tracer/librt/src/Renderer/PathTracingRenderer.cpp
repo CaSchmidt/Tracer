@@ -56,7 +56,8 @@ namespace rt {
   ////// private /////////////////////////////////////////////////////////////
 
   Color PathTracingRenderer::radiance(const Ray& _ray, const ScenePtr& _scene,
-                                      const SamplerPtr& sampler, const uint_t /*depth*/) const
+                                      const SamplerPtr& sampler,
+                                      const uint_t /*depth*/, const Color& /*throughput*/) const
   {
     const RenderOptions& options = PathTracingRenderer::options();
     const Scene           *scene = SCENE(_scene);
