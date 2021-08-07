@@ -102,6 +102,11 @@ namespace pt {
     _emitScale = std::max<rt::real_t>(1, s);
   }
 
+  bool Object::haveTexture() const
+  {
+    return bool(_texture);
+  }
+
   bool Object::setTexture(const rt::size_t id, rt::TexturePtr& texture)
   {
     if( id == 0 ) {

@@ -52,6 +52,7 @@ namespace pt {
     void setEmissiveColor(const rt::Color& c);
     void setEmissiveScale(const rt::real_t s);
 
+    bool haveTexture() const;
     bool setTexture(const rt::size_t id, rt::TexturePtr& texture);
 
     void preprocess();
