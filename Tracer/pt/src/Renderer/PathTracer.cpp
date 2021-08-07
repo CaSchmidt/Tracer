@@ -69,7 +69,9 @@ namespace pt {
 
     *wi = info.toWorld(wiS);
 
-    return f*cosTi/pdf;
+    return cosTi != rt::ZERO  &&  pdf != rt::ZERO
+        ? f*cosTi/pdf
+        : rt::Color(0);
   }
 
   rt::Color PathTracer::radiance(const rt::Ray& ray, const rt::ScenePtr& _scene,
@@ -94,7 +96,9 @@ namespace pt {
     rt::Direction wi;
     const rt::Color bxdf = evalBxDF(&wi, info, sampler);
 
-    const rt::Color Li = radiance(info.ray(wi), _scene, sampler, depth + 1, rt::Color(1));
+    const rt::Color Li = !bxdf.isZero()
+        ? radiance(info.ray(wi), _scene, sampler, depth + 1, throughput)
+        : rt::Color(0);
 
     return Le + bxdf*Li;
   }
