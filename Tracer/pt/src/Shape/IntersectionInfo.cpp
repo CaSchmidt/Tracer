@@ -37,9 +37,7 @@ namespace pt {
 
   rt::Color IntersectionInfo::emittance() const
   {
-    return object != nullptr
-        ? object->emittance()
-        : rt::Color(0);
+    return object->emittance();
   }
 
   void IntersectionInfo::initializeShading(const rt::Ray& ray)
@@ -61,9 +59,7 @@ namespace pt {
 
   rt::Color IntersectionInfo::textureColor() const
   {
-    return texture != nullptr
-        ? texture->lookup(texCoord2D())
-        : rt::Color(1);
+    return texture->lookup(texCoord2D());
   }
 
 } // namespace pt
