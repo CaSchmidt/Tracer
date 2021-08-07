@@ -51,7 +51,8 @@ constexpr rt::size_t height = 768;
 void build_scene(pt::Scene *scene)
 {  
   const rt::Color black{0, 0, 0};
-  const rt::Color white{0.75, 0.75, 0.75};
+  const rt::Color white{1, 1, 1};
+  const rt::Color  gray{0.75, 0.75, 0.75};
   const rt::Color   red{0.75, 0.25, 0.25};
   const rt::Color green{0.25, 0.75, 0.25};
   const rt::Color   sky{0, 0.8f, 1};
@@ -63,7 +64,7 @@ void build_scene(pt::Scene *scene)
   scene->setBackgroundColor(black);
 
   pt::ObjectPtr cornell = pt::Object::createInvertedBox(n4::identity(), 2, 2, 2);
-  texture = rt::FlatTexture::create(white);
+  texture = rt::FlatTexture::create(gray);
   cornell->setTexture(0, texture);
   texture = rt::FlatTexture::create(red); // Left
   cornell->setTexture(1, texture);
@@ -76,10 +77,10 @@ void build_scene(pt::Scene *scene)
   pt::ObjectPtr light = pt::Object::create(n4::translate(0, 0, 0.99f)*n4::rotateXbyPI2(2));
   shape = pt::Plane::create(n4::identity(), 0.5, 0.5);
   light->add(shape);
-  texture = rt::FlatTexture::create(white);
+  texture = rt::FlatTexture::create(black);
   light->setTexture(1, texture);
   light->setEmissiveColor(white);
-  light->setEmissiveScale(4);
+  light->setEmissiveScale(3);
   scene->add(light);
 
   {
@@ -88,7 +89,7 @@ void build_scene(pt::Scene *scene)
     const rt::real_t p1 = 0.375;
     matrix = n4::translate(-p1, p1, h1/2.0 - 1.0)*n4::rotateZ(rt::PI/6.0);
     pt::ObjectPtr box1 = pt::Object::createBox(matrix, d1, d1, h1);
-    texture = rt::FlatTexture::create(white);
+    texture = rt::FlatTexture::create(gray);
     box1->setTexture(0, texture);
     scene->add(box1);
   }
@@ -99,7 +100,7 @@ void build_scene(pt::Scene *scene)
     const rt::real_t p2 = 0.375;
     matrix = n4::translate(p2, -p2, h2/2.0 - 1.0)*n4::rotateZ(-rt::PI/6.0);
     pt::ObjectPtr box2 = pt::Object::createBox(matrix, d2, d2, h2);
-    texture = rt::FlatTexture::create(white);
+    texture = rt::FlatTexture::create(gray);
     box2->setTexture(0, texture);
     scene->add(box2);
   }
