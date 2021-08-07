@@ -1,6 +1,7 @@
 list(APPEND util_HEADERS
   include/Debug.h
   include/Image.h
+  include/ValueObserver.h
   )
 
 list(APPEND util_SOURCES
