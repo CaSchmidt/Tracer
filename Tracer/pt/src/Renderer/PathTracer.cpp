@@ -57,23 +57,6 @@ namespace pt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  rt::Color PathTracer::evalBxDF(rt::Direction *wi,
-                                 const IntersectionInfo& info, const rt::SamplerPtr& sampler) const
-  {
-    using Dist = rt::CosineHemisphere;
-
-    const rt::Color       f = info.textureColor()/rt::PI; // BxDF
-    const rt::Direction wiS = Dist::sample(sampler->sample2D());
-    const rt::real_t  cosTi = std::max<rt::real_t>(0, geom::shading::cosTheta(wiS));
-    const rt::real_t    pdf = Dist::pdf(cosTi);
-
-    *wi = info.toWorld(wiS);
-
-    return cosTi != rt::ZERO  &&  pdf != rt::ZERO
-        ? f*cosTi/pdf
-        : rt::Color(0);
-  }
-
   rt::Color PathTracer::radiance(const rt::Ray& ray, const rt::ScenePtr& _scene,
                                  const rt::SamplerPtr& sampler,
                                  const rt::uint_t depth, const rt::Color& throughput) const
@@ -94,13 +77,13 @@ namespace pt {
     const rt::Color Le = info.emittance();
 
     rt::Direction wi;
-    const rt::Color bxdf = evalBxDF(&wi, info, sampler);
+    const rt::Color bsdf = info.textureColor()*info.sampleBSDF(&wi, sampler->sample2D());
 
-    const rt::Color Li = !bxdf.isZero()
+    const rt::Color Li = !bsdf.isZero()
         ? radiance(info.ray(wi), _scene, sampler, depth + 1, throughput)
         : rt::Color(0);
 
-    return Le + bxdf*Li;
+    return Le + bsdf*Li;
   }
 
 } // namespace pt

@@ -32,6 +32,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include "pt/BSDF/IBSDF.h"
 #include "pt/Shape/IShape.h"
 #include "rt/Texture/ITexture.h"
 
@@ -51,6 +52,10 @@ namespace pt {
     rt::Color emittance() const;
     void setEmissiveColor(const rt::Color& c);
     void setEmissiveScale(const rt::real_t s);
+
+    bool haveBSDF() const;
+    const IBSDF *bsdf() const;
+    bool setBSDF(BSDFPtr& bsdf);
 
     bool haveTexture() const;
     bool setTexture(const rt::size_t id, rt::TexturePtr& texture);
@@ -88,6 +93,7 @@ namespace pt {
     Object() noexcept = delete;
 
     rt::Bounds     _bounds;
+    BSDFPtr        _bsdf;
     rt::Color      _emitColor{0, 0, 0};
     rt::real_t     _emitScale{1};
     ObjectFaces    _faces;

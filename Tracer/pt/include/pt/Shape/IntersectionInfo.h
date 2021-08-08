@@ -32,6 +32,7 @@
 #ifndef INTERSECTIONINFO_H
 #define INTERSECTIONINFO_H
 
+#include "rt/Sampler/Sample.h"
 #include "rt/Texture/TexCoord.h"
 
 namespace rt {
@@ -70,6 +71,8 @@ namespace pt {
     }
 
     rt::Ray ray(const IntersectionInfo& to) const;
+
+    rt::Color sampleBSDF(rt::Direction *wi, const rt::Sample2D& xi) const;
 
     inline rt::TexCoord2D texCoord2D() const
     {

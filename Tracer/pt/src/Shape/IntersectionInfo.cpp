@@ -57,6 +57,11 @@ namespace pt {
     return rt::Ray(P, delta, tMax);
   }
 
+  rt::Color IntersectionInfo::sampleBSDF(rt::Direction *wi, const rt::Sample2D& xi) const
+  {
+    return object->bsdf()->sample(*this, wi, xi);
+  }
+
   rt::Color IntersectionInfo::textureColor() const
   {
     return texture->lookup(texCoord2D());

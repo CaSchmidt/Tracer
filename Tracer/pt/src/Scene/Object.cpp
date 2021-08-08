@@ -102,6 +102,22 @@ namespace pt {
     _emitScale = std::max<rt::real_t>(1, s);
   }
 
+  bool Object::haveBSDF() const
+  {
+    return bool(_bsdf);
+  }
+
+  const IBSDF *Object::bsdf() const
+  {
+    return _bsdf.get();
+  }
+
+  bool Object::setBSDF(BSDFPtr& bsdf)
+  {
+    _bsdf = std::move(bsdf);
+    return haveBSDF();
+  }
+
   bool Object::haveTexture() const
   {
     return bool(_texture);

@@ -48,9 +48,6 @@ namespace pt {
   private:
     PathTracer() noexcept = delete;
 
-    rt::Color evalBxDF(rt::Direction *wi,
-                       const IntersectionInfo& info, const rt::SamplerPtr& sampler) const;
-
     rt::Color radiance(const rt::Ray& ray, const rt::ScenePtr& scene, const rt::SamplerPtr& sampler,
                        const rt::uint_t depth, const rt::Color& throughput) const;
   };
