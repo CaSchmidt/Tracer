@@ -111,7 +111,7 @@ namespace pt {
   {
     if( id == 0 ) {
       _texture = std::move(texture);
-      return bool(_texture);
+      return haveTexture();
     }
     if( id < 1  ||  id > _faces.size() ) {
       return false;
