@@ -1,4 +1,6 @@
 list(APPEND pt_HEADERS
+  include/pt/BSDF/Diffuse.h
+  include/pt/BSDF/IBSDF.h
   include/pt/Renderer/PathTracer.h
   include/pt/Scene/Object.h
   include/pt/Scene/Scene.h
@@ -8,6 +10,8 @@ list(APPEND pt_HEADERS
   )
 
 list(APPEND pt_SOURCES
+  src/BSDF/Diffuse.cpp
+  src/BSDF/IBSDF.cpp
   src/Renderer/PathTracer.cpp
   src/Scene/Object.cpp
   src/Scene/ObjectLibrary.cpp
