@@ -61,13 +61,10 @@ namespace pt {
                                  const rt::SamplerPtr& sampler,
                                  const rt::uint_t depth, const rt::Color& throughput) const
   {
+    constexpr rt::real_t RR_EPSILON0 = 0x1p-3 - 0x1p-5;
+
     const rt::RenderOptions& options = IRenderer::options();
     const Scene               *scene = SCENE(_scene);
-
-    const bool stop_path = depth >= options.maxDepth;
-    if( stop_path ) {
-      return rt::Color(0);
-    }
 
     IntersectionInfo info;
     if( !scene->intersect(&info, ray) ) {
@@ -76,14 +73,24 @@ namespace pt {
 
     const rt::Color Le = info.emittance();
 
+    const bool stop_path = depth >= options.maxDepth;
+    const rt::real_t pdfRR = stop_path
+        ? std::clamp<rt::real_t>(throughput.max(), RR_EPSILON0, rt::ONE - RR_EPSILON0)
+        : 1;
+    if( stop_path  &&  sampler->sample() >= pdfRR ) {
+      return Le;
+    }
+
     rt::Direction wi;
     const rt::Color bsdf = info.textureColor()*info.sampleBSDF(&wi, sampler->sample2D());
 
+    const rt::Color beta = throughput*bsdf/pdfRR;
+
     const rt::Color Li = !bsdf.isZero()
-        ? radiance(info.ray(wi), _scene, sampler, depth + 1, throughput)
+        ? radiance(info.ray(wi), _scene, sampler, depth + 1, beta)
         : rt::Color(0);
 
-    return Le + bsdf*Li;
+    return Le + bsdf*Li/pdfRR;
   }
 
 } // namespace pt
