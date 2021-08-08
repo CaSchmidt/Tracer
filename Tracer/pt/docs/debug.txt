@@ -1,0 +1,16 @@
+PathTracer.h:
+
+    using DepthObserver = ValueObserver<rt::uint_t>;
+    using PdfRRObserver = ValueObserver<rt::real_t>;
+
+    DepthObserver _obsDepth;
+    PdfRRObserver _obsPdfRR;
+
+    const DepthObserver::CompareFunc cmpDepth =
+        [](const rt::uint_t& o,const rt::uint_t& s) -> bool {
+      return o > s;
+    };
+    const PdfRRObserver::CompareFunc cmpPdfRR =
+        [](const rt::real_t& o, const rt::real_t& s) -> bool {
+      return o < s;
+    };
