@@ -33,6 +33,7 @@
 #include <cstdlib>
 
 #include "math/Solver.h"
+#include "pt/BSDF/Diffuse.h"
 #include "pt/Renderer/PathTracer.h"
 #include "pt/Scene/Scene.h"
 #include "pt/Shape/Plane.h"
@@ -57,13 +58,16 @@ void build_scene(pt::Scene *scene)
   const rt::Color green{0.25, 0.75, 0.25};
   const rt::Color   sky{0, 0.8f, 1};
 
+  pt::BSDFPtr       bsdf;
+  rt::Matrix      matrix;
   pt::ShapePtr     shape;
   rt::TexturePtr texture;
-  rt::Matrix      matrix;
 
   scene->setBackgroundColor(black);
 
   pt::ObjectPtr cornell = pt::Object::createInvertedBox(n4::identity(), 2, 2, 2);
+  bsdf = pt::Diffuse::create();
+  cornell->setBSDF(bsdf);
   texture = rt::FlatTexture::create(gray);
   cornell->setTexture(0, texture);
   texture = rt::FlatTexture::create(red); // Left
@@ -77,6 +81,8 @@ void build_scene(pt::Scene *scene)
   pt::ObjectPtr light = pt::Object::create(n4::translate(0, 0, 0.99f)*n4::rotateXbyPI2(2));
   shape = pt::Plane::create(n4::identity(), 0.5, 0.5);
   light->add(shape);
+  bsdf = pt::Diffuse::create();
+  light->setBSDF(bsdf);
   texture = rt::FlatTexture::create(black);
   light->setTexture(1, texture);
   light->setEmissiveColor(white);
@@ -89,6 +95,8 @@ void build_scene(pt::Scene *scene)
     const rt::real_t p1 = 0.375;
     matrix = n4::translate(-p1, p1, h1/2.0 - 1.0)*n4::rotateZ(rt::PI/6.0);
     pt::ObjectPtr box1 = pt::Object::createBox(matrix, d1, d1, h1);
+    bsdf = pt::Diffuse::create();
+    box1->setBSDF(bsdf);
     texture = rt::FlatTexture::create(gray);
     box1->setTexture(0, texture);
     scene->add(box1);
@@ -100,6 +108,8 @@ void build_scene(pt::Scene *scene)
     const rt::real_t p2 = 0.375;
     matrix = n4::translate(p2, -p2, h2/2.0 - 1.0)*n4::rotateZ(-rt::PI/6.0);
     pt::ObjectPtr box2 = pt::Object::createBox(matrix, d2, d2, h2);
+    bsdf = pt::Diffuse::create();
+    box2->setBSDF(bsdf);
     texture = rt::FlatTexture::create(gray);
     box2->setTexture(0, texture);
     scene->add(box2);
