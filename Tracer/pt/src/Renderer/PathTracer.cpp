@@ -62,6 +62,8 @@ namespace pt {
                                  const rt::uint_t depth, const rt::Color& throughput) const
   {
     constexpr rt::real_t RR_EPSILON0 = 0x1p-3 - 0x1p-5;
+    constexpr rt::real_t      RR_MIN = RR_EPSILON0;
+    constexpr rt::real_t      RR_MAX = rt::ONE - RR_EPSILON0;
 
     const rt::RenderOptions& options = IRenderer::options();
     const Scene               *scene = SCENE(_scene);
@@ -75,7 +77,7 @@ namespace pt {
 
     const bool stop_path = depth >= options.maxDepth;
     const rt::real_t pdfRR = stop_path
-        ? std::clamp<rt::real_t>(throughput.max(), RR_EPSILON0, rt::ONE - RR_EPSILON0)
+        ? std::clamp<rt::real_t>(throughput.max(), RR_MIN, RR_MAX)
         : 1;
     if( stop_path  &&  sampler->sample() >= pdfRR ) {
       return Le;
