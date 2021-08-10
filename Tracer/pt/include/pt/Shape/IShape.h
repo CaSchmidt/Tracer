@@ -50,8 +50,6 @@ namespace pt {
     virtual bool intersect(IntersectionInfo *info, const rt::Ray& ray) const = 0;
 
     void moveShape(const rt::Transform& shapeToWorld);
-    const rt::Transform& shapeToWorld() const;
-    void resetShapeToWorld();
     void setShapeToWorld(const rt::Transform& shapeToWorld);
 
     virtual rt::Bounds shapeBounds() const = 0;
@@ -75,7 +73,6 @@ namespace pt {
   private:
     IShape() noexcept = delete;
 
-    rt::Transform _initialShapeToWorld{};
     rt::Transform _xfrmWS{}; // Shape -> World
     rt::Transform _xfrmSW{}; // World -> Shape
   };

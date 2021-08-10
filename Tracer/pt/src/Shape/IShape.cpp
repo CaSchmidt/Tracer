@@ -52,19 +52,8 @@ namespace pt {
     _xfrmSW = _xfrmWS.inverse();
   }
 
-  const rt::Transform& IShape::shapeToWorld() const
-  {
-    return _xfrmWS;
-  }
-
-  void IShape::resetShapeToWorld()
-  {
-    setShapeToWorld(_initialShapeToWorld);
-  }
-
   void IShape::setShapeToWorld(const rt::Transform& shapeToWorld)
   {
-    _initialShapeToWorld = shapeToWorld;
     _xfrmWS = rt::Transform();
     moveShape(shapeToWorld);
   }
