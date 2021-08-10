@@ -86,7 +86,7 @@ void build_scene(pt::Scene *scene)
   texture = rt::FlatTexture::create(black);
   light->setTexture(1, texture);
   light->setEmissiveColor(white);
-  light->setEmissiveScale(3);
+  light->setEmissiveScale(4);
   scene->add(light);
 
   {
