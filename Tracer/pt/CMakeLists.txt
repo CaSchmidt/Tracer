@@ -7,6 +7,7 @@ list(APPEND pt_HEADERS
   include/pt/Shape/IntersectionInfo.h
   include/pt/Shape/IShape.h
   include/pt/Shape/Plane.h
+  include/pt/Shape/Sphere.h
   )
 
 list(APPEND pt_SOURCES
@@ -19,6 +20,7 @@ list(APPEND pt_SOURCES
   src/Shape/IntersectionInfo.cpp
   src/Shape/IShape.cpp
   src/Shape/Plane.cpp
+  src/Shape/Sphere.cpp
   src/main.cpp
   )
 
