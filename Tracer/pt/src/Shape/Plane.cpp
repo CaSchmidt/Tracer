@@ -106,6 +106,9 @@ namespace pt {
   ShapePtr Plane::create(const rt::Transform& shapeToWorld,
                          const rt::real_t width, const rt::real_t height)
   {
+    if( width <= rt::ZERO  ||  height <= rt::ZERO ) {
+      return ShapePtr();
+    }
     return std::make_unique<Plane>(shapeToWorld, width, height);
   }
 
