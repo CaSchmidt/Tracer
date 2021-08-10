@@ -37,14 +37,15 @@
 #include "pt/Renderer/PathTracer.h"
 #include "pt/Scene/Scene.h"
 #include "pt/Shape/Plane.h"
+#include "pt/Shape/Sphere.h"
 #include "rt/Camera/FrustumCamera.h"
 #include "rt/Renderer/RenderContext.h"
 #include "rt/Sampler/SimpleSampler.h"
 #include "rt/Texture/FlatTexture.h"
 #include "Util/Worker.h"
 
-constexpr rt::size_t  blockSize = 8;
-constexpr rt::size_t numSamples = 32;
+constexpr rt::size_t  blockSize = 1;
+constexpr rt::size_t numSamples = 128;
 
 constexpr rt::size_t  width = 768;
 constexpr rt::size_t height = 768;
@@ -65,7 +66,7 @@ void build_scene(pt::Scene *scene)
 
   scene->setBackgroundColor(black);
 
-  pt::ObjectPtr cornell = pt::Object::createInvertedBox(n4::identity(), 2, 2, 2);
+  pt::ObjectPtr cornell = pt::Object::createInvertedBox(n4::translate(0, 0, 1), 2, 2, 2);
   bsdf = pt::Diffuse::create();
   cornell->setBSDF(bsdf);
   texture = rt::FlatTexture::create(gray);
@@ -78,7 +79,7 @@ void build_scene(pt::Scene *scene)
   cornell->setTexture(3, texture);
   scene->add(cornell);
 
-  pt::ObjectPtr light = pt::Object::create(n4::translate(0, 0, 0.99f)*n4::rotateXbyPI2(2));
+  pt::ObjectPtr light = pt::Object::create(n4::translate(0, 0, 1.99f)*n4::rotateXbyPI2(2));
   shape = pt::Plane::create(n4::identity(), 0.5, 0.5);
   light->add(shape);
   bsdf = pt::Diffuse::create();
@@ -89,11 +90,26 @@ void build_scene(pt::Scene *scene)
   light->setEmissiveScale(4);
   scene->add(light);
 
+#if 1
+  {
+    const rt::real_t r1 = 0.375;
+    const rt::real_t p1 = 0.375;
+    matrix = n4::translate(-p1, p1, r1);
+    pt::ObjectPtr sphere1 = pt::Object::create(matrix);
+    shape = pt::Sphere::create(n4::identity(), r1);
+    sphere1->add(shape);
+    bsdf = pt::Diffuse::create();
+    sphere1->setBSDF(bsdf);
+    texture = rt::FlatTexture::create(gray);
+    sphere1->setTexture(0, texture);
+    scene->add(sphere1);
+  }
+#else
   {
     const rt::real_t d1 = 0.5;
     const rt::real_t h1 = 1;
     const rt::real_t p1 = 0.375;
-    matrix = n4::translate(-p1, p1, h1/2.0 - 1.0)*n4::rotateZ(rt::PI/6.0);
+    matrix = n4::translate(-p1, p1, h1/2.0)*n4::rotateZ(rt::PI/6.0);
     pt::ObjectPtr box1 = pt::Object::createBox(matrix, d1, d1, h1);
     bsdf = pt::Diffuse::create();
     box1->setBSDF(bsdf);
@@ -101,12 +117,13 @@ void build_scene(pt::Scene *scene)
     box1->setTexture(0, texture);
     scene->add(box1);
   }
+#endif
 
   {
     const rt::real_t d2 = 0.5;
     const rt::real_t h2 = 0.5;
     const rt::real_t p2 = 0.375;
-    matrix = n4::translate(p2, -p2, h2/2.0 - 1.0)*n4::rotateZ(-rt::PI/6.0);
+    matrix = n4::translate(p2, -p2, h2/2.0)*n4::rotateZ(-rt::PI/6.0);
     pt::ObjectPtr box2 = pt::Object::createBox(matrix, d2, d2, h2);
     bsdf = pt::Diffuse::create();
     box2->setBSDF(bsdf);
@@ -128,8 +145,8 @@ int main(int /*argc*/, char ** /*argv*/)
   // (2.1) Render Options ////////////////////////////////////////////////////
 
   rt::RenderOptions options;
-  options.eye      = rt::Vertex{0, -2.7f, 0};
-  options.lookAt   = rt::Vertex{0, 0, 0};
+  options.eye      = rt::Vertex{0, -2.7f, 1};
+  options.lookAt   = rt::Vertex{0, 0, 1};
   options.cameraUp = rt::Direction{0, 0, 1};
   options.fov_rad       = math::radian<rt::real_t>(60);
   options.worldToScreen = 2;
