@@ -4,6 +4,8 @@ list(APPEND pt_HEADERS
   include/pt/Renderer/PathTracer.h
   include/pt/Scene/Object.h
   include/pt/Scene/Scene.h
+  include/pt/Shape/Cylinder.h
+  include/pt/Shape/Disk.h
   include/pt/Shape/IntersectionInfo.h
   include/pt/Shape/IShape.h
   include/pt/Shape/Plane.h
@@ -17,6 +19,8 @@ list(APPEND pt_SOURCES
   src/Scene/Object.cpp
   src/Scene/ObjectLibrary.cpp
   src/Scene/Scene.cpp
+  src/Shape/Cylinder.cpp
+  src/Shape/Disk.cpp
   src/Shape/IntersectionInfo.cpp
   src/Shape/IShape.cpp
   src/Shape/Plane.cpp
