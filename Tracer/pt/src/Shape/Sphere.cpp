@@ -32,9 +32,7 @@
 #include "pt/Shape/Sphere.h"
 
 #include "geom/Intersect.h"
-#include "geom/Util.h"
 #include "pt/Shape/IntersectionInfo.h"
-#include "rt/Sampler/Sampling.h"
 
 namespace pt {
 
