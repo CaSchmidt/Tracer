@@ -44,8 +44,8 @@
 #include "rt/Texture/FlatTexture.h"
 #include "Util/Worker.h"
 
-constexpr rt::size_t  blockSize = 1;
-constexpr rt::size_t numSamples = 128;
+constexpr rt::size_t  blockSize = 8;
+constexpr rt::size_t numSamples = 32;
 
 constexpr rt::size_t  width = 768;
 constexpr rt::size_t height = 768;
@@ -119,6 +119,20 @@ void build_scene(pt::Scene *scene)
   }
 #endif
 
+#if 1
+  {
+    const rt::real_t h2 = 0.375;
+    const rt::real_t r2 = 0.375;
+    const rt::real_t p2 = 0.375;
+    matrix = n4::translate(p2, -p2, h2/2.0);
+    pt::ObjectPtr pillar2 = pt::Object::createPillar(matrix, h2, r2);
+    bsdf = pt::Diffuse::create();
+    pillar2->setBSDF(bsdf);
+    texture = rt::FlatTexture::create(gray);
+    pillar2->setTexture(0, texture);
+    scene->add(pillar2);
+  }
+#else
   {
     const rt::real_t d2 = 0.5;
     const rt::real_t h2 = 0.5;
@@ -131,6 +145,7 @@ void build_scene(pt::Scene *scene)
     box2->setTexture(0, texture);
     scene->add(box2);
   }
+#endif
 }
 
 int main(int /*argc*/, char ** /*argv*/)
