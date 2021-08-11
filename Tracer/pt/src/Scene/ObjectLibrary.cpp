@@ -31,6 +31,8 @@
 
 #include "pt/Scene/Object.h"
 
+#include "pt/Shape/Cylinder.h"
+#include "pt/Shape/Disk.h"
 #include "pt/Shape/Plane.h"
 
 namespace pt {
@@ -146,6 +148,40 @@ namespace pt {
     const rt::real_t top = dimz/rt::TWO;
     X = n4::translate(0, 0, top)*n4::rotateXbyPI2(2);
     shape = Plane::create(X, dimx, dimy);
+    object->add(shape);
+
+    return object;
+  }
+
+  ObjectPtr Object::createPillar(const rt::Transform& objectToWorld,
+                                 const rt::real_t height,
+                                 const rt::real_t radius)
+  {
+    if( radius <= rt::ZERO  ||  height <= rt::ZERO ) {
+      return ObjectPtr();
+    }
+
+    ObjectPtr object = Object::create(objectToWorld);
+    ShapePtr shape;
+    rt::Matrix X;
+
+    // (Z.1) Bottom Disk /////////////////////////////////////////////////////
+
+    const rt::real_t bottom = -height/rt::TWO;
+    X = n4::translate(0, 0, bottom)*n4::rotateXbyPI2(2);
+    shape = Disk::create(X, radius);
+    object->add(shape);
+
+    // (Z.2) Top Disk ////////////////////////////////////////////////////////
+
+    const rt::real_t top = height/rt::TWO;
+    X = n4::translate(0, 0, top);
+    shape = Disk::create(X, radius);
+    object->add(shape);
+
+    // (3) Cylindrical Surface ///////////////////////////////////////////////
+
+    shape = Cylinder::create(n4::identity(), height, radius);
     object->add(shape);
 
     return object;

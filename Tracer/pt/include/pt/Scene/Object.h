@@ -74,6 +74,10 @@ namespace pt {
                                        const rt::real_t dimy,
                                        const rt::real_t dimz);
 
+    static ObjectPtr createPillar(const rt::Transform& objectToWorld,
+                                  const rt::real_t height,
+                                  const rt::real_t radius);
+
   private:
     struct ObjectFace {
       ObjectFace(ShapePtr& _shape) noexcept
