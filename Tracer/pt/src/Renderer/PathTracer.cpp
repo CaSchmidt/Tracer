@@ -75,9 +75,16 @@ namespace pt {
 
     const rt::Color Le = info.emittance();
 
+    /*
+     * NOTE:
+     * Cf. to "Ray Tracing Gems II", Chapter 14, "The Reference Path Tracer"
+     * for Russian Roulette probability
+     * and Jacco Bikker, "Advanced Graphics", Lecture 11, "Various"
+     * for clamping considerations.
+     */
     const bool stop_path = depth >= options.maxDepth;
     const rt::real_t pdfRR = stop_path
-        ? std::clamp<rt::real_t>(throughput.max(), RR_MIN, RR_MAX)
+        ? std::clamp<rt::real_t>(throughput.luminance(), RR_MIN, RR_MAX)
         : 1;
     if( stop_path  &&  sampler->sample() >= pdfRR ) {
       return Le;
