@@ -34,6 +34,7 @@
 
 #include "math/Solver.h"
 #include "pt/BSDF/Diffuse.h"
+#include "pt/BSDF/Mirror.h"
 #include "pt/Renderer/PathTracer.h"
 #include "pt/Scene/Scene.h"
 #include "pt/Shape/Plane.h"
@@ -98,8 +99,13 @@ void build_scene(pt::Scene *scene)
     pt::ObjectPtr sphere1 = pt::Object::create(matrix);
     shape = pt::Sphere::create(n4::identity(), r1);
     sphere1->add(shape);
+# if 1
+    bsdf = pt::Mirror::create();
+    sphere1->setBSDF(bsdf);
+# else
     bsdf = pt::Diffuse::create();
     sphere1->setBSDF(bsdf);
+# endif
     texture = rt::FlatTexture::create(gray);
     sphere1->setTexture(0, texture);
     scene->add(sphere1);
