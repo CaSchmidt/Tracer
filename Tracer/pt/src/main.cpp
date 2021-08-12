@@ -121,7 +121,7 @@ void build_scene(pt::Scene *scene)
 
 #if 1
   {
-    const rt::real_t h2 = 0.375;
+    const rt::real_t h2 = 0.5;
     const rt::real_t r2 = 0.375;
     const rt::real_t p2 = 0.375;
     matrix = n4::translate(p2, -p2, h2/2.0);
