@@ -67,11 +67,11 @@ namespace geom {
     }
 
     template<typename VecT>
-    inline real_t boundaryEta(const VecT& w, const real_t etaOut, const real_t etaIn)
+    inline real_t boundaryEta(const VecT& w, const real_t etaA, const real_t etaB)
     {
       return isSameHemisphere(w)
-          ? etaOut/etaIn
-          : etaIn/etaOut;
+          ? etaA/etaB
+          : etaB/etaA;
     }
 
     template<typename VecT>
@@ -99,9 +99,9 @@ namespace geom {
           : Direction();
     }
 
-    inline Direction refract(const Direction& wi, const real_t etaOut, const real_t etaIn)
+    inline Direction refract(const Direction& wi, const real_t etaA, const real_t etaB)
     {
-      return refract(wi, boundaryEta(wi, etaOut, etaIn));
+      return refract(wi, boundaryEta(wi, etaA, etaB));
     }
 
     template<typename VecT>

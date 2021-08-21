@@ -59,11 +59,11 @@ namespace geom {
     inline constexpr real_t  ONE = 1;
     inline constexpr real_t  TWO = 2;
 
-    inline real_t boundaryEta(const real_t cosTi, const real_t etaOut, const real_t etaIn)
+    inline real_t boundaryEta(const real_t cosTi, const real_t etaA, const real_t etaB)
     {
       return cosTi >= ZERO
-          ? etaOut/etaIn
-          : etaIn/etaOut;
+          ? etaA/etaB
+          : etaB/etaA;
     }
 
     inline real_t dielectric(const real_t cosTi_, const real_t eta)
@@ -84,9 +84,9 @@ namespace geom {
       return (para*para + perp*perp)/TWO;
     }
 
-    inline real_t dielectric(const real_t cosTi, const real_t etaOut, const real_t etaIn)
+    inline real_t dielectric(const real_t cosTi, const real_t etaA, const real_t etaB)
     {
-      return dielectric(cosTi, boundaryEta(cosTi, etaOut, etaIn));
+      return dielectric(cosTi, boundaryEta(cosTi, etaA, etaB));
     }
 
   } // namespace optics
