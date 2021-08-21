@@ -33,6 +33,7 @@
 #include <cstdlib>
 
 #include "math/Solver.h"
+#include "pt/BSDF/Dielectric.h"
 #include "pt/BSDF/Diffuse.h"
 #include "pt/BSDF/Mirror.h"
 #include "pt/Renderer/PathTracer.h"
@@ -127,6 +128,21 @@ void build_scene(pt::Scene *scene)
 
 #if 1
   {
+    const rt::real_t r2 = 0.375;
+    const rt::real_t p2 = 0.375;
+    matrix = n4::translate(p2, -p2, r2);
+    pt::ObjectPtr sphere2 = pt::Object::create(matrix);
+    shape = pt::Sphere::create(n4::identity(), r2);
+    sphere2->add(shape);
+    bsdf = pt::Dielectric::create(1.5);
+    sphere2->setBSDF(bsdf);
+    texture = rt::FlatTexture::create(white);
+    sphere2->setTexture(0, texture);
+    scene->add(sphere2);
+  }
+#else
+# if 1
+  {
     const rt::real_t h2 = 0.5;
     const rt::real_t r2 = 0.375;
     const rt::real_t p2 = 0.375;
@@ -138,7 +154,7 @@ void build_scene(pt::Scene *scene)
     pillar2->setTexture(0, texture);
     scene->add(pillar2);
   }
-#else
+# else
   {
     const rt::real_t d2 = 0.5;
     const rt::real_t h2 = 0.5;
@@ -151,6 +167,7 @@ void build_scene(pt::Scene *scene)
     box2->setTexture(0, texture);
     scene->add(box2);
   }
+# endif
 #endif
 }
 
