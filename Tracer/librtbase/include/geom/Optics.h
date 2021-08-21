@@ -72,7 +72,7 @@ namespace geom {
       const real_t sinTi = math::pythagoras<real_t>(cosTi);
 
       const real_t sinTt = eta*sinTi; // Snell's law
-      if( sinTt > ONE ) { // total internal reflection
+      if( sinTt >= ONE ) { // total internal reflection
         return ONE;
       }
 
