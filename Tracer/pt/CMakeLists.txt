@@ -1,4 +1,5 @@
 list(APPEND pt_HEADERS
+  include/pt/BSDF/Dielectric.h
   include/pt/BSDF/Diffuse.h
   include/pt/BSDF/IBSDF.h
   include/pt/BSDF/Mirror.h
@@ -14,6 +15,7 @@ list(APPEND pt_HEADERS
   )
 
 list(APPEND pt_SOURCES
+  src/BSDF/Dielectric.cpp
   src/BSDF/Diffuse.cpp
   src/BSDF/IBSDF.cpp
   src/BSDF/Mirror.cpp
