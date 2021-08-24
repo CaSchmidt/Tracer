@@ -38,9 +38,9 @@ list(APPEND rtbase_SOURCES
   src/Camera/ICamera.cpp
   src/Camera/SimpleCamera.cpp
   src/Loader/SceneLoaderBase.cpp
-  src/Loader/SceneLoaderOptions.cpp
   src/Renderer/IRenderer.cpp
   src/Renderer/RenderContext.cpp
+  src/Renderer/RenderOptionsLoader.cpp
   src/Sampler/ISampler.cpp
   src/Sampler/Sampling.cpp
   src/Sampler/SimpleSampler.cpp

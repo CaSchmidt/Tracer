@@ -34,6 +34,10 @@
 
 #include "rt/Base/Types.h"
 
+namespace tinyxml2 {
+  class XMLElement;
+} // namespace tinyxml2
+
 namespace rt {
 
   struct RenderOptions {
@@ -48,6 +52,8 @@ namespace rt {
     real_t         focus{};
     real_t         gamma{1};
     uint_t      maxDepth{15};
+
+    static RenderOptions load(const tinyxml2::XMLElement *parent, bool *ok = nullptr);
   };
 
 } // namespace rt

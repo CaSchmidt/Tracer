@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,68 +29,68 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#include "rt/Loader/SceneLoaderBase.h"
+#include <tinyxml2.h>
+
 #include "rt/Renderer/RenderOptions.h"
+
+#include "rt/Loader/SceneLoaderBase.h"
 
 namespace rt {
 
-  namespace priv {
-
-    RenderOptions parseOptions(const tinyxml2::XMLElement *node, bool *ok)
-    {
-      if( ok != nullptr ) {
-        *ok = false;
-      }
-
-      if( node == nullptr ) {
-        return RenderOptions();
-      }
-
-      bool myOk = false;
-      RenderOptions result;
-
-      result.fov_rad = parseAngle(node->FirstChildElement("FoV"), &myOk);
-      if( !myOk ) {
-        return RenderOptions();
-      }
-
-      result.worldToScreen = parseReal(node->FirstChildElement("WorldToScreen"), &myOk);
-      if( !myOk ) {
-        return RenderOptions();
-      }
-
-      result.aperture = parseReal(node->FirstChildElement("Aperture"), &myOk);
-      if( !myOk ) {
-        result.aperture = 0;
-      }
-
-      result.focus = parseReal(node->FirstChildElement("Focus"), &myOk);
-      if( !myOk ) {
-        result.focus = 0;
-      }
-
-      result.eye = parseVertex(node->FirstChildElement("Eye"), &myOk);
-      if( !myOk ) {
-        return RenderOptions();
-      }
-
-      result.lookAt = parseVertex(node->FirstChildElement("LookAt"), &myOk);
-      if( !myOk ) {
-        return RenderOptions();
-      }
-
-      result.cameraUp = parseDirection(node->FirstChildElement("CameraUp"), &myOk);
-      if( !myOk ) {
-        return RenderOptions();
-      }
-
-      if( ok != nullptr ) {
-        *ok = true;
-      }
-
-      return result;
+  RenderOptions RenderOptions::load(const tinyxml2::XMLElement *parent, bool *ok)
+  {
+    if( ok != nullptr ) {
+      *ok = false;
     }
 
-  } // namespace priv
+    const tinyxml2::XMLElement *xml_Options = parent->FirstChildElement("Options");
+    if( xml_Options == nullptr ) {
+      return RenderOptions();
+    }
+
+    bool myOk = false;
+    RenderOptions result;
+
+    result.fov_rad = priv::parseAngle(xml_Options->FirstChildElement("FoV"), &myOk);
+    if( !myOk ) {
+      return RenderOptions();
+    }
+
+    result.worldToScreen = priv::parseReal(xml_Options->FirstChildElement("WorldToScreen"), &myOk);
+    if( !myOk ) {
+      return RenderOptions();
+    }
+
+    result.aperture = priv::parseReal(xml_Options->FirstChildElement("Aperture"), &myOk);
+    if( !myOk ) {
+      result.aperture = 0;
+    }
+
+    result.focus = priv::parseReal(xml_Options->FirstChildElement("Focus"), &myOk);
+    if( !myOk ) {
+      result.focus = 0;
+    }
+
+    result.eye = priv::parseVertex(xml_Options->FirstChildElement("Eye"), &myOk);
+    if( !myOk ) {
+      return RenderOptions();
+    }
+
+    result.lookAt = priv::parseVertex(xml_Options->FirstChildElement("LookAt"), &myOk);
+    if( !myOk ) {
+      return RenderOptions();
+    }
+
+    result.cameraUp = priv::parseDirection(xml_Options->FirstChildElement("CameraUp"), &myOk);
+    if( !myOk ) {
+      return RenderOptions();
+    }
+
+    if( ok != nullptr ) {
+      *ok = true;
+    }
+
+    return result;
+  }
 
 } // namespace rt

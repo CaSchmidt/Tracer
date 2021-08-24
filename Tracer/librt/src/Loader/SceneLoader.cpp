@@ -55,8 +55,6 @@ namespace rt {
 
     LightPtr parseLight(const tinyxml2::XMLElement *node, const ObjectConsumer& add_object);
 
-    RenderOptions parseOptions(const tinyxml2::XMLElement *node, bool *ok);
-
     Objects parseText(const tinyxml2::XMLElement *node);
 
   } // namespace priv
@@ -80,8 +78,7 @@ namespace rt {
 
     bool ok = false;
 
-    const tinyxml2::XMLElement *xml_Options = xml_Tracer->FirstChildElement("Options");
-    *options = priv::parseOptions(xml_Options, &ok);
+    *options = RenderOptions::load(xml_Tracer, &ok);
     if( !ok ) {
       fprintf(stderr, "Unable to parse render options!\n");
       return false;
