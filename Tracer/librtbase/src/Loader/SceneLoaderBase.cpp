@@ -29,6 +29,8 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
+#include <tinyxml2.h>
+
 #include "rt/Loader/SceneLoaderBase.h"
 
 #include "math/Solver.h"

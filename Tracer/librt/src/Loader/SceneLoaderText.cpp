@@ -30,6 +30,7 @@
 *****************************************************************************/
 
 #include <font8x8_basic.h>
+#include <tinyxml2.h>
 
 #include "rt/Loader/SceneLoaderBase.h"
 #include "rt/Object/Sphere.h"

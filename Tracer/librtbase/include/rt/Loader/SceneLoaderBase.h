@@ -37,9 +37,11 @@
 #include <string>
 #include <type_traits>
 
-#include <tinyxml2.h>
-
 #include "rt/Base/Types.h"
+
+namespace tinyxml2 {
+  class XMLElement;
+} // namespace tinyxml2
 
 namespace rt {
 
