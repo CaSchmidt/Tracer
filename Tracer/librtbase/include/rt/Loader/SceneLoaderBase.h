@@ -39,7 +39,7 @@
 
 #include <tinyxml2.h>
 
-#include "rt/Object/IObject.h"
+#include "rt/Base/Types.h"
 
 namespace rt {
 

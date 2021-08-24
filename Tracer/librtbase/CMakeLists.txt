@@ -15,6 +15,8 @@ list(APPEND rtbase_HEADERS
   include/rt/Camera/FrustumCamera.h
   include/rt/Camera/ICamera.h
   include/rt/Camera/SimpleCamera.h
+  include/rt/Loader/SceneLoaderBase.h
+  include/rt/Loader/SceneLoaderStringUtil.h
   include/rt/Renderer/IRenderer.h
   include/rt/Renderer/RenderContext.h
   include/rt/Renderer/RenderLoop.h
@@ -35,6 +37,8 @@ list(APPEND rtbase_SOURCES
   src/Camera/FrustumCamera.cpp
   src/Camera/ICamera.cpp
   src/Camera/SimpleCamera.cpp
+  src/Loader/SceneLoaderBase.cpp
+  src/Loader/SceneLoaderOptions.cpp
   src/Renderer/IRenderer.cpp
   src/Renderer/RenderContext.cpp
   src/Sampler/ISampler.cpp
@@ -60,5 +64,6 @@ target_include_directories(rtbase
   )
 
 target_link_libraries(rtbase
+  PUBLIC tinyxml2
   PUBLIC util
   )

@@ -11,8 +11,7 @@ list(APPEND rt_HEADERS
   include/rt/Light/ILight.h
   include/rt/Light/PointLight.h
   include/rt/Loader/SceneLoader.h
-  include/rt/Loader/SceneLoaderBase.h
-  include/rt/Loader/SceneLoaderStringUtil.h
+  include/rt/Loader/SceneLoaderObject.h
   include/rt/Material/BSDF.h
   include/rt/Material/IMaterial.h
   include/rt/Material/MatteMaterial.h
@@ -47,11 +46,9 @@ list(APPEND rt_SOURCES
   src/Light/ILight.cpp
   src/Light/PointLight.cpp
   src/Loader/SceneLoader.cpp
-  src/Loader/SceneLoaderBase.cpp
   src/Loader/SceneLoaderLight.cpp
   src/Loader/SceneLoaderMaterial.cpp
   src/Loader/SceneLoaderObject.cpp
-  src/Loader/SceneLoaderOptions.cpp
   src/Loader/SceneLoaderText.cpp
   src/Loader/SceneLoaderTexture.cpp
   src/Material/BSDF.cpp
@@ -88,6 +85,5 @@ target_include_directories(rt
   )
 
 target_link_libraries(rt
-  PUBLIC  rtbase
-  PRIVATE tinyxml2
+  PUBLIC rtbase
   )
