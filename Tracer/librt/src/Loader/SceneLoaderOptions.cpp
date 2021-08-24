@@ -47,39 +47,39 @@ namespace rt {
       }
 
       bool myOk = false;
-      RenderOptions opts;
+      RenderOptions result;
 
-      opts.fov_rad = parseAngle(node->FirstChildElement("FoV"), &myOk);
+      result.fov_rad = parseAngle(node->FirstChildElement("FoV"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
-      opts.worldToScreen = parseReal(node->FirstChildElement("WorldToScreen"), &myOk);
+      result.worldToScreen = parseReal(node->FirstChildElement("WorldToScreen"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
-      opts.aperture = parseReal(node->FirstChildElement("Aperture"), &myOk);
+      result.aperture = parseReal(node->FirstChildElement("Aperture"), &myOk);
       if( !myOk ) {
-        opts.aperture = 0;
+        result.aperture = 0;
       }
 
-      opts.focus = parseReal(node->FirstChildElement("Focus"), &myOk);
+      result.focus = parseReal(node->FirstChildElement("Focus"), &myOk);
       if( !myOk ) {
-        opts.focus = 0;
+        result.focus = 0;
       }
 
-      opts.eye = parseVertex(node->FirstChildElement("Eye"), &myOk);
-      if( !myOk ) {
-        return RenderOptions();
-      }
-
-      opts.lookAt = parseVertex(node->FirstChildElement("LookAt"), &myOk);
+      result.eye = parseVertex(node->FirstChildElement("Eye"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
 
-      opts.cameraUp = parseDirection(node->FirstChildElement("CameraUp"), &myOk);
+      result.lookAt = parseVertex(node->FirstChildElement("LookAt"), &myOk);
+      if( !myOk ) {
+        return RenderOptions();
+      }
+
+      result.cameraUp = parseDirection(node->FirstChildElement("CameraUp"), &myOk);
       if( !myOk ) {
         return RenderOptions();
       }
@@ -88,7 +88,7 @@ namespace rt {
         *ok = true;
       }
 
-      return opts;
+      return result;
     }
 
   } // namespace priv
