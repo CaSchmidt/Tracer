@@ -189,7 +189,7 @@ int main(int /*argc*/, char ** /*argv*/)
   options.fov_rad       = math::radian<rt::real_t>(60);
   options.worldToScreen = 2;
   options.gamma    = 2.2f;
-  options.maxDepth = 3;
+  options.maxDepth = 5;
 
   // (2.2) Renderer //////////////////////////////////////////////////////////
 
