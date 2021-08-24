@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,13 +29,10 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SCENELOADERBASE_H
-#define SCENELOADERBASE_H
+#ifndef SCENELOADEROBJECT_H
+#define SCENELOADEROBJECT_H
 
-#include <charconv>
 #include <functional>
-#include <string>
-#include <type_traits>
 
 #include <tinyxml2.h>
 
@@ -45,30 +42,12 @@ namespace rt {
 
   namespace priv {
 
-    real_t parseAngle(const tinyxml2::XMLElement *node, bool *ok);
+    ObjectPtr parseObject(const tinyxml2::XMLElement *node, const bool mat_is_opt = false);
 
-    Color parseColor(const tinyxml2::XMLElement *node, bool *ok);
-
-    Direction parseDirection(const tinyxml2::XMLElement *node, bool *ok);
-
-    Normal parseNormal(const tinyxml2::XMLElement *node, bool *ok);
-
-    real_t parseReal(const tinyxml2::XMLElement *node, bool *ok);
-
-    Matrix parseRotation(const tinyxml2::XMLElement *node, bool *ok);
-
-    signed int parseSignedInt(const tinyxml2::XMLElement *node, bool *ok);
-
-    size_t parseSize(const tinyxml2::XMLElement *node, bool *ok);
-
-    std::string parseString(const tinyxml2::XMLElement *node, bool *ok);
-
-    Transform parseTransform(const tinyxml2::XMLElement *node, bool *ok);
-
-    Vertex parseVertex(const tinyxml2::XMLElement *node, bool *ok);
+    using ObjectConsumer = std::function<void(ObjectPtr&)>;
 
   } // namespace priv
 
 } // namespace rt
 
-#endif // SCENELOADERBASE_H
+#endif // SCENELOADEROBJECT_H

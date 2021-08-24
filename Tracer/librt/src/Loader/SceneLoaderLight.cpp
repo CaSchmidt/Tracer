@@ -33,6 +33,7 @@
 #include "rt/Light/DirectionalLight.h"
 #include "rt/Light/PointLight.h"
 #include "rt/Loader/SceneLoaderBase.h"
+#include "rt/Loader/SceneLoaderObject.h"
 #include "rt/Material/MatteMaterial.h"
 
 namespace rt {

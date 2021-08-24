@@ -42,6 +42,7 @@
 
 #include "rt/Light/ILight.h"
 #include "rt/Loader/SceneLoaderBase.h"
+#include "rt/Loader/SceneLoaderObject.h"
 #include "rt/Loader/SceneLoaderStringUtil.h"
 #include "rt/Renderer/IRenderer.h"
 #include "rt/Scene/Scene.h"
