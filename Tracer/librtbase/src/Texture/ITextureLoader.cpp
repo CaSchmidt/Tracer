@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,30 +29,60 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef FLATTEXTURE_H
-#define FLATTEXTURE_H
+#include <charconv>
+
+#include <tinyxml2.h>
 
 #include "rt/Texture/ITexture.h"
 
+#include "rt/Loader/SceneLoaderStringUtil.h"
+#include "rt/Texture/CheckedTexture.h"
+#include "rt/Texture/FlatTexture.h"
+
 namespace rt {
 
-  class FlatTexture : public ITexture {
-  public:
-    FlatTexture(const size_t id, const Color& color) noexcept;
-    ~FlatTexture() noexcept;
+  ////// public //////////////////////////////////////////////////////////////
 
-    TexturePtr copy() const;
+  bool ITexture::isTexture(const tinyxml2::XMLElement *elem)
+  {
+    return elem != nullptr  &&  priv::compare(elem->Value(), "Texture");
+  }
 
-    Color lookup(const TexCoord2D& tex) const final;
+  TexturePtr ITexture::load(const tinyxml2::XMLElement *elem)
+  {
+    if( elem == nullptr ) {
+      return TexturePtr();
+    }
 
-    static TexturePtr create(const size_t id, const Color& color);
+    if(        elem->Attribute("type", "Checked") != nullptr ) {
+      return CheckedTexture::load(elem);
+    } else if( elem->Attribute("type", "Flat") != nullptr ) {
+      return FlatTexture::load(elem);
+    }
 
-    static TexturePtr load(const tinyxml2::XMLElement *elem);
+    return TexturePtr();
+  }
 
-  private:
-    Color _color{};
-  };
+  ////// protected ///////////////////////////////////////////////////////////
+
+  size_t ITexture::readId(const tinyxml2::XMLElement *elem)
+  {
+    constexpr size_t defaultId = 0; // Default ID
+    const char *nameId = "id";
+
+    if( elem == nullptr  ||  elem->Attribute(nameId) == nullptr ) {
+      return defaultId;
+    }
+
+    size_t value;
+    const char *attr = elem->Attribute(nameId);
+    const std::from_chars_result result =
+        std::from_chars(attr, attr + priv::length(attr), value, 10);
+    if( result.ec != std::errc() ) {
+      return defaultId;
+    }
+
+    return value;
+  }
 
 } // namespace rt
-
-#endif // FLATTEXTURE_H

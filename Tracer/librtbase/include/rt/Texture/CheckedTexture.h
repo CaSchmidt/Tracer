@@ -51,6 +51,8 @@ namespace rt {
                              const Color& colorA, const Color& colorB,
                              const real_t scaleS, const real_t scaleT);
 
+    static TexturePtr load(const tinyxml2::XMLElement *elem);
+
   private:
     Color  _colorA{};
     Color  _colorB{};

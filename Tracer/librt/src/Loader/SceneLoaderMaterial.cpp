@@ -42,15 +42,11 @@ namespace rt {
 
   namespace priv {
 
-    // Import ////////////////////////////////////////////////////////////////
-
-    TexturePtr parseTexture(const tinyxml2::XMLElement *node);
-
     // Implementation ////////////////////////////////////////////////////////
 
     MaterialPtr parseMatteMaterial(const tinyxml2::XMLElement *node)
     {
-      TexturePtr texture = parseTexture(node->FirstChildElement("Texture"));
+      TexturePtr texture = ITexture::load(node->FirstChildElement("Texture"));
       if( !texture ) {
         return MaterialPtr();
       }
@@ -82,7 +78,7 @@ namespace rt {
     {
       bool myOk = false;
 
-      TexturePtr diffuse = parseTexture(node->FirstChildElement("Diffuse"));
+      TexturePtr diffuse = ITexture::load(node->FirstChildElement("Diffuse"));
       if( !diffuse ) {
         return MaterialPtr();
       }
@@ -97,7 +93,7 @@ namespace rt {
 
       TexturePtr specular;
       if( node->FirstChildElement("Specular") != nullptr ) {
-        specular = parseTexture(node->FirstChildElement("Specular"));
+        specular = ITexture::load(node->FirstChildElement("Specular"));
         if( !specular ) {
           return MaterialPtr();
         }

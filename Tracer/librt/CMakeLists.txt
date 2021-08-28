@@ -50,7 +50,6 @@ list(APPEND rt_SOURCES
   src/Loader/SceneLoaderMaterial.cpp
   src/Loader/SceneLoaderObject.cpp
   src/Loader/SceneLoaderText.cpp
-  src/Loader/SceneLoaderTexture.cpp
   src/Material/BSDF.cpp
   src/Material/IMaterial.cpp
   src/Material/MatteMaterial.cpp

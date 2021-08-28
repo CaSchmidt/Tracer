@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2019, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -29,30 +29,30 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef FLATTEXTURE_H
-#define FLATTEXTURE_H
+#include <tinyxml2.h>
 
-#include "rt/Texture/ITexture.h"
+#include "rt/Texture/FlatTexture.h"
+
+#include "rt/Loader/SceneLoaderBase.h"
 
 namespace rt {
 
-  class FlatTexture : public ITexture {
-  public:
-    FlatTexture(const size_t id, const Color& color) noexcept;
-    ~FlatTexture() noexcept;
+  TexturePtr FlatTexture::load(const tinyxml2::XMLElement *elem)
+  {
+    if( elem == nullptr ) {
+      return TexturePtr();
+    }
 
-    TexturePtr copy() const;
+    bool myOk = false;
 
-    Color lookup(const TexCoord2D& tex) const final;
+    const size_t id = readId(elem);
 
-    static TexturePtr create(const size_t id, const Color& color);
+    const Color color = priv::parseColor(elem->FirstChildElement("Color"), &myOk);
+    if( !myOk ) {
+      return TexturePtr();
+    }
 
-    static TexturePtr load(const tinyxml2::XMLElement *elem);
-
-  private:
-    Color _color{};
-  };
+    return FlatTexture::create(id, color);
+  }
 
 } // namespace rt
-
-#endif // FLATTEXTURE_H

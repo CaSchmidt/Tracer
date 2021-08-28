@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (c) 2020, Carsten Schmidt. All rights reserved.
+** Copyright (c) 2021, Carsten Schmidt. All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions
@@ -31,72 +31,43 @@
 
 #include <tinyxml2.h>
 
-#include "rt/Loader/SceneLoaderBase.h"
 #include "rt/Texture/CheckedTexture.h"
-#include "rt/Texture/FlatTexture.h"
+
+#include "rt/Loader/SceneLoaderBase.h"
 
 namespace rt {
 
-  namespace priv {
-
-    // Implementation ////////////////////////////////////////////////////////
-
-    TexturePtr parseCheckedTexture(const tinyxml2::XMLElement *node)
-    {
-      bool myOk = false;
-
-      const Color colorA = parseColor(node->FirstChildElement("ColorA"), &myOk);
-      if( !myOk ) {
-        return TexturePtr();
-      }
-
-      const Color colorB = parseColor(node->FirstChildElement("ColorB"), &myOk);
-      if( !myOk ) {
-        return TexturePtr();
-      }
-
-      const real_t scaleS = parseReal(node->FirstChildElement("ScaleS"), &myOk);
-      if( !myOk ) {
-        return TexturePtr();
-      }
-
-      const real_t scaleT = parseReal(node->FirstChildElement("ScaleT"), &myOk);
-      if( !myOk ) {
-        return TexturePtr();
-      }
-
-      return CheckedTexture::create(0, colorA, colorB, scaleS, scaleT);
-    }
-
-    TexturePtr parseFlatTexture(const tinyxml2::XMLElement *node)
-    {
-      bool myOk = false;
-
-      const Color color = parseColor(node->FirstChildElement("Color"), &myOk);
-      if( !myOk ) {
-        return TexturePtr();
-      }
-
-      return FlatTexture::create(0, color);
-    }
-
-    // Export ////////////////////////////////////////////////////////////////
-
-    TexturePtr parseTexture(const tinyxml2::XMLElement *node)
-    {
-      if( node == nullptr ) {
-        return TexturePtr();
-      }
-
-      if(        node->Attribute("type", "Checked") != nullptr ) {
-        return parseCheckedTexture(node);
-      } else if( node->Attribute("type", "Flat") != nullptr ) {
-        return parseFlatTexture(node);
-      }
-
+  TexturePtr CheckedTexture::load(const tinyxml2::XMLElement *elem)
+  {
+    if( elem == nullptr ) {
       return TexturePtr();
     }
 
-  } // namespace priv
+    bool myOk = false;
+
+    const size_t id = readId(elem);
+
+    const Color colorA = priv::parseColor(elem->FirstChildElement("ColorA"), &myOk);
+    if( !myOk ) {
+      return TexturePtr();
+    }
+
+    const Color colorB = priv::parseColor(elem->FirstChildElement("ColorB"), &myOk);
+    if( !myOk ) {
+      return TexturePtr();
+    }
+
+    const real_t scaleS = priv::parseReal(elem->FirstChildElement("ScaleS"), &myOk);
+    if( !myOk ) {
+      return TexturePtr();
+    }
+
+    const real_t scaleT = priv::parseReal(elem->FirstChildElement("ScaleT"), &myOk);
+    if( !myOk ) {
+      return TexturePtr();
+    }
+
+    return CheckedTexture::create(id, colorA, colorB, scaleS, scaleT);
+  }
 
 } // namespace rt

@@ -36,7 +36,13 @@
 
 #include "rt/Texture/TexCoord.h"
 
+namespace tinyxml2 {
+  class XMLElement;
+} // namespace tinyxml2
+
 namespace rt {
+
+  using TexturePtr = std::unique_ptr<class ITexture>;
 
   class ITexture {
   public:
@@ -45,17 +51,21 @@ namespace rt {
 
     size_t id() const;
 
-    virtual std::unique_ptr<ITexture> copy() const = 0;
+    virtual TexturePtr copy() const = 0;
 
     virtual Color lookup(const TexCoord2D& tex) const = 0;
+
+    static bool isTexture(const tinyxml2::XMLElement *elem);
+    static TexturePtr load(const tinyxml2::XMLElement *elem);
+
+  protected:
+    static size_t readId(const tinyxml2::XMLElement *elem);
 
   private:
     ITexture() noexcept = delete;
 
     size_t _id{0};
   };
-
-  using TexturePtr = std::unique_ptr<ITexture>;
 
 } // namespace rt
 

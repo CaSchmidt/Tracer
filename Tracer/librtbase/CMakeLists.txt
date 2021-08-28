@@ -46,8 +46,11 @@ list(APPEND rtbase_SOURCES
   src/Sampler/SimpleSampler.cpp
   src/Scene/IScene.cpp
   src/Texture/CheckedTexture.cpp
+  src/Texture/CheckedTextureLoader.cpp
   src/Texture/FlatTexture.cpp
+  src/Texture/FlatTextureLoader.cpp
   src/Texture/ITexture.cpp
+  src/Texture/ITextureLoader.cpp
   src-util/Worker.cpp
   )
 
