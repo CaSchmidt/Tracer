@@ -56,12 +56,12 @@ namespace rt {
       }
 
       const real_t scaleS = parseReal(node->FirstChildElement("ScaleS"), &myOk);
-      if( !myOk  ||  scaleS <= 0 ) {
+      if( !myOk ) {
         return TexturePtr();
       }
 
       const real_t scaleT = parseReal(node->FirstChildElement("ScaleT"), &myOk);
-      if( !myOk  ||  scaleT <= 0 ) {
+      if( !myOk ) {
         return TexturePtr();
       }
 

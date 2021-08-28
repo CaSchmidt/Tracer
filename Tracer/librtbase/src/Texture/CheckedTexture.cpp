@@ -66,6 +66,9 @@ namespace rt {
   TexturePtr CheckedTexture::create(const Color& colorA, const Color& colorB,
                                     const real_t scaleS, const real_t scaleT)
   {
+    if( scaleS <= ZERO  ||  scaleT <= ZERO ) {
+      return TexturePtr();
+    }
     return std::make_unique<CheckedTexture>(colorA, colorB, scaleS, scaleT);
   }
 
