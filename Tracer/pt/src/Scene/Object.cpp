@@ -123,8 +123,19 @@ namespace pt {
     return bool(_texture);
   }
 
+  bool Object::setTexture(rt::TexturePtr& texture)
+  {
+    if( !texture ) {
+      return false;
+    }
+    return setTexture(texture->id(), texture);
+  }
+
   bool Object::setTexture(const rt::size_t id, rt::TexturePtr& texture)
   {
+    if( !texture ) {
+      return false;
+    }
     if( id == 0 ) {
       _texture = std::move(texture);
       return haveTexture();

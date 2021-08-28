@@ -33,8 +33,18 @@
 
 namespace rt {
 
+  ITexture::ITexture(const size_t id) noexcept
+    : _id{id}
+  {
+  }
+
   ITexture::~ITexture() noexcept
   {
+  }
+
+  size_t ITexture::id() const
+  {
+    return _id;
   }
 
 } // namespace rt

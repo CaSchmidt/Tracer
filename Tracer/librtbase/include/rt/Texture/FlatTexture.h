@@ -38,14 +38,14 @@ namespace rt {
 
   class FlatTexture : public ITexture {
   public:
-    FlatTexture(const Color& color) noexcept;
+    FlatTexture(const size_t id, const Color& color) noexcept;
     ~FlatTexture() noexcept;
 
     TexturePtr copy() const;
 
     Color lookup(const TexCoord2D& tex) const final;
 
-    static TexturePtr create(const Color& color);
+    static TexturePtr create(const size_t id, const Color& color);
 
   private:
     Color _color{};

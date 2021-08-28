@@ -33,7 +33,8 @@
 
 namespace rt {
 
-  FlatTexture::FlatTexture(const Color& color) noexcept
+  FlatTexture::FlatTexture(const size_t id, const Color& color) noexcept
+    : ITexture(id)
   {
     _color = n4::clamp(color, 0, 1);
   }
@@ -44,7 +45,7 @@ namespace rt {
 
   TexturePtr FlatTexture::copy() const
   {
-    return create(_color);
+    return create(id(), _color);
   }
 
   Color FlatTexture::lookup(const TexCoord2D& /*tex*/) const
@@ -52,9 +53,9 @@ namespace rt {
     return _color;
   }
 
-  TexturePtr FlatTexture::create(const Color& color)
+  TexturePtr FlatTexture::create(const size_t id, const Color& color)
   {
-    return std::make_unique<FlatTexture>(color);
+    return std::make_unique<FlatTexture>(id, color);
   }
 
 } // namespace rt

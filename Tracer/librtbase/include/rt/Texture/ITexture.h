@@ -40,11 +40,19 @@ namespace rt {
 
   class ITexture {
   public:
+    ITexture(const size_t id) noexcept;
     virtual ~ITexture() noexcept;
+
+    size_t id() const;
 
     virtual std::unique_ptr<ITexture> copy() const = 0;
 
     virtual Color lookup(const TexCoord2D& tex) const = 0;
+
+  private:
+    ITexture() noexcept = delete;
+
+    size_t _id{0};
   };
 
   using TexturePtr = std::unique_ptr<ITexture>;

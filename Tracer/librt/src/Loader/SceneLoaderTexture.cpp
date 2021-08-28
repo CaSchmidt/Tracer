@@ -65,7 +65,7 @@ namespace rt {
         return TexturePtr();
       }
 
-      return CheckedTexture::create(colorA, colorB, scaleS, scaleT);
+      return CheckedTexture::create(0, colorA, colorB, scaleS, scaleT);
     }
 
     TexturePtr parseFlatTexture(const tinyxml2::XMLElement *node)
@@ -77,7 +77,7 @@ namespace rt {
         return TexturePtr();
       }
 
-      return FlatTexture::create(color);
+      return FlatTexture::create(0, color);
     }
 
     // Export ////////////////////////////////////////////////////////////////
