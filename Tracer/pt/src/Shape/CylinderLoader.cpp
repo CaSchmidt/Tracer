@@ -48,24 +48,24 @@ namespace pt {
       return ShapePtr();
     }
 
-    bool myOk = false;
+    bool ok = false;
 
-    const rt::real_t height = rt::priv::parseReal(elem->FirstChildElement("Height"), &myOk);
-    if( !myOk ) {
+    const rt::real_t height = rt::priv::parseReal(elem->FirstChildElement("Height"), &ok);
+    if( !ok ) {
       return ShapePtr();
     }
 
-    const rt::real_t radius = rt::priv::parseReal(elem->FirstChildElement("Radius"), &myOk);
-    if( !myOk ) {
+    const rt::real_t radius = rt::priv::parseReal(elem->FirstChildElement("Radius"), &ok);
+    if( !ok ) {
       return ShapePtr();
     }
 
-    rt::Transform transform = rt::priv::parseTransform(elem->FirstChildElement("Transform"), &myOk);
-    if( !myOk ) {
+    rt::Transform transform = rt::priv::parseTransform(elem->FirstChildElement("Transform"), &ok);
+    if( !ok ) {
       return ShapePtr();
     }
 
-    return Cylinder::create(transform, height, radius);
+    return create(transform, height, radius);
   }
 
 } // namespace pt

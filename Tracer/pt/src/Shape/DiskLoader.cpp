@@ -48,19 +48,19 @@ namespace pt {
       return ShapePtr();
     }
 
-    bool myOk = false;
+    bool ok = false;
 
-    const rt::real_t radius = rt::priv::parseReal(elem->FirstChildElement("Radius"), &myOk);
-    if( !myOk ) {
+    const rt::real_t radius = rt::priv::parseReal(elem->FirstChildElement("Radius"), &ok);
+    if( !ok ) {
       return ShapePtr();
     }
 
-    rt::Transform transform = rt::priv::parseTransform(elem->FirstChildElement("Transform"), &myOk);
-    if( !myOk ) {
+    rt::Transform transform = rt::priv::parseTransform(elem->FirstChildElement("Transform"), &ok);
+    if( !ok ) {
       return ShapePtr();
     }
 
-    return Disk::create(transform, radius);
+    return create(transform, radius);
   }
 
 } // namespace pt

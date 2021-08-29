@@ -48,24 +48,24 @@ namespace pt {
       return ShapePtr();
     }
 
-    bool myOk = false;
+    bool ok = false;
 
-    const rt::real_t height = rt::priv::parseReal(elem->FirstChildElement("Height"), &myOk);
-    if( !myOk ) {
+    const rt::real_t height = rt::priv::parseReal(elem->FirstChildElement("Height"), &ok);
+    if( !ok ) {
       return ShapePtr();
     }
 
-    rt::Transform transform = rt::priv::parseTransform(elem->FirstChildElement("Transform"), &myOk);
-    if( !myOk ) {
+    rt::Transform transform = rt::priv::parseTransform(elem->FirstChildElement("Transform"), &ok);
+    if( !ok ) {
       return ShapePtr();
     }
 
-    const rt::real_t width = rt::priv::parseReal(elem->FirstChildElement("Width"), &myOk);
-    if( !myOk ) {
+    const rt::real_t width = rt::priv::parseReal(elem->FirstChildElement("Width"), &ok);
+    if( !ok ) {
       return ShapePtr();
     }
 
-    return Plane::create(transform, width, height);
+    return create(transform, width, height);
   }
 
 } // namespace pt
