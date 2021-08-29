@@ -50,6 +50,11 @@ namespace rt {
 
   TexturePtr ITexture::load(const tinyxml2::XMLElement *elem)
   {
+    /*
+     * NOTE:
+     * Some legacy applications require elem's name to differ from isTexture(),
+     * so calling load() on proper XML elements is left to the caller's discretion!
+     */
     if( elem == nullptr ) {
       return TexturePtr();
     }
