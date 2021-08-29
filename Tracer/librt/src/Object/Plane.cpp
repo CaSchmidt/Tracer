@@ -131,6 +131,9 @@ namespace rt {
   ObjectPtr Plane::create(const Transform& objectToWorld,
                           const real_t width, const real_t height)
   {
+    if( width <= ZERO  ||  height <= ZERO ) {
+      return ObjectPtr();
+    }
     return std::make_unique<Plane>(objectToWorld, width, height);
   }
 

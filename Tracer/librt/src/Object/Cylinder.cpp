@@ -113,6 +113,9 @@ namespace rt {
   ObjectPtr Cylinder::create(const Transform& objectToWorld,
                              const real_t height, const real_t radius)
   {
+    if( height <= ZERO  ||  radius <= ZERO ) {
+      return ObjectPtr();
+    }
     return std::make_unique<Cylinder>(objectToWorld, height, radius);
   }
 

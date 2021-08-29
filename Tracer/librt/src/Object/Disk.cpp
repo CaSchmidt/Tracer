@@ -116,6 +116,9 @@ namespace rt {
   ObjectPtr Disk::create(const Transform& objectToWorld,
                          const real_t radius)
   {
+    if( radius <= ZERO ) {
+      return ObjectPtr();
+    }
     return std::make_unique<Disk>(objectToWorld, radius);
   }
 

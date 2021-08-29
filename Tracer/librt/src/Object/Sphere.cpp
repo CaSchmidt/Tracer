@@ -172,6 +172,9 @@ namespace rt {
   ObjectPtr Sphere::create(const Transform& objectToWorld,
                            const real_t radius)
   {
+    if( radius <= ZERO ) {
+      return ObjectPtr();
+    }
     return std::make_unique<Sphere>(objectToWorld, radius);
   }
 

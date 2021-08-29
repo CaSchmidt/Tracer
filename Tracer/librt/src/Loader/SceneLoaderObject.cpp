@@ -53,7 +53,7 @@ namespace rt {
       bool myOk = false;
 
       const real_t height = parseReal(node->FirstChildElement("Height"), &myOk);
-      if( !myOk  ||  height <= 0 ) {
+      if( !myOk ) {
         return ObjectPtr();
       }
 
@@ -63,7 +63,7 @@ namespace rt {
       }
 
       const real_t radius = parseReal(node->FirstChildElement("Radius"), &myOk);
-      if( !myOk  ||  radius <= 0 ) {
+      if( !myOk ) {
         return ObjectPtr();
       }
 
@@ -88,7 +88,7 @@ namespace rt {
       }
 
       const real_t radius = parseReal(node->FirstChildElement("Radius"), &myOk);
-      if( !myOk  ||  radius <= 0 ) {
+      if( !myOk ) {
         return ObjectPtr();
       }
 
@@ -161,7 +161,7 @@ namespace rt {
       bool myOk = false;
 
       const real_t height = parseReal(node->FirstChildElement("Height"), &myOk);
-      if( !myOk  ||  height <= 0 ) {
+      if( !myOk ) {
         return ObjectPtr();
       }
 
@@ -176,7 +176,7 @@ namespace rt {
       }
 
       const real_t width = parseReal(node->FirstChildElement("Width"), &myOk);
-      if( !myOk  ||  width <= 0 ) {
+      if( !myOk ) {
         return ObjectPtr();
       }
 
@@ -196,7 +196,7 @@ namespace rt {
       }
 
       const real_t radius = parseReal(node->FirstChildElement("Radius"), &myOk);
-      if( !myOk  ||  radius <= 0 ) {
+      if( !myOk ) {
         return ObjectPtr();
       }
 
