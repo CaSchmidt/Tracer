@@ -29,36 +29,43 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef CYLINDER_H
-#define CYLINDER_H
+#include <tinyxml2.h>
 
-#include "pt/Shape/IShape.h"
+#include "pt/Shape/Plane.h"
+
+#include "rt/Loader/SceneLoaderBase.h"
 
 namespace pt {
 
-  class Cylinder : public IShape {
-  public:
-    Cylinder(const rt::Transform& objectToWorld,
-             const rt::real_t height, const rt::real_t radius) noexcept;
-    ~Cylinder() noexcept;
+  bool Plane::isPlane(const tinyxml2::XMLElement *elem)
+  {
+    return IShape::isShape(elem)  &&  elem->Attribute("type", "Plane") != nullptr;
+  }
 
-    bool intersect(IntersectionInfo *info, const rt::Ray& ray) const final;;
+  ShapePtr Plane::load(const tinyxml2::XMLElement *elem)
+  {
+    if( !isPlane(elem) ) {
+      return ShapePtr();
+    }
 
-    rt::Bounds shapeBounds() const;
+    bool myOk = false;
 
-    static ShapePtr create(const rt::Transform& objectToWorld,
-                           const rt::real_t height, const rt::real_t radius);
+    const rt::real_t height = rt::priv::parseReal(elem->FirstChildElement("Height"), &myOk);
+    if( !myOk ) {
+      return ShapePtr();
+    }
 
-    static bool isCylinder(const tinyxml2::XMLElement *elem);
-    static ShapePtr load(const tinyxml2::XMLElement* elem);
+    rt::Transform transform = rt::priv::parseTransform(elem->FirstChildElement("Transform"), &myOk);
+    if( !myOk ) {
+      return ShapePtr();
+    }
 
-  private:
-    static constexpr rt::real_t EPSILON0 = 0x1p-10;
+    const rt::real_t width = rt::priv::parseReal(elem->FirstChildElement("Width"), &myOk);
+    if( !myOk ) {
+      return ShapePtr();
+    }
 
-    rt::real_t _height{};
-    rt::real_t _radius{};
-  };
+    return Plane::create(transform, width, height);
+  }
 
 } // namespace pt
-
-#endif // CYLINDER_H

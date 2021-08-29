@@ -49,6 +49,9 @@ namespace pt {
     static ShapePtr create(const rt::Transform& shapeToWorld,
                            const rt::real_t width, const rt::real_t height);
 
+    static bool isPlane(const tinyxml2::XMLElement *elem);
+    static ShapePtr load(const tinyxml2::XMLElement *elem);
+
   private:
     static constexpr rt::real_t EPSILON0 = rt::EPSILON0_BASE;
 

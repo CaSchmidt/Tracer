@@ -24,11 +24,16 @@ list(APPEND pt_SOURCES
   src/Scene/ObjectLibrary.cpp
   src/Scene/Scene.cpp
   src/Shape/Cylinder.cpp
+  src/Shape/CylinderLoader.cpp
   src/Shape/Disk.cpp
+  src/Shape/DiskLoader.cpp
   src/Shape/IntersectionInfo.cpp
   src/Shape/IShape.cpp
+  src/Shape/IShapeLoader.cpp
   src/Shape/Plane.cpp
+  src/Shape/PlaneLoader.cpp
   src/Shape/Sphere.cpp
+  src/Shape/SphereLoader.cpp
   src/main.cpp
   )
 

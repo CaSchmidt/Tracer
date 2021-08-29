@@ -37,9 +37,15 @@
 
 #include "rt/Base/Types.h"
 
+namespace tinyxml2 {
+  class XMLElement;
+} // namespace tinyxml2
+
 namespace pt {
 
   struct IntersectionInfo;
+
+  using ShapePtr = std::unique_ptr<class IShape>;
 
   class IShape {
   public:
@@ -70,14 +76,15 @@ namespace pt {
       return _xfrmWS*x;
     }
 
+    static bool isShape(const tinyxml2::XMLElement *elem);
+    static ShapePtr load(const tinyxml2::XMLElement *elem);
+
   private:
     IShape() noexcept = delete;
 
     rt::Transform _xfrmWS{}; // Shape -> World
     rt::Transform _xfrmSW{}; // World -> Shape
   };
-
-  using ShapePtr = std::unique_ptr<IShape>;
 
 } // namespace pt
 

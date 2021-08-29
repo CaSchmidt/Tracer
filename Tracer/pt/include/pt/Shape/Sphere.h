@@ -49,6 +49,9 @@ namespace pt {
     static ShapePtr create(const rt::Transform& objectToWorld,
                            const rt::real_t radius);
 
+    static bool isSphere(const tinyxml2::XMLElement *elem);
+    static ShapePtr load(const tinyxml2::XMLElement *elem);
+
   private:
     static constexpr rt::real_t EPSILON0 = 0x1p-10;
 

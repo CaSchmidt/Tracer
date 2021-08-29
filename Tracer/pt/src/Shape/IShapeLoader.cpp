@@ -29,36 +29,40 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef CYLINDER_H
-#define CYLINDER_H
+#include <tinyxml2.h>
 
 #include "pt/Shape/IShape.h"
 
+#include "pt/Shape/Cylinder.h"
+#include "pt/Shape/Disk.h"
+#include "pt/Shape/Plane.h"
+#include "pt/Shape/Sphere.h"
+#include "rt/Loader/SceneLoaderStringUtil.h"
+
 namespace pt {
 
-  class Cylinder : public IShape {
-  public:
-    Cylinder(const rt::Transform& objectToWorld,
-             const rt::real_t height, const rt::real_t radius) noexcept;
-    ~Cylinder() noexcept;
+  bool IShape::isShape(const tinyxml2::XMLElement *elem)
+  {
+    return elem != nullptr  &&  rt::priv::compare(elem->Value(), "Shape");
+  }
 
-    bool intersect(IntersectionInfo *info, const rt::Ray& ray) const final;;
+  ShapePtr IShape::load(const tinyxml2::XMLElement *elem)
+  {
+    if( !isShape(elem) ) {
+      return ShapePtr();
+    }
 
-    rt::Bounds shapeBounds() const;
+    if(        Cylinder::isCylinder(elem) ) {
+      return Cylinder::load(elem);
+    } else if( Disk::isDisk(elem) ) {
+      return Disk::load(elem);
+    } else if( Plane::isPlane(elem) ) {
+      return Plane::load(elem);
+    } else if( Sphere::isSphere(elem) ) {
+      return Sphere::load(elem);
+    }
 
-    static ShapePtr create(const rt::Transform& objectToWorld,
-                           const rt::real_t height, const rt::real_t radius);
-
-    static bool isCylinder(const tinyxml2::XMLElement *elem);
-    static ShapePtr load(const tinyxml2::XMLElement* elem);
-
-  private:
-    static constexpr rt::real_t EPSILON0 = 0x1p-10;
-
-    rt::real_t _height{};
-    rt::real_t _radius{};
-  };
+    return ShapePtr();
+  }
 
 } // namespace pt
-
-#endif // CYLINDER_H
