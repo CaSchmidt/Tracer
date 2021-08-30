@@ -71,14 +71,14 @@ void build_scene(pt::Scene *scene)
   pt::ObjectPtr cornell = pt::Object::createInvertedBox(n4::translate(0, 0, 1), 2, 2, 2);
   bsdf = pt::Diffuse::create();
   cornell->setBSDF(bsdf);
-  texture = rt::FlatTexture::create(0, gray);
-  cornell->setTexture(texture);
-  texture = rt::FlatTexture::create(1, red); // Left
-  cornell->setTexture(texture);
-  texture = rt::FlatTexture::create(2, green); // Right
-  cornell->setTexture(texture);
-  texture = rt::FlatTexture::create(3, black); // Front
-  cornell->setTexture(texture);
+  texture = rt::FlatTexture::create(gray);
+  cornell->setTexture(0, texture);
+  texture = rt::FlatTexture::create(red); // Left
+  cornell->setTexture(1, texture);
+  texture = rt::FlatTexture::create(green); // Right
+  cornell->setTexture(2, texture);
+  texture = rt::FlatTexture::create(black); // Front
+  cornell->setTexture(3, texture);
   scene->add(cornell);
 
   pt::ObjectPtr light = pt::Object::create(n4::translate(0, 0, 1.99f)*n4::rotateXbyPI2(2));
@@ -86,8 +86,8 @@ void build_scene(pt::Scene *scene)
   light->add(shape);
   bsdf = pt::Diffuse::create();
   light->setBSDF(bsdf);
-  texture = rt::FlatTexture::create(1, black);
-  light->setTexture(texture);
+  texture = rt::FlatTexture::create(black);
+  light->setTexture(1, texture);
   light->setEmissiveColor(white);
   light->setEmissiveScale(4);
   scene->add(light);
@@ -107,8 +107,8 @@ void build_scene(pt::Scene *scene)
     bsdf = pt::Diffuse::create();
     sphere1->setBSDF(bsdf);
 # endif
-    texture = rt::FlatTexture::create(0, gray);
-    sphere1->setTexture(texture);
+    texture = rt::FlatTexture::create(gray);
+    sphere1->setTexture(0, texture);
     scene->add(sphere1);
   }
 #else
@@ -120,8 +120,8 @@ void build_scene(pt::Scene *scene)
     pt::ObjectPtr box1 = pt::Object::createBox(matrix, d1, d1, h1);
     bsdf = pt::Diffuse::create();
     box1->setBSDF(bsdf);
-    texture = rt::FlatTexture::create(0, gray);
-    box1->setTexture(texture);
+    texture = rt::FlatTexture::create(gray);
+    box1->setTexture(0, texture);
     scene->add(box1);
   }
 #endif
@@ -136,8 +136,8 @@ void build_scene(pt::Scene *scene)
     sphere2->add(shape);
     bsdf = pt::Dielectric::create(1.5);
     sphere2->setBSDF(bsdf);
-    texture = rt::FlatTexture::create(0, white);
-    sphere2->setTexture(texture);
+    texture = rt::FlatTexture::create(white);
+    sphere2->setTexture(0, texture);
     scene->add(sphere2);
   }
 #else
@@ -150,8 +150,8 @@ void build_scene(pt::Scene *scene)
     pt::ObjectPtr pillar2 = pt::Object::createPillar(matrix, h2, r2);
     bsdf = pt::Diffuse::create();
     pillar2->setBSDF(bsdf);
-    texture = rt::FlatTexture::create(0, gray);
-    pillar2->setTexture(texture);
+    texture = rt::FlatTexture::create(gray);
+    pillar2->setTexture(0, texture);
     scene->add(pillar2);
   }
 # else
@@ -163,8 +163,8 @@ void build_scene(pt::Scene *scene)
     pt::ObjectPtr box2 = pt::Object::createBox(matrix, d2, d2, h2);
     bsdf = pt::Diffuse::create();
     box2->setBSDF(bsdf);
-    texture = rt::FlatTexture::create(0, gray);
-    box2->setTexture(texture);
+    texture = rt::FlatTexture::create(gray);
+    box2->setTexture(0, texture);
     scene->add(box2);
   }
 # endif
