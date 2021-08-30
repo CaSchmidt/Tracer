@@ -35,11 +35,9 @@
 
 namespace rt {
 
-  CheckedTexture::CheckedTexture(const size_t id,
-                                 const Color& colorA, const Color& colorB,
+  CheckedTexture::CheckedTexture(const Color& colorA, const Color& colorB,
                                  const real_t scaleS, const real_t scaleT) noexcept
-    : ITexture(id)
-    , _scaleS{scaleS}
+    : _scaleS{scaleS}
     , _scaleT{scaleT}
   {
     _colorA = n4::clamp(colorA, 0, 1);
@@ -52,7 +50,7 @@ namespace rt {
 
   TexturePtr CheckedTexture::copy() const
   {
-    return create(id(), _colorA, _colorB, _scaleS, _scaleT);
+    return create(_colorA, _colorB, _scaleS, _scaleT);
   }
 
   Color CheckedTexture::lookup(const TexCoord2D& tex) const
@@ -65,14 +63,13 @@ namespace rt {
         : _colorB;
   }
 
-  TexturePtr CheckedTexture::create(const size_t id,
-                                    const Color& colorA, const Color& colorB,
+  TexturePtr CheckedTexture::create(const Color& colorA, const Color& colorB,
                                     const real_t scaleS, const real_t scaleT)
   {
     if( scaleS <= ZERO  ||  scaleT <= ZERO ) {
       return TexturePtr();
     }
-    return std::make_unique<CheckedTexture>(id, colorA, colorB, scaleS, scaleT);
+    return std::make_unique<CheckedTexture>(colorA, colorB, scaleS, scaleT);
   }
 
 } // namespace rt

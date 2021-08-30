@@ -46,10 +46,7 @@ namespace rt {
 
   class ITexture {
   public:
-    ITexture(const size_t id) noexcept;
     virtual ~ITexture() noexcept;
-
-    size_t id() const;
 
     virtual TexturePtr copy() const = 0;
 
@@ -57,14 +54,7 @@ namespace rt {
 
     static bool isTexture(const tinyxml2::XMLElement *elem);
     static TexturePtr load(const tinyxml2::XMLElement *elem);
-
-  protected:
     static size_t readId(const tinyxml2::XMLElement *elem, const rt::size_t defaultId = 0);
-
-  private:
-    ITexture() noexcept = delete;
-
-    size_t _id{0};
   };
 
 } // namespace rt

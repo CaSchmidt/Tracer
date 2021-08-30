@@ -45,14 +45,12 @@ namespace rt {
 
     bool myOk = false;
 
-    const size_t id = readId(elem);
-
     const Color color = priv::parseColor(elem->FirstChildElement("Color"), &myOk);
     if( !myOk ) {
       return TexturePtr();
     }
 
-    return FlatTexture::create(id, color);
+    return FlatTexture::create(color);
   }
 
 } // namespace rt

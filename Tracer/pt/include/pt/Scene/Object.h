@@ -58,7 +58,6 @@ namespace pt {
     bool setBSDF(BSDFPtr& bsdf);
 
     bool haveTexture() const;
-    bool setTexture(rt::TexturePtr& texture);
     bool setTexture(const rt::size_t id, rt::TexturePtr& texture);
 
     void preprocess();

@@ -68,8 +68,6 @@ namespace rt {
     return TexturePtr();
   }
 
-  ////// protected ///////////////////////////////////////////////////////////
-
   size_t ITexture::readId(const tinyxml2::XMLElement *elem, const rt::size_t defaultId)
   {
     const char *nameId = "id";

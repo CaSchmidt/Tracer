@@ -38,8 +38,7 @@ namespace rt {
 
   class CheckedTexture : public ITexture {
   public:
-    CheckedTexture(const size_t id,
-                   const Color& colorA, const Color& colorB,
+    CheckedTexture(const Color& colorA, const Color& colorB,
                    const real_t scaleS, const real_t scaleT) noexcept;
     ~CheckedTexture() noexcept;
 
@@ -47,8 +46,7 @@ namespace rt {
 
     Color lookup(const TexCoord2D& tex) const final;
 
-    static TexturePtr create(const size_t id,
-                             const Color& colorA, const Color& colorB,
+    static TexturePtr create(const Color& colorA, const Color& colorB,
                              const real_t scaleS, const real_t scaleT);
 
     static TexturePtr load(const tinyxml2::XMLElement *elem);

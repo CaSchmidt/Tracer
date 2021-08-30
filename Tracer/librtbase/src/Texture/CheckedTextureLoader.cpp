@@ -45,8 +45,6 @@ namespace rt {
 
     bool myOk = false;
 
-    const size_t id = readId(elem);
-
     const Color colorA = priv::parseColor(elem->FirstChildElement("ColorA"), &myOk);
     if( !myOk ) {
       return TexturePtr();
@@ -67,7 +65,7 @@ namespace rt {
       return TexturePtr();
     }
 
-    return CheckedTexture::create(id, colorA, colorB, scaleS, scaleT);
+    return CheckedTexture::create(colorA, colorB, scaleS, scaleT);
   }
 
 } // namespace rt
