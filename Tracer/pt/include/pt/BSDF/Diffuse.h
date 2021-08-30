@@ -46,6 +46,9 @@ namespace pt {
     rt::Color sample(const rt::Direction& wo, rt::Direction *wi, const rt::Sample2D& xi) const;
 
     static BSDFPtr create();
+
+    static bool isDiffuse(const tinyxml2::XMLElement *elem);
+    static BSDFPtr load(const tinyxml2::XMLElement *elem);
   };
 
 } // namespace pt

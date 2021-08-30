@@ -29,34 +29,65 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef DIELECTRIC_H
-#define DIELECTRIC_H
+#include <tinyxml2.h>
 
 #include "pt/BSDF/IBSDF.h"
 
+#include "pt/BSDF/Dielectric.h"
+#include "pt/BSDF/Diffuse.h"
+#include "pt/BSDF/Mirror.h"
+#include "rt/Loader/SceneLoaderBase.h"
+#include "rt/Loader/SceneLoaderStringUtil.h"
+
 namespace pt {
 
-  class Dielectric : public IBSDF {
-  public:
-    Dielectric(const rt::real_t eta) noexcept;
-    ~Dielectric() noexcept;
+  ////// public //////////////////////////////////////////////////////////////
 
-    rt::Color   eval(const rt::Direction& wo, const rt::Direction& wi) const;
-    rt::real_t   pdf(const rt::Direction& wo, const rt::Direction& wi) const;
-    rt::Color sample(const rt::Direction& wo, rt::Direction *wi, const rt::Sample2D& xi) const;
+  bool IBSDF::isBSDF(const tinyxml2::XMLElement *elem)
+  {
+    return elem != nullptr  &&  rt::priv::compare(elem->Value(), "BSDF");
+  }
 
-    rt::real_t eta() const;
-    void setEta(const rt::real_t eta);
+  BSDFPtr IBSDF::load(const tinyxml2::XMLElement *elem)
+  {
+    if( !isBSDF(elem) ) {
+      return BSDFPtr();
+    }
 
-    static BSDFPtr create(const rt::real_t eta);
+    BSDFPtr bsdf;
+    if(        Dielectric::isDielectric(elem) ) {
+      bsdf = Dielectric::load(elem);
+    } else if( Diffuse::isDiffuse(elem) ) {
+      bsdf = Diffuse::load(elem);
+    } else if( Mirror::isMirror(elem) ) {
+      bsdf = Mirror::load(elem);
+    }
 
-    static bool isDielectric(const tinyxml2::XMLElement *elem);
-    static BSDFPtr load(const tinyxml2::XMLElement *elem);
+    if( bsdf ) {
+      bsdf->setColor(readColor(elem));
+    }
 
-  private:
-    rt::real_t _etaB;
-  };
+    return bsdf;
+  }
+
+  ////// private /////////////////////////////////////////////////////////////
+
+  rt::Color IBSDF::readColor(const tinyxml2::XMLElement *parent)
+  {
+    const rt::Color defaultColor(1);
+
+    if( parent == nullptr ) {
+      return defaultColor;
+    }
+
+    bool ok = false;
+
+    const rt::Color result = rt::priv::parseColor(parent->FirstChildElement("BSDF.Color"), &ok);
+    if( !ok ) {
+      return defaultColor;
+    }
+
+    return result;
+  }
 
 } // namespace pt
-
-#endif // DIELECTRIC_H

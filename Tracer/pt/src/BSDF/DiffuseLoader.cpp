@@ -29,34 +29,26 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef DIELECTRIC_H
-#define DIELECTRIC_H
+#include <tinyxml2.h>
 
-#include "pt/BSDF/IBSDF.h"
+#include "pt/BSDF/Diffuse.h"
+
+#include "rt/Loader/SceneLoaderBase.h"
 
 namespace pt {
 
-  class Dielectric : public IBSDF {
-  public:
-    Dielectric(const rt::real_t eta) noexcept;
-    ~Dielectric() noexcept;
+  bool Diffuse::isDiffuse(const tinyxml2::XMLElement *elem)
+  {
+    return isBSDF(elem)  &&  elem->Attribute("type", "Diffuse") != nullptr;
+  }
 
-    rt::Color   eval(const rt::Direction& wo, const rt::Direction& wi) const;
-    rt::real_t   pdf(const rt::Direction& wo, const rt::Direction& wi) const;
-    rt::Color sample(const rt::Direction& wo, rt::Direction *wi, const rt::Sample2D& xi) const;
+  BSDFPtr Diffuse::load(const tinyxml2::XMLElement *elem)
+  {
+    if( !isDiffuse(elem) ) {
+      return BSDFPtr();
+    }
 
-    rt::real_t eta() const;
-    void setEta(const rt::real_t eta);
-
-    static BSDFPtr create(const rt::real_t eta);
-
-    static bool isDielectric(const tinyxml2::XMLElement *elem);
-    static BSDFPtr load(const tinyxml2::XMLElement *elem);
-
-  private:
-    rt::real_t _etaB;
-  };
+    return create();
+  }
 
 } // namespace pt
-
-#endif // DIELECTRIC_H

@@ -16,9 +16,13 @@ list(APPEND pt_HEADERS
 
 list(APPEND pt_SOURCES
   src/BSDF/Dielectric.cpp
+  src/BSDF/DielectricLoader.cpp
   src/BSDF/Diffuse.cpp
+  src/BSDF/DiffuseLoader.cpp
   src/BSDF/IBSDF.cpp
+  src/BSDF/IBSDFLoader.cpp
   src/BSDF/Mirror.cpp
+  src/BSDF/MirrorLoader.cpp
   src/Renderer/PathTracer.cpp
   src/Scene/Object.cpp
   src/Scene/ObjectLibrary.cpp

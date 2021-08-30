@@ -50,6 +50,9 @@ namespace pt {
 
     static BSDFPtr create(const rt::real_t reflection = 1);
 
+    static bool isMirror(const tinyxml2::XMLElement *elem);
+    static BSDFPtr load(const tinyxml2::XMLElement *elem);
+
   private:
     rt::real_t _reflection;
   };

@@ -36,9 +36,15 @@
 
 #include "rt/Sampler/Sample.h"
 
+namespace tinyxml2 {
+  class XMLElement;
+} // namespace tinyxml2
+
 namespace pt {
 
   struct IntersectionInfo;
+
+  using BSDFPtr = std::unique_ptr<class IBSDF>;
 
   class IBSDF {
   public:
@@ -74,11 +80,15 @@ namespace pt {
      */
     virtual rt::Color sample(const rt::Direction& wo, rt::Direction *wi, const rt::Sample2D& xi) const = 0;
 
+    static bool isBSDF(const tinyxml2::XMLElement *elem);
+    static BSDFPtr load(const tinyxml2::XMLElement *elem);
+
   protected:
     rt::Color _color;
-  };
 
-  using BSDFPtr = std::unique_ptr<class IBSDF>;
+  private:
+    static rt::Color readColor(const tinyxml2::XMLElement *parent);
+  };
 
 } // namespace pt
 
