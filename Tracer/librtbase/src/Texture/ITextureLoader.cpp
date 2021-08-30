@@ -70,12 +70,11 @@ namespace rt {
 
   ////// protected ///////////////////////////////////////////////////////////
 
-  size_t ITexture::readId(const tinyxml2::XMLElement *elem)
+  size_t ITexture::readId(const tinyxml2::XMLElement *elem, const rt::size_t defaultId)
   {
-    constexpr size_t defaultId = 0; // Default ID
     const char *nameId = "id";
 
-    if( elem == nullptr  ||  elem->Attribute(nameId) == nullptr ) {
+    if( !isTexture(elem)  ||  elem->Attribute(nameId) == nullptr ) {
       return defaultId;
     }
 

@@ -59,7 +59,7 @@ namespace rt {
     static TexturePtr load(const tinyxml2::XMLElement *elem);
 
   protected:
-    static size_t readId(const tinyxml2::XMLElement *elem);
+    static size_t readId(const tinyxml2::XMLElement *elem, const rt::size_t defaultId = 0);
 
   private:
     ITexture() noexcept = delete;

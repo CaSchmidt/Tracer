@@ -72,11 +72,10 @@ namespace pt {
 
   ////// private /////////////////////////////////////////////////////////////
 
-  rt::Color IBSDF::readColor(const tinyxml2::XMLElement *parent)
+  rt::Color IBSDF::readColor(const tinyxml2::XMLElement *parent,
+                             const rt::Color& defaultColor)
   {
-    const rt::Color defaultColor(1);
-
-    if( parent == nullptr ) {
+    if( !isBSDF(parent) ) {
       return defaultColor;
     }
 

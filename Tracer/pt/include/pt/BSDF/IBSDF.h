@@ -87,7 +87,8 @@ namespace pt {
     rt::Color _color;
 
   private:
-    static rt::Color readColor(const tinyxml2::XMLElement *parent);
+    static rt::Color readColor(const tinyxml2::XMLElement *parent,
+                               const rt::Color& defaultColor = rt::Color(1));
   };
 
 } // namespace pt
