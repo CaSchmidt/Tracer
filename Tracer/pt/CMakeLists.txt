@@ -26,7 +26,9 @@ list(APPEND pt_SOURCES
   src/Renderer/PathTracer.cpp
   src/Scene/Object.cpp
   src/Scene/ObjectLibrary.cpp
+  src/Scene/ObjectLoader.cpp
   src/Scene/Scene.cpp
+  src/Scene/SceneLoader.cpp
   src/Shape/Cylinder.cpp
   src/Shape/CylinderLoader.cpp
   src/Shape/Disk.cpp

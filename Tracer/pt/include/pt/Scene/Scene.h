@@ -36,6 +36,10 @@
 #include "rt/Scene/IScene.h"
 #include "pt/Scene/Object.h"
 
+namespace rt {
+  struct RenderOptions;
+} // namespace rt
+
 namespace pt {
 
   class Scene : public rt::IScene {
@@ -53,6 +57,11 @@ namespace pt {
     bool intersect(IntersectionInfo *info, const rt::Ray& ray) const;
 
     static rt::ScenePtr create();
+
+    static bool isScene(const tinyxml2::XMLElement *elem);
+    static bool isScene(const char *filename);
+
+    static bool load(Scene *scene, rt::RenderOptions *options, const char *filename);
 
   private:
     rt::Color _background;
