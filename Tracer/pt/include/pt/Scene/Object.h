@@ -78,6 +78,9 @@ namespace pt {
                                   const rt::real_t height,
                                   const rt::real_t radius);
 
+    static bool isObject(const tinyxml2::XMLElement *elem);
+    static ObjectPtr load(const tinyxml2::XMLElement *elem);
+
   private:
     struct ObjectFace {
       ObjectFace(ShapePtr& _shape) noexcept
@@ -95,6 +98,19 @@ namespace pt {
     using ObjectFaces = std::list<ObjectFace>;
 
     Object() noexcept = delete;
+
+    static bool isBox(const tinyxml2::XMLElement *elem);
+    static bool isInvertedBox(const tinyxml2::XMLElement *elem);
+    static bool isPillar(const tinyxml2::XMLElement *elem);
+
+    static ObjectPtr loadBox(const tinyxml2::XMLElement *elem,
+                             const rt::Transform& objectToWorld);
+    static ObjectPtr loadInvertedBox(const tinyxml2::XMLElement *elem,
+                                     const rt::Transform& objectToWorld);
+    static ObjectPtr loadPillar(const tinyxml2::XMLElement *elem,
+                                const rt::Transform& objectToWorld);
+    static ObjectPtr loadShapes(const tinyxml2::XMLElement *elem,
+                                const rt::Transform& objectToWorld);
 
     rt::Bounds     _bounds;
     BSDFPtr        _bsdf;
