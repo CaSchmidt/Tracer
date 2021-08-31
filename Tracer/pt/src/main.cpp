@@ -171,6 +171,19 @@ void build_scene(pt::Scene *scene)
 #endif
 }
 
+rt::RenderOptions build_options()
+{
+  rt::RenderOptions options;
+  options.eye      = rt::Vertex{0, -2.7f, 1};
+  options.lookAt   = rt::Vertex{0, 0, 1};
+  options.cameraUp = rt::Direction{0, 0, 1};
+  options.fov_rad       = math::radian<rt::real_t>(60);
+  options.worldToScreen = 2;
+  options.gamma    = 2.2f;
+  options.maxDepth = 5;
+  return options;
+}
+
 int main(int /*argc*/, char ** /*argv*/)
 {
   rt::RenderContext rc;
@@ -197,7 +210,7 @@ int main(int /*argc*/, char ** /*argv*/)
 
   // (3) Camera //////////////////////////////////////////////////////////////
 
-  rc.camera = rt::FrustumCamera::create(width, height, options);
+  rc.camera = rt::FrustumCamera::create(width, height, rc.renderer->options());
 
   // (4) Sampler /////////////////////////////////////////////////////////////
 
