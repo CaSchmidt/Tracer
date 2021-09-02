@@ -49,6 +49,7 @@
 #define PATH_TO_XML "../../Tracer/Tracer/pt-scenes/"
 
 #define FILE_1 "cornell.xml"
+#define FILE_2 "cornell-shapes.xml"
 
 constexpr rt::size_t  blockSize = 8;
 constexpr rt::size_t numSamples = 32;
@@ -56,154 +57,13 @@ constexpr rt::size_t numSamples = 32;
 constexpr rt::size_t  width = 768;
 constexpr rt::size_t height = 768;
 
-void build_scene(pt::Scene *scene)
-{  
-  const rt::Color black{0, 0, 0};
-  const rt::Color white{1, 1, 1};
-  const rt::Color  gray{0.75, 0.75, 0.75};
-  const rt::Color   red{0.75, 0.25, 0.25};
-  const rt::Color green{0.25, 0.75, 0.25};
-  const rt::Color   sky{0, 0.8f, 1};
-
-  pt::BSDFPtr       bsdf;
-  rt::Matrix      matrix;
-  pt::ShapePtr     shape;
-  rt::TexturePtr texture;
-
-  scene->setBackgroundColor(black);
-
-  // (1) Create Cornell Box //////////////////////////////////////////////////
-
-  pt::ObjectPtr cornell = pt::Object::createInvertedBox(n4::translate(0, 0, 1), 2, 2, 2);
-  bsdf = pt::Diffuse::create();
-  cornell->setBSDF(bsdf);
-  texture = rt::FlatTexture::create(gray);
-  cornell->setTexture(0, texture);
-  texture = rt::FlatTexture::create(red); // Left
-  cornell->setTexture(1, texture);
-  texture = rt::FlatTexture::create(green); // Right
-  cornell->setTexture(2, texture);
-  texture = rt::FlatTexture::create(black); // Front
-  cornell->setTexture(3, texture);
-  scene->add(cornell);
-
-  // (2) Create Light ////////////////////////////////////////////////////////
-
-  pt::ObjectPtr light = pt::Object::create(n4::translate(0, 0, 1.99f)*n4::rotateXbyPI2(2));
-  shape = pt::Plane::create(n4::identity(), 0.5, 0.5);
-  light->add(shape);
-  bsdf = pt::Diffuse::create();
-  light->setBSDF(bsdf);
-  texture = rt::FlatTexture::create(black);
-  light->setTexture(0, texture);
-  light->setEmissiveColor(white);
-  light->setEmissiveScale(4);
-  scene->add(light);
-
-  // Create various Objects //////////////////////////////////////////////////
-
-#if 1
-  {
-    const rt::real_t r1 = 0.375;
-    const rt::real_t p1 = 0.375;
-    matrix = n4::translate(-p1, p1, r1);
-    pt::ObjectPtr sphere1 = pt::Object::create(matrix);
-    shape = pt::Sphere::create(n4::identity(), r1);
-    sphere1->add(shape);
-# if 1
-    bsdf = pt::Mirror::create();
-    sphere1->setBSDF(bsdf);
-# else
-    bsdf = pt::Diffuse::create();
-    sphere1->setBSDF(bsdf);
-# endif
-    texture = rt::FlatTexture::create(gray);
-    sphere1->setTexture(0, texture);
-    scene->add(sphere1);
-  }
-#else
-  {
-    const rt::real_t d1 = 0.5;
-    const rt::real_t h1 = 1;
-    const rt::real_t p1 = 0.375;
-    matrix = n4::translate(-p1, p1, h1/2.0)*n4::rotateZ(rt::PI/6.0);
-    pt::ObjectPtr box1 = pt::Object::createBox(matrix, d1, d1, h1);
-    bsdf = pt::Diffuse::create();
-    box1->setBSDF(bsdf);
-    texture = rt::FlatTexture::create(gray);
-    box1->setTexture(0, texture);
-    scene->add(box1);
-  }
-#endif
-
-#if 1
-  {
-    const rt::real_t r2 = 0.375;
-    const rt::real_t p2 = 0.375;
-    matrix = n4::translate(p2, -p2, r2);
-    pt::ObjectPtr sphere2 = pt::Object::create(matrix);
-    shape = pt::Sphere::create(n4::identity(), r2);
-    sphere2->add(shape);
-    bsdf = pt::Dielectric::create(1.5);
-    sphere2->setBSDF(bsdf);
-    texture = rt::FlatTexture::create(white);
-    sphere2->setTexture(0, texture);
-    scene->add(sphere2);
-  }
-#else
-# if 1
-  {
-    const rt::real_t h2 = 0.5;
-    const rt::real_t r2 = 0.375;
-    const rt::real_t p2 = 0.375;
-    matrix = n4::translate(p2, -p2, h2/2.0);
-    pt::ObjectPtr pillar2 = pt::Object::createPillar(matrix, h2, r2);
-    bsdf = pt::Diffuse::create();
-    pillar2->setBSDF(bsdf);
-    texture = rt::FlatTexture::create(gray);
-    pillar2->setTexture(0, texture);
-    scene->add(pillar2);
-  }
-# else
-  {
-    const rt::real_t d2 = 0.5;
-    const rt::real_t h2 = 0.5;
-    const rt::real_t p2 = 0.375;
-    matrix = n4::translate(p2, -p2, h2/2.0)*n4::rotateZ(-rt::PI/6.0);
-    pt::ObjectPtr box2 = pt::Object::createBox(matrix, d2, d2, h2);
-    bsdf = pt::Diffuse::create();
-    box2->setBSDF(bsdf);
-    texture = rt::FlatTexture::create(gray);
-    box2->setTexture(0, texture);
-    scene->add(box2);
-  }
-# endif
-#endif
-}
-
-rt::RenderOptions build_options()
-{
-  rt::RenderOptions options;
-  options.eye      = rt::Vertex{0, -2.7f, 1};
-  options.lookAt   = rt::Vertex{0, 0, 1};
-  options.cameraUp = rt::Direction{0, 0, 1};
-  options.fov_rad       = math::radian<rt::real_t>(60);
-  options.worldToScreen = 2;
-  options.gamma    = 2.2f;
-  options.maxDepth = 5;
-  return options;
-}
-
 int main(int /*argc*/, char ** /*argv*/)
 {
   rt::RenderContext rc;
 
-  // (1) Scene ///////////////////////////////////////////////////////////////
+  // (1) Scene & Options /////////////////////////////////////////////////////
 
   rc.scene = pt::Scene::create();
-  build_scene(pt::SCENE(rc.scene));
-
-  // (2.1) Render Options ////////////////////////////////////////////////////
 
   rt::RenderOptions options;
   if( !pt::Scene::load(pt::SCENE(rc.scene), &options, PATH_TO_XML FILE_1) ) {
@@ -212,7 +72,7 @@ int main(int /*argc*/, char ** /*argv*/)
   options.gamma    = 2.2f; // Not in XML!
   options.maxDepth = 5;    // Not in XML!
 
-  // (2.2) Renderer //////////////////////////////////////////////////////////
+  // (2) Renderer ////////////////////////////////////////////////////////////
 
   rc.renderer = pt::PathTracer::create(options);
 
