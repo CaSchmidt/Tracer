@@ -165,7 +165,7 @@ namespace pt {
   ObjectPtr Object::loadInvertedBox(const tinyxml2::XMLElement *elem,
                                     const rt::Transform& objectToWorld)
   {
-    if( !isBox(elem) ) {
+    if( !isInvertedBox(elem) ) {
       return ObjectPtr();
     }
 
@@ -192,7 +192,7 @@ namespace pt {
   ObjectPtr Object::loadPillar(const tinyxml2::XMLElement *elem,
                                const rt::Transform& objectToWorld)
   {
-    if( !isBox(elem) ) {
+    if( !isPillar(elem) ) {
       return ObjectPtr();
     }
 
@@ -220,8 +220,8 @@ namespace pt {
 
     ObjectPtr object = create(objectToWorld);
 
-    for(const tinyxml2::XMLElement *child = elem->FirstChildElement();
-        child != nullptr; child = child->NextSiblingElement()) {
+    for(const tinyxml2::XMLElement *child = elem->FirstChildElement("Shape");
+        child != nullptr; child = child->NextSiblingElement("Shape")) {
       if( !IShape::isShape(child) ) {
         continue;
       }
