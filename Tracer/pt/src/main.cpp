@@ -46,6 +46,10 @@
 #include "rt/Texture/FlatTexture.h"
 #include "Util/Worker.h"
 
+#define PATH_TO_XML "../../Tracer/Tracer/pt-scenes/"
+
+#define FILE_1 "cornell.xml"
+
 constexpr rt::size_t  blockSize = 8;
 constexpr rt::size_t numSamples = 32;
 
@@ -68,6 +72,8 @@ void build_scene(pt::Scene *scene)
 
   scene->setBackgroundColor(black);
 
+  // (1) Create Cornell Box //////////////////////////////////////////////////
+
   pt::ObjectPtr cornell = pt::Object::createInvertedBox(n4::translate(0, 0, 1), 2, 2, 2);
   bsdf = pt::Diffuse::create();
   cornell->setBSDF(bsdf);
@@ -81,16 +87,20 @@ void build_scene(pt::Scene *scene)
   cornell->setTexture(3, texture);
   scene->add(cornell);
 
+  // (2) Create Light ////////////////////////////////////////////////////////
+
   pt::ObjectPtr light = pt::Object::create(n4::translate(0, 0, 1.99f)*n4::rotateXbyPI2(2));
   shape = pt::Plane::create(n4::identity(), 0.5, 0.5);
   light->add(shape);
   bsdf = pt::Diffuse::create();
   light->setBSDF(bsdf);
   texture = rt::FlatTexture::create(black);
-  light->setTexture(1, texture);
+  light->setTexture(0, texture);
   light->setEmissiveColor(white);
   light->setEmissiveScale(4);
   scene->add(light);
+
+  // Create various Objects //////////////////////////////////////////////////
 
 #if 1
   {
@@ -196,13 +206,11 @@ int main(int /*argc*/, char ** /*argv*/)
   // (2.1) Render Options ////////////////////////////////////////////////////
 
   rt::RenderOptions options;
-  options.eye      = rt::Vertex{0, -2.7f, 1};
-  options.lookAt   = rt::Vertex{0, 0, 1};
-  options.cameraUp = rt::Direction{0, 0, 1};
-  options.fov_rad       = math::radian<rt::real_t>(60);
-  options.worldToScreen = 2;
-  options.gamma    = 2.2f;
-  options.maxDepth = 5;
+  if( !pt::Scene::load(pt::SCENE(rc.scene), &options, PATH_TO_XML FILE_1) ) {
+    return EXIT_FAILURE;
+  }
+  options.gamma    = 2.2f; // Not in XML!
+  options.maxDepth = 5;    // Not in XML!
 
   // (2.2) Renderer //////////////////////////////////////////////////////////
 
