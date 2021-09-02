@@ -52,17 +52,23 @@ namespace pt {
       return ShapePtr();
     }
 
+    ShapePtr shape;
     if(        Cylinder::isCylinder(elem) ) {
-      return Cylinder::load(elem);
+      shape = Cylinder::load(elem);
     } else if( Disk::isDisk(elem) ) {
-      return Disk::load(elem);
+      shape = Disk::load(elem);
     } else if( Plane::isPlane(elem) ) {
-      return Plane::load(elem);
+      shape = Plane::load(elem);
     } else if( Sphere::isSphere(elem) ) {
-      return Sphere::load(elem);
+      shape = Sphere::load(elem);
     }
 
-    return ShapePtr();
+    if( !shape ) {
+      fprintf(stderr, "Unable to load <Shape> at line \"%d\"!\n", elem->GetLineNum());
+      return ShapePtr();
+    }
+
+    return shape;
   }
 
 } // namespace pt

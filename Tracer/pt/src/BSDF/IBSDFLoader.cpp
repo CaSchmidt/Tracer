@@ -65,6 +65,9 @@ namespace pt {
 
     if( bsdf ) {
       bsdf->setColor(readColor(elem));
+    } else {
+      fprintf(stderr, "Unable to load <BSDF> at line \"%d\"!\n", elem->GetLineNum());
+      return BSDFPtr();
     }
 
     return bsdf;

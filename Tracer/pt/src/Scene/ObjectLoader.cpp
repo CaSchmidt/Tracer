@@ -57,6 +57,7 @@ namespace pt {
 
     const rt::Transform objectToWorld = rt::priv::parseTransform(elem->FirstChildElement("Transform"), &ok);
     if( !ok ) {
+      fprintf(stderr, "Erroneous or missing <Transform>!\n");
       return ObjectPtr();
     }
 
@@ -69,11 +70,12 @@ namespace pt {
       object = loadInvertedBox(elem, objectToWorld);
     } else if( isPillar(elem) ) {
       object = loadPillar(elem, objectToWorld);
-    } else {
+    } else if( isObject(elem)  &&  elem->Attribute("type") == nullptr ) {
       object = loadShapes(elem, objectToWorld);
     }
 
     if( !object ) {
+      fprintf(stderr, "Erroneous or missing <Object> definition!\n");
       return ObjectPtr();
     }
 
@@ -81,7 +83,10 @@ namespace pt {
 
     BSDFPtr bsdf = IBSDF::load(elem->FirstChildElement("BSDF"));
     if( !bsdf ) {
+      fprintf(stderr, "Erroneous or missing <BSDF>!\n");
       return ObjectPtr();
+    } else {
+      object->setBSDF(bsdf);
     }
 
     // (4) Load Texture(s) ///////////////////////////////////////////////////
@@ -99,19 +104,26 @@ namespace pt {
       object->setTexture(id, texture);
     }
 
+    if( !object->haveTexture() ) {
+      fprintf(stderr, "Erroneous or missing <Texture id=\"0\">!\n");
+      return ObjectPtr();
+    }
+
     // (5) Load Emittance ////////////////////////////////////////////////////
 
     const rt::Color emitColor = rt::priv::parseColor(elem->FirstChildElement("EmitColor"), &ok);
-    if( !ok ) {
-      return ObjectPtr();
+    if( ok ) {
+      object->setEmissiveColor(emitColor);
+    } else {
+      object->setEmissiveColor(rt::Color(0));
     }
-    object->setEmissiveColor(emitColor);
 
     const rt::real_t emitScale = rt::priv::parseReal(elem->FirstChildElement("EmitScale"), &ok);
-    if( !ok ) {
-      return ObjectPtr();
+    if( ok ) {
+      object->setEmissiveScale(emitScale);
+    } else {
+      object->setEmissiveScale(1);
     }
-    object->setEmissiveScale(emitScale);
 
     // Done! /////////////////////////////////////////////////////////////////
 

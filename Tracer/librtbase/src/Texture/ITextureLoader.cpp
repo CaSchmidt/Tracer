@@ -59,13 +59,19 @@ namespace rt {
       return TexturePtr();
     }
 
+    TexturePtr texture;
     if(        elem->Attribute("type", "Checked") != nullptr ) {
-      return CheckedTexture::load(elem);
+      texture = CheckedTexture::load(elem);
     } else if( elem->Attribute("type", "Flat") != nullptr ) {
-      return FlatTexture::load(elem);
+      texture = FlatTexture::load(elem);
     }
 
-    return TexturePtr();
+    if( !texture ) {
+      fprintf(stderr, "Unable to load <Texture> at line \"%d\"!\n", elem->GetLineNum());
+      return TexturePtr();
+    }
+
+    return texture;
   }
 
   size_t ITexture::readId(const tinyxml2::XMLElement *elem, const rt::size_t defaultId)

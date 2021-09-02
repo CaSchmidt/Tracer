@@ -94,7 +94,7 @@ namespace pt {
       }
       ObjectPtr object = Object::load(child);
       if( !object ) {
-        fprintf(stderr, "Unable to load <Object> at line \"%d\"!", child->GetLineNum());
+        fprintf(stderr, "Unable to load <Object> at line \"%d\"!\n", child->GetLineNum());
         return false;
       }
       scene->add(object);
