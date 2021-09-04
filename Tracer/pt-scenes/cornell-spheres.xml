@@ -1,0 +1,148 @@
+<PathTracerScene>
+  <Options>
+    <FoV>60</FoV>
+    <WorldToScreen>2</WorldToScreen>
+    <Eye>
+      <x>0</x>
+      <y>-2.7</y>
+      <z>1</z>
+    </Eye>
+    <LookAt>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </LookAt>
+    <CameraUp>
+      <x>0</x>
+      <y>0</y>
+      <z>1</z>
+    </CameraUp>
+  </Options>
+  <BackgroundColor>
+    <r>0</r>
+    <g>0</g>
+    <b>0</b>
+  </BackgroundColor>
+  <!-- Cornell Box -->
+  <Object type="InvertedBox">
+    <DimX>2</DimX>
+    <DimY>2</DimY>
+    <DimZ>2</DimZ>
+    <Transform>
+      <Translate>
+        <x>0</x>
+        <y>0</y>
+        <z>1</z>
+      </Translate>
+    </Transform>
+    <BSDF type="Diffuse"/>
+    <Texture id="0" type="Flat">
+      <Color>
+        <r>0.75</r>
+        <g>0.75</g>
+        <b>0.75</b>
+      </Color>
+    </Texture>
+    <Texture id="1" type="Flat">
+      <Color>
+        <r>0.75</r>
+        <g>0.25</g>
+        <b>0.25</b>
+      </Color>
+    </Texture>
+    <Texture id="2" type="Flat">
+      <Color>
+        <r>0.25</r>
+        <g>0.75</g>
+        <b>0.25</b>
+      </Color>
+    </Texture>
+    <Texture id="3" type="Flat">
+      <Color>
+        <r>0</r>
+        <g>0</g>
+        <b>0</b>
+      </Color>
+    </Texture>
+  </Object>
+  <!-- Light -->
+  <Object>
+    <Transform>
+      <Rotate>
+        <rxByPI2>2</rxByPI2>
+      </Rotate>
+      <Translate>
+        <x>0</x>
+        <y>0</y>
+        <z>1.99</z>
+      </Translate>
+    </Transform>
+    <Shape type="Plane">
+      <Transform/>
+      <Width>0.5</Width>
+      <Height>0.5</Height>
+    </Shape>
+    <BSDF type="Diffuse"/>
+    <Texture type="Flat">
+      <Color>
+        <r>0</r>
+        <g>0</g>
+        <b>0</b>
+      </Color>
+    </Texture>
+    <EmitColor>
+      <r>1</r>
+      <g>1</g>
+      <b>1</b>
+    </EmitColor>
+    <EmitScale>4</EmitScale>
+  </Object>
+  <!-- Sphere #1: Mirror -->
+  <Object>
+    <Transform>
+      <Translate>
+        <x>-0.375</x>
+        <y>0.375</y>
+        <z>0.375</z>
+      </Translate>
+    </Transform>
+    <Shape type="Sphere">
+      <Transform/>
+      <Radius>0.375</Radius>
+    </Shape>
+    <BSDF type="Mirror">
+      <Reflection>1</Reflection>
+    </BSDF>
+    <Texture type="Flat">
+      <Color>
+        <r>1</r>
+        <g>1</g>
+        <b>1</b>
+      </Color>
+    </Texture>
+  </Object>
+  <!-- Sphere #2: Glass -->
+  <Object>
+    <Transform>
+      <Translate>
+        <x>0.375</x>
+        <y>-0.375</y>
+        <z>0.375</z>
+      </Translate>
+    </Transform>
+    <Shape type="Sphere">
+      <Transform/>
+      <Radius>0.375</Radius>
+    </Shape>
+    <BSDF type="Dielectric">
+      <Eta>1.5</Eta>
+    </BSDF>
+    <Texture type="Flat">
+      <Color>
+        <r>1</r>
+        <g>1</g>
+        <b>1</b>
+      </Color>
+    </Texture>
+  </Object>
+</PathTracerScene>

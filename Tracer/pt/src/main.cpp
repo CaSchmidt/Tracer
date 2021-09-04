@@ -50,6 +50,7 @@
 
 #define FILE_1 "cornell.xml"
 #define FILE_2 "cornell-shapes.xml"
+#define FILE_3 "cornell-spheres.xml"
 
 constexpr rt::size_t  blockSize = 8;
 constexpr rt::size_t numSamples = 32;
