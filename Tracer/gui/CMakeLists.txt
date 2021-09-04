@@ -44,4 +44,4 @@ target_include_directories(gui
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
   )
 
-target_link_libraries(gui Qt5::Widgets Qt5::Concurrent rt)
+target_link_libraries(gui Qt5::Widgets Qt5::Concurrent pt rt)

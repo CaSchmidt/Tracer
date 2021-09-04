@@ -39,6 +39,8 @@
 #include "WMainWindow.h"
 #include "ui_WMainWindow.h"
 
+#include "pt/Renderer/PathTracer.h"
+#include "pt/Scene/Scene.h"
 #include "rt/Camera/FrustumCamera.h"
 #include "rt/Camera/SimpleCamera.h"
 #include "rt/Loader/SceneLoader.h"
@@ -143,26 +145,43 @@ bool WMainWindow::initializeRenderContext()
   }
   const QString filename = ui->sceneEdit->text();
 
+  // (0) Determine Type of Scene & Renderer //////////////////////////////////
+
+  const bool is_pathtracer = pt::Scene::isScene(filename.toUtf8().constData());
+
   // (1) Scene & RenderOptions ///////////////////////////////////////////////
 
-  rc.scene = rt::Scene::create();
-  rt::Scene *scene = rt::SCENE(rc.scene);
-
   rt::RenderOptions options;
-  if( !rt::loadScene(scene, &options, filename.toUtf8().constData()) ) {
+
+  bool ok = false;
+  if( is_pathtracer ) {
+    rc.scene = pt::Scene::create();
+    pt::Scene *scene = pt::SCENE(rc.scene);
+    ok = pt::Scene::load(scene, &options, filename.toUtf8().constData());
+  } else {
+    rc.scene = rt::Scene::create();
+    rt::Scene *scene = rt::SCENE(rc.scene);
+    ok = rt::loadScene(scene, &options, filename.toUtf8().constData());
+    if( ok ) {
+      scene->setUseCastShadow(ui->castShadowCheck->isChecked());
+    }
+  }
+
+  if( !ok ) {
     QMessageBox::critical(this, tr("Error"),
                           tr("Unable to load scene!"),
                           QMessageBox::Ok, QMessageBox::NoButton);
     return false;
   }
-  scene->setUseCastShadow(ui->castShadowCheck->isChecked());
 
   options.gamma    = ui->gammaSpin->value();
   options.maxDepth = ui->maxDepthSpin->value();
 
   // (2) Renderer ////////////////////////////////////////////////////////////
 
-  if(        ui->methodCombo->currentText() == METH_DIRECT ) {
+  if(        is_pathtracer ) {
+    rc.renderer = pt::PathTracer::create(options);
+  } else if( ui->methodCombo->currentText() == METH_DIRECT ) {
     rc.renderer = rt::DirectLightingRenderer::create(options);
     rt::DIRECT_LIGHTING(rc.renderer)->setSampleOneLight(ui->sampleOneLightCheck->isChecked());
   } else if( ui->methodCombo->currentText() == METH_PATH ) {
