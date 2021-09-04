@@ -1,4 +1,4 @@
-list(APPEND ptcli_HEADERS
+list(APPEND pt_HEADERS
   include/pt/BSDF/Dielectric.h
   include/pt/BSDF/Diffuse.h
   include/pt/BSDF/IBSDF.h
@@ -14,7 +14,7 @@ list(APPEND ptcli_HEADERS
   include/pt/Shape/Sphere.h
   )
 
-list(APPEND ptcli_SOURCES
+list(APPEND pt_SOURCES
   src/BSDF/Dielectric.cpp
   src/BSDF/DielectricLoader.cpp
   src/BSDF/Diffuse.cpp
@@ -40,20 +40,19 @@ list(APPEND ptcli_SOURCES
   src/Shape/PlaneLoader.cpp
   src/Shape/Sphere.cpp
   src/Shape/SphereLoader.cpp
-  src/main.cpp
   )
 
-add_executable(ptcli
-  ${ptcli_HEADERS}
-  ${ptcli_SOURCES}
+add_library(pt STATIC
+  ${pt_HEADERS}
+  ${pt_SOURCES}
   )
 
-format_output_name(ptcli "PathTracer-CLI")
+format_output_name(pt "pt")
 
-target_include_directories(ptcli
-  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+target_include_directories(pt
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
   )
 
-target_link_libraries(ptcli
-  PRIVATE rtbase
+target_link_libraries(pt
+  PUBLIC rtbase
   )

@@ -27,11 +27,12 @@ add_subdirectory(3rdparty/tinyxml2-800)
 
 add_subdirectory(libutil)
 add_subdirectory(librtbase)
+add_subdirectory(libpt)
 add_subdirectory(librt)
 
 add_subdirectory(cli)
 add_subdirectory(gui)
-add_subdirectory(pt)
+add_subdirectory(ptcli)
 
 ### Tests ####################################################################
 
