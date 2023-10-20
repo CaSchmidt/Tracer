@@ -17,8 +17,8 @@ include(FormatOutputName)
 find_package(Qt5Widgets 5.6 REQUIRED)
 find_package(Qt5Concurrent 5.6 REQUIRED)
 
-add_subdirectory(../NumericArray/NumericArray
-  ${CMAKE_CURRENT_BINARY_DIR}/NumericArray
+add_subdirectory(../csUtil/csUtil
+  ${CMAKE_CURRENT_BINARY_DIR}/csUtil
   )
 
 add_subdirectory(3rdparty/tinyxml2-800)

@@ -24,6 +24,11 @@ add_executable(gui
 format_output_name(gui "Tracer-GUI")
 
 set_target_properties(gui PROPERTIES
+  CXX_STANDARD 20
+  CXX_STANDARD_REQUIRED ON
+  )
+
+set_target_properties(gui PROPERTIES
   AUTOMOC ON
   AUTORCC ON
   AUTOUIC ON

@@ -49,6 +49,11 @@ add_library(pt STATIC
 
 format_output_name(pt "pt")
 
+set_target_properties(pt PROPERTIES
+  CXX_STANDARD 20
+  CXX_STANDARD_REQUIRED ON
+  )
+
 target_include_directories(pt
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
   )

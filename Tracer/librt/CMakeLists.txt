@@ -78,6 +78,11 @@ add_library(rt STATIC
 
 format_output_name(rt "rt")
 
+set_target_properties(rt PROPERTIES
+  CXX_STANDARD 20
+  CXX_STANDARD_REQUIRED ON
+  )
+
 target_include_directories(rt
   PRIVATE ${Tracer_SOURCE_DIR}/3rdparty/font8x8/include
   PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}/include
