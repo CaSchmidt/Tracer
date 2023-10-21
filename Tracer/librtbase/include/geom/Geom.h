@@ -32,6 +32,8 @@
 #ifndef GEOM_H
 #define GEOM_H
 
+#include <cs/Math/Math.h>
+
 #include <N4/N4.h>
 
 namespace geom {
@@ -46,10 +48,12 @@ namespace geom {
     static constexpr bool have_w = false;
   };
 
-  using Direction = n4::Vector4f<DirectionTraits,n4::Normal3fManipulator>;
+  using Direction = n4::Vector4f<DirectionTraits,n4::Normal3fData>;
   using    Matrix = n4::Matrix4f;
   using    Normal = n4::Normal3f;
   using    Vertex = n4::Vertex4f;
+
+  using Math = cs::Math<real_t>;
 
   // Convenience Functions ///////////////////////////////////////////////////
 
@@ -57,7 +61,7 @@ namespace geom {
   inline real_t absDot(const n4::ExprBase<traits1_T,ARG1>& arg1,
                        const n4::ExprBase<traits2_T,ARG2>& arg2)
   {
-    return n4::abs(n4::dot(arg1, n4::expr_cast<traits1_T,traits2_T,ARG2>(arg2)));
+    return Math::abs(n4::dot(arg1, n4::expr_cast<traits1_T,traits2_T,ARG2>(arg2)));
   }
 
   template<typename traits1_T, typename ARG1, typename traits2_T, typename ARG2>
@@ -76,7 +80,7 @@ namespace geom {
 
   inline Direction spherical(const real_t sinTheta, const real_t cosTheta, const real_t phi)
   {
-    return {sinTheta*n4::cos(phi), sinTheta*n4::sin(phi), cosTheta};
+    return {sinTheta*Math::cos(phi), sinTheta*Math::sin(phi), cosTheta};
   }
 
   // Helpers /////////////////////////////////////////////////////////////////

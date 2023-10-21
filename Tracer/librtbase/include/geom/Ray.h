@@ -100,7 +100,7 @@ namespace geom {
 
     inline bool isValid() const
     {
-      return n4::isFinite(_tMax)  &&  _tMax > ZERO;
+      return Math::isFinite(_tMax)  &&  _tMax > ZERO;
     }
 
     inline bool isValidT(const real_t t) const

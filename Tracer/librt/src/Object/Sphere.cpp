@@ -71,7 +71,7 @@ namespace rt {
       const Vertex Pobj = rayObj(t);
       const Normal Nobj = geom::to_normal(n4::normalize(Pobj));
       const real_t    u = math::phase<real_t>(Nobj.x, Nobj.y)/TWO_PI;
-      const real_t    v = n4::acos(std::clamp<real_t>(Nobj.z, -ONE, ONE))/PI;
+      const real_t    v = Math::acos(std::clamp<real_t>(Nobj.z, -ONE, ONE))/PI;
 
       *surface = SurfaceInfo();
 

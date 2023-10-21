@@ -63,7 +63,7 @@ namespace geom {
     template<typename VecT>
     inline real_t absCosTheta(const VecT& w)
     {
-      return n4::abs(cosTheta(w));
+      return Math::abs(cosTheta(w));
     }
 
     template<typename VecT>
@@ -95,7 +95,7 @@ namespace geom {
       const real_t sin2Tt = eta*eta*sin2Ti; // Snell's Law
       const real_t cos2Tt = ONE - sin2Tt;
       return cos2Tt >= ZERO // Handle Internal Reflection: sin2Tt > 1
-          ? Direction{-eta*wi.x, -eta*wi.y, -eta*wi.z + (eta*cosTi - n4::sqrt(cos2Tt))*nz}
+          ? Direction{-eta*wi.x, -eta*wi.y, -eta*wi.z + (eta*cosTi - Math::sqrt(cos2Tt))*nz}
           : Direction();
     }
 
@@ -113,7 +113,7 @@ namespace geom {
     template<typename VecT>
     inline real_t sinTheta(const VecT& w)
     {
-      return n4::sqrt(sin2Theta(w));
+      return Math::sqrt(sin2Theta(w));
     }
 
   } // namespace shading

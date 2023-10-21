@@ -48,7 +48,7 @@ namespace geom {
 
     inline bool isHit(const real_t& t)
     {
-      return n4::isFinite(t)  &&  t >= ZERO;
+      return Math::isFinite(t)  &&  t >= ZERO;
     }
 
   } // namespace intersect

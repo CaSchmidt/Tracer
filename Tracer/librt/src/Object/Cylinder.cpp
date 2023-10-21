@@ -61,7 +61,7 @@ namespace rt {
     }
 
     const Vertex Pobj = rayObj(t);
-    if( n4::abs(Pobj.z) > _height/TWO ) {
+    if( Math::abs(Pobj.z) > _height/TWO ) {
       return false;
     }
 
@@ -96,7 +96,7 @@ namespace rt {
     const real_t phi = xi2*TWO_PI;
     const real_t   z = xi1*_height - _height/TWO;
 
-    const Vertex Pobj = geom::reproject2D({_radius*n4::cos(phi), _radius*n4::sin(phi), z}, _radius);
+    const Vertex Pobj = geom::reproject2D({_radius*Math::cos(phi), _radius*Math::sin(phi), z}, _radius);
     const Normal Nobj = n4::normalize(Normal{Pobj.x, Pobj.y, 0});
 
     SurfaceInfo surface;

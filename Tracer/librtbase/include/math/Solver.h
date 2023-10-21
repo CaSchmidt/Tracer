@@ -34,7 +34,7 @@
 
 #include <algorithm>
 
-#include <N4/Math.h>
+#include <cs/Math/Math.h>
 
 #include "math/Constants.h"
 
@@ -43,7 +43,7 @@ namespace math {
   template<typename T>
   inline T abs(const T& x, const T& y)
   {
-    return n4::sqrt(x*x + y*y);
+    return cs::Math<T>::sqrt(x*x + y*y);
   }
 
   template<typename T>
@@ -56,7 +56,7 @@ namespace math {
   inline T phase(const T& x, const T& y)
   {
     // atan2(y,x) -> phi := [-pi,pi]
-    T phi = n4::atan2(y, x);
+    T phi = cs::Math<T>::atan2(y, x);
     if( phi < ZERO<T> ) {
       phi += TWO_PI<T>;
     }
@@ -67,14 +67,14 @@ namespace math {
   inline T pythagoras(const T& x)
   {
     // x^2 + y^2 = 1  =>  y = sqrt(1 - x^2)
-    return n4::sqrt(std::max<T>(ZERO<T>, ONE<T> - x*x));
+    return cs::Math<T>::sqrt(std::max<T>(ZERO<T>, ONE<T> - x*x));
   }
 
   template<typename T>
   inline T pythagoras(const T& x, const T& h)
   {
     // x^2 + y^2 = h^2  =>  y = sqrt(h^2 - x^2)
-    return n4::sqrt(std::max<T>(ZERO<T>, h*h - x*x));
+    return cs::Math<T>::sqrt(std::max<T>(ZERO<T>, h*h - x*x));
   }
 
   template<typename T>
@@ -92,7 +92,7 @@ namespace math {
       return false;
     }
 
-    const double rootDiscrim = n4::sqrt(discrim);
+    const double rootDiscrim = cs::Math<double>::sqrt(discrim);
     const double q = b < ZERO<double>
         ? -ONE_HALF<double>*(b - rootDiscrim)
         : -ONE_HALF<double>*(b + rootDiscrim);

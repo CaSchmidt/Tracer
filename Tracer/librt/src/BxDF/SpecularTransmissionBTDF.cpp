@@ -99,7 +99,7 @@ namespace rt {
     if( pdf != nullptr ) {
       *pdf = 1;
     }
-    return (kT*eta*eta)*_color/n4::abs(cosTi);
+    return (kT*eta*eta)*_color/Math::abs(cosTi);
   }
 
 } // namespace rt

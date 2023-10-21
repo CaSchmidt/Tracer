@@ -57,6 +57,8 @@ namespace rt {
   using geom::Ray;
   using geom::Transform;
 
+  using geom::Math;
+
   ////// Special Values //////////////////////////////////////////////////////
 
   inline constexpr real_t INF_REAL_T = math::Inf<real_t>;

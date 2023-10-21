@@ -62,7 +62,7 @@ namespace pt {
       const rt::Vertex Pobj = rayObj(t);
       const rt::Normal Nobj = geom::to_normal(n4::normalize(Pobj));
       const rt::real_t    u = math::phase<rt::real_t>(Nobj.x, Nobj.y)/rt::TWO_PI;
-      const rt::real_t    v = n4::acos(std::clamp<rt::real_t>(Nobj.z, -rt::ONE, rt::ONE))/rt::PI;
+      const rt::real_t    v = rt::Math::acos(std::clamp<rt::real_t>(Nobj.z, -rt::ONE, rt::ONE))/rt::PI;
 
       *info = IntersectionInfo();
 

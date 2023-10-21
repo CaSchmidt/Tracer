@@ -41,9 +41,7 @@ namespace rt {
   void render_loop(Image& image, const size_t y0, const RadianceFunc& radiance,
                    const real_t gamma = ONE)
   {
-    constexpr real_t MAX_RGB = 256.0 - 0x1p-7;
-
-    const real_t invGamma = 1.0f/std::max<real_t>(1, gamma); // Decoding gamma only!
+    const real_t invGamma = ONE/std::max(ONE, gamma); // Decoding gamma only!
 
     const size_t y1 = y0 + image.height();
     for(size_t y = y0; y < y1; y++) {
@@ -51,13 +49,13 @@ namespace rt {
       for(size_t x = 0; x < image.width(); x++) {
         const Color Li = radiance(x, y);
 
-        const real_t r = n4::pow(Li.r, invGamma);
-        const real_t g = n4::pow(Li.g, invGamma);
-        const real_t b = n4::pow(Li.b, invGamma);
+        const Color color = invGamma != ONE
+            ? n4::pow(Li, invGamma)
+            : Li;
 
-        *row++ = static_cast<uint8_t>(std::clamp<real_t>(r, 0, 1)*MAX_RGB);
-        *row++ = static_cast<uint8_t>(std::clamp<real_t>(g, 0, 1)*MAX_RGB);
-        *row++ = static_cast<uint8_t>(std::clamp<real_t>(b, 0, 1)*MAX_RGB);
+        *row++ = color.r8();
+        *row++ = color.g8();
+        *row++ = color.b8();
         *row++ = 0xFF;
       }
     }

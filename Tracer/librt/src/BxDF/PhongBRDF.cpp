@@ -63,7 +63,7 @@ namespace rt {
     if( cosAlpha < ZERO  ||  _shin < ONE ) {
       return Color();
     }
-    return _color*_norm*n4::pow(cosAlpha, _shin);
+    return _color*_norm*Math::pow(cosAlpha, _shin);
   }
 
 } // namespace rt

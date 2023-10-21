@@ -41,7 +41,7 @@ namespace rt {
 
     size_t choose(const real_t xi, const size_t count)
     {
-      const size_t index = size_t(n4::floor(xi*real_t(count)));
+      const size_t index = size_t(Math::floor(xi*real_t(count)));
       return std::min<size_t>(index, count - 1);
     }
 
@@ -64,14 +64,14 @@ namespace rt {
     if( offset.isZero() ) {
       return Vertex();
     }
-    const bool align_x = n4::abs(offset.x) > n4::abs(offset.y);
+    const bool align_x = Math::abs(offset.x) > Math::abs(offset.y);
     const real_t     r = align_x
         ? real_t{offset.x}
         : real_t{offset.y};
     const real_t phi = align_x
         ? (PI_QUARTER)*(offset.y/offset.x)
         : (PI_HALF) - (PI_QUARTER)*(offset.x/offset.y);
-    return {r*n4::cos(phi), r*n4::sin(phi)};
+    return {r*Math::cos(phi), r*Math::sin(phi)};
   }
 
   real_t ConcentricDisk::pdf()
@@ -84,7 +84,7 @@ namespace rt {
   Direction CosineHemisphere::sample(const Sample2D& xi)
   {
     const Vertex d = ConcentricDisk::sample(xi);
-    const real_t z = n4::sqrt(std::max<real_t>(0, ONE - d.x*d.x - d.y*d.y));
+    const real_t z = Math::sqrt(std::max<real_t>(0, ONE - d.x*d.x - d.y*d.y));
     return {d.x, d.y, z};
   }
 
@@ -120,9 +120,9 @@ namespace rt {
   Vertex UniformDisk::sample(const Sample2D& xi)
   {
     SAMPLES_2D(xi);
-    const real_t   r = n4::sqrt(xi1);
+    const real_t   r = Math::sqrt(xi1);
     const real_t phi = TWO_PI*xi2;
-    return {r*n4::cos(phi), r*n4::sin(phi)};
+    return {r*Math::cos(phi), r*Math::sin(phi)};
   }
 
   real_t UniformDisk::pdf()

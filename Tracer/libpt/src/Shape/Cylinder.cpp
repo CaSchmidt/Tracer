@@ -60,7 +60,7 @@ namespace pt {
     }
 
     const rt::Vertex Pobj = rayObj(t);
-    if( n4::abs(Pobj.z) > _height/rt::TWO ) {
+    if( rt::Math::abs(Pobj.z) > _height/rt::TWO ) {
       return false;
     }
 

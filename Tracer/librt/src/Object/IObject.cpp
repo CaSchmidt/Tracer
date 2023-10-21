@@ -123,7 +123,7 @@ namespace rt {
 
     if( rr != ZERO ) {
       // NOTE: 'wi' points towards 'surface'; cf. 'delta'!
-      const Direction    wi = geom::to_direction(delta)/n4::sqrt(rr);
+      const Direction    wi = geom::to_direction(delta)/Math::sqrt(rr);
       const real_t absCosTo = geom::absDot(surface.N, -wi);
       if( absCosTo != ZERO ) {
         *pdf *= rr/absCosTo; // NOTE: Convert from area to solid angle.

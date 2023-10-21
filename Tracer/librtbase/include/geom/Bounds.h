@@ -32,6 +32,8 @@
 #ifndef BOUNDS_H
 #define BOUNDS_H
 
+#include <cs/SIMD/SIMD128Ray4f.h>
+
 #include "geom/Ray.h"
 
 namespace geom {
@@ -57,7 +59,7 @@ namespace geom {
 
     inline bool isValid() const
     {
-      return simd::compareLEQ<false>(_min.eval(), _max.eval());
+      return cs::simd::compareLEQ<n4::SIMD128,false>(_min.eval(), _max.eval());
     }
 
     void set(const Vertex& p1, const Vertex& p2)
@@ -85,10 +87,10 @@ namespace geom {
     bool intersect(const Ray& ray, const bool use_tMax = false) const
     {
       return use_tMax
-          ? simd::intersectRayAABBox(_min.eval(), _max.eval(),
-                                     ray.origin().eval(), ray.direction().eval(), ray.tMax())
-          : simd::intersectRayAABBox(_min.eval(), _max.eval(),
-                                     ray.origin().eval(), ray.direction().eval());
+          ? cs::simd::intersectRayAABBox<n4::SIMD128>(_min.eval(), _max.eval(),
+                                                      ray.origin().eval(), ray.direction().eval(), ray.tMax())
+          : cs::simd::intersectRayAABBox<n4::SIMD128>(_min.eval(), _max.eval(),
+                                                      ray.origin().eval(), ray.direction().eval());
     }
 
   private:

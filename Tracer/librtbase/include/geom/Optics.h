@@ -68,7 +68,7 @@ namespace geom {
 
     inline real_t dielectric(const real_t cosTi_, const real_t eta)
     {
-      const real_t cosTi = n4::abs(std::clamp<real_t>(cosTi_, -1, 1));
+      const real_t cosTi = Math::abs(std::clamp<real_t>(cosTi_, -1, 1));
       const real_t sinTi = math::pythagoras<real_t>(cosTi);
 
       const real_t sinTt = eta*sinTi; // Snell's law

@@ -86,7 +86,7 @@ namespace rt {
     const real_t w = static_cast<real_t>(width);
     const real_t h = static_cast<real_t>(height);
     const real_t a = w/h;
-    const real_t n = n4::tan(fov_rad/TWO);
+    const real_t n = Math::tan(fov_rad/TWO);
     return n4::translate(-a*n, n, -1)*n4::scale(TWO*a*n/w, -TWO*n/h, 1);
   }
 
