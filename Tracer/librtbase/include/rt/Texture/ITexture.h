@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef ITEXTURE_H
-#define ITEXTURE_H
+#pragma once
 
 #include <memory>
 
@@ -58,5 +57,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // ITEXTURE_H

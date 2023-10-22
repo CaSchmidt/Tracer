@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef WHITTEDRENDERER_H
-#define WHITTEDRENDERER_H
+#pragma once
 
 #include "rt/Renderer/BaseRenderer.h"
 
@@ -49,5 +48,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // WHITTEDRENDERER_H

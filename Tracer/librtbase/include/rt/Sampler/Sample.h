@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SAMPLE_H
-#define SAMPLE_H
+#pragma once
 
 #include <tuple>
 
@@ -43,5 +42,3 @@ namespace rt {
   using Sample2D = std::tuple<real_t,real_t>;
 
 } // namespace rt
-
-#endif // SAMPLE_H

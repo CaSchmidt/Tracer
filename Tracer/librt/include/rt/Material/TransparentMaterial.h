@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef TRANSPARENTMATERIAL_H
-#define TRANSPARENTMATERIAL_H
+#pragma once
 
 #include "rt/Material/IMaterial.h"
 
@@ -57,5 +56,3 @@ namespace rt {
   }
 
 } // namespace rt
-
-#endif // TRANSPARENTMATERIAL_H

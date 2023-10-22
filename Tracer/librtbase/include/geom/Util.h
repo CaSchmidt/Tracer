@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef GEOM_UTIL_H
-#define GEOM_UTIL_H
+#pragma once
 
 #include "geom/Geom.h"
 #include "math/Solver.h"
@@ -51,5 +50,3 @@ namespace geom {
   }
 
 } // namespace geom
-
-#endif // GEOM_UTIL_H

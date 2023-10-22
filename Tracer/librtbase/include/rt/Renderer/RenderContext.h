@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef RENDERCONTEXT_H
-#define RENDERCONTEXT_H
+#pragma once
 
 #include <list>
 #include <tuple>
@@ -68,5 +67,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // RENDERCONTEXT_H

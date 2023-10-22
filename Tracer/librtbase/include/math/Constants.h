@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#pragma once
 
 #include <limits>
 
@@ -57,5 +56,3 @@ namespace math {
   template<typename T> inline constexpr T FOUR_PI         = static_cast<T>(4.0*PI_double);
 
 } // namespace math
-
-#endif // CONSTANTS_H

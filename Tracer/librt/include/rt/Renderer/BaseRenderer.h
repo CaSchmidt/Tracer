@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef BASERENDERER_H
-#define BASERENDERER_H
+#pragma once
 
 #include "rt/Renderer/IRenderer.h"
 
@@ -53,5 +52,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // BASERENDERER_H

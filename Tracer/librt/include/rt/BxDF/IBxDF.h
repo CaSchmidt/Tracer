@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef IBXDF_H
-#define IBXDF_H
+#pragma once
 
 #include "rt/Sampler/Sample.h"
 
@@ -88,5 +87,3 @@ namespace rt {
   }
 
 } // namespace rt
-
-#endif // IBXDF_H

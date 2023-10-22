@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef OPAQUEMATERIAL_H
-#define OPAQUEMATERIAL_H
+#pragma once
 
 #include "rt/Material/IMaterial.h"
 #include "rt/Texture/ITexture.h"
@@ -72,5 +71,3 @@ namespace rt {
   }
 
 } // namespace rt
-
-#endif // OPAQUEMATERIAL_H

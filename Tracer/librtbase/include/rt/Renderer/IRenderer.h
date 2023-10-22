@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef IRENDERER_H
-#define IRENDERER_H
+#pragma once
 
 #include "Image.h"
 #include "rt/Camera/ICamera.h"
@@ -67,5 +66,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // IRENDERER_H

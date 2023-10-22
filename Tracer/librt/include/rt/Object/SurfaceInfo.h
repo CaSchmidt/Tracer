@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SURFACEINFO_H
-#define SURFACEINFO_H
+#pragma once
 
 #include "rt/Texture/TexCoord.h"
 
@@ -99,5 +98,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // SURFACEINFO_H

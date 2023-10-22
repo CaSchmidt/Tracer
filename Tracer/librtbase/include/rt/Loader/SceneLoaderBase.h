@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SCENELOADERBASE_H
-#define SCENELOADERBASE_H
+#pragma once
 
 #include <charconv>
 #include <functional>
@@ -72,5 +71,3 @@ namespace rt {
   } // namespace priv
 
 } // namespace rt
-
-#endif // SCENELOADERBASE_H

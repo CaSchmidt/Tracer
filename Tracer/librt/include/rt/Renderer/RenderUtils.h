@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef RENDERUTILS_H
-#define RENDERUTILS_H
+#pragma once
 
 #include "rt/Light/ILight.h"
 #include "rt/Sampler/ISampler.h"
@@ -51,5 +50,3 @@ namespace rt {
                               const Scene& scene, const SamplerPtr& sampler);
 
 } // namespace rt
-
-#endif // RENDERUTILS_H

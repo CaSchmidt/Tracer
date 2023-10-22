@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef DIRECTLIGHTINGRENDERER_H
-#define DIRECTLIGHTINGRENDERER_H
+#pragma once
 
 #include "rt/Renderer/BaseRenderer.h"
 
@@ -59,5 +58,3 @@ namespace rt {
   }
 
 } // namespace rt
-
-#endif // DIRECTLIGHTINGRENDERER_H

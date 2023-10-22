@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SAMPLING_H
-#define SAMPLING_H
+#pragma once
 
 #include "rt/Sampler/Sample.h"
 
@@ -77,5 +76,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // SAMPLING_H

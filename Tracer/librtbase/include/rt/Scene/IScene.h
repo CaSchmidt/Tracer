@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef ISCENE_H
-#define ISCENE_H
+#pragma once
 
 #include <memory>
 
@@ -44,5 +43,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // ISCENE_H

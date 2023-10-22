@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef MIRRORMATERIAL_H
-#define MIRRORMATERIAL_H
+#pragma once
 
 #include "rt/Material/IMaterial.h"
 
@@ -55,5 +54,3 @@ namespace rt {
   }
 
 } // namespace rt
-
-#endif // MIRRORMATERIAL_H

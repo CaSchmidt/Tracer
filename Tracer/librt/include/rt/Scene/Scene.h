@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef RT_SCENE_H
-#define RT_SCENE_H
+#pragma once
 
 #include "rt/Light/ILight.h"
 #include "rt/Object/IObject.h"
@@ -80,5 +79,3 @@ namespace rt {
   }
 
 } // namespace rt
-
-#endif // RT_SCENE_H

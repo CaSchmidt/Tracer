@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SHADING_H
-#define SHADING_H
+#pragma once
 
 #include "geom/Geom.h"
 
@@ -119,5 +118,3 @@ namespace geom {
   } // namespace shading
 
 } // namespace geom
-
-#endif // SHADING_H

@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SIMPLECAMERA_H
-#define SIMPLECAMERA_H
+#pragma once
 
 #include "rt/Camera/ICamera.h"
 
@@ -61,5 +60,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // SIMPLECAMERA_H

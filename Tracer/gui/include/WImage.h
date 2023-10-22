@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef WIMAGE_H
-#define WIMAGE_H
+#pragma once
 
 #include <QtWidgets/QWidget>
 
@@ -61,5 +60,3 @@ private:
   QBrush _backgroundBrush{};
   QImage _image{};
 };
-
-#endif // WIMAGE_H

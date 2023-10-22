@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef DIELECTRIC_H
-#define DIELECTRIC_H
+#pragma once
 
 #include "pt/BSDF/IBSDF.h"
 
@@ -58,5 +57,3 @@ namespace pt {
   };
 
 } // namespace pt
-
-#endif // DIELECTRIC_H

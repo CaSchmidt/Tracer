@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef GROUP_H
-#define GROUP_H
+#pragma once
 
 #include "rt/Object/IObject.h"
 
@@ -68,5 +67,3 @@ namespace rt {
   }
 
 } // namespace rt
-
-#endif // GROUP_H

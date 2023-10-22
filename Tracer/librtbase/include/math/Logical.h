@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef LOGICAL_H
-#define LOGICAL_H
+#pragma once
 
 namespace math {
 
@@ -40,5 +39,3 @@ namespace math {
   }
 
 } // namespace math
-
-#endif // LOGICAL_H

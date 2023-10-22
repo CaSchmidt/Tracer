@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef FLATTEXTURE_H
-#define FLATTEXTURE_H
+#pragma once
 
 #include "rt/Texture/ITexture.h"
 
@@ -54,5 +53,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // FLATTEXTURE_H

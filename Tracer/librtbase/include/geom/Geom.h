@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef GEOM_H
-#define GEOM_H
+#pragma once
 
 #include <cs/Math/Math.h>
 
@@ -104,5 +103,3 @@ namespace geom {
   }
 
 } // namespace geom
-
-#endif // GEOM_H

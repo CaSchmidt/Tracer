@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef IMATERIAL_H
-#define IMATERIAL_H
+#pragma once
 
 #include <memory>
 
@@ -61,5 +60,3 @@ namespace rt {
   using MaterialPtr = std::unique_ptr<IMaterial>;
 
 } // namespace rt
-
-#endif // IMATERIAL_H

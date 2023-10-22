@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SPECULARREFLECTIONBRDF_H
-#define SPECULARREFLECTIONBRDF_H
+#pragma once
 
 #include "rt/BxDF/IBxDF.h"
 
@@ -53,5 +52,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // SPECULARREFLECTIONBRDF_H

@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef OPTICS_H
-#define OPTICS_H
+#pragma once
 
 #include "math/Solver.h"
 #include "rt/Base/Types.h"
@@ -92,5 +91,3 @@ namespace geom {
   } // namespace optics
 
 } // namespace geom
-
-#endif // OPTICS_H

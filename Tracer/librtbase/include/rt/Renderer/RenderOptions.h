@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef RENDEROPTIONS_H
-#define RENDEROPTIONS_H
+#pragma once
 
 #include "rt/Base/Types.h"
 
@@ -57,5 +56,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // RENDEROPTIONS_H

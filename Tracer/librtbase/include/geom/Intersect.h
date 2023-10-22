@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef INTERSECT_H
-#define INTERSECT_H
+#pragma once
 
 #include "geom/Ray.h"
 #include "math/Solver.h"
@@ -103,5 +102,3 @@ namespace geom {
   } // namespace intersect
 
 } // namespace geom
-
-#endif // INTERSECT_H

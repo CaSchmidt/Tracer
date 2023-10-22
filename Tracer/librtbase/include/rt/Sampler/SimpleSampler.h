@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SIMPLESAMPLER_H
-#define SIMPLESAMPLER_H
+#pragma once
 
 #include <random>
 
@@ -57,5 +56,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // SIMPLESAMPLER_H

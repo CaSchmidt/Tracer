@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef OBJECT_H
-#define OBJECT_H
+#pragma once
 
 #include "pt/BSDF/IBSDF.h"
 #include "pt/Shape/IShape.h"
@@ -124,5 +123,3 @@ namespace pt {
   using Objects = std::list<ObjectPtr>;
 
 } // namespace pt
-
-#endif // OBJECT_H

@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef HIT_H
-#define HIT_H
+#pragma once
 
 #include "geom/Geom.h"
 #include "math/Constants.h"
@@ -54,5 +53,3 @@ namespace geom {
   } // namespace intersect
 
 } // namespace geom
-
-#endif // HIT_H

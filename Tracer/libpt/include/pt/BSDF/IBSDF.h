@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef IBSDF_H
-#define IBSDF_H
+#pragma once
 
 #include <memory>
 
@@ -92,5 +91,3 @@ namespace pt {
   };
 
 } // namespace pt
-
-#endif // IBSDF_H

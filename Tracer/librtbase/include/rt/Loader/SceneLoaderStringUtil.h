@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SCENELOADERSTRINGUTIL_H
-#define SCENELOADERSTRINGUTIL_H
+#pragma once
 
 #include <cctype>
 
@@ -85,5 +84,3 @@ namespace rt {
   } // namespace priv
 
 } // namespace rt
-
-#endif // SCENELOADERSTRINGUTIL_H

@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef DISK_H
-#define DISK_H
+#pragma once
 
 #include "rt/Object/IObject.h"
 
@@ -57,5 +56,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // DISK_H

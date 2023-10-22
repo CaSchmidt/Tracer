@@ -29,12 +29,9 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef UI_UTIL_H
-#define UI_UTIL_H
+#pragma once
 
 #include <QtGui/QBrush>
 
 QBrush createCheckedBrush(const int size, const QColor& color0, const QColor& color1);
 QBrush createCheckedBrush(const int size, const int dark = 96, const int light = 160);
-
-#endif // UI_UTIL_H

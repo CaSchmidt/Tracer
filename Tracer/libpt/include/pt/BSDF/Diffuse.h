@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef DIFFUSE_H
-#define DIFFUSE_H
+#pragma once
 
 #include "pt/BSDF/IBSDF.h"
 
@@ -52,5 +51,3 @@ namespace pt {
   };
 
 } // namespace pt
-
-#endif // DIFFUSE_H

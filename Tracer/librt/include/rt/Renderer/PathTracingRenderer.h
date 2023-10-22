@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef PATHTRACINGRENDERER_H
-#define PATHTRACINGRENDERER_H
+#pragma once
 
 #include "rt/Renderer/IRenderer.h"
 
@@ -49,5 +48,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // PATHTRACINGRENDERER_H

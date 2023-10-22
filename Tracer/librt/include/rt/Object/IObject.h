@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef IOBJECT_H
-#define IOBJECT_H
+#pragma once
 
 #include <list>
 #include <memory>
@@ -105,5 +104,3 @@ namespace rt {
   bool isSphere(const ObjectPtr& o);
 
 } // namespace rt
-
-#endif // IOBJECT_H

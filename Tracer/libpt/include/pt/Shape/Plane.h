@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef PLANE_H
-#define PLANE_H
+#pragma once
 
 #include "pt/Shape/IShape.h"
 
@@ -60,5 +59,3 @@ namespace pt {
   };
 
 } // namespace pt
-
-#endif // PLANE_H

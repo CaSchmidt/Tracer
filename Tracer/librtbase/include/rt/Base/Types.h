@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef TYPES_H
-#define TYPES_H
+#pragma once
 
 #include <limits>
 #include <type_traits>
@@ -86,5 +85,3 @@ namespace rt {
   inline constexpr real_t   SHADOW_BIAS = 0x1p-10;
 
 } // namespace rt
-
-#endif // TYPES_H

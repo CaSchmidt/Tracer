@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef WMAINWINDOW_H
-#define WMAINWINDOW_H
+#pragma once
 
 #include <QtCore/QFutureWatcher>
 #include <QtWidgets/QMainWindow>
@@ -65,5 +64,3 @@ private:
   QFuture<Image> future;
   QFutureWatcher<Image> watcher;
 };
-
-#endif // WMAINWINDOW_H

@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef DIFFUSEAREALIGHT_H
-#define DIFFUSEAREALIGHT_H
+#pragma once
 
 #include "rt/Light/IAreaLight.h"
 
@@ -59,5 +58,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // DIFFUSEAREALIGHT_H

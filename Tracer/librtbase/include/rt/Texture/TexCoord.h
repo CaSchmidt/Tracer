@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef TEXCOORD_H
-#define TEXCOORD_H
+#pragma once
 
 #include <tuple>
 
@@ -43,5 +42,3 @@ namespace rt {
   using TexCoord2D = std::tuple<real_t,real_t>;
 
 } // namespace rt
-
-#endif // TEXCOORD_H

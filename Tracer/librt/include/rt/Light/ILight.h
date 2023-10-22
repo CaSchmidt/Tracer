@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef ILIGHT_H
-#define ILIGHT_H
+#pragma once
 
 #include <list>
 #include <memory>
@@ -93,5 +92,3 @@ namespace rt {
   using   Lights = std::list<LightPtr>;
 
 } // namespace rt
-
-#endif // ILIGHT_H

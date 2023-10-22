@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SCENELOADEROBJECT_H
-#define SCENELOADEROBJECT_H
+#pragma once
 
 #include <functional>
 
@@ -49,5 +48,3 @@ namespace rt {
   } // namespace priv
 
 } // namespace rt
-
-#endif // SCENELOADEROBJECT_H

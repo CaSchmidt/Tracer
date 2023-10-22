@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef INTERSECTIONINFO_H
-#define INTERSECTIONINFO_H
+#pragma once
 
 #include "rt/Sampler/Sample.h"
 #include "rt/Texture/TexCoord.h"
@@ -108,5 +107,3 @@ namespace pt {
   };
 
 } // namespace pt
-
-#endif // INTERSECTIONINFO_H

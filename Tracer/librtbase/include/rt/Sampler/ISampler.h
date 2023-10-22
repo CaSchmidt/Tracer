@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef ISAMPLER_H
-#define ISAMPLER_H
+#pragma once
 
 #include <memory>
 
@@ -61,5 +60,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // ISAMPLER_H

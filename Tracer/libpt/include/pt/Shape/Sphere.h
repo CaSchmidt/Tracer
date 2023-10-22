@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SPHERE_H
-#define SPHERE_H
+#pragma once
 
 #include "pt/Shape/IShape.h"
 
@@ -59,5 +58,3 @@ namespace pt {
   };
 
 } // namespace pt
-
-#endif // SPHERE_H

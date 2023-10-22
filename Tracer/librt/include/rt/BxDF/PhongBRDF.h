@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef PHONGBRDF_H
-#define PHONGBRDF_H
+#pragma once
 
 #include "rt/BxDF/IBxDF.h"
 
@@ -52,5 +51,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // PHONGBRDF_H

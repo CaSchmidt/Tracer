@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef LAMBERTIANBRDF_H
-#define LAMBERTIANBRDF_H
+#pragma once
 
 #include "rt/BxDF/IBxDF.h"
 
@@ -45,5 +44,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // LAMBERTIANBRDF_H

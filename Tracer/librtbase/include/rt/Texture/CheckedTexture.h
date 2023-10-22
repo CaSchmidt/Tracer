@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef CHECKEDTEXTURE_H
-#define CHECKEDTEXTURE_H
+#pragma once
 
 #include "rt/Texture/ITexture.h"
 
@@ -59,5 +58,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // CHECKEDTEXTURE_H

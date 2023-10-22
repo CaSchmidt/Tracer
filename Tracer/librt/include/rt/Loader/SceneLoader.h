@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SCENELOADER_H
-#define SCENELOADER_H
+#pragma once
 
 namespace rt {
 
@@ -40,5 +39,3 @@ namespace rt {
   bool loadScene(Scene *scene, RenderOptions *options, const char *filename);
 
 } // namespace rt
-
-#endif // SCENELOADER_H

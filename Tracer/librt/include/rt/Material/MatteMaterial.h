@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef MATTEMATERIAL_H
-#define MATTEMATERIAL_H
+#pragma once
 
 #include "rt/Material/IMaterial.h"
 #include "rt/Texture/ITexture.h"
@@ -61,5 +60,3 @@ namespace rt {
   }
 
 } // namespace rt
-
-#endif // MATTEMATERIAL_H

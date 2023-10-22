@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef POINTLIGHT_H
-#define POINTLIGHT_H
+#pragma once
 
 #include "rt/Light/ILight.h"
 
@@ -55,5 +54,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // POINTLIGHT_H

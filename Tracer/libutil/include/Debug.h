@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef RT_DEBUG_H
-#define RT_DEBUG_H
+#pragma once
 
 #include "N4/Vector4f.h"
 
@@ -55,5 +54,3 @@ inline void debugPrint(const n4::Vector4f<traits_T,manip_T>& v, const bool nl = 
   printf("(%.6f,%.6f,%.6f)%s", x, y, z, nl ? "\n" : "");
   fflush(stdout);
 }
-
-#endif // RT_DEBUG_H

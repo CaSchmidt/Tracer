@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef RAY_H
-#define RAY_H
+#pragma once
 
 #include "geom/Geom.h"
 #include "geom/Hit.h"
@@ -115,5 +114,3 @@ namespace geom {
   };
 
 } // namespace geom
-
-#endif // RAY_H

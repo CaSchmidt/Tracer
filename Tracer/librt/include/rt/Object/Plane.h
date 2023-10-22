@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef PLANE_H
-#define PLANE_H
+#pragma once
 
 #include "rt/Object/IObject.h"
 
@@ -58,5 +57,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // PLANE_H

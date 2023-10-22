@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef ISHAPE_H
-#define ISHAPE_H
+#pragma once
 
 #include <list>
 #include <memory>
@@ -87,5 +86,3 @@ namespace pt {
   };
 
 } // namespace pt
-
-#endif // ISHAPE_H

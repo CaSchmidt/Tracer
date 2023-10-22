@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef FRUSTUMCAMERA_H
-#define FRUSTUMCAMERA_H
+#pragma once
 
 #include "rt/Camera/ICamera.h"
 
@@ -67,5 +66,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // FRUSTUMCAMERA_H

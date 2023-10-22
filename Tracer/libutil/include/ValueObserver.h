@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef VALUEOBSERVER_H
-#define VALUEOBSERVER_H
+#pragma once
 
 #include <functional>
 #include <iostream>
@@ -85,5 +84,3 @@ private:
   T           _value;
   std::string _valueString;
 };
-
-#endif // VALUEOBSERVER_H

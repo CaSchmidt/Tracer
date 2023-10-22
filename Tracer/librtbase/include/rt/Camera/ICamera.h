@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef ICAMERA_H
-#define ICAMERA_H
+#pragma once
 
 #include "rt/Sampler/ISampler.h"
 
@@ -63,5 +62,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // ICAMERA_H

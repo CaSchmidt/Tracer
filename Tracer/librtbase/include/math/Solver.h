@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef SOLVER_H
-#define SOLVER_H
+#pragma once
 
 #include <algorithm>
 
@@ -114,5 +113,3 @@ namespace math {
   }
 
 } // namespace math
-
-#endif // SOLVER_H

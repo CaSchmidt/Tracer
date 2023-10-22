@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef WORKER_H
-#define WORKER_H
+#pragma once
 
 #include "rt/Renderer/RenderContext.h"
 
@@ -44,5 +43,3 @@ public:
 private:
   static void progress(const rt::size_t y, const rt::size_t height);
 };
-
-#endif // WORKER_H

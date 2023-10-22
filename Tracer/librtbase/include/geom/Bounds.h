@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef BOUNDS_H
-#define BOUNDS_H
+#pragma once
 
 #include <cs/SIMD/SIMD128Ray4f.h>
 
@@ -99,5 +98,3 @@ namespace geom {
   };
 
 } // namespace geom
-
-#endif // BOUNDS_H

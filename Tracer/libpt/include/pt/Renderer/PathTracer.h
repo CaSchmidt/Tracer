@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef PATHTRACER_H
-#define PATHTRACER_H
+#pragma once
 
 #include "rt/Renderer/IRenderer.h"
 
@@ -53,5 +52,3 @@ namespace pt {
   };
 
 } // namespace pt
-
-#endif // PATHTRACER_H

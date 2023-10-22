@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef BSDF_H
-#define BSDF_H
+#pragma once
 
 #include <array>
 
@@ -95,5 +94,3 @@ namespace rt {
   };
 
 } // namespace rt
-
-#endif // BSDF_H

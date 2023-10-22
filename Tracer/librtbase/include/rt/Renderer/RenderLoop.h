@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef RENDERLOOP_H
-#define RENDERLOOP_H
+#pragma once
 
 #include "Image.h"
 #include "rt/Base/Types.h"
@@ -62,5 +61,3 @@ namespace rt {
   }
 
 } // namespace rt
-
-#endif // RENDERLOOP_H

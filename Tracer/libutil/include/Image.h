@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef IMAGE_H
-#define IMAGE_H
+#pragma once
 
 #include <cstdint>
 
@@ -74,5 +73,3 @@ private:
   Buffer _buffer{};
   size_type _width{}, _height{};
 };
-
-#endif // IMAGE_H

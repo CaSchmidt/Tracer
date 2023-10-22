@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef PT_SCENE_H
-#define PT_SCENE_H
+#pragma once
 
 #include "rt/Base/Types.h"
 #include "rt/Scene/IScene.h"
@@ -74,5 +73,3 @@ namespace pt {
   }
 
 } // namespace pt
-
-#endif // PT_SCENE_H

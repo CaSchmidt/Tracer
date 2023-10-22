@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef TRANSFORM_H
-#define TRANSFORM_H
+#pragma once
 
 #include <N4/Util.h>
 
@@ -132,5 +131,3 @@ namespace geom {
   };
 
 } // namespace geom
-
-#endif // TRANSFORM_H

@@ -29,8 +29,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 
-#ifndef IAREALIGHT_H
-#define IAREALIGHT_H
+#pragma once
 
 #include "rt/Light/ILight.h"
 
@@ -53,5 +52,3 @@ namespace rt {
   }
 
 } // namespace rt
-
-#endif // IAREALIGHT_H
